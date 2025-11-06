@@ -2,10 +2,12 @@
 
 import { useState, useEffect } from 'react';
 import { Sparkles, Menu, X } from 'lucide-react';
+import SignInModal from './auth/SignInModal';
 
 export default function Header() {
   const [scrolled, setScrolled] = useState(false);
   const [isMobileMenuOpen, setIsMobileMenuOpen] = useState(false);
+  const [isSignInOpen, setIsSignInOpen] = useState(false);
 
   useEffect(() => {
     const handleScroll = () => {
@@ -227,7 +229,9 @@ export default function Header() {
             </div>
 
             {/* Premium CTA Button - Desktop */}
-            <button className={`
+            <button 
+              onClick={() => setIsSignInOpen(true)}
+              className={`
               hidden md:flex relative px-5 py-2 md:px-7 md:py-2.5 rounded-2xl font-black transition-all duration-700
               bg-linear-to-r from-gray-900 via-gray-800 to-gray-900
               text-white overflow-hidden group items-center gap-2
@@ -362,7 +366,10 @@ export default function Header() {
             {/* CTA Button in Menu */}
             <div className="pt-6 border-t border-white/20">
               <button 
-                onClick={() => setIsMobileMenuOpen(false)}
+                onClick={() => {
+                  setIsMobileMenuOpen(false);
+                  setIsSignInOpen(true);
+                }}
                 className={`
                   relative w-full px-6 py-4 rounded-2xl font-black text-base
                   bg-linear-to-r from-gray-900 via-gray-800 to-gray-900
@@ -397,6 +404,9 @@ export default function Header() {
           </div>
         </div>
       </div>
+
+      {/* Sign In Modal */}
+      <SignInModal isOpen={isSignInOpen} onClose={() => setIsSignInOpen(false)} />
     </nav>
   );
 }
