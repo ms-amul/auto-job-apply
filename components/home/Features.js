@@ -2,8 +2,10 @@
 
 import Container from '../Container';
 import { Zap, Bot, Target, Sparkles, Rocket, TrendingUp, Clock, Mail, BarChart3, Shield, RefreshCw, Bell } from 'lucide-react';
+import { useMobile } from '@/hooks/useMobile';
 
 export default function Features() {
+  const { isMobile, isReducedMotion } = useMobile();
   const features = [
     {
       icon: Zap,
@@ -83,14 +85,14 @@ export default function Features() {
     return (
       <div
         key={keyPrefix}
-        className="group relative w-96 md:w-[420px] shrink-0"
+        className={`group relative shrink-0 ${isMobile ? 'w-[85vw] max-w-[320px]' : 'w-96 md:w-[420px]'}`}
       >
         <div className={`
-          relative h-full bg-white/3 backdrop-blur-3xl rounded-3xl p-8 md:p-10
+          relative h-full bg-white/3 backdrop-blur-3xl rounded-3xl ${isMobile ? 'p-6' : 'p-8 md:p-10'}
           border border-white/20
           shadow-2xl
           transition-all duration-700 ease-out
-          transform hover:-translate-y-2 hover:scale-[1.02]
+          transform ${isMobile ? '' : 'hover:-translate-y-2 hover:scale-[1.02]'}
           overflow-hidden
         `}
         style={{
@@ -129,12 +131,12 @@ export default function Features() {
           {/* Content */}
           <div className="relative z-10">
             {/* Premium glassmorphic icon container */}
-            <div className="relative w-20 h-20 md:w-24 md:h-24 mb-8">
+            <div className={`relative ${isMobile ? 'w-16 h-16 mb-6' : 'w-20 h-20 md:w-24 md:h-24 mb-8'}`}>
               {/* Icon glow backdrop */}
               <div className={`
                 absolute inset-0 bg-linear-to-br ${feature.color}
-                rounded-3xl blur-2xl opacity-40 group-hover:opacity-60
-                transition-all duration-700 animate-pulse
+                rounded-3xl blur-2xl opacity-40 ${isMobile ? '' : 'group-hover:opacity-60'}
+                transition-all duration-700 ${isMobile ? '' : 'animate-pulse'}
               `}></div>
               
               {/* Glass icon box */}
@@ -143,7 +145,7 @@ export default function Features() {
                 bg-linear-to-br ${feature.color}
                 rounded-3xl
                 flex items-center justify-center
-                transform group-hover:scale-110 group-hover:rotate-6
+                transform ${isMobile ? '' : 'group-hover:scale-110 group-hover:rotate-6'}
                 transition-all duration-700
                 overflow-hidden
               `}
@@ -155,15 +157,15 @@ export default function Features() {
                 <div className="absolute inset-0 bg-linear-to-br from-white/30 via-transparent to-transparent"></div>
                 <div className="absolute top-0 left-0 right-0 h-1/2 bg-linear-to-b from-white/20 to-transparent"></div>
                 
-                <Icon className="relative z-10 w-10 h-10 md:w-12 md:h-12 text-white drop-shadow-2xl" strokeWidth={2.5} />
+                <Icon className={`relative z-10 text-white drop-shadow-2xl ${isMobile ? 'w-8 h-8' : 'w-10 h-10 md:w-12 md:h-12'}`} strokeWidth={2.5} />
               </div>
             </div>
 
-            <h3 className="text-2xl md:text-3xl font-black text-white mb-4 group-hover:text-transparent group-hover:bg-clip-text group-hover:bg-linear-to-r group-hover:from-orange-400 group-hover:to-rose-400 transition-all duration-500 tracking-tight">
+            <h3 className={`${isMobile ? 'text-xl mb-3' : 'text-2xl md:text-3xl mb-4'} font-black text-white ${isMobile ? '' : 'group-hover:text-transparent group-hover:bg-clip-text group-hover:bg-linear-to-r group-hover:from-orange-400 group-hover:to-rose-400'} transition-all duration-500 tracking-tight`}>
               {feature.title}
             </h3>
             
-            <p className="text-gray-300 text-lg md:text-xl leading-relaxed font-light">
+            <p className={`text-gray-300 ${isMobile ? 'text-base' : 'text-lg md:text-xl'} leading-relaxed font-light`}>
               {feature.description}
             </p>
           </div>
@@ -210,18 +212,24 @@ export default function Features() {
         <div className="absolute inset-0 bg-[radial-gradient(ellipse_at_top,var(--tw-gradient-stops))] from-orange-900/20 via-transparent to-transparent"></div>
         <div className="absolute inset-0 bg-[radial-gradient(ellipse_at_bottom,var(--tw-gradient-stops))] from-purple-900/20 via-transparent to-transparent"></div>
         
-        {/* Floating orbs */}
-        <div className="absolute top-20 -left-20 w-96 h-96 bg-orange-500/20 rounded-full blur-3xl animate-blob"></div>
-        <div className="absolute top-40 -right-32 w-[500px] h-[500px] bg-purple-500/15 rounded-full blur-3xl animate-blob animation-delay-2000"></div>
-        <div className="absolute bottom-20 left-1/2 w-[600px] h-[600px] bg-pink-500/15 rounded-full blur-3xl animate-blob animation-delay-4000"></div>
+        {/* Floating orbs - disabled on mobile */}
+        {!isMobile && (
+          <>
+            <div className={`absolute top-20 -left-20 w-96 h-96 bg-orange-500/20 rounded-full blur-3xl ${isReducedMotion ? '' : 'animate-blob'}`}></div>
+            <div className={`absolute top-40 -right-32 w-[500px] h-[500px] bg-purple-500/15 rounded-full blur-3xl ${isReducedMotion ? '' : 'animate-blob animation-delay-2000'}`}></div>
+            <div className={`absolute bottom-20 left-1/2 w-[600px] h-[600px] bg-pink-500/15 rounded-full blur-3xl ${isReducedMotion ? '' : 'animate-blob animation-delay-4000'}`}></div>
+          </>
+        )}
         
-        {/* Subtle grid pattern */}
-        <div 
-          className="absolute inset-0 opacity-[0.02]"
-          style={{
-            backgroundImage: 'repeating-linear-gradient(0deg, #fff 0px, #fff 1px, transparent 1px, transparent 50px), repeating-linear-gradient(90deg, #fff 0px, #fff 1px, transparent 1px, transparent 50px)'
-          }}
-        ></div>
+        {/* Subtle grid pattern - disabled on mobile */}
+        {!isMobile && (
+          <div 
+            className="absolute inset-0 opacity-[0.02]"
+            style={{
+              backgroundImage: 'repeating-linear-gradient(0deg, #fff 0px, #fff 1px, transparent 1px, transparent 50px), repeating-linear-gradient(90deg, #fff 0px, #fff 1px, transparent 1px, transparent 50px)'
+            }}
+          ></div>
+        )}
       </div>
 
       <Container>
@@ -253,25 +261,41 @@ export default function Features() {
 
       {/* Glassmorphic carousel with corner fade accents */}
       <div className="relative">
-        {/* Subtle left corner fade */}
-        <div className="absolute left-0 top-0 bottom-0 w-24 md:w-32 z-10 pointer-events-none">
-          <div className="absolute inset-0 bg-linear-to-r from-gray-900/80 via-gray-900/30 to-transparent backdrop-blur-[1px]"></div>
-        </div>
+        {/* Subtle left corner fade - smaller on mobile */}
+        {!isMobile && (
+          <div className="absolute left-0 top-0 bottom-0 w-24 md:w-32 z-10 pointer-events-none">
+            <div className="absolute inset-0 bg-linear-to-r from-gray-900/80 via-gray-900/30 to-transparent backdrop-blur-[1px]"></div>
+          </div>
+        )}
         
-        {/* Subtle right corner fade */}
-        <div className="absolute right-0 top-0 bottom-0 w-24 md:w-32 z-10 pointer-events-none">
-          <div className="absolute inset-0 bg-linear-to-l from-gray-900/80 via-gray-900/30 to-transparent backdrop-blur-[1px]"></div>
-        </div>
+        {/* Subtle right corner fade - smaller on mobile */}
+        {!isMobile && (
+          <div className="absolute right-0 top-0 bottom-0 w-24 md:w-32 z-10 pointer-events-none">
+            <div className="absolute inset-0 bg-linear-to-l from-gray-900/80 via-gray-900/30 to-transparent backdrop-blur-[1px]"></div>
+          </div>
+        )}
         
-        <div className="overflow-hidden py-4">
-          <div className="flex gap-8 md:gap-10 marquee-container">
+        {/* Mobile: Horizontal scroll, Desktop: Marquee animation */}
+        <div className={`py-4 ${isMobile ? 'overflow-x-auto overflow-y-hidden scrollbar-hide' : 'overflow-hidden'}`}
+          style={isMobile ? {
+            WebkitOverflowScrolling: 'touch',
+            scrollbarWidth: 'none',
+            msOverflowStyle: 'none',
+          } : {}}
+        >
+          <div 
+            className={`flex ${isMobile ? 'gap-4 px-4' : 'gap-8 md:gap-10'} ${isMobile || isReducedMotion ? '' : 'marquee-container'}`}
+            style={isMobile ? {
+              width: 'max-content',
+            } : {}}
+          >
             {/* First set of features */}
             {features.map((feature, index) => (
               <FeatureCard key={`first-${index}`} feature={feature} keyPrefix={`first-${index}`} />
             ))}
             
-            {/* Duplicate set for seamless loop */}
-            {features.map((feature, index) => (
+            {/* Duplicate set for seamless loop - only on desktop */}
+            {!isMobile && features.map((feature, index) => (
               <FeatureCard key={`second-${index}`} feature={feature} keyPrefix={`second-${index}`} />
             ))}
           </div>

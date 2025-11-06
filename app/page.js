@@ -1,17 +1,46 @@
+'use client';
+
+import { Suspense, lazy } from 'react';
 import HeroParallax from '@/components/home/HeroParallax';
-import Features from '@/components/home/Features';
-import ProcessParallax from '@/components/home/ProcessParallax';
-import ParallaxStats from '@/components/home/ParallaxStats';
-import CTA from '@/components/home/CTA';
+
+// Lazy load heavy components
+const Features = lazy(() => import('@/components/home/Features'));
+const ProcessParallax = lazy(() => import('@/components/home/ProcessParallax'));
+const ParallaxStats = lazy(() => import('@/components/home/ParallaxStats'));
+const CTA = lazy(() => import('@/components/home/CTA'));
+
+// Loading fallback component
+function SectionLoader() {
+  return (
+    <div className="min-h-[400px] flex items-center justify-center">
+      <div className="w-8 h-8 border-2 border-orange-500 border-t-transparent rounded-full animate-spin"></div>
+    </div>
+  );
+}
 
 export default function Home() {
   return (
     <div className="min-h-screen bg-white">
+      {/* Hero loads immediately */}
       <HeroParallax />
-      <Features />
-      <ProcessParallax />
-      <ParallaxStats />
-      <CTA />
+      
+      {/* Heavy sections load on demand */}
+      <Suspense fallback={<SectionLoader />}>
+        <Features />
+      </Suspense>
+      
+      <Suspense fallback={<SectionLoader />}>
+        <ProcessParallax />
+      </Suspense>
+      
+      <Suspense fallback={<SectionLoader />}>
+        <ParallaxStats />
+      </Suspense>
+      
+      <Suspense fallback={<SectionLoader />}>
+        <CTA />
+      </Suspense>
     </div>
   );
 }
+

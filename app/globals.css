@@ -12,6 +12,11 @@
   --font-mono: var(--font-geist-mono);
 }
 
+html {
+  scroll-behavior: smooth;
+  scroll-padding-top: 6rem; /* Account for fixed header */
+}
+
 body {
   background: var(--background);
   color: var(--foreground);
@@ -215,4 +220,45 @@ body {
 
 .animate-spin-slow {
   animation: spin-slow 3s linear infinite;
+}
+
+/* Mobile Performance Optimizations */
+@media (max-width: 768px) {
+  /* Reduce animation complexity on mobile */
+  .animate-float,
+  .animate-blob {
+    animation-duration: 4s !important;
+  }
+  
+  /* Disable heavy animations on mobile */
+  .marquee-container {
+    animation: none !important;
+  }
+  
+  /* Reduce blur effects on mobile */
+  * {
+    will-change: auto !important;
+  }
+  
+  /* Hide scrollbars on mobile */
+  .scrollbar-hide {
+    -ms-overflow-style: none;
+    scrollbar-width: none;
+  }
+  
+  .scrollbar-hide::-webkit-scrollbar {
+    display: none;
+  }
+}
+
+/* Respect reduced motion preference */
+@media (prefers-reduced-motion: reduce) {
+  *,
+  *::before,
+  *::after {
+    animation-duration: 0.01ms !important;
+    animation-iteration-count: 1 !important;
+    transition-duration: 0.01ms !important;
+    scroll-behavior: auto !important;
+  }
 }

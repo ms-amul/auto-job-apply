@@ -3,16 +3,19 @@
 import { useEffect, useRef, useState } from 'react';
 import Container from '../Container';
 import { ArrowRight, Play, Sparkles, Star } from 'lucide-react';
+import { useMobile } from '@/hooks/useMobile';
 
 export default function HeroParallax() {
   const [scrollY, setScrollY] = useState(0);
   const [particles, setParticles] = useState([]);
   const heroRef = useRef(null);
+  const { isMobile, isReducedMotion } = useMobile();
 
   useEffect(() => {
-    // Generate particles only on client side
+    // Generate fewer particles on mobile
+    const particleCount = isMobile ? 5 : 20;
     setParticles(
-      Array.from({ length: 20 }, (_, i) => ({
+      Array.from({ length: particleCount }, (_, i) => ({
         id: i,
         left: Math.random() * 100,
         top: Math.random() * 100,
@@ -21,19 +24,29 @@ export default function HeroParallax() {
         speed: 0.1 + Math.random() * 0.2,
       }))
     );
-  }, []);
+  }, [isMobile]);
 
   useEffect(() => {
+    // Throttle scroll events for better performance
+    let ticking = false;
     const handleScroll = () => {
-      setScrollY(window.scrollY);
+      if (!ticking) {
+        window.requestAnimationFrame(() => {
+          setScrollY(window.scrollY);
+          ticking = false;
+        });
+        ticking = true;
+      }
     };
 
     window.addEventListener('scroll', handleScroll, { passive: true });
     return () => window.removeEventListener('scroll', handleScroll);
   }, []);
 
-  const parallaxSpeed = scrollY * 0.5;
+  // Reduce parallax intensity on mobile
+  const parallaxSpeed = isMobile ? scrollY * 0.1 : scrollY * 0.5;
   const opacityFade = Math.max(1 - scrollY / 500, 0);
+  const shouldAnimate = !isReducedMotion;
 
   return (
     <section 
@@ -46,32 +59,36 @@ export default function HeroParallax() {
         <div className="absolute inset-0 bg-[radial-gradient(ellipse_at_top_right,var(--tw-gradient-stops))] from-orange-100/40 via-transparent to-transparent"></div>
         <div className="absolute inset-0 bg-[radial-gradient(ellipse_at_bottom_left,var(--tw-gradient-stops))] from-rose-100/30 via-transparent to-transparent"></div>
         
-        {/* Multi-layered floating orbs with enhanced parallax */}
-        <div 
-          className="absolute top-20 -left-20 w-96 h-96 bg-linear-to-br from-orange-300/40 to-rose-400/40 rounded-full blur-3xl animate-float"
-          style={{ 
-            transform: `translate(${parallaxSpeed * 0.3}px, ${parallaxSpeed * 0.4}px) scale(${1 + scrollY * 0.0001})`,
-            mixBlendMode: 'multiply',
-          }}
-        ></div>
-        <div 
-          className="absolute top-40 -right-32 w-[500px] h-[500px] bg-linear-to-br from-purple-300/30 to-pink-400/30 rounded-full blur-3xl animate-float"
-          style={{ 
-            transform: `translate(${parallaxSpeed * -0.5}px, ${parallaxSpeed * 0.6}px) scale(${1 + scrollY * 0.00012})`,
-            animationDelay: '1s',
-            mixBlendMode: 'multiply',
-          }}
-        ></div>
-        <div 
-          className="absolute bottom-20 left-1/4 w-[600px] h-[600px] bg-linear-to-br from-blue-300/20 to-cyan-400/20 rounded-full blur-3xl animate-float"
-          style={{ 
-            transform: `translate(${parallaxSpeed * 0.4}px, ${parallaxSpeed * -0.3}px) scale(${1 + scrollY * 0.00008})`,
-            animationDelay: '2s',
-            mixBlendMode: 'multiply',
-          }}
-        ></div>
+        {/* Multi-layered floating orbs - reduced on mobile */}
+        {!isMobile && (
+          <>
+            <div 
+              className={`absolute top-20 -left-20 w-96 h-96 bg-linear-to-br from-orange-300/40 to-rose-400/40 rounded-full blur-3xl ${shouldAnimate ? 'animate-float' : ''}`}
+              style={{ 
+                transform: shouldAnimate ? `translate(${parallaxSpeed * 0.3}px, ${parallaxSpeed * 0.4}px) scale(${1 + scrollY * 0.0001})` : 'none',
+                mixBlendMode: 'multiply',
+              }}
+            ></div>
+            <div 
+              className={`absolute top-40 -right-32 w-[500px] h-[500px] bg-linear-to-br from-purple-300/30 to-pink-400/30 rounded-full blur-3xl ${shouldAnimate ? 'animate-float' : ''}`}
+              style={{ 
+                transform: shouldAnimate ? `translate(${parallaxSpeed * -0.5}px, ${parallaxSpeed * 0.6}px) scale(${1 + scrollY * 0.00012})` : 'none',
+                animationDelay: '1s',
+                mixBlendMode: 'multiply',
+              }}
+            ></div>
+            <div 
+              className={`absolute bottom-20 left-1/4 w-[600px] h-[600px] bg-linear-to-br from-blue-300/20 to-cyan-400/20 rounded-full blur-3xl ${shouldAnimate ? 'animate-float' : ''}`}
+              style={{ 
+                transform: shouldAnimate ? `translate(${parallaxSpeed * 0.4}px, ${parallaxSpeed * -0.3}px) scale(${1 + scrollY * 0.00008})` : 'none',
+                animationDelay: '2s',
+                mixBlendMode: 'multiply',
+              }}
+            ></div>
+          </>
+        )}
 
-        {/* Enhanced floating particles with varied parallax speeds */}
+        {/* Enhanced floating particles - fewer on mobile */}
         {particles.map((particle) => (
           <div
             key={particle.id}
@@ -80,22 +97,24 @@ export default function HeroParallax() {
               left: `${particle.left}%`,
               top: `${particle.top}%`,
               background: `linear-gradient(135deg, rgba(249, 115, 22, ${0.3 + Math.random() * 0.3}), rgba(244, 63, 94, ${0.2 + Math.random() * 0.3}))`,
-              animation: `float ${particle.duration}s ease-in-out infinite`,
+              animation: shouldAnimate ? `float ${particle.duration}s ease-in-out infinite` : 'none',
               animationDelay: `${particle.delay}s`,
-              transform: `translateY(${parallaxSpeed * particle.speed}px) translateX(${parallaxSpeed * particle.speed * 0.5}px)`,
-              boxShadow: `0 0 ${4 + Math.random() * 8}px rgba(249, 115, 22, 0.4)`,
+              transform: shouldAnimate ? `translateY(${parallaxSpeed * particle.speed}px) translateX(${parallaxSpeed * particle.speed * 0.5}px)` : 'none',
+              boxShadow: `0 0 ${4 + Math.random() * 8}px rgba(249, 115, 22, ${isMobile ? 0.2 : 0.4})`,
             }}
           ></div>
         ))}
 
-        {/* Subtle grid overlay for premium feel */}
-        <div 
-          className="absolute inset-0 opacity-[0.015]"
-          style={{
-            backgroundImage: 'repeating-linear-gradient(0deg, #000 0px, #000 1px, transparent 1px, transparent 40px), repeating-linear-gradient(90deg, #000 0px, #000 1px, transparent 1px, transparent 40px)',
-            transform: `translateY(${parallaxSpeed * 0.1}px)`,
-          }}
-        ></div>
+        {/* Subtle grid overlay - disabled on mobile */}
+        {!isMobile && (
+          <div 
+            className="absolute inset-0 opacity-[0.015]"
+            style={{
+              backgroundImage: 'repeating-linear-gradient(0deg, #000 0px, #000 1px, transparent 1px, transparent 40px), repeating-linear-gradient(90deg, #000 0px, #000 1px, transparent 1px, transparent 40px)',
+              transform: shouldAnimate ? `translateY(${parallaxSpeed * 0.1}px)` : 'none',
+            }}
+          ></div>
+        )}
       </div>
 
       <Container>

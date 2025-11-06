@@ -3,6 +3,7 @@
 import { useEffect, useState, useRef } from 'react';
 import Container from '../Container';
 import { Settings, Sparkles, Target, CheckCircle, ArrowRight, User, Brain, Search, BarChart, Send, Mail, Calendar } from 'lucide-react';
+import { useMobile } from '@/hooks/useMobile';
 
 export default function ProcessParallax() {
   const [scrollY, setScrollY] = useState(0);
@@ -10,10 +11,11 @@ export default function ProcessParallax() {
   const [activeSubStep, setActiveSubStep] = useState(0);
   const [isVisible, setIsVisible] = useState(false);
   const sectionRef = useRef(null);
+  const { isMobile, isReducedMotion } = useMobile();
 
   // Auto-advance through sub-steps and main steps with clean animation
   useEffect(() => {
-    if (!isVisible) return;
+    if (!isVisible || isReducedMotion) return;
     
     // Stop if we've completed all steps
     if (activeStep > 2) return;
@@ -24,6 +26,8 @@ export default function ProcessParallax() {
       if (activeSubStep >= lastStepSubStepsCount - 1) return;
     }
 
+    // Slower on mobile for better performance
+    const intervalTime = isMobile ? 3000 : 2000;
     const interval = setInterval(() => {
       const currentStepSubStepsCount = steps[activeStep]?.subSteps.length || 0;
       
@@ -38,20 +42,28 @@ export default function ProcessParallax() {
           setActiveSubStep(0); // Reset to first sub-step of next step
         }
       }
-    }, 2000); // 2 seconds per sub-step for better visibility
+    }, intervalTime);
 
     return () => clearInterval(interval);
-  }, [isVisible, activeStep, activeSubStep]);
+  }, [isVisible, activeStep, activeSubStep, isMobile, isReducedMotion]);
 
   // Detect when section is in viewport
   useEffect(() => {
+    // Throttle scroll events
+    let ticking = false;
     const handleScroll = () => {
-      setScrollY(window.scrollY);
+      if (!ticking) {
+        window.requestAnimationFrame(() => {
+          setScrollY(window.scrollY);
 
-      if (sectionRef.current) {
-        const rect = sectionRef.current.getBoundingClientRect();
-        const inView = rect.top < window.innerHeight * 0.8 && rect.bottom > 0;
-        setIsVisible(inView);
+          if (sectionRef.current) {
+            const rect = sectionRef.current.getBoundingClientRect();
+            const inView = rect.top < window.innerHeight * 0.8 && rect.bottom > 0;
+            setIsVisible(inView);
+          }
+          ticking = false;
+        });
+        ticking = true;
       }
     };
 

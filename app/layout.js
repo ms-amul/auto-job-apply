@@ -26,7 +26,7 @@ export default function RootLayout({ children }) {
       >
         <div className="min-h-screen bg-white">
           <Header />
-          <main className='pt-10'>
+          <main className='pt-20 md:pt-10'>
             {children}
           </main>
           <Footer />

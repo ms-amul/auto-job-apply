@@ -3,17 +3,20 @@
 import { useEffect, useState, useRef } from 'react';
 import Container from '../Container';
 import { TrendingUp, Users, Zap, Award } from 'lucide-react';
+import { useMobile } from '@/hooks/useMobile';
 
 export default function ParallaxStats() {
   const [scrollY, setScrollY] = useState(0);
   const [isVisible, setIsVisible] = useState(false);
   const [particles, setParticles] = useState([]);
   const sectionRef = useRef(null);
+  const { isMobile, isReducedMotion } = useMobile();
 
   useEffect(() => {
-    // Generate particles only on client side
+    // Generate fewer particles on mobile
+    const particleCount = isMobile ? 3 : 15;
     setParticles(
-      Array.from({ length: 15 }, (_, i) => ({
+      Array.from({ length: particleCount }, (_, i) => ({
         id: i,
         left: Math.random() * 100,
         top: Math.random() * 100,
@@ -22,64 +25,74 @@ export default function ParallaxStats() {
         parallaxMultiplier: 1 + i * 0.1,
       }))
     );
-  }, []);
+  }, [isMobile]);
 
   useEffect(() => {
+    // Throttle scroll events
+    let ticking = false;
     const handleScroll = () => {
-      setScrollY(window.scrollY);
+      if (!ticking) {
+        window.requestAnimationFrame(() => {
+          setScrollY(window.scrollY);
 
-      if (sectionRef.current) {
-        const rect = sectionRef.current.getBoundingClientRect();
-        setIsVisible(rect.top < window.innerHeight && rect.bottom > 0);
+          if (sectionRef.current) {
+            const rect = sectionRef.current.getBoundingClientRect();
+            setIsVisible(rect.top < window.innerHeight && rect.bottom > 0);
+          }
+          ticking = false;
+        });
+        ticking = true;
       }
     };
 
     window.addEventListener('scroll', handleScroll, { passive: true });
-    handleScroll(); // Check initial state
+    handleScroll();
     return () => window.removeEventListener('scroll', handleScroll);
   }, []);
 
   const stats = [
-    { 
-      icon: Zap, 
-      value: '10K+', 
+    {
+      icon: Zap,
+      value: '10K+',
       label: 'Applications Sent',
       color: 'from-orange-500 to-red-500',
       delay: '0s',
     },
-    { 
-      icon: Users, 
-      value: '2.5K+', 
+    {
+      icon: Users,
+      value: '2.5K+',
       label: 'Happy Users',
       color: 'from-blue-500 to-indigo-500',
       delay: '0.2s',
     },
-    { 
-      icon: TrendingUp, 
-      value: '5x', 
+    {
+      icon: TrendingUp,
+      value: '5x',
       label: 'Faster Job Search',
       color: 'from-green-500 to-emerald-500',
       delay: '0.4s',
     },
-    { 
-      icon: Award, 
-      value: '87%', 
+    {
+      icon: Award,
+      value: '87%',
       label: 'Success Rate',
       color: 'from-purple-500 to-pink-500',
       delay: '0.6s',
     }
   ];
 
-  const parallaxOffset = isVisible ? (scrollY * 0.1) % 50 : 0;
+  // Reduce parallax on mobile
+  const parallaxOffset = isVisible && !isMobile ? (scrollY * 0.1) % 50 : 0;
 
   return (
-    <section 
+    <section
+      id="pricing"
       ref={sectionRef}
       className="relative py-24 md:py-32 overflow-hidden"
     >
       {/* Animated gradient background */}
       <div className="absolute inset-0 bg-linear-to-br from-orange-500 via-rose-500 to-pink-500">
-        <div 
+        <div
           className="absolute inset-0 opacity-30"
           style={{
             backgroundImage: `
@@ -144,7 +157,7 @@ export default function ParallaxStats() {
                     </div>
 
                     {/* Value */}
-                    <div 
+                    <div
                       className="text-4xl md:text-6xl font-bold text-white mb-2 animate-countUp"
                       style={{ animationDelay: stat.delay }}
                     >
