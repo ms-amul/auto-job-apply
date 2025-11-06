@@ -21,9 +21,9 @@ export default function Footer() {
             </div>
 
             {/* Right: Links + Social */}
-            <div className="flex items-center gap-6">
-              {/* Links */}
-              <div className="flex items-center gap-4 text-xs">
+            <div className="flex items-center gap-4 md:gap-6">
+              {/* Links - Hidden on mobile */}
+              <div className="hidden md:flex items-center gap-4 text-xs">
                 <a href="#features" className="text-gray-400 hover:text-white transition-colors">Features</a>
                 <a href="#how-it-works" className="text-gray-400 hover:text-white transition-colors">How it Works</a>
                 <a href="#pricing" className="text-gray-400 hover:text-white transition-colors">Pricing</a>

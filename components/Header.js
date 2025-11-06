@@ -1,10 +1,11 @@
 'use client';
 
 import { useState, useEffect } from 'react';
-import { Sparkles } from 'lucide-react';
+import { Sparkles, Menu, X } from 'lucide-react';
 
 export default function Header() {
   const [scrolled, setScrolled] = useState(false);
+  const [isMobileMenuOpen, setIsMobileMenuOpen] = useState(false);
 
   useEffect(() => {
     const handleScroll = () => {
@@ -15,6 +16,44 @@ export default function Header() {
     handleScroll();
     return () => window.removeEventListener('scroll', handleScroll);
   }, []);
+
+  // Close menu on outside click or scroll
+  useEffect(() => {
+    if (isMobileMenuOpen) {
+      const handleClickOutside = (e) => {
+        if (!e.target.closest('nav')) {
+          setIsMobileMenuOpen(false);
+        }
+      };
+      const handleScroll = () => setIsMobileMenuOpen(false);
+      
+      document.addEventListener('mousedown', handleClickOutside);
+      window.addEventListener('scroll', handleScroll);
+      
+      return () => {
+        document.removeEventListener('mousedown', handleClickOutside);
+        window.removeEventListener('scroll', handleScroll);
+      };
+    }
+  }, [isMobileMenuOpen]);
+
+  // Prevent body scroll when menu is open
+  useEffect(() => {
+    if (isMobileMenuOpen) {
+      document.body.style.overflow = 'hidden';
+    } else {
+      document.body.style.overflow = '';
+    }
+    return () => {
+      document.body.style.overflow = '';
+    };
+  }, [isMobileMenuOpen]);
+
+  const navLinks = [
+    { href: '#features', label: 'Features' },
+    { href: '#how-it-works', label: 'How it Works' },
+    { href: '#pricing', label: 'Pricing' },
+  ];
 
   return (
     <nav 
@@ -136,16 +175,13 @@ export default function Header() {
               </div>
             </div>
 
-            {/* Premium Navigation Links */}
+            {/* Premium Navigation Links - Desktop */}
             <div className="hidden md:flex items-center gap-1 lg:gap-2">
-              {[
-                { href: '#features', label: 'Features' },
-                { href: '#how-it-works', label: 'How it Works' },
-                { href: '#pricing', label: 'Pricing' },
-              ].map((link, index) => (
+              {navLinks.map((link, index) => (
                 <a
                   key={index}
                   href={link.href}
+                  onClick={() => setIsMobileMenuOpen(false)}
                   className={`
                     relative px-4 lg:px-5 py-2 rounded-xl font-semibold transition-all duration-500
                     text-gray-700 hover:text-gray-900
@@ -170,11 +206,31 @@ export default function Header() {
               ))}
             </div>
 
-            {/* Premium CTA Button */}
+            {/* Mobile Menu Button */}
+            <div className="md:hidden">
+              {/* Hamburger Icon */}
+              <button
+                onClick={() => setIsMobileMenuOpen(!isMobileMenuOpen)}
+                className="relative w-10 h-10 rounded-xl bg-white/10 backdrop-blur-sm border border-white/20 flex items-center justify-center transition-all duration-300 hover:bg-white/20 hover:border-white/30 group"
+                aria-label="Toggle menu"
+                style={{
+                  boxShadow: '0 4px 12px -3px rgba(0, 0, 0, 0.2), inset 0 1px 0 0 rgba(255, 255, 255, 0.1)',
+                }}
+              >
+                <div className="absolute inset-0 bg-linear-to-br from-white/10 to-transparent rounded-xl"></div>
+                {isMobileMenuOpen ? (
+                  <X className="w-5 h-5 text-gray-700 relative z-10 transition-all duration-300 rotate-90" strokeWidth={2.5} />
+                ) : (
+                  <Menu className="w-5 h-5 text-gray-700 relative z-10 transition-all duration-300" strokeWidth={2.5} />
+                )}
+              </button>
+            </div>
+
+            {/* Premium CTA Button - Desktop */}
             <button className={`
-              relative px-5 py-2 md:px-7 md:py-2.5 rounded-2xl font-black transition-all duration-700
+              hidden md:flex relative px-5 py-2 md:px-7 md:py-2.5 rounded-2xl font-black transition-all duration-700
               bg-linear-to-r from-gray-900 via-gray-800 to-gray-900
-              text-white overflow-hidden group
+              text-white overflow-hidden group items-center gap-2
               ${scrolled 
                 ? 'text-sm md:text-base shadow-xl shadow-gray-900/30' 
                 : 'text-sm md:text-base shadow-lg shadow-gray-900/20'
@@ -204,6 +260,140 @@ export default function Header() {
                 <Sparkles className="w-4 h-4 group-hover:rotate-12 transition-transform duration-500" strokeWidth={2.5} />
               </span>
             </button>
+          </div>
+        </div>
+      </div>
+
+      {/* Premium Mobile Menu Overlay */}
+      <div 
+        className={`
+          fixed inset-0 z-40 md:hidden transition-all duration-500 ease-out
+          ${isMobileMenuOpen 
+            ? 'opacity-100 pointer-events-auto' 
+            : 'opacity-0 pointer-events-none'
+          }
+        `}
+        onClick={() => setIsMobileMenuOpen(false)}
+      >
+        {/* Backdrop with blur */}
+        <div 
+          className={`
+            absolute inset-0 bg-black/40 backdrop-blur-md transition-opacity duration-500
+            ${isMobileMenuOpen ? 'opacity-100' : 'opacity-0'}
+          `}
+        ></div>
+
+        {/* Glass Menu Panel */}
+        <div 
+          className={`
+            absolute top-0 right-0 h-full w-[85vw] max-w-sm
+            bg-white/80 backdrop-blur-3xl
+            border-l-2 border-white/40
+            shadow-2xl
+            transition-transform duration-500 ease-out
+            ${isMobileMenuOpen ? 'translate-x-0' : 'translate-x-full'}
+          `}
+          onClick={(e) => e.stopPropagation()}
+          style={{
+            boxShadow: '-10px 0 50px -12px rgba(0, 0, 0, 0.3), inset 2px 0 0 0 rgba(255, 255, 255, 0.9)',
+          }}
+        >
+          {/* Multi-layer glass reflections */}
+          <div className="absolute inset-0 bg-linear-to-br from-white/90 via-white/60 to-transparent opacity-70"></div>
+          <div className="absolute inset-0 bg-linear-to-tl from-white/40 via-transparent to-transparent opacity-50"></div>
+          
+          {/* Top edge highlight */}
+          <div className="absolute top-0 left-0 right-0 h-px bg-linear-to-r from-transparent via-white/80 to-transparent"></div>
+          
+          {/* Side edge highlight */}
+          <div className="absolute top-0 bottom-0 left-0 w-px bg-linear-to-b from-transparent via-white/70 to-transparent"></div>
+
+          {/* Menu Content */}
+          <div className="relative z-10 h-full flex flex-col pt-20 pb-8 px-6">
+            {/* Close Button */}
+            <button
+              onClick={() => setIsMobileMenuOpen(false)}
+              className="absolute top-6 right-6 w-10 h-10 rounded-xl bg-white/20 backdrop-blur-sm border border-white/30 flex items-center justify-center transition-all duration-300 hover:bg-white/30 hover:scale-110 group"
+              style={{
+                boxShadow: '0 4px 12px -3px rgba(0, 0, 0, 0.2), inset 0 1px 0 0 rgba(255, 255, 255, 0.2)',
+              }}
+            >
+              <div className="absolute inset-0 bg-linear-to-br from-white/20 to-transparent rounded-xl"></div>
+              <X className="w-5 h-5 text-gray-700 relative z-10 group-hover:rotate-90 transition-transform duration-300" strokeWidth={2.5} />
+            </button>
+
+            {/* Navigation Links */}
+            <nav className="flex-1 space-y-2">
+              {navLinks.map((link, index) => (
+                <a
+                  key={index}
+                  href={link.href}
+                  onClick={() => setIsMobileMenuOpen(false)}
+                  className={`
+                    relative block px-6 py-4 rounded-2xl font-bold text-lg
+                    text-gray-800 transition-all duration-300
+                    group overflow-hidden
+                    ${isMobileMenuOpen ? 'animate-fadeInUp' : ''}
+                  `}
+                  style={{
+                    animationDelay: `${index * 100}ms`,
+                  }}
+                >
+                  {/* Hover background */}
+                  <div className="absolute inset-0 bg-linear-to-br from-orange-50 to-rose-50 rounded-2xl opacity-0 group-hover:opacity-100 transition-all duration-300 scale-0 group-hover:scale-100"></div>
+                  
+                  {/* Border on hover */}
+                  <div className="absolute inset-0 rounded-2xl border-2 border-orange-200/0 group-hover:border-orange-200/60 transition-all duration-300"></div>
+                  
+                  {/* Glass reflection */}
+                  <div className="absolute inset-0 bg-linear-to-br from-white/70 to-transparent rounded-2xl opacity-60"></div>
+                  
+                  {/* Left accent bar */}
+                  <div className="absolute left-0 top-0 bottom-0 w-1 bg-linear-to-b from-orange-500 to-rose-500 rounded-l-2xl opacity-0 group-hover:opacity-100 transition-opacity duration-300"></div>
+                  
+                  <span className="relative z-10 flex items-center justify-between">
+                    {link.label}
+                    <Sparkles className="w-4 h-4 text-orange-500 opacity-0 group-hover:opacity-100 transition-opacity duration-300" strokeWidth={2.5} />
+                  </span>
+                </a>
+              ))}
+            </nav>
+
+            {/* CTA Button in Menu */}
+            <div className="pt-6 border-t border-white/20">
+              <button 
+                onClick={() => setIsMobileMenuOpen(false)}
+                className={`
+                  relative w-full px-6 py-4 rounded-2xl font-black text-base
+                  bg-linear-to-r from-gray-900 via-gray-800 to-gray-900
+                  text-white overflow-hidden group
+                  transition-all duration-300
+                  hover:shadow-2xl hover:shadow-orange-500/40
+                  ${isMobileMenuOpen ? 'animate-fadeInUp' : ''}
+                `}
+                style={{
+                  animationDelay: '300ms',
+                  boxShadow: '0 10px 30px -8px rgba(0, 0, 0, 0.4), inset 0 1px 0 0 rgba(255, 255, 255, 0.2)',
+                }}
+              >
+                {/* Animated gradient background */}
+                <div className="absolute inset-0 bg-linear-to-r from-orange-500 via-rose-500 to-pink-500 opacity-0 group-hover:opacity-100 transition-opacity duration-300"></div>
+                
+                {/* Glass reflection */}
+                <div className="absolute inset-0 bg-linear-to-br from-white/20 to-transparent"></div>
+                
+                {/* Shimmer effect */}
+                <div className="absolute inset-0 bg-linear-to-r from-transparent via-white/30 to-transparent -translate-x-full group-hover:translate-x-full transition-transform duration-700"></div>
+                
+                {/* Top highlight */}
+                <div className="absolute top-0 left-0 right-0 h-px bg-linear-to-r from-transparent via-white/50 to-transparent"></div>
+                
+                <span className="relative z-10 flex items-center justify-center gap-2">
+                  Get Started
+                  <Sparkles className="w-5 h-5 group-hover:rotate-12 transition-transform duration-500" strokeWidth={2.5} />
+                </span>
+              </button>
+            </div>
           </div>
         </div>
       </div>
