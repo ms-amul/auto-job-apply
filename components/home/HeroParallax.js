@@ -38,49 +38,69 @@ export default function HeroParallax() {
   return (
     <section 
       ref={heroRef}
-      className="relative min-h-screen flex items-center overflow-hidden bg-linear-to-br from-gray-50 via-white to-orange-50"
+      className="relative min-h-screen flex items-center overflow-hidden bg-linear-to-br from-gray-50 via-orange-50/30 to-rose-50/40"
     >
-      {/* Animated background elements */}
+      {/* Premium layered background with parallax */}
       <div className="absolute inset-0 overflow-hidden pointer-events-none">
-        {/* Floating orbs */}
+        {/* Base gradient overlay */}
+        <div className="absolute inset-0 bg-[radial-gradient(ellipse_at_top_right,var(--tw-gradient-stops))] from-orange-100/40 via-transparent to-transparent"></div>
+        <div className="absolute inset-0 bg-[radial-gradient(ellipse_at_bottom_left,var(--tw-gradient-stops))] from-rose-100/30 via-transparent to-transparent"></div>
+        
+        {/* Multi-layered floating orbs with enhanced parallax */}
         <div 
-          className="absolute top-20 left-10 w-64 h-64 bg-linear-to-br from-orange-300 to-rose-400 rounded-full mix-blend-multiply filter blur-3xl opacity-30 animate-float"
-          style={{ transform: `translateY(${parallaxSpeed * 0.3}px)` }}
-        ></div>
-        <div 
-          className="absolute top-40 right-20 w-72 h-72 bg-linear-to-br from-purple-300 to-pink-400 rounded-full mix-blend-multiply filter blur-3xl opacity-30 animate-float"
+          className="absolute top-20 -left-20 w-96 h-96 bg-linear-to-br from-orange-300/40 to-rose-400/40 rounded-full blur-3xl animate-float"
           style={{ 
-            transform: `translateY(${parallaxSpeed * 0.5}px)`,
-            animationDelay: '1s',
+            transform: `translate(${parallaxSpeed * 0.3}px, ${parallaxSpeed * 0.4}px) scale(${1 + scrollY * 0.0001})`,
+            mixBlendMode: 'multiply',
           }}
         ></div>
         <div 
-          className="absolute bottom-20 left-1/3 w-80 h-80 bg-linear-to-br from-blue-300 to-cyan-400 rounded-full mix-blend-multiply filter blur-3xl opacity-20 animate-float"
+          className="absolute top-40 -right-32 w-[500px] h-[500px] bg-linear-to-br from-purple-300/30 to-pink-400/30 rounded-full blur-3xl animate-float"
           style={{ 
-            transform: `translateY(${parallaxSpeed * 0.4}px)`,
+            transform: `translate(${parallaxSpeed * -0.5}px, ${parallaxSpeed * 0.6}px) scale(${1 + scrollY * 0.00012})`,
+            animationDelay: '1s',
+            mixBlendMode: 'multiply',
+          }}
+        ></div>
+        <div 
+          className="absolute bottom-20 left-1/4 w-[600px] h-[600px] bg-linear-to-br from-blue-300/20 to-cyan-400/20 rounded-full blur-3xl animate-float"
+          style={{ 
+            transform: `translate(${parallaxSpeed * 0.4}px, ${parallaxSpeed * -0.3}px) scale(${1 + scrollY * 0.00008})`,
             animationDelay: '2s',
+            mixBlendMode: 'multiply',
           }}
         ></div>
 
-        {/* Floating particles */}
+        {/* Enhanced floating particles with varied parallax speeds */}
         {particles.map((particle) => (
           <div
             key={particle.id}
-            className="absolute w-2 h-2 bg-linear-to-br from-orange-400 to-pink-500 rounded-full opacity-20"
+            className="absolute w-1.5 h-1.5 rounded-full"
             style={{
               left: `${particle.left}%`,
               top: `${particle.top}%`,
+              background: `linear-gradient(135deg, rgba(249, 115, 22, ${0.3 + Math.random() * 0.3}), rgba(244, 63, 94, ${0.2 + Math.random() * 0.3}))`,
               animation: `float ${particle.duration}s ease-in-out infinite`,
               animationDelay: `${particle.delay}s`,
-              transform: `translateY(${parallaxSpeed * particle.speed}px)`,
+              transform: `translateY(${parallaxSpeed * particle.speed}px) translateX(${parallaxSpeed * particle.speed * 0.5}px)`,
+              boxShadow: `0 0 ${4 + Math.random() * 8}px rgba(249, 115, 22, 0.4)`,
             }}
           ></div>
         ))}
+
+        {/* Subtle grid overlay for premium feel */}
+        <div 
+          className="absolute inset-0 opacity-[0.015]"
+          style={{
+            backgroundImage: 'repeating-linear-gradient(0deg, #000 0px, #000 1px, transparent 1px, transparent 40px), repeating-linear-gradient(90deg, #000 0px, #000 1px, transparent 1px, transparent 40px)',
+            transform: `translateY(${parallaxSpeed * 0.1}px)`,
+          }}
+        ></div>
       </div>
 
       <Container>
         <div className="relative z-10 grid lg:grid-cols-2 gap-12 items-center">
-          {/* Left Content */}
+          {/* Left Content - Premium Glass Design */}
           <div 
             className="text-center lg:text-left"
             style={{
@@ -88,19 +108,30 @@ export default function HeroParallax() {
               opacity: opacityFade,
             }}
           >
-            {/* Badge */}
-            <div className="inline-flex items-center gap-2 bg-white/80 backdrop-blur-sm border border-orange-200 rounded-full px-4 py-2 mb-6 shadow-lg animate-fadeInUp">
-              <Sparkles className="w-4 h-4 text-orange-500" />
-              <span className="text-sm font-semibold text-orange-600">
+            {/* Premium Glassmorphic Badge */}
+            <div 
+              className="inline-flex items-center gap-2 bg-white/60 backdrop-blur-xl border border-white/80 rounded-full px-5 py-2.5 mb-6 shadow-xl animate-fadeInUp"
+              style={{
+                boxShadow: '0 10px 30px -5px rgba(249, 115, 22, 0.3), inset 0 1px 0 0 rgba(255, 255, 255, 0.8)',
+              }}
+            >
+              <Sparkles className="w-4 h-4 text-orange-600" />
+              <span className="text-sm font-bold bg-linear-to-r from-orange-600 to-rose-600 bg-clip-text text-transparent">
                 AI-Powered Job Applications
               </span>
               <Star className="w-4 h-4 text-orange-500 fill-orange-500" />
             </div>
 
-            <h1 className="text-5xl sm:text-6xl lg:text-7xl xl:text-8xl font-bold text-gray-900 leading-tight mb-6 animate-fadeInUp">
+            {/* Enhanced Heading with Parallax */}
+            <h1 
+              className="text-5xl sm:text-6xl lg:text-7xl xl:text-8xl font-black text-gray-900 leading-[1.1] mb-6 animate-fadeInUp tracking-tight"
+              style={{
+                transform: `translateY(${parallaxSpeed * 0.05}px)`,
+              }}
+            >
               Your dream job is{' '}
               <span className="relative inline-block">
-                <span className="relative z-10 bg-linear-to-r from-orange-500 to-rose-500 bg-clip-text text-transparent">
+                <span className="relative z-10 bg-linear-to-r from-orange-500 via-rose-500 to-pink-500 bg-clip-text text-transparent drop-shadow-sm">
                   one click
                 </span>
                 <svg 
@@ -126,35 +157,84 @@ export default function HeroParallax() {
               {' '}away
             </h1>
             
-            <p className="text-xl sm:text-2xl text-gray-600 mb-8 max-w-2xl mx-auto lg:mx-0 animate-fadeInUp" style={{ animationDelay: '0.2s' }}>
-              Join <span className="font-bold text-orange-500">2,500+</span> professionals who automated their job search and landed{' '}
-              <span className="font-bold text-orange-500">5x more interviews</span> in half the time.
+            {/* Enhanced Description */}
+            <p 
+              className="text-xl sm:text-2xl text-gray-700 mb-10 max-w-2xl mx-auto lg:mx-0 animate-fadeInUp font-medium leading-relaxed" 
+              style={{ 
+                animationDelay: '0.2s',
+                transform: `translateY(${parallaxSpeed * 0.08}px)`,
+              }}
+            >
+              Join <span className="font-black bg-linear-to-r from-orange-600 to-rose-600 bg-clip-text text-transparent">2,500+</span> professionals who automated their job search and landed{' '}
+              <span className="font-black bg-linear-to-r from-orange-600 to-rose-600 bg-clip-text text-transparent">5x more interviews</span> in half the time.
             </p>
 
-            <div className="flex flex-col sm:flex-row gap-4 justify-center lg:justify-start mb-8 animate-fadeInUp" style={{ animationDelay: '0.4s' }}>
-              <button className="group bg-linear-to-r from-orange-500 to-rose-500 text-white px-8 py-4 rounded-full text-lg font-semibold hover:shadow-2xl transition-all flex items-center justify-center gap-2 shadow-lg hover:scale-105">
-                Start Applying for Free
-                <ArrowRight className="w-5 h-5 group-hover:translate-x-1 transition-transform" />
+            {/* Premium Glassmorphic Buttons */}
+            <div 
+              className="flex flex-col sm:flex-row gap-4 justify-center lg:justify-start mb-10 animate-fadeInUp" 
+              style={{ 
+                animationDelay: '0.4s',
+                transform: `translateY(${parallaxSpeed * 0.1}px)`,
+              }}
+            >
+              <button 
+                className="cursor-pointer relative group bg-linear-to-r from-orange-500 via-rose-500 to-pink-500 text-white px-8 py-4 rounded-full text-lg font-bold flex items-center justify-center gap-2 shadow-2xl overflow-hidden"
+                style={{
+                  boxShadow: '0 20px 40px -10px rgba(249, 115, 22, 0.5)',
+                }}
+              >
+                <span className="relative z-10 flex items-center gap-2">
+                  Start Applying for Free
+                  <ArrowRight className="w-5 h-5" />
+                </span>
+                {/* Glass shine effect */}
+                <div className="absolute inset-0 bg-linear-to-r from-transparent via-white/20 to-transparent"></div>
               </button>
-              <button className="group border-2 border-gray-300 text-gray-700 px-8 py-4 rounded-full text-lg font-semibold hover:border-gray-400 hover:bg-gray-50 transition-all flex items-center justify-center gap-2">
+              
+              <button 
+                className="cursor-pointer relative bg-white/60 backdrop-blur-xl border-2 border-white/80 text-gray-900 px-8 py-4 rounded-full text-lg font-bold flex items-center justify-center gap-2 shadow-xl overflow-hidden"
+                style={{
+                  boxShadow: '0 10px 30px -5px rgba(0, 0, 0, 0.2), inset 0 1px 0 0 rgba(255, 255, 255, 0.8)',
+                }}
+              >
                 <Play className="w-5 h-5 fill-current" />
-                Watch Demo
+                <span>Watch Demo</span>
               </button>
             </div>
 
-            <div className="flex flex-wrap items-center gap-4 justify-center lg:justify-start animate-fadeInUp" style={{ animationDelay: '0.6s' }}>
-              <div className="group bg-linear-to-r from-orange-50 to-rose-50 border border-orange-200 rounded-xl px-4 py-2 flex items-center gap-2 hover:shadow-lg transition-all">
-                <span className="text-2xl">🏆</span>
-                <span className="text-orange-600 text-sm font-semibold">#1 Product of the Day</span>
+            {/* Premium Glassmorphic Achievement Badges */}
+            <div 
+              className="flex flex-wrap items-center gap-3 justify-center lg:justify-start animate-fadeInUp" 
+              style={{ 
+                animationDelay: '0.6s',
+                transform: `translateY(${parallaxSpeed * 0.12}px)`,
+              }}
+            >
+              <div 
+                className="relative bg-white/60 backdrop-blur-xl border border-white/80 rounded-2xl px-4 py-2.5 flex items-center gap-2.5 shadow-lg overflow-hidden"
+                style={{
+                  boxShadow: '0 10px 25px -5px rgba(249, 115, 22, 0.2), inset 0 1px 0 0 rgba(255, 255, 255, 0.8)',
+                }}
+              >
+                <div className="absolute inset-0 bg-linear-to-r from-orange-500/10 to-rose-500/10"></div>
+                <span className="text-2xl relative z-10">🏆</span>
+                <span className="font-bold bg-linear-to-r from-orange-600 to-rose-600 bg-clip-text text-transparent text-sm relative z-10">#1 Product of the Day</span>
               </div>
-              <div className="group bg-linear-to-r from-orange-50 to-rose-50 border border-orange-200 rounded-xl px-4 py-2 flex items-center gap-2 hover:shadow-lg transition-all">
-                <span className="text-2xl">🚀</span>
-                <span className="text-orange-600 text-sm font-semibold">#3 Product of the Week</span>
+              
+              <div 
+                className="relative bg-white/60 backdrop-blur-xl border border-white/80 rounded-2xl px-4 py-2.5 flex items-center gap-2.5 shadow-lg overflow-hidden"
+                style={{
+                  boxShadow: '0 10px 25px -5px rgba(249, 115, 22, 0.2), inset 0 1px 0 0 rgba(255, 255, 255, 0.8)',
+                }}
+              >
+                <div className="absolute inset-0 bg-linear-to-r from-orange-500/10 to-rose-500/10"></div>
+                <span className="text-2xl relative z-10">🚀</span>
+                <span className="font-bold bg-linear-to-r from-orange-600 to-rose-600 bg-clip-text text-transparent text-sm relative z-10">#3 Product of the Week</span>
               </div>
             </div>
           </div>
 
-          {/* Right Content - Interactive Dashboard Preview */}
+          {/* Right Content - Premium Glassmorphic Dashboard */}
           <div 
             className="relative hidden lg:block"
             style={{
@@ -162,70 +242,137 @@ export default function HeroParallax() {
             }}
           >
             <div className="relative w-full h-[600px]">
-              {/* Main dashboard card */}
-              <div className="absolute inset-0 bg-linear-to-br from-white to-gray-50 rounded-3xl shadow-2xl border border-gray-200 p-8 overflow-hidden">
-                <div className="absolute top-0 right-0 w-64 h-64 bg-linear-to-br from-orange-200 to-transparent rounded-full blur-3xl opacity-30"></div>
+              {/* Background glow effects */}
+              <div className="absolute inset-0">
+                <div 
+                  className="absolute top-0 left-0 w-96 h-96 bg-linear-to-br from-orange-400/30 to-rose-400/30 rounded-full blur-3xl"
+                  style={{ transform: `translate(${parallaxSpeed * 0.1}px, ${parallaxSpeed * 0.15}px)` }}
+                ></div>
+                <div 
+                  className="absolute bottom-0 right-0 w-80 h-80 bg-linear-to-br from-purple-400/20 to-pink-400/20 rounded-full blur-3xl"
+                  style={{ transform: `translate(${parallaxSpeed * -0.1}px, ${parallaxSpeed * -0.12}px)` }}
+                ></div>
+              </div>
+
+              {/* Main glassmorphic dashboard card */}
+              <div 
+                className="absolute inset-0 bg-white/40 backdrop-blur-2xl rounded-3xl shadow-2xl border border-white/60 p-8 overflow-hidden z-10"
+                style={{
+                  transform: `translateY(${parallaxSpeed * 0.05}px)`,
+                  boxShadow: '0 25px 50px -12px rgba(0, 0, 0, 0.15), inset 0 1px 0 0 rgba(255, 255, 255, 0.6)',
+                }}
+              >
+                {/* Glass reflection effect */}
+                <div className="absolute inset-0 bg-linear-to-br from-white/50 via-white/20 to-transparent opacity-60"></div>
                 
+                {/* Subtle grid pattern */}
+                <div className="absolute inset-0 opacity-[0.02]" style={{
+                  backgroundImage: 'repeating-linear-gradient(0deg, #000 0px, #000 1px, transparent 1px, transparent 20px), repeating-linear-gradient(90deg, #000 0px, #000 1px, transparent 1px, transparent 20px)'
+                }}></div>
+
                 <div className="relative z-10">
-                  <div className="flex items-center justify-between mb-6">
-                    <h3 className="text-2xl font-bold text-gray-900">Job Applications</h3>
-                    <div className="flex gap-2">
-                      <div className="w-3 h-3 bg-green-500 rounded-full animate-pulse"></div>
-                      <div className="w-3 h-3 bg-yellow-500 rounded-full animate-pulse" style={{ animationDelay: '0.3s' }}></div>
-                      <div className="w-3 h-3 bg-red-500 rounded-full animate-pulse" style={{ animationDelay: '0.6s' }}></div>
+                  {/* Header with premium styling */}
+                  <div className="flex items-center justify-between mb-8">
+                    <div>
+                      <h3 className="text-3xl font-black text-gray-900 mb-1 tracking-tight">
+                        Job Applications
+                      </h3>
+                      <p className="text-sm text-gray-600 font-medium">Real-time automation dashboard</p>
+                    </div>
+                    <div className="flex gap-2 bg-white/60 backdrop-blur-sm rounded-full px-3 py-2 border border-white/80 shadow-sm">
+                      <div className="w-2 h-2 bg-green-500 rounded-full animate-pulse"></div>
+                      <div className="w-2 h-2 bg-yellow-500 rounded-full animate-pulse" style={{ animationDelay: '0.3s' }}></div>
+                      <div className="w-2 h-2 bg-red-500 rounded-full animate-pulse" style={{ animationDelay: '0.6s' }}></div>
                     </div>
                   </div>
 
-                  {/* Stats */}
-                  <div className="grid grid-cols-2 gap-4 mb-6">
+                  {/* Glassmorphic stat cards */}
+                  <div className="grid grid-cols-2 gap-4 mb-8">
                     {[
-                      { label: 'Applied', value: '127', color: 'blue' },
-                      { label: 'Responses', value: '43', color: 'green' },
-                      { label: 'Interviews', value: '12', color: 'orange' },
-                      { label: 'Offers', value: '3', color: 'purple' },
+                      { label: 'Applied', value: '127', icon: '📤', gradient: 'from-blue-500/20 to-cyan-500/20' },
+                      { label: 'Responses', value: '43', icon: '✉️', gradient: 'from-green-500/20 to-emerald-500/20' },
+                      { label: 'Interviews', value: '12', icon: '🎯', gradient: 'from-orange-500/20 to-red-500/20' },
+                      { label: 'Offers', value: '3', icon: '🎉', gradient: 'from-purple-500/20 to-pink-500/20' },
                     ].map((stat, i) => (
-                      <div key={i} className="bg-white rounded-xl p-4 shadow-sm border border-gray-100 hover:shadow-md transition-shadow">
-                        <div className="text-3xl font-bold text-gray-900">{stat.value}</div>
-                        <div className="text-sm text-gray-600">{stat.label}</div>
+                      <div 
+                        key={i} 
+                        className={`relative bg-white/50 backdrop-blur-sm rounded-2xl p-5 border border-white/80 shadow-lg overflow-hidden`}
+                        style={{
+                          transform: `translateY(${parallaxSpeed * (0.02 + i * 0.005)}px)`,
+                        }}
+                      >
+                        {/* Gradient overlay */}
+                        <div className={`absolute inset-0 bg-linear-to-br ${stat.gradient} opacity-50`}></div>
+                        
+                        <div className="relative z-10">
+                          <div className="flex items-start justify-between mb-2">
+                            <span className="text-3xl">{stat.icon}</span>
+                            <div className="text-4xl font-black text-gray-900">{stat.value}</div>
+                          </div>
+                          <div className="text-xs font-semibold text-gray-700 uppercase tracking-wider">{stat.label}</div>
+                        </div>
                       </div>
                     ))}
                   </div>
 
-                  {/* Progress bar */}
-                  <div className="bg-gray-200 rounded-full h-3 overflow-hidden">
-                    <div className="bg-linear-to-r from-orange-500 to-rose-500 h-full rounded-full animate-progress" style={{ width: '68%' }}></div>
+                  {/* Premium progress section */}
+                  <div className="bg-white/50 backdrop-blur-sm rounded-2xl p-5 border border-white/80 shadow-lg">
+                    <div className="flex items-center justify-between mb-3">
+                      <span className="text-sm font-bold text-gray-900">Success Rate</span>
+                      <span className="text-2xl font-black bg-linear-to-r from-orange-600 to-rose-600 bg-clip-text text-transparent">68%</span>
+                    </div>
+                    <div className="relative h-4 bg-gray-200/50 rounded-full overflow-hidden backdrop-blur-sm">
+                      <div 
+                        className="absolute inset-y-0 left-0 bg-linear-to-r from-orange-500 via-rose-500 to-pink-500 rounded-full shadow-lg animate-progress"
+                        style={{ width: '68%' }}
+                      >
+                        {/* Shimmer effect */}
+                        <div className="absolute inset-0 bg-linear-to-r from-transparent via-white/40 to-transparent animate-shimmer"></div>
+                      </div>
+                    </div>
+                    <p className="text-xs text-gray-600 mt-2 font-medium">This week's performance</p>
                   </div>
-                  <p className="text-sm text-gray-600 mt-2">68% match rate this week</p>
                 </div>
               </div>
 
-              {/* Floating job cards */}
+              {/* Floating glassmorphic job cards with proper z-index */}
               {[
-                { company: 'Google', role: 'Senior Engineer', match: '95%', top: '10%', left: '-10%', delay: '0s' },
-                { company: 'Microsoft', role: 'Product Manager', match: '89%', top: '50%', right: '-10%', delay: '1s' },
-                { company: 'Apple', role: 'Design Lead', match: '92%', bottom: '10%', left: '0%', delay: '2s' },
+                { company: 'Google', role: 'Senior Engineer', match: '95%', logo: '🔍', top: '5%', left: '-12%', delay: '0s', parallax: 0.15 },
+                { company: 'Microsoft', role: 'Product Manager', match: '89%', logo: '💼', top: '45%', right: '-12%', delay: '1s', parallax: 0.18 },
+                { company: 'Apple', role: 'Design Lead', match: '92%', logo: '🎨', bottom: '8%', left: '-2%', delay: '2s', parallax: 0.12 },
               ].map((job, i) => (
                 <div
                   key={i}
-                  className="absolute bg-white rounded-2xl p-4 shadow-xl border border-gray-200 w-56 animate-float"
+                  className="absolute bg-white/60 backdrop-blur-xl rounded-2xl p-4 border border-white/80 shadow-2xl w-60 z-20 animate-float"
                   style={{
                     top: job.top,
                     bottom: job.bottom,
                     left: job.left,
                     right: job.right,
                     animationDelay: job.delay,
+                    transform: `translateY(${parallaxSpeed * job.parallax}px)`,
+                    boxShadow: '0 20px 40px -10px rgba(0, 0, 0, 0.2), inset 0 1px 0 0 rgba(255, 255, 255, 0.8)',
                   }}
                 >
-                  <div className="flex items-center gap-3 mb-2">
-                    <div className="w-10 h-10 bg-linear-to-br from-blue-500 to-purple-500 rounded-lg"></div>
-                    <div className="flex-1">
-                      <h4 className="font-semibold text-sm text-gray-900">{job.company}</h4>
-                      <p className="text-xs text-gray-600">{job.role}</p>
+                  {/* Glass reflection */}
+                  <div className="absolute inset-0 bg-linear-to-br from-white/60 via-white/30 to-transparent rounded-2xl"></div>
+                  
+                  <div className="relative z-10">
+                    <div className="flex items-center gap-3 mb-3">
+                      <div className="w-12 h-12 bg-linear-to-br from-gray-100 to-gray-200 rounded-xl flex items-center justify-center text-2xl shadow-inner">
+                        {job.logo}
+                      </div>
+                      <div className="flex-1">
+                        <h4 className="font-bold text-base text-gray-900">{job.company}</h4>
+                        <p className="text-xs text-gray-600 font-medium">{job.role}</p>
+                      </div>
                     </div>
-                  </div>
-                  <div className="flex items-center justify-between">
-                    <span className="text-xs font-semibold text-green-600">{job.match} Match</span>
-                    <span className="text-xs text-gray-500">Just now</span>
+                    <div className="flex items-center justify-between pt-3 border-t border-gray-200/50">
+                      <span className="text-xs font-bold text-green-600 bg-green-50/50 backdrop-blur-sm px-2 py-1 rounded-full">
+                        {job.match} Match
+                      </span>
+                      <span className="text-xs text-gray-500 font-semibold">Just now</span>
+                    </div>
                   </div>
                 </div>
               ))}
