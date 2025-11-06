@@ -141,6 +141,7 @@ export default function ProcessParallax() {
   return (
     <section 
       ref={sectionRef}
+      id='how-it-works'
       className="relative bg-linear-to-br from-white via-orange-50/30 to-blue-50/40 overflow-hidden"
       style={{ minHeight: '120vh' }}
     >
