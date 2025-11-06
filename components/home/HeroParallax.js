@@ -323,7 +323,7 @@ export default function HeroParallax() {
                     </div>
                     <div className="relative h-4 bg-gray-200/50 rounded-full overflow-hidden backdrop-blur-sm">
                       <div 
-                        className="absolute inset-y-0 left-0 bg-linear-to-r from-orange-500 via-rose-500 to-pink-500 rounded-full shadow-lg animate-progress"
+                        className="absolute inset-y-0 left-0 bg-linear-to-r from-orange-500 via-rose-500 to-pink-500 rounded-full shadow-lg animate-progress-hero"
                         style={{ width: '68%' }}
                       >
                         {/* Shimmer effect */}

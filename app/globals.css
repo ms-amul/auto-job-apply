@@ -108,8 +108,27 @@ body {
   animation-delay: 4s;
 }
 
-/* Progress Animation (HeroParallax) */
+/* Progress Animation (HeroParallax & ProcessParallax) */
 @keyframes progress {
+  0% {
+    width: 0%;
+    opacity: 0.8;
+  }
+  50% {
+    opacity: 1;
+  }
+  100% {
+    width: 100%;
+    opacity: 1;
+  }
+}
+
+.animate-progress {
+  animation: progress 2s cubic-bezier(0.4, 0, 0.2, 1) forwards;
+}
+
+/* Hero specific progress (68%) */
+@keyframes progress-hero {
   from {
     width: 0%;
   }
@@ -118,8 +137,8 @@ body {
   }
 }
 
-.animate-progress {
-  animation: progress 2s ease-out forwards;
+.animate-progress-hero {
+  animation: progress-hero 2s ease-out forwards;
 }
 
 /* Scroll Animation (HeroParallax) */
