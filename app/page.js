@@ -5,7 +5,6 @@ import Features from '@/components/home/Features';
 import ProcessParallax from '@/components/home/ProcessParallax';
 import ParallaxStats from '@/components/home/ParallaxStats';
 import CTA from '@/components/home/CTA';
-import NotificationStack from '@/components/NotificationStack';
 
 export default function Home() {
   return (
@@ -19,7 +18,6 @@ export default function Home() {
         <CTA />
       </main>
       <Footer />
-      <NotificationStack />
     </div>
   );
 }

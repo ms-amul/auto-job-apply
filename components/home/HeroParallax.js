@@ -6,7 +6,22 @@ import { ArrowRight, Play, Sparkles, Star } from 'lucide-react';
 
 export default function HeroParallax() {
   const [scrollY, setScrollY] = useState(0);
+  const [particles, setParticles] = useState([]);
   const heroRef = useRef(null);
+
+  useEffect(() => {
+    // Generate particles only on client side
+    setParticles(
+      Array.from({ length: 20 }, (_, i) => ({
+        id: i,
+        left: Math.random() * 100,
+        top: Math.random() * 100,
+        duration: 3 + Math.random() * 4,
+        delay: Math.random() * 2,
+        speed: 0.1 + Math.random() * 0.2,
+      }))
+    );
+  }, []);
 
   useEffect(() => {
     const handleScroll = () => {
@@ -48,16 +63,16 @@ export default function HeroParallax() {
         ></div>
 
         {/* Floating particles */}
-          {[...Array(20)].map((_, i) => (
+        {particles.map((particle) => (
           <div
-            key={i}
+            key={particle.id}
             className="absolute w-2 h-2 bg-linear-to-br from-orange-400 to-pink-500 rounded-full opacity-20"
             style={{
-              left: `${Math.random() * 100}%`,
-              top: `${Math.random() * 100}%`,
-              animation: `float ${3 + Math.random() * 4}s ease-in-out infinite`,
-              animationDelay: `${Math.random() * 2}s`,
-              transform: `translateY(${parallaxSpeed * (0.1 + Math.random() * 0.2)}px)`,
+              left: `${particle.left}%`,
+              top: `${particle.top}%`,
+              animation: `float ${particle.duration}s ease-in-out infinite`,
+              animationDelay: `${particle.delay}s`,
+              transform: `translateY(${parallaxSpeed * particle.speed}px)`,
             }}
           ></div>
         ))}
@@ -225,18 +240,6 @@ export default function HeroParallax() {
           <div className="w-1 h-3 bg-gray-400 rounded-full mt-2 animate-scroll"></div>
         </div>
       </div>
-
-      <style jsx>{`
-        @keyframes progress {
-          from { width: 0%; }
-          to { width: 68%; }
-        }
-
-        @keyframes scroll {
-          0%, 100% { transform: translateY(0); opacity: 1; }
-          50% { transform: translateY(8px); opacity: 0.5; }
-        }
-      `}</style>
     </section>
   );
 }

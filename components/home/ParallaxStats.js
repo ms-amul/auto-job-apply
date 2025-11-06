@@ -7,7 +7,22 @@ import { TrendingUp, Users, Zap, Award } from 'lucide-react';
 export default function ParallaxStats() {
   const [scrollY, setScrollY] = useState(0);
   const [isVisible, setIsVisible] = useState(false);
+  const [particles, setParticles] = useState([]);
   const sectionRef = useRef(null);
+
+  useEffect(() => {
+    // Generate particles only on client side
+    setParticles(
+      Array.from({ length: 15 }, (_, i) => ({
+        id: i,
+        left: Math.random() * 100,
+        top: Math.random() * 100,
+        duration: 4 + Math.random() * 3,
+        delay: Math.random() * 2,
+        parallaxMultiplier: 1 + i * 0.1,
+      }))
+    );
+  }, []);
 
   useEffect(() => {
     const handleScroll = () => {
@@ -79,16 +94,16 @@ export default function ParallaxStats() {
 
       {/* Floating particles */}
       <div className="absolute inset-0 overflow-hidden pointer-events-none">
-        {[...Array(15)].map((_, i) => (
+        {particles.map((particle) => (
           <div
-            key={i}
+            key={particle.id}
             className="absolute w-2 h-2 bg-white rounded-full opacity-40"
             style={{
-              left: `${Math.random() * 100}%`,
-              top: `${Math.random() * 100}%`,
-              animation: `float ${4 + Math.random() * 3}s ease-in-out infinite`,
-              animationDelay: `${Math.random() * 2}s`,
-              transform: `translateY(${parallaxOffset * (1 + i * 0.1)}px)`,
+              left: `${particle.left}%`,
+              top: `${particle.top}%`,
+              animation: `float ${particle.duration}s ease-in-out infinite`,
+              animationDelay: `${particle.delay}s`,
+              transform: `translateY(${parallaxOffset * particle.parallaxMultiplier}px)`,
             }}
           ></div>
         ))}
@@ -157,23 +172,6 @@ export default function ParallaxStats() {
           </div>
         </div>
       </Container>
-
-      <style jsx>{`
-        @keyframes countUp {
-          from {
-            opacity: 0;
-            transform: translateY(20px);
-          }
-          to {
-            opacity: 1;
-            transform: translateY(0);
-          }
-        }
-
-        .animate-countUp {
-          animation: countUp 0.8s ease-out both;
-        }
-      `}</style>
     </section>
   );
 }

@@ -11,7 +11,7 @@ export default function CTA() {
           <p className="text-lg md:text-xl text-gray-600 mb-8 max-w-2xl mx-auto">
             Join thousands of professionals who have accelerated their job search with AutoApply AI
           </p>
-          <button className="bg-black text-white px-8 md:px-10 py-4 md:py-5 rounded-full text-base md:text-lg font-medium hover:bg-gray-800 transition-all shadow-xl hover:shadow-2xl inline-flex items-center gap-2">
+          <button className="bg-black cursor-pointer text-white px-8 md:px-10 py-4 md:py-5 rounded-full text-base md:text-lg font-medium hover:bg-gray-800 transition-all shadow-xl hover:shadow-2xl inline-flex items-center gap-2">
             Start Applying for Free
             <svg className="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24">
               <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M9 5l7 7-7 7" />

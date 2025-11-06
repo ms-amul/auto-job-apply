@@ -107,3 +107,93 @@ body {
 .animation-delay-4000 {
   animation-delay: 4s;
 }
+
+/* Progress Animation (HeroParallax) */
+@keyframes progress {
+  from {
+    width: 0%;
+  }
+  to {
+    width: 68%;
+  }
+}
+
+.animate-progress {
+  animation: progress 2s ease-out forwards;
+}
+
+/* Scroll Animation (HeroParallax) */
+@keyframes scroll {
+  0%, 100% {
+    transform: translateY(0);
+    opacity: 1;
+  }
+  50% {
+    transform: translateY(8px);
+    opacity: 0.5;
+  }
+}
+
+.animate-scroll {
+  animation: scroll 1.5s ease-in-out infinite;
+}
+
+/* Count Up Animation (ParallaxStats) */
+@keyframes countUp {
+  from {
+    opacity: 0;
+    transform: translateY(20px);
+  }
+  to {
+    opacity: 1;
+    transform: translateY(0);
+  }
+}
+
+.animate-countUp {
+  animation: countUp 0.8s ease-out both;
+}
+
+/* Shimmer Animation (ProcessParallax) */
+@keyframes shimmer {
+  0% {
+    transform: translateX(-100%);
+  }
+  100% {
+    transform: translateX(200%);
+  }
+}
+
+.animate-shimmer {
+  animation: shimmer 2s ease-in-out infinite;
+}
+
+/* Draw Line Animation (ProcessParallax heading) */
+@keyframes drawLine {
+  from {
+    stroke-dasharray: 200;
+    stroke-dashoffset: 200;
+  }
+  to {
+    stroke-dasharray: 200;
+    stroke-dashoffset: 0;
+  }
+}
+
+.animate-draw-line {
+  animation: drawLine 1s ease-out forwards;
+}
+
+/* Slow Spin Animation (ProcessParallax icon ring) */
+@keyframes spin-slow {
+  from {
+    transform: rotate(0deg);
+  }
+  to {
+    transform: rotate(360deg);
+  }
+}
+
+.animate-spin-slow {
+  animation: spin-slow 3s linear infinite;
+}
