@@ -12,7 +12,7 @@ const geistMono = Geist_Mono({
 });
 
 export const metadata = {
-  title: "AutoApply AI - Your Dream Job is One Click Away",
+  title: "JobVita - Your Dream Job is One Click Away",
   description: "AI-powered job application assistant that automatically applies to jobs matching your profile",
 };
 
