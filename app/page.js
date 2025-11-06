@@ -1,21 +1,25 @@
 import Header from '@/components/Header';
 import Footer from '@/components/Footer';
-import Hero from '@/components/home/Hero';
+import HeroParallax from '@/components/home/HeroParallax';
 import Features from '@/components/home/Features';
-import Stats from '@/components/home/Stats';
+import ProcessParallax from '@/components/home/ProcessParallax';
+import ParallaxStats from '@/components/home/ParallaxStats';
 import CTA from '@/components/home/CTA';
+import NotificationStack from '@/components/NotificationStack';
 
 export default function Home() {
   return (
-    <div className="min-h-screen bg-linear-to-b from-gray-50 to-white">
+    <div className="min-h-screen bg-white">
       <Header />
-      <main>
-        <Hero />
+      <main className='pt-10'>
+        <HeroParallax />
         <Features />
-        <Stats />
+        <ProcessParallax />
+        <ParallaxStats />
         <CTA />
       </main>
       <Footer />
+      <NotificationStack />
     </div>
   );
 }
