@@ -235,7 +235,7 @@ export default function Features() {
         </div>
 
         {/* Inner content with padding */}
-        <div className={`relative ${isMobile ? 'py-12' : 'py-20 md:py-32'}`}>
+        <div className={`relative ${isMobile ? 'py-16' : 'py-16 md:py-8'}`}>
 
           <Container>
             <div className="relative z-10 text-center lg:text-left mb-12 md:mb-16">

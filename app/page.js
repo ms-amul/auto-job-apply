@@ -7,7 +7,6 @@ import HeroParallax from '@/components/home/HeroParallax';
 const Features = lazy(() => import('@/components/home/Features'));
 const ProcessParallax = lazy(() => import('@/components/home/ProcessParallax'));
 const ParallaxStats = lazy(() => import('@/components/home/ParallaxStats'));
-const CTA = lazy(() => import('@/components/home/CTA'));
 
 // Loading fallback component
 function SectionLoader() {
@@ -35,10 +34,6 @@ export default function Home() {
       
       <Suspense fallback={<SectionLoader />}>
         <ParallaxStats />
-      </Suspense>
-      
-      <Suspense fallback={<SectionLoader />}>
-        <CTA />
       </Suspense>
     </div>
   );

@@ -233,38 +233,6 @@ export default function HeroParallax() {
                 <span>Watch Demo</span>
               </button>
             </div>
-
-            {/* Premium Glassmorphic Achievement Badges */}
-            <div 
-              className="flex flex-wrap items-center gap-3 justify-center lg:justify-start animate-fadeInUp" 
-              style={{ 
-                animationDuration: '1.2s',
-                animationDelay: '1s',
-                transform: `translateY(${parallaxSpeed * 0.12}px)`,
-              }}
-            >
-              <div 
-                className="relative bg-white/60 backdrop-blur-xl border border-white/80 rounded-2xl px-4 py-2.5 flex items-center gap-2.5 shadow-lg overflow-hidden hover:scale-105 transition-transform duration-300"
-                style={{
-                  boxShadow: `0 10px 25px -5px ${theme.accentPrimary}30, inset 0 1px 0 0 rgba(255, 255, 255, 0.8)`,
-                }}
-              >
-                <div className="absolute inset-0 opacity-[0.08]" style={{ background: theme.getAccentGradient(135) }}></div>
-                <Trophy className="w-5 h-5 relative z-10" style={{ color: theme.accentPrimary }} strokeWidth={2.5} />
-                <span className="font-bold bg-clip-text text-transparent text-sm relative z-10" style={{ backgroundImage: theme.getAccentGradient(90) }}>#1 Product of the Day</span>
-              </div>
-              
-              <div 
-                className="relative bg-white/60 backdrop-blur-xl border border-white/80 rounded-2xl px-4 py-2.5 flex items-center gap-2.5 shadow-lg overflow-hidden hover:scale-105 transition-transform duration-300"
-                style={{
-                  boxShadow: `0 10px 25px -5px ${theme.accentSecondary}30, inset 0 1px 0 0 rgba(255, 255, 255, 0.8)`,
-                }}
-              >
-                <div className="absolute inset-0 opacity-[0.08]" style={{ background: theme.getAccentGradient(45) }}></div>
-                <Rocket className="w-5 h-5 relative z-10" style={{ color: theme.accentSecondary }} strokeWidth={2.5} />
-                <span className="font-bold bg-clip-text text-transparent text-sm relative z-10" style={{ backgroundImage: theme.getAccentGradient(90) }}>#3 Product of the Week</span>
-              </div>
-            </div>
           </div>
 
           {/* Right Content - Premium Glassmorphic Dashboard */}
