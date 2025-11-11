@@ -2,7 +2,7 @@
 
 import { useEffect, useRef, useState } from 'react';
 import Container from '../Container';
-import { ArrowRight, Play, Sparkles, Star } from 'lucide-react';
+import { ArrowRight, Play, Sparkles, Star, Trophy, Rocket, Send, Mail, Target, PartyPopper, Search, Briefcase, Palette } from 'lucide-react';
 import { useMobile } from '@/hooks/useMobile';
 import { theme } from '../../utils/theme';
 
@@ -125,10 +125,10 @@ export default function HeroParallax() {
       </div>
 
       <Container>
-        <div className="relative z-10 grid lg:grid-cols-2 gap-12 items-center py-2">
+        <div className="relative z-10 grid lg:grid-cols-2 gap-12 items-center pt-16">
           {/* Left Content - Premium Glass Design */}
           <div 
-            className="text-center lg:text-left"
+            className="text-center lg:text-left text-sm"
             style={{
               transform: `translateY(${parallaxSpeed * 0.2}px)`,
               opacity: opacityFade,
@@ -136,23 +136,26 @@ export default function HeroParallax() {
           >
             {/* Premium Glassmorphic Badge */}
             <div 
-              className="inline-flex items-center gap-2 bg-white/60 backdrop-blur-xl border border-white/80 rounded-full px-5 py-2.5 mb-6 shadow-xl animate-fadeInUp"
+              className="inline-flex items-center gap-2 bg-white/60 backdrop-blur-xl border border-white/80 rounded-full px-3 py-2 mb-4 shadow-xl animate-fadeInUp"
               style={{
                 boxShadow: `0 10px 30px -5px ${theme.accentPrimary}4D, inset 0 1px 0 0 rgba(255, 255, 255, 0.8)`,
+                animationDuration: '1.2s',
+                animationDelay: '0.2s',
               }}
             >
-              <Sparkles className="w-4 h-4" style={{ color: theme.accentPrimary }} />
-              <span className="text-sm font-bold bg-clip-text text-transparent" style={{ backgroundImage: theme.getAccentGradient(90) }}>
+              <Sparkles className="w-4 h-4" style={{ color: theme.accentPrimary }} strokeWidth={2.5} />
+              <span className="text-[10px] font-bold bg-clip-text text-transparent" style={{ backgroundImage: theme.getAccentGradient(90) }}>
                 AI-Powered Job Applications
               </span>
-              <Star className="w-4 h-4" style={{ color: theme.accentSecondary, fill: theme.accentSecondary }} />
             </div>
 
             {/* Enhanced Heading with Parallax */}
             <h1 
-              className="text-5xl sm:text-6xl lg:text-7xl xl:text-8xl font-black text-gray-900 leading-[1.1] mb-6 animate-fadeInUp tracking-tight"
+              className="text-5xl sm:text-6xl lg:text-7xl xl:text-8xl font-black text-gray-900 leading-[1.1] mb-4 animate-fadeInUp tracking-tight"
               style={{
                 transform: `translateY(${parallaxSpeed * 0.05}px)`,
+                animationDuration: '1.2s',
+                animationDelay: '0.4s',
               }}
             >
               Your dream job is{' '}
@@ -185,9 +188,10 @@ export default function HeroParallax() {
             
             {/* Enhanced Description */}
             <p 
-              className="text-xl sm:text-2xl text-gray-700 mb-10 max-w-2xl mx-auto lg:mx-0 animate-fadeInUp font-medium leading-relaxed" 
+              className="text-xl sm:text-2xl text-gray-700 mb-4 max-w-2xl mx-auto lg:mx-0 animate-fadeInUp font-medium leading-relaxed" 
               style={{ 
-                animationDelay: '0.2s',
+                animationDuration: '1.2s',
+                animationDelay: '0.6s',
                 transform: `translateY(${parallaxSpeed * 0.08}px)`,
               }}
             >
@@ -197,9 +201,10 @@ export default function HeroParallax() {
 
             {/* Premium Glassmorphic Buttons */}
             <div 
-              className="flex flex-col sm:flex-row gap-4 justify-center lg:justify-start mb-10 animate-fadeInUp" 
+              className="flex flex-col sm:flex-row gap-4 justify-center lg:justify-start mb-4 animate-fadeInUp" 
               style={{ 
-                animationDelay: '0.4s',
+                animationDuration: '1.2s',
+                animationDelay: '0.8s',
                 transform: `translateY(${parallaxSpeed * 0.1}px)`,
               }}
             >
@@ -233,30 +238,31 @@ export default function HeroParallax() {
             <div 
               className="flex flex-wrap items-center gap-3 justify-center lg:justify-start animate-fadeInUp" 
               style={{ 
-                animationDelay: '0.6s',
+                animationDuration: '1.2s',
+                animationDelay: '1s',
                 transform: `translateY(${parallaxSpeed * 0.12}px)`,
               }}
             >
               <div 
-                className="relative bg-white/60 backdrop-blur-xl border border-white/80 rounded-2xl px-4 py-2.5 flex items-center gap-2.5 shadow-lg overflow-hidden"
+                className="relative bg-white/60 backdrop-blur-xl border border-white/80 rounded-2xl px-4 py-2.5 flex items-center gap-2.5 shadow-lg overflow-hidden hover:scale-105 transition-transform duration-300"
                 style={{
-                  boxShadow: '0 10px 25px -5px rgba(249, 115, 22, 0.2), inset 0 1px 0 0 rgba(255, 255, 255, 0.8)',
+                  boxShadow: `0 10px 25px -5px ${theme.accentPrimary}30, inset 0 1px 0 0 rgba(255, 255, 255, 0.8)`,
                 }}
               >
-                <div className="absolute inset-0 bg-linear-to-r from-orange-500/10 to-rose-500/10"></div>
-                <span className="text-2xl relative z-10">🏆</span>
-                <span className="font-bold bg-linear-to-r from-orange-600 to-rose-600 bg-clip-text text-transparent text-sm relative z-10">#1 Product of the Day</span>
+                <div className="absolute inset-0 opacity-[0.08]" style={{ background: theme.getAccentGradient(135) }}></div>
+                <Trophy className="w-5 h-5 relative z-10" style={{ color: theme.accentPrimary }} strokeWidth={2.5} />
+                <span className="font-bold bg-clip-text text-transparent text-sm relative z-10" style={{ backgroundImage: theme.getAccentGradient(90) }}>#1 Product of the Day</span>
               </div>
               
               <div 
-                className="relative bg-white/60 backdrop-blur-xl border border-white/80 rounded-2xl px-4 py-2.5 flex items-center gap-2.5 shadow-lg overflow-hidden"
+                className="relative bg-white/60 backdrop-blur-xl border border-white/80 rounded-2xl px-4 py-2.5 flex items-center gap-2.5 shadow-lg overflow-hidden hover:scale-105 transition-transform duration-300"
                 style={{
-                  boxShadow: '0 10px 25px -5px rgba(249, 115, 22, 0.2), inset 0 1px 0 0 rgba(255, 255, 255, 0.8)',
+                  boxShadow: `0 10px 25px -5px ${theme.accentSecondary}30, inset 0 1px 0 0 rgba(255, 255, 255, 0.8)`,
                 }}
               >
-                <div className="absolute inset-0 bg-linear-to-r from-orange-500/10 to-rose-500/10"></div>
-                <span className="text-2xl relative z-10">🚀</span>
-                <span className="font-bold bg-linear-to-r from-orange-600 to-rose-600 bg-clip-text text-transparent text-sm relative z-10">#3 Product of the Week</span>
+                <div className="absolute inset-0 opacity-[0.08]" style={{ background: theme.getAccentGradient(45) }}></div>
+                <Rocket className="w-5 h-5 relative z-10" style={{ color: theme.accentSecondary }} strokeWidth={2.5} />
+                <span className="font-bold bg-clip-text text-transparent text-sm relative z-10" style={{ backgroundImage: theme.getAccentGradient(90) }}>#3 Product of the Week</span>
               </div>
             </div>
           </div>
@@ -283,17 +289,20 @@ export default function HeroParallax() {
 
               {/* Main glassmorphic dashboard card */}
               <div 
-                className="absolute inset-0 bg-white/40 backdrop-blur-2xl rounded-3xl shadow-2xl border border-white/60 p-8 overflow-hidden z-10"
+                className="absolute inset-0 bg-white/75 backdrop-blur-2xl rounded-3xl shadow-2xl border-2 border-white/90 p-4 overflow-hidden z-10"
                 style={{
                   transform: `translateY(${parallaxSpeed * 0.05}px)`,
-                  boxShadow: '0 25px 50px -12px rgba(0, 0, 0, 0.15), inset 0 1px 0 0 rgba(255, 255, 255, 0.6)',
+                  boxShadow: `0 30px 60px -15px rgba(0, 0, 0, 0.25), inset 0 1px 0 0 rgba(255, 255, 255, 0.9), 0 0 0 1px ${theme.accentPrimary}15`,
                 }}
               >
-                {/* Glass reflection effect */}
-                <div className="absolute inset-0 bg-linear-to-br from-white/50 via-white/20 to-transparent opacity-60"></div>
+                {/* Premium glass reflection layer */}
+                <div className="absolute inset-0 bg-linear-to-br from-white/60 via-white/20 to-transparent pointer-events-none"></div>
+                
+                {/* Strong background layer for text readability */}
+                <div className="absolute inset-0 bg-white/65 backdrop-blur-xl"></div>
                 
                 {/* Subtle grid pattern */}
-                <div className="absolute inset-0 opacity-[0.02]" style={{
+                <div className="absolute inset-0 opacity-[0.015]" style={{
                   backgroundImage: 'repeating-linear-gradient(0deg, #000 0px, #000 1px, transparent 1px, transparent 20px), repeating-linear-gradient(90deg, #000 0px, #000 1px, transparent 1px, transparent 20px)'
                 }}></div>
 
@@ -301,108 +310,138 @@ export default function HeroParallax() {
                   {/* Header with premium styling */}
                   <div className="flex items-center justify-between mb-8">
                     <div>
-                      <h3 className="text-3xl font-black text-gray-900 mb-1 tracking-tight">
+                      <h3 className="text-3xl font-black text-gray-900 mb-1 tracking-tight drop-shadow-sm">
                         Job Applications
                       </h3>
-                      <p className="text-sm text-gray-600 font-medium">Real-time automation dashboard</p>
+                      <p className="text-sm text-gray-700 font-semibold">Real-time automation dashboard</p>
                     </div>
-                    <div className="flex gap-2 bg-white/60 backdrop-blur-sm rounded-full px-3 py-2 border border-white/80 shadow-sm">
-                      <div className="w-2 h-2 bg-green-500 rounded-full animate-pulse"></div>
-                      <div className="w-2 h-2 bg-yellow-500 rounded-full animate-pulse" style={{ animationDelay: '0.3s' }}></div>
-                      <div className="w-2 h-2 bg-red-500 rounded-full animate-pulse" style={{ animationDelay: '0.6s' }}></div>
+                    <div className="flex gap-2 bg-white/90 backdrop-blur-sm rounded-full px-3 py-2 border-2 border-white shadow-lg">
+                      <div className="w-2 h-2 bg-green-500 rounded-full animate-pulse shadow-sm"></div>
+                      <div className="w-2 h-2 bg-yellow-500 rounded-full animate-pulse shadow-sm" style={{ animationDelay: '0.3s' }}></div>
+                      <div className="w-2 h-2 bg-red-500 rounded-full animate-pulse shadow-sm" style={{ animationDelay: '0.6s' }}></div>
                     </div>
                   </div>
 
                   {/* Glassmorphic stat cards */}
-                  <div className="grid grid-cols-2 gap-4 mb-8">
+                  <div className="grid grid-cols-2 gap-4 mb-4">
                     {[
-                      { label: 'Applied', value: '127', icon: '📤' },
-                      { label: 'Responses', value: '43', icon: '✉️' },
-                      { label: 'Interviews', value: '12', icon: '🎯' },
-                      { label: 'Offers', value: '3', icon: '🎉' },
-                    ].map((stat, i) => (
-                      <div 
-                        key={i} 
-                        className={`relative bg-white/50 backdrop-blur-sm rounded-2xl p-5 border border-white/80 shadow-lg overflow-hidden`}
-                        style={{
-                          transform: `translateY(${parallaxSpeed * (0.02 + i * 0.005)}px)`,
-                        }}
-                      >
-                        {/* Accent overlay */}
-                        <div className="absolute inset-0 opacity-30" style={{ background: theme.getAccentGradient(135) }}></div>
-                        
-                        <div className="relative z-10">
-                          <div className="flex items-start justify-between mb-2">
-                            <span className="text-3xl">{stat.icon}</span>
-                            <div className="text-4xl font-black text-gray-900">{stat.value}</div>
+                      { label: 'Applied', value: '127', icon: Send },
+                      { label: 'Responses', value: '43', icon: Mail },
+                      { label: 'Interviews', value: '12', icon: Target },
+                      { label: 'Offers', value: '3', icon: PartyPopper },
+                    ].map((stat, i) => {
+                      const IconComponent = stat.icon;
+                      return (
+                        <div 
+                          key={i} 
+                          className={`relative bg-white/75 backdrop-blur-xl rounded-2xl p-5 border-2 border-white/90 shadow-xl overflow-hidden hover:scale-105 transition-transform duration-300`}
+                          style={{
+                            transform: `translateY(${parallaxSpeed * (0.02 + i * 0.005)}px)`,
+                            boxShadow: `0 10px 30px -8px rgba(0, 0, 0, 0.2), inset 0 1px 0 0 rgba(255, 255, 255, 0.9)`,
+                          }}
+                        >
+                          {/* Premium glass reflection */}
+                          <div className="absolute inset-0 bg-linear-to-br from-white/50 via-white/20 to-transparent pointer-events-none"></div>
+                          
+                          {/* Solid background for text readability */}
+                          <div className="absolute inset-0 bg-white/60 backdrop-blur-md"></div>
+                          
+                          {/* Accent overlay */}
+                          <div className="absolute inset-0 opacity-[0.06]" style={{ background: theme.getAccentGradient(135) }}></div>
+                          
+                          <div className="relative z-10">
+                            <div className="flex items-start justify-between mb-2">
+                              <div className="w-10 h-10 rounded-xl flex items-center justify-center shadow-lg relative overflow-hidden" style={{ background: theme.getAccentGradient(135) }}>
+                                {/* Inner shine */}
+                                <div className="absolute inset-0 bg-linear-to-br from-white/30 to-transparent"></div>
+                                <IconComponent className="w-5 h-5 text-white relative z-10" strokeWidth={2.5} />
+                              </div>
+                              <div className="text-4xl font-black text-gray-900 drop-shadow-sm">{stat.value}</div>
+                            </div>
+                            <div className="text-xs font-bold text-gray-700 uppercase tracking-wider">{stat.label}</div>
                           </div>
-                          <div className="text-xs font-semibold text-gray-700 uppercase tracking-wider">{stat.label}</div>
                         </div>
-                      </div>
-                    ))}
+                      );
+                    })}
                   </div>
 
                   {/* Premium progress section */}
-                  <div className="bg-white/50 backdrop-blur-sm rounded-2xl p-5 border border-white/80 shadow-lg">
-                    <div className="flex items-center justify-between mb-3">
-                      <span className="text-sm font-bold text-gray-900">Success Rate</span>
-                      <span className="text-2xl font-black bg-clip-text text-transparent" style={{ backgroundImage: theme.getAccentGradient(90) }}>68%</span>
-                    </div>
-                    <div className="relative h-4 bg-gray-200/50 rounded-full overflow-hidden backdrop-blur-sm">
-                      <div 
-                        className="absolute inset-y-0 left-0 rounded-full shadow-lg animate-progress-hero"
-                        style={{ width: '68%', background: theme.getAccentGradient(90) }}
-                      >
-                        {/* Shimmer effect */}
-                        <div className="absolute inset-0 animate-shimmer" style={{ background: 'linear-gradient(90deg, transparent, rgba(255,255,255,0.4), transparent)' }}></div>
+                  <div className="relative bg-white/75 backdrop-blur-xl rounded-2xl p-5 border-2 border-white/90 shadow-xl overflow-hidden">
+                    {/* Premium glass reflection */}
+                    <div className="absolute inset-0 bg-linear-to-br from-white/50 via-white/20 to-transparent pointer-events-none"></div>
+                    
+                    {/* Solid background for text readability */}
+                    <div className="absolute inset-0 bg-white/60 backdrop-blur-md"></div>
+                    
+                    <div className="relative z-10">
+                      <div className="flex items-center justify-between mb-3">
+                        <span className="text-sm font-bold text-gray-900 drop-shadow-sm">Success Rate</span>
+                        <span className="text-2xl font-black bg-clip-text text-transparent drop-shadow-sm" style={{ backgroundImage: theme.getAccentGradient(90) }}>68%</span>
                       </div>
+                      <div className="relative h-4 bg-gray-200/80 rounded-full overflow-hidden backdrop-blur-sm shadow-inner">
+                        <div 
+                          className="absolute inset-y-0 left-0 rounded-full shadow-lg animate-progress-hero"
+                          style={{ width: '68%', background: theme.getAccentGradient(90) }}
+                        >
+                          {/* Shimmer effect */}
+                          <div className="absolute inset-0 animate-shimmer" style={{ background: 'linear-gradient(90deg, transparent, rgba(255,255,255,0.4), transparent)' }}></div>
+                        </div>
+                      </div>
+                      <p className="text-xs text-gray-700 mt-2 font-semibold">This week's performance</p>
                     </div>
-                    <p className="text-xs text-gray-600 mt-2 font-medium">This week's performance</p>
                   </div>
                 </div>
               </div>
 
               {/* Floating glassmorphic job cards with proper z-index */}
               {[
-                { company: 'Google', role: 'Senior Engineer', match: '95%', logo: '🔍', top: '5%', left: '-12%', delay: '0s', parallax: 0.15 },
-                { company: 'Microsoft', role: 'Product Manager', match: '89%', logo: '💼', top: '45%', right: '-12%', delay: '1s', parallax: 0.18 },
-                { company: 'Apple', role: 'Design Lead', match: '92%', logo: '🎨', bottom: '8%', left: '-2%', delay: '2s', parallax: 0.12 },
-              ].map((job, i) => (
-                <div
-                  key={i}
-                  className="absolute bg-white/60 backdrop-blur-xl rounded-2xl p-4 border border-white/80 shadow-2xl w-60 z-20 animate-float"
-                  style={{
-                    top: job.top,
-                    bottom: job.bottom,
-                    left: job.left,
-                    right: job.right,
-                    animationDelay: job.delay,
-                    transform: `translateY(${parallaxSpeed * job.parallax}px)`,
-                    boxShadow: '0 20px 40px -10px rgba(0, 0, 0, 0.2), inset 0 1px 0 0 rgba(255, 255, 255, 0.8)',
-                  }}
-                >
-                  {/* Glass reflection */}
-                  <div className="absolute inset-0 bg-linear-to-br from-white/60 via-white/30 to-transparent rounded-2xl"></div>
-                  
-                  <div className="relative z-10">
-                    <div className="flex items-center gap-3 mb-3">
-                      <div className="w-12 h-12 bg-linear-to-br from-gray-100 to-gray-200 rounded-xl flex items-center justify-center text-2xl shadow-inner">
-                        {job.logo}
+                { company: 'Google', role: 'Senior Engineer', match: '95%', icon: Search, top: '5%', left: '-12%', delay: '0s', parallax: 0.15 },
+                { company: 'Microsoft', role: 'Product Manager', match: '89%', icon: Briefcase, top: '45%', right: '-12%', delay: '1s', parallax: 0.18 },
+                { company: 'Apple', role: 'Design Lead', match: '92%', icon: Palette, bottom: '8%', left: '-2%', delay: '2s', parallax: 0.12 },
+              ].map((job, i) => {
+                const JobIcon = job.icon;
+                return (
+                  <div
+                    key={i}
+                    className="absolute bg-white/20 backdrop-blur-2xl rounded-2xl p-5 border-2 border-white/90 shadow-2xl w-64 z-20 animate-float transition-all duration-300 overflow-hidden"
+                    style={{
+                      top: job.top,
+                      bottom: job.bottom,
+                      left: job.left,
+                      right: job.right,
+                      animationDelay: job.delay,
+                      transform: `translateY(${parallaxSpeed * job.parallax}px)`,
+                      boxShadow: `0 30px 60px -15px rgba(0, 0, 0, 0.3), inset 0 1px 0 0 rgba(255, 255, 255, 0.9), 0 0 0 1px ${theme.accentPrimary}20`,
+                    }}
+                  >
+                    {/* Premium glass reflection layer */}
+                    <div className="absolute inset-0 bg-linear-to-br from-white/70 via-white/30 to-transparent pointer-events-none"></div>
+                    
+                    {/* Strong opaque background layer for text readability */}
+                    <div className="absolute inset-0 bg-white/10 backdrop-blur-xl"></div>
+                    
+                    <div className="relative z-10">
+                      <div className="flex items-center gap-3 mb-4">
+                        <div className="w-12 h-12 rounded-xl flex items-center justify-center shadow-xl relative overflow-hidden" style={{ background: theme.getAccentGradient(135) }}>
+                          {/* Inner shine effect */}
+                          <div className="absolute inset-0 bg-linear-to-br from-white/30 to-transparent"></div>
+                          <JobIcon className="w-6 h-6 text-white relative z-10" strokeWidth={2.5} />
+                        </div>
+                        <div className="flex-1 min-w-0">
+                          <h4 className="font-bold text-base text-gray-900 truncate drop-shadow-sm">{job.company}</h4>
+                          <p className="text-xs text-gray-700 font-semibold truncate">{job.role}</p>
+                        </div>
                       </div>
-                      <div className="flex-1">
-                        <h4 className="font-bold text-base text-gray-900">{job.company}</h4>
-                        <p className="text-xs text-gray-600 font-medium">{job.role}</p>
+                      <div className="flex items-center justify-between pt-3 border-t-2 border-gray-200/60">
+                        <span className="text-xs font-bold text-green-700 bg-green-100/90 backdrop-blur-sm px-3 py-1.5 rounded-full shadow-sm border border-green-200/50">
+                          {job.match} Match
+                        </span>
+                        <span className="text-xs text-gray-600 font-bold bg-gray-100/80 px-2.5 py-1 rounded-full">Just now</span>
                       </div>
-                    </div>
-                    <div className="flex items-center justify-between pt-3 border-t border-gray-200/50">
-                      <span className="text-xs font-bold text-green-600 bg-green-50/50 backdrop-blur-sm px-2 py-1 rounded-full">
-                        {job.match} Match
-                      </span>
-                      <span className="text-xs text-gray-500 font-semibold">Just now</span>
                     </div>
                   </div>
-                </div>
-              ))}
+                );
+              })}
             </div>
           </div>
         </div>
