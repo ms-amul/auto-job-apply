@@ -1,65 +1,123 @@
+'use client';
+
+import { useState } from 'react';
 import Container from './Container';
-import { Sparkles, Twitter, Github, Linkedin } from 'lucide-react';
+import SignInModal from './auth/SignInModal';
+import { Sparkles, ArrowUpRight, Twitter, Linkedin, Github } from 'lucide-react';
+import { theme } from '@/utils/theme';
 
 export default function Footer() {
+  const [isSignInOpen, setIsSignInOpen] = useState(false);
+
   return (
-    <footer className="bg-gray-900 border-t border-gray-800">
-      <Container>
-        <div className="py-6">
-          {/* Main Row */}
-          <div className="flex flex-col md:flex-row justify-between items-center gap-4 mb-4">
-            {/* Left: Logo + Brand */}
-            <div className="flex items-center gap-2 group cursor-pointer">
-              <div className="w-7 h-7 bg-linear-to-br from-orange-500 to-rose-500 rounded-lg flex items-center justify-center"
-                style={{
-                  boxShadow: '0 4px 12px -3px rgba(249, 115, 22, 0.3), inset 0 1px 0 0 rgba(255, 255, 255, 0.3)',
-                }}
-              >
-                <Sparkles className="w-4 h-4 text-white" strokeWidth={2.5} />
+    <>
+      <footer className="relative overflow-hidden">
+        {/* Gradient Background */}
+        <div 
+          className="absolute inset-0"
+          style={{
+            background: 'linear-gradient(180deg, #0a0a1a 0%, #1a0a2e 50%, #2d1b3d 100%)',
+          }}
+        />
+
+        <Container>
+          <div className="relative z-10">
+            {/* Top Section */}
+            <div className="pt-16 pb-12">
+              <div className="flex flex-col lg:flex-row justify-between gap-12">
+                {/* Left: Heading */}
+                <div className="max-w-xl">
+                  <div className="inline-flex items-center gap-2 px-3 py-1 rounded-full bg-white/5 border border-white/10 mb-6">
+                    <Sparkles className="w-3 h-3 text-white" strokeWidth={2} />
+                    <span className="text-xs text-white/80">Contact Us</span>
+                  </div>
+                  
+                  <h2 className="text-3xl md:text-4xl lg:text-5xl font-light text-white/90 mb-8 leading-tight">
+                    Interested in working together, trying our the platform or simply learning more?
+                  </h2>
+
+                  <div className="mt-8">
+                    <p className="text-sm text-white/50 mb-2">Contact us at:</p>
+                    <a 
+                      href="mailto:support@jobvita.com"
+                      className="inline-flex items-center gap-2 text-white text-lg hover:text-white/80 transition-colors group"
+                    >
+                      <span>support@jobvita.com</span>
+                      <ArrowUpRight className="w-5 h-5 group-hover:translate-x-0.5 group-hover:-translate-y-0.5 transition-transform" />
+                    </a>
+                  </div>
+                </div>
+
+                {/* Right: Navigation */}
+                <div className="flex flex-wrap gap-8 lg:gap-12">
+                  <div>
+                    <a 
+                      href="#how-it-works" 
+                      className="text-white/70 hover:text-white text-base transition-colors"
+                    >
+                      How It Works
+                    </a>
+                  </div>
+                  <div>
+                    <a 
+                      href="#features" 
+                      className="text-white/70 hover:text-white text-base transition-colors"
+                    >
+                      Features
+                    </a>
+                  </div>
+                  <div>
+                    <a 
+                      href="#pricing" 
+                      className="text-white/70 hover:text-white text-base transition-colors"
+                    >
+                      Pricing
+                    </a>
+                  </div>
+                  <div>
+                    <button
+                      onClick={() => setIsSignInOpen(true)}
+                      className="text-white/70 hover:text-white text-base transition-colors"
+                    >
+                      Get Started
+                    </button>
+                  </div>
+                </div>
               </div>
-              <span className="text-base font-bold text-white">JobVita</span>
             </div>
 
-            {/* Right: Links + Social */}
-            <div className="flex items-center gap-4 md:gap-6">
-              {/* Links - Hidden on mobile */}
-              <div className="hidden md:flex items-center gap-4 text-xs">
-                <a href="#features" className="text-gray-400 hover:text-white transition-colors">Features</a>
-                <a href="#how-it-works" className="text-gray-400 hover:text-white transition-colors">How it Works</a>
-                <a href="#pricing" className="text-gray-400 hover:text-white transition-colors">Pricing</a>
-                <a href="#" className="text-gray-400 hover:text-white transition-colors">Privacy</a>
-              </div>
+            {/* Bottom Bar */}
+            <div className="py-6 flex flex-col md:flex-row justify-between items-center gap-4 border-t border-white/10">
+              <p className="text-sm text-white/40">
+                &copy; {new Date().getFullYear()} JobVita. All rights reserved.
+              </p>
 
-              {/* Social Icons */}
-              <div className="flex items-center gap-2">
+              <div className="flex items-center gap-6">
                 {[
-                  { icon: Twitter, href: '#', label: 'Twitter' },
-                  { icon: Github, href: '#', label: 'GitHub' },
-                  { icon: Linkedin, href: '#', label: 'LinkedIn' },
-                ].map((social, index) => {
+                  { name: 'LinkedIn', icon: Linkedin, href: '#' },
+                  { name: 'Twitter', icon: Twitter, href: '#' },
+                  { name: 'GitHub', icon: Github, href: '#' },
+                ].map((social) => {
                   const Icon = social.icon;
                   return (
                     <a
-                      key={index}
+                      key={social.name}
                       href={social.href}
-                      aria-label={social.label}
-                      className="w-7 h-7 rounded-lg bg-white/5 border border-white/10 flex items-center justify-center hover:bg-white/10 hover:border-white/20 transition-all"
+                      className="text-white/40 hover:text-white transition-colors"
+                      aria-label={social.name}
                     >
-                      <Icon className="w-3.5 h-3.5 text-gray-400 hover:text-white transition-colors" strokeWidth={2} />
+                      <Icon className="w-5 h-5" strokeWidth={1.5} />
                     </a>
                   );
                 })}
               </div>
             </div>
           </div>
+        </Container>
+      </footer>
 
-          {/* Copyright */}
-          <div className="text-xs text-gray-500 text-center md:text-left">
-            © {new Date().getFullYear()} JobVita. All rights reserved.
-          </div>
-        </div>
-      </Container>
-    </footer>
+      <SignInModal isOpen={isSignInOpen} onClose={() => setIsSignInOpen(false)} />
+    </>
   );
 }
 

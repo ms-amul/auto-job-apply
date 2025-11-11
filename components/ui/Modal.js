@@ -2,6 +2,7 @@
 
 import { useEffect } from 'react';
 import { X } from 'lucide-react';
+import { theme } from '@/utils/theme';
 
 export default function Modal({ 
   isOpen, 
@@ -48,40 +49,58 @@ export default function Modal({
       onClick={handleBackdropClick}
       style={{ zIndex }}
     >
-      {/* Backdrop */}
-      <div className="absolute inset-0 bg-black/40 backdrop-blur-md transition-opacity duration-500"></div>
-
-      {/* Modal */}
+      {/* Premium Backdrop with Blur */}
       <div 
-        className={`relative w-full ${maxWidthClasses[maxWidth]} bg-white/90 backdrop-blur-3xl rounded-3xl shadow-2xl border-2 border-white/60 overflow-hidden animate-modal-slideUp ${className}`}
-        onClick={(e) => e.stopPropagation()}
+        className="absolute inset-0 backdrop-blur-xl transition-opacity duration-500"
         style={{
-          boxShadow: '0 25px 50px -12px rgba(0, 0, 0, 0.25), inset 0 2px 0 0 rgba(255, 255, 255, 0.9)',
+          background: 'linear-gradient(135deg, rgba(0, 0, 0, 0.6) 0%, rgba(0, 0, 0, 0.8) 100%)',
         }}
+      ></div>
+
+      {/* Modal Container */}
+      <div 
+        className={`relative w-full ${maxWidthClasses[maxWidth]} rounded-3xl overflow-hidden animate-modal-slideUp ${className}`}
+        onClick={(e) => e.stopPropagation()}
       >
-        {/* Multi-layer glass reflections */}
-        <div className="absolute inset-0 bg-linear-to-br from-white/90 via-white/60 to-transparent opacity-70"></div>
-        <div className="absolute inset-0 bg-linear-to-tl from-white/40 via-transparent to-transparent opacity-50"></div>
-        
-        {/* Top edge highlight */}
-        <div className="absolute top-0 left-0 right-0 h-px bg-linear-to-r from-transparent via-white/80 to-transparent"></div>
-        
-        {/* Shimmer effect */}
-        <div className="absolute inset-0 overflow-hidden opacity-0 hover:opacity-100 transition-opacity duration-1000">
-          <div className="absolute inset-0 bg-linear-to-r from-transparent via-white/40 to-transparent -translate-x-full hover:translate-x-full transition-transform duration-1500"></div>
-        </div>
+        {/* Glassmorphic Background */}
+        <div 
+          className="absolute inset-0 bg-white/95 backdrop-blur-3xl"
+          style={{
+            boxShadow: `0 25px 50px -12px rgba(0, 0, 0, 0.4), 0 0 0 1px ${theme.accentPrimary}10`,
+          }}
+        ></div>
+
+        {/* Subtle Accent Gradient Top Border */}
+        <div 
+          className="absolute top-0 left-0 right-0 h-0.5"
+          style={{
+            background: theme.getAccentGradient(90),
+            opacity: 0.6,
+          }}
+        ></div>
+
+        {/* Glass Reflection Layers */}
+        <div className="absolute inset-0 bg-linear-to-br from-white/50 via-transparent to-transparent pointer-events-none"></div>
+        <div className="absolute top-0 left-0 right-0 h-px bg-linear-to-r from-transparent via-white to-transparent opacity-60"></div>
+
+        {/* Subtle Ambient Glow */}
+        <div 
+          className="absolute -top-24 -right-24 w-48 h-48 rounded-full blur-3xl opacity-10 pointer-events-none"
+          style={{
+            background: theme.getAccentGradient(135),
+          }}
+        ></div>
 
         {/* Close Button */}
         {showCloseButton && (
           <button
             onClick={onClose}
-            className="absolute top-4 right-4 z-50 w-10 h-10 rounded-xl bg-white/20 backdrop-blur-sm border border-white/30 flex items-center justify-center transition-all duration-300 hover:bg-white/30 hover:scale-110 group"
+            className="absolute top-6 right-6 z-50 w-9 h-9 rounded-full bg-gray-100 hover:bg-gray-200 flex items-center justify-center transition-all duration-300 hover:scale-110 group"
             style={{
-              boxShadow: '0 4px 12px -3px rgba(0, 0, 0, 0.2), inset 0 1px 0 0 rgba(255, 255, 255, 0.2)',
+              boxShadow: '0 2px 8px -1px rgba(0, 0, 0, 0.1)',
             }}
           >
-            <div className="absolute inset-0 bg-linear-to-br from-white/20 to-transparent rounded-xl"></div>
-            <X className="w-5 h-5 text-gray-700 relative z-10 group-hover:rotate-90 transition-transform duration-300" strokeWidth={2.5} />
+            <X className="w-4 h-4 text-gray-600 group-hover:rotate-90 transition-transform duration-300" strokeWidth={2} />
           </button>
         )}
 

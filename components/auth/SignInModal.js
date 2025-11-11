@@ -6,6 +6,7 @@ import EmailStep from './EmailStep';
 import PasswordStep from './PasswordStep';
 import { getCookie, setCookie } from '@/utils/cookies';
 import Modal from '@/components/ui/Modal';
+import { theme } from '@/utils/theme';
 
 export default function SignInModal({ isOpen, onClose }) {
   const [step, setStep] = useState('email'); // 'email' or 'password'
@@ -78,23 +79,10 @@ export default function SignInModal({ isOpen, onClose }) {
       maxWidth="md"
       zIndex={100}
     >
-      <div className="p-8 md:p-10">
-        {/* Logo/Brand */}
-        <div className="flex items-center justify-center gap-2 mb-6">
-          <div className="w-8 h-8 bg-linear-to-br from-orange-500 via-rose-500 to-pink-500 rounded-xl flex items-center justify-center"
-            style={{
-              boxShadow: '0 4px 12px -3px rgba(249, 115, 22, 0.3), inset 0 1px 0 0 rgba(255, 255, 255, 0.3)',
-            }}
-          >
-            <Sparkles className="w-4 h-4 text-white" strokeWidth={2.5} />
-          </div>
-          <span className="text-xl font-black bg-linear-to-r from-gray-900 via-orange-900 to-gray-900 bg-clip-text text-transparent">
-            JobVita
-          </span>
-        </div>
+      <div className="p-8 md:p-12">
 
         {/* Step Content */}
-        <div className="min-h-[400px]">
+        <div className="min-h-[420px]">
           {step === 'email' ? (
             <EmailStep 
               email={email}
