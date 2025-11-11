@@ -69,15 +69,15 @@ export default function Features() {
         className={`group relative shrink-0 ${isMobile ? 'w-[280px]' : 'w-80 md:w-[360px]'}`}
       >
         <div className={`
-          relative h-full bg-white/5 backdrop-blur-2xl rounded-2xl ${isMobile ? 'p-5' : 'p-6 md:p-8'}
+          relative h-full bg-white/5 backdrop-blur-2xl rounded-xl ${isMobile ? 'p-4' : 'p-5 md:p-6'}
           border border-white/10
-          shadow-xl
+          shadow-lg
           transition-all duration-700 ease-out
-          transform ${isMobile ? '' : 'hover:-translate-y-2 hover:border-white/20'}
+          transform ${isMobile ? '' : 'hover:-translate-y-1 hover:border-white/20'}
           overflow-hidden
         `}
           style={{
-            boxShadow: '0 20px 40px -10px rgba(0, 0, 0, 0.3), inset 0 1px 0 0 rgba(255, 255, 255, 0.1)',
+            boxShadow: '0 15px 30px -8px rgba(0, 0, 0, 0.25), inset 0 1px 0 0 rgba(255, 255, 255, 0.1)',
           }}
         >
           {/* Premium glass reflection with multiple layers */}
@@ -102,39 +102,39 @@ export default function Features() {
           {/* Content */}
           <div className="relative z-10">
             {/* Premium glassmorphic icon container */}
-            <div className={`relative ${isMobile ? 'w-14 h-14 mb-5' : 'w-16 h-16 md:w-18 md:h-18 mb-6'}`}>
+            <div className={`relative ${isMobile ? 'w-12 h-12 mb-4' : 'w-14 h-14 md:w-16 md:h-16 mb-5'}`}>
               {/* Icon glow backdrop */}
-              <div className="absolute inset-0 rounded-2xl blur-xl opacity-50 transition-all duration-700"
+              <div className="absolute inset-0 rounded-xl blur-lg opacity-40 transition-all duration-700"
                 style={{ background: theme.getAccentGradient(135) }}
               ></div>
 
               {/* Glass icon box */}
               <div className={`
                 relative w-full h-full
-                rounded-2xl
+                rounded-xl
                 flex items-center justify-center
-                transform ${isMobile ? '' : 'group-hover:scale-110 group-hover:rotate-6'}
+                transform ${isMobile ? '' : 'group-hover:scale-105 group-hover:rotate-3'}
                 transition-all duration-700
                 overflow-hidden
               `}
                 style={{
                   background: theme.getAccentGradient(135),
-                  boxShadow: `0 10px 25px -5px ${theme.accentPrimary}60, inset 0 1px 0 0 rgba(255, 255, 255, 0.3)`,
+                  boxShadow: `0 8px 20px -4px ${theme.accentPrimary}60, inset 0 1px 0 0 rgba(255, 255, 255, 0.3)`,
                 }}
               >
                 {/* Glass shine overlay */}
                 <div className="absolute inset-0 bg-linear-to-br from-white/30 via-transparent to-transparent rounded-2xl"></div>
                 <div className="absolute top-0 left-0 right-0 h-1/2 bg-linear-to-b from-white/20 to-transparent rounded-t-2xl"></div>
 
-                <Icon className={`relative z-10 text-white drop-shadow-lg ${isMobile ? 'w-7 h-7' : 'w-8 h-8 md:w-9 md:h-9'}`} strokeWidth={2.5} />
+                <Icon className={`relative z-10 text-white drop-shadow-lg ${isMobile ? 'w-6 h-6' : 'w-7 h-7 md:w-8 md:h-8'}`} strokeWidth={2.5} />
               </div>
             </div>
 
-            <h3 className={`${isMobile ? 'text-lg mb-2' : 'text-xl md:text-2xl mb-3'} font-black text-white transition-all duration-500 tracking-tight`}>
+            <h3 className={`${isMobile ? 'text-base mb-2' : 'text-lg md:text-xl mb-2.5'} font-black text-white transition-all duration-500 tracking-tight`}>
               {feature.title}
             </h3>
 
-            <p className={`text-gray-300 ${isMobile ? 'text-sm' : 'text-base md:text-lg'} leading-relaxed`}>
+            <p className={`text-gray-300 ${isMobile ? 'text-xs' : 'text-sm md:text-base'} leading-relaxed`}>
               {feature.description}
             </p>
           </div>
@@ -235,10 +235,10 @@ export default function Features() {
         </div>
 
         {/* Inner content with padding */}
-        <div className={`relative ${isMobile ? 'py-16' : 'py-16 md:py-8'}`}>
+        <div className={`relative ${isMobile ? 'py-12' : 'py-12 md:py-16'}`}>
 
           <Container>
-            <div className="relative z-10 text-center lg:text-left mb-12 md:mb-16">
+            <div className="relative z-10 text-center lg:text-left mb-8 md:mb-12">
               {/* Premium badge */}
               <div
                 className="inline-flex items-center gap-2 bg-white/10 backdrop-blur-xl border border-white/20 rounded-full px-5 py-2 mb-6 shadow-xl"
@@ -251,7 +251,7 @@ export default function Features() {
                 </span>
               </div>
 
-              <h2 className={`${isMobile ? 'text-3xl' : 'text-4xl md:text-5xl lg:text-6xl'} font-black mb-4 md:mb-6 tracking-tight`}>
+              <h2 className={`${isMobile ? 'text-2xl' : 'text-3xl md:text-4xl lg:text-5xl'} font-black mb-3 md:mb-5 tracking-tight`}>
                 <span className="text-white">
                   Everything You Need to
                 </span>
@@ -261,7 +261,7 @@ export default function Features() {
                 </span>
               </h2>
 
-              <p className={`${isMobile ? 'text-base' : 'text-lg md:text-xl'} text-gray-300 font-medium ${isMobile ? 'max-w-md' : 'max-w-2xl'} ${isMobile ? 'mx-auto' : 'lg:mx-0'}`}>
+              <p className={`${isMobile ? 'text-sm' : 'text-base md:text-lg'} text-gray-300 font-medium ${isMobile ? 'max-w-md' : 'max-w-2xl'} ${isMobile ? 'mx-auto' : 'lg:mx-0'}`}>
                 Powerful automation features that work 24/7 to help you{' '}
                 <span className="font-bold text-white">
                   apply faster, track smarter,

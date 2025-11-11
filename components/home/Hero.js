@@ -4,39 +4,39 @@ import { Trophy, Rocket, ArrowRight, Play } from 'lucide-react';
 
 export default function Hero() {
   return (
-    <section className="pb-16 md:pb-24 pt-24 md:pt-32">
+    <section className="pb-12 md:pb-16 pt-20 md:pt-24">
       <Container>
         <div className="grid lg:grid-cols-2 gap-8 lg:gap-12 items-center">
           {/* Left Content */}
           <div className="text-center lg:text-left animate-fadeInUp" style={{ animationDuration: '1s' }}>
-            <h1 className="text-4xl sm:text-5xl lg:text-6xl xl:text-7xl font-bold text-gray-900 leading-tight mb-6">
+            <h1 className="text-3xl sm:text-4xl lg:text-5xl xl:text-6xl font-bold text-gray-900 leading-tight mb-5">
               Your dream job is{' '}
               <span className="relative inline-block">
                 one click
-                <svg className="absolute -bottom-2 left-0 w-full" height="12" viewBox="0 0 200 12" fill="none">
-                  <path d="M2 10C50 4 150 4 198 10" stroke={theme.accentPrimary} strokeWidth="3" strokeLinecap="round"/>
+                <svg className="absolute -bottom-2 left-0 w-full" height="10" viewBox="0 0 200 10" fill="none">
+                  <path d="M2 8C50 3 150 3 198 8" stroke={theme.accentPrimary} strokeWidth="2.5" strokeLinecap="round"/>
                 </svg>
               </span>
               {' '}away
             </h1>
             
-            <p className="text-lg sm:text-xl text-gray-600 mb-8 max-w-xl mx-auto lg:mx-0">
+            <p className="text-base sm:text-lg text-gray-600 mb-6 max-w-xl mx-auto lg:mx-0 leading-relaxed">
               For <span className="font-medium" style={{ color: theme.accentPrimary }}>job seekers</span>, <span className="font-medium" style={{ color: theme.accentPrimary }}>career changers</span>, and <span className="font-medium" style={{ color: theme.accentPrimary }}>professionals</span> who want to apply to hundreds of jobs effortlessly and land interviews faster.
             </p>
 
-            <div className="flex flex-col sm:flex-row gap-4 justify-center lg:justify-start mb-8 animate-fadeInUp" style={{ animationDuration: '1s', animationDelay: '0.3s' }}>
+            <div className="flex flex-col sm:flex-row gap-3 justify-center lg:justify-start mb-6 animate-fadeInUp" style={{ animationDuration: '1s', animationDelay: '0.3s' }}>
               <button
-                className="group text-white px-8 py-4 rounded-full text-base font-bold transition-all flex items-center justify-center gap-2 shadow-xl hover:shadow-2xl hover:scale-105 active:scale-95"
+                className="group text-white px-6 py-3 rounded-full text-sm font-semibold transition-all flex items-center justify-center gap-2 shadow-lg hover:shadow-xl hover:scale-105 active:scale-95"
                 style={{ 
                   background: theme.getAccentGradient(90),
-                  boxShadow: `0 20px 40px -10px ${theme.accentPrimary}60`
+                  boxShadow: `0 15px 30px -8px ${theme.accentPrimary}60`
                 }}
               >
                 Start Applying for Free
-                <ArrowRight className="w-5 h-5 group-hover:translate-x-1 transition-transform" strokeWidth={2.5} />
+                <ArrowRight className="w-4 h-4 group-hover:translate-x-1 transition-transform" strokeWidth={2} />
               </button>
-              <button className="group border-2 border-gray-300 text-gray-800 px-8 py-4 rounded-full text-base font-bold hover:border-gray-400 hover:bg-white/80 backdrop-blur-sm transition-all shadow-lg hover:shadow-xl flex items-center justify-center gap-2 hover:scale-105 active:scale-95">
-                <Play className="w-4 h-4 fill-gray-800" strokeWidth={0} />
+              <button className="group border-2 border-gray-300 text-gray-800 px-6 py-3 rounded-full text-sm font-semibold hover:border-gray-400 hover:bg-white/80 backdrop-blur-sm transition-all shadow-md hover:shadow-lg flex items-center justify-center gap-2 hover:scale-105 active:scale-95">
+                <Play className="w-3.5 h-3.5 fill-gray-800" strokeWidth={0} />
                 Watch Demo
               </button>
             </div>

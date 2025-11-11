@@ -87,7 +87,7 @@ export default function ParallaxStats() {
     <section
       id="pricing"
       ref={sectionRef}
-      className="relative py-24 md:py-32 overflow-hidden"
+      className="relative py-16 md:py-20 overflow-hidden"
     >
       {/* Animated gradient background with accent colors */}
       <div 
@@ -208,14 +208,14 @@ export default function ParallaxStats() {
 
                     {/* Value */}
                     <div
-                      className="relative z-10 text-4xl md:text-6xl font-black text-white mb-2 text-center drop-shadow-xl animate-countUp"
+                      className="relative z-10 text-3xl md:text-4xl font-black text-white mb-2 text-center drop-shadow-xl animate-countUp"
                       style={{ animationDelay: stat.delay }}
                     >
                       {stat.value}
                     </div>
 
                     {/* Label */}
-                    <div className="relative z-10 text-sm md:text-base text-white font-semibold text-center leading-tight">
+                    <div className="relative z-10 text-xs md:text-sm text-white font-semibold text-center leading-tight">
                       {stat.label}
                     </div>
                   </div>
@@ -273,12 +273,12 @@ export default function ParallaxStats() {
               {/* Content */}
               <div className="relative z-10 max-w-xl">
                 {/* Heading */}
-                <h2 className="text-4xl md:text-5xl lg:text-6xl font-black text-white mb-4 leading-tight">
+                <h2 className="text-3xl md:text-4xl lg:text-5xl font-black text-white mb-4 leading-tight">
                   Ready to land your dream job?
                 </h2>
 
                 {/* Subtitle */}
-                <p className="text-base md:text-lg text-white/90 mb-10 leading-relaxed">
+                <p className="text-sm md:text-base text-white/90 mb-8 leading-relaxed">
                   Your AI-powered job search assistant is ready to help you succeed. Let's get started.
                 </p>
 
@@ -286,7 +286,7 @@ export default function ParallaxStats() {
                 <div className="flex flex-col sm:flex-row gap-4">
                   <button 
                     onClick={() => setIsSignInOpen(true)}
-                    className="group relative cursor-pointer bg-gray-900 hover:bg-black text-white px-8 py-4 rounded-full text-base font-semibold transition-all duration-300 inline-flex items-center justify-between gap-4 shadow-xl hover:shadow-2xl"
+                    className="group relative cursor-pointer bg-gray-900 hover:bg-black text-white px-6 py-3 rounded-full text-sm font-semibold transition-all duration-300 inline-flex items-center justify-between gap-3 shadow-lg hover:shadow-xl"
                   >
                     <span>Start Applying for Free</span>
                     <div className="w-8 h-8 rounded-full bg-white/20 flex items-center justify-center">
@@ -296,7 +296,7 @@ export default function ParallaxStats() {
 
                   <button 
                     onClick={() => setIsSignInOpen(true)}
-                    className="group relative cursor-pointer bg-gray-900 hover:bg-black text-white px-8 py-4 rounded-full text-base font-semibold transition-all duration-300 inline-flex items-center justify-between gap-4 shadow-xl hover:shadow-2xl"
+                    className="group relative cursor-pointer bg-gray-900 hover:bg-black text-white px-6 py-3 rounded-full text-sm font-semibold transition-all duration-300 inline-flex items-center justify-between gap-3 shadow-lg hover:shadow-xl"
                   >
                     <span>View Features</span>
                     <div className="w-8 h-8 rounded-full bg-white/20 flex items-center justify-center">
@@ -306,7 +306,7 @@ export default function ParallaxStats() {
                 </div>
 
                 {/* Subtle benefits note */}
-                <p className="text-sm text-white/70 mt-6">
+                <p className="text-xs text-white/70 mt-5">
                   No credit card required • 100 free applications • Start in 2 minutes
                 </p>
               </div>

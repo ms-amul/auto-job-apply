@@ -125,7 +125,7 @@ export default function HeroParallax() {
       </div>
 
       <Container>
-        <div className="relative z-10 grid lg:grid-cols-2 gap-12 items-center pt-16">
+        <div className="relative z-10 grid lg:grid-cols-2 gap-10 items-center pt-10">
           {/* Left Content - Premium Glass Design */}
           <div 
             className="text-center lg:text-left text-sm"
@@ -151,7 +151,7 @@ export default function HeroParallax() {
 
             {/* Enhanced Heading with Parallax */}
             <h1 
-              className="text-5xl sm:text-6xl lg:text-7xl xl:text-8xl font-black text-gray-900 leading-[1.1] mb-4 animate-fadeInUp tracking-tight"
+              className="text-3xl sm:text-4xl lg:text-5xl xl:text-6xl font-black text-gray-900 leading-tight mb-4 animate-fadeInUp tracking-tight"
               style={{
                 transform: `translateY(${parallaxSpeed * 0.05}px)`,
                 animationDuration: '1.2s',
@@ -164,15 +164,15 @@ export default function HeroParallax() {
                   one click
                 </span>
                 <svg 
-                  className="absolute -bottom-2 left-0 w-full" 
-                  height="16" 
-                  viewBox="0 0 200 16" 
+                  className="absolute -bottom-1 left-0 w-full" 
+                  height="12" 
+                  viewBox="0 0 200 12" 
                   fill="none"
                 >
                   <path 
-                    d="M2 12C50 6 150 6 198 12" 
+                    d="M2 9C50 4 150 4 198 9" 
                     stroke="url(#gradient)" 
-                    strokeWidth="4" 
+                    strokeWidth="3" 
                     strokeLinecap="round"
                   />
                   <defs>
@@ -188,20 +188,20 @@ export default function HeroParallax() {
             
             {/* Enhanced Description */}
             <p 
-              className="text-xl sm:text-2xl text-gray-700 mb-4 max-w-2xl mx-auto lg:mx-0 animate-fadeInUp font-medium leading-relaxed" 
+              className="text-base sm:text-lg text-gray-700 mb-4 max-w-2xl mx-auto lg:mx-0 animate-fadeInUp font-medium leading-relaxed" 
               style={{ 
                 animationDuration: '1.2s',
                 animationDelay: '0.6s',
                 transform: `translateY(${parallaxSpeed * 0.08}px)`,
               }}
             >
-              Join <span className="font-black bg-clip-text text-transparent" style={{ backgroundImage: theme.getAccentGradient(90) }}>2,500+</span> professionals who automated their job search and landed{' '}
-              <span className="font-black bg-clip-text text-transparent" style={{ backgroundImage: theme.getAccentGradient(90) }}>5x more interviews</span> in half the time.
+              Join <span className="font-bold bg-clip-text text-transparent" style={{ backgroundImage: theme.getAccentGradient(90) }}>2,500+</span> professionals who automated their job search and landed{' '}
+              <span className="font-bold bg-clip-text text-transparent" style={{ backgroundImage: theme.getAccentGradient(90) }}>5x more interviews</span> in half the time.
             </p>
 
             {/* Premium Glassmorphic Buttons */}
             <div 
-              className="flex flex-col sm:flex-row gap-4 justify-center lg:justify-start mb-4 animate-fadeInUp" 
+              className="flex flex-col sm:flex-row gap-3 justify-center lg:justify-start mb-4 animate-fadeInUp" 
               style={{ 
                 animationDuration: '1.2s',
                 animationDelay: '0.8s',
@@ -209,27 +209,27 @@ export default function HeroParallax() {
               }}
             >
               <button 
-                className="cursor-pointer relative group text-white px-8 py-4 rounded-full text-lg font-bold flex items-center justify-center gap-2 shadow-2xl overflow-hidden"
+                className="cursor-pointer relative group text-white px-6 py-3 rounded-full text-sm font-semibold flex items-center justify-center gap-2 shadow-lg overflow-hidden hover:shadow-xl transition-shadow"
                 style={{
                   background: theme.getAccentGradient(90),
-                  boxShadow: `0 20px 40px -10px ${theme.accentPrimary}80`,
+                  boxShadow: `0 15px 30px -8px ${theme.accentPrimary}80`,
                 }}
               >
                 <span className="relative z-10 flex items-center gap-2">
                   Start Applying for Free
-                  <ArrowRight className="w-5 h-5" />
+                  <ArrowRight className="w-4 h-4" />
                 </span>
                 {/* Glass shine effect */}
                 <div className="absolute inset-0" style={{ background: 'linear-gradient(90deg, transparent, rgba(255,255,255,0.2), transparent)' }}></div>
               </button>
               
               <button 
-                className="cursor-pointer relative bg-white/60 backdrop-blur-xl border-2 border-white/80 text-gray-900 px-8 py-4 rounded-full text-lg font-bold flex items-center justify-center gap-2 shadow-xl overflow-hidden"
+                className="cursor-pointer relative bg-white/60 backdrop-blur-xl border-2 border-white/80 text-gray-900 px-6 py-3 rounded-full text-sm font-semibold flex items-center justify-center gap-2 shadow-md overflow-hidden hover:shadow-lg transition-shadow"
                 style={{
-                  boxShadow: '0 10px 30px -5px rgba(0, 0, 0, 0.2), inset 0 1px 0 0 rgba(255, 255, 255, 0.8)',
+                  boxShadow: '0 8px 20px -4px rgba(0, 0, 0, 0.15), inset 0 1px 0 0 rgba(255, 255, 255, 0.8)',
                 }}
               >
-                <Play className="w-5 h-5 fill-current" />
+                <Play className="w-4 h-4 fill-current" />
                 <span>Watch Demo</span>
               </button>
             </div>
@@ -276,12 +276,12 @@ export default function HeroParallax() {
 
                 <div className="relative z-10">
                   {/* Header with premium styling - Dark Theme */}
-                  <div className="flex items-center justify-between mb-8">
+                  <div className="flex items-center justify-between mb-6">
                     <div>
-                      <h3 className="text-3xl font-black text-white mb-1 tracking-tight">
+                      <h3 className="text-xl font-black text-white mb-1 tracking-tight">
                         Job Applications
                       </h3>
-                      <p className="text-sm text-gray-300 font-medium">Real-time automation dashboard</p>
+                      <p className="text-xs text-gray-300 font-medium">Real-time automation dashboard</p>
                     </div>
                     <div className="flex gap-2 bg-white/10 backdrop-blur-sm rounded-full px-3 py-2 border border-white/20">
                       <div className="w-2 h-2 bg-green-400 rounded-full animate-pulse shadow-sm shadow-green-400/50"></div>
@@ -319,14 +319,14 @@ export default function HeroParallax() {
                           
                           <div className="relative z-10">
                             <div className="flex items-start justify-between mb-2">
-                              <div className="w-10 h-10 rounded-xl flex items-center justify-center shadow-lg relative overflow-hidden" style={{ background: theme.getAccentGradient(135) }}>
+                              <div className="w-9 h-9 rounded-xl flex items-center justify-center shadow-lg relative overflow-hidden" style={{ background: theme.getAccentGradient(135) }}>
                                 {/* Inner shine */}
                                 <div className="absolute inset-0 bg-linear-to-br from-white/30 to-transparent"></div>
-                                <IconComponent className="w-5 h-5 text-white relative z-10" strokeWidth={2.5} />
+                                <IconComponent className="w-4 h-4 text-white relative z-10" strokeWidth={2.5} />
                               </div>
-                              <div className="text-4xl font-black text-white">{stat.value}</div>
+                              <div className="text-3xl font-black text-white">{stat.value}</div>
                             </div>
-                            <div className="text-xs font-bold text-gray-300 uppercase tracking-wider">{stat.label}</div>
+                            <div className="text-[10px] font-bold text-gray-300 uppercase tracking-wide">{stat.label}</div>
                           </div>
                         </div>
                       );
@@ -400,22 +400,22 @@ export default function HeroParallax() {
                           <JobIcon className="w-6 h-6 text-white relative z-10" strokeWidth={2.5} />
                         </div>
                         <div className="flex-1 min-w-0">
-                          <h4 className="font-bold text-base text-white truncate">{job.company}</h4>
-                          <p className="text-xs text-gray-300 font-medium truncate">{job.role}</p>
+                          <h4 className="font-bold text-sm text-white truncate">{job.company}</h4>
+                          <p className="text-[10px] text-gray-300 font-medium truncate">{job.role}</p>
                         </div>
                       </div>
-                      <div className="flex items-center justify-between pt-3 border-t border-white/10">
+                      <div className="flex items-center justify-between pt-2.5 border-t border-white/10">
                         <span 
-                          className="text-xs font-bold px-3 py-1.5 rounded-full"
+                          className="text-[10px] font-bold px-2.5 py-1 rounded-full"
                           style={{
                             background: `linear-gradient(135deg, ${theme.accentPrimary}20, ${theme.accentSecondary}15)`,
-                            color: theme.accentPrimary,
+                            color: 'white',
                             border: `1px solid ${theme.accentPrimary}30`,
                           }}
                         >
                           {job.match} Match
                         </span>
-                        <span className="text-xs text-gray-400 font-medium">Just now</span>
+                        <span className="text-[10px] text-gray-400 font-medium">Just now</span>
                       </div>
                     </div>
                   </div>

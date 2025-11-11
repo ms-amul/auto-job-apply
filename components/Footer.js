@@ -13,7 +13,7 @@ export default function Footer() {
     <>
       <footer className="relative overflow-hidden">
         {/* Gradient Background */}
-        <div 
+        <div
           className="absolute inset-0"
           style={{
             background: 'linear-gradient(180deg, #0a0a1a 0%, #1a0a2e 50%, #2d1b3d 100%)',
@@ -31,14 +31,14 @@ export default function Footer() {
                     <Sparkles className="w-3 h-3 text-white" strokeWidth={2} />
                     <span className="text-xs text-white/80">Contact Us</span>
                   </div>
-                  
-                  <h2 className="text-3xl md:text-4xl lg:text-5xl font-light text-white/90 mb-8 leading-tight">
+
+                  <h2 className="text-xl md:text-2xl lg:text-3xl font-light text-white/90 mb-8 leading-tight">
                     Interested in working together, trying our the platform or simply learning more?
                   </h2>
 
                   <div className="mt-8">
                     <p className="text-sm text-white/50 mb-2">Contact us at:</p>
-                    <a 
+                    <a
                       href="mailto:support@jobvita.com"
                       className="inline-flex items-center gap-2 text-white text-lg hover:text-white/80 transition-colors group"
                     >
@@ -51,24 +51,24 @@ export default function Footer() {
                 {/* Right: Navigation */}
                 <div className="flex flex-wrap gap-8 lg:gap-12">
                   <div>
-                    <a 
-                      href="#how-it-works" 
+                    <a
+                      href="#how-it-works"
                       className="text-white/70 hover:text-white text-base transition-colors"
                     >
                       How It Works
                     </a>
                   </div>
                   <div>
-                    <a 
-                      href="#features" 
+                    <a
+                      href="#features"
                       className="text-white/70 hover:text-white text-base transition-colors"
                     >
                       Features
                     </a>
                   </div>
                   <div>
-                    <a 
-                      href="#pricing" 
+                    <a
+                      href="#pricing"
                       className="text-white/70 hover:text-white text-base transition-colors"
                     >
                       Pricing

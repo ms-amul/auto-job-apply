@@ -197,7 +197,7 @@ export default function ProcessParallax() {
         ></div>
       </div>
 
-      <div className="sticky top-0 min-h-screen flex items-center py-20">
+      <div className="sticky top-0 min-h-screen flex items-center py-12">
         <Container>
           {/* Premium heading section */}
           <div className="mb-10 relative">
@@ -216,7 +216,7 @@ export default function ProcessParallax() {
                 style={{ background: `radial-gradient(ellipse, ${theme.accentPrimary}40, transparent 70%)` }}
               ></div>
               
-              <h2 className="relative text-left text-5xl md:text-6xl lg:text-7xl xl:text-8xl font-black leading-tight tracking-tight">
+              <h2 className="relative text-left text-3xl md:text-4xl lg:text-5xl xl:text-6xl font-black leading-tight tracking-tight">
                 <span className="inline-block animate-fadeInUp" style={{ animationDuration: '1.2s' }}>
                   <span className="bg-clip-text text-transparent drop-shadow-lg" style={{ backgroundImage: theme.getAccentGradient(90) }}>
                     Automated Success
@@ -256,7 +256,7 @@ export default function ProcessParallax() {
             </div>
 
             {/* Premium subtitle */}
-            <p className="text-xl md:text-2xl lg:text-3xl text-gray-700 animate-fadeInUp font-medium" style={{ animationDelay: '0.2s', animationDuration: '1.2s' }}>
+            <p className="text-base md:text-lg lg:text-xl text-gray-700 animate-fadeInUp font-medium" style={{ animationDelay: '0.2s', animationDuration: '1.2s' }}>
               Watch your job applications{' '}
               <span className="relative inline-block">
                 <span className="font-bold text-transparent bg-clip-text" style={{ backgroundImage: theme.getAccentGradient(90) }}>
@@ -394,7 +394,7 @@ export default function ProcessParallax() {
                           {isPast ? (
                             <CheckCircle className="w-8 h-8 text-white drop-shadow-lg" strokeWidth={2.5} />
                           ) : (
-                            <span className={`text-2xl font-black ${isActive ? 'text-white drop-shadow-lg' : 'text-gray-600'}`}>
+                            <span className={`text-xl font-black ${isActive ? 'text-white drop-shadow-lg' : 'text-gray-600'}`}>
                               {index + 1}
                             </span>
                           )}
@@ -444,7 +444,7 @@ export default function ProcessParallax() {
                         {/* Title */}
                         <div className="flex-1">
                           <h3 className={`
-                            text-2xl font-black mb-1 transition-all duration-700 tracking-tight
+                            text-xl font-black mb-1 transition-all duration-700 tracking-tight
                             ${isActive 
                               ? 'bg-clip-text text-transparent' 
                               : 'text-gray-900'
@@ -454,7 +454,7 @@ export default function ProcessParallax() {
                           >
                             {step.title}
                           </h3>
-                          <p className="text-sm text-gray-700 font-medium">
+                          <p className="text-xs text-gray-700 font-medium">
                             {step.description}
                           </p>
                         </div>
