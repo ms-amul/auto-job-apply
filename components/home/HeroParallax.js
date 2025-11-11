@@ -125,7 +125,7 @@ export default function HeroParallax() {
       </div>
 
       <Container>
-        <div className="relative z-10 grid lg:grid-cols-2 gap-12 items-center">
+        <div className="relative z-10 grid lg:grid-cols-2 gap-12 items-center py-2">
           {/* Left Content - Premium Glass Design */}
           <div 
             className="text-center lg:text-left"
