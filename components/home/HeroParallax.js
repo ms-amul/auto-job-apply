@@ -255,38 +255,38 @@ export default function HeroParallax() {
                 ></div>
               </div>
 
-              {/* Main glassmorphic dashboard card */}
+              {/* Main glassmorphic dashboard card - Dark Theme */}
               <div 
-                className="absolute inset-0 bg-white/75 backdrop-blur-2xl rounded-3xl shadow-2xl border-2 border-white/90 p-4 overflow-hidden z-10"
+                className="absolute inset-0 rounded-3xl shadow-2xl p-4 overflow-hidden z-10"
                 style={{
                   transform: `translateY(${parallaxSpeed * 0.05}px)`,
-                  boxShadow: `0 30px 60px -15px rgba(0, 0, 0, 0.25), inset 0 1px 0 0 rgba(255, 255, 255, 0.9), 0 0 0 1px ${theme.accentPrimary}15`,
+                  background: 'linear-gradient(135deg, rgba(15, 23, 42, 0.95), rgba(30, 41, 59, 0.95))',
+                  backdropFilter: 'blur(40px)',
+                  boxShadow: `0 30px 60px -15px rgba(0, 0, 0, 0.4), inset 0 1px 0 0 rgba(255, 255, 255, 0.1), 0 0 0 1px ${theme.accentPrimary}30, 0 0 60px -15px ${theme.accentPrimary}40`,
                 }}
               >
                 {/* Premium glass reflection layer */}
-                <div className="absolute inset-0 bg-linear-to-br from-white/60 via-white/20 to-transparent pointer-events-none"></div>
+                <div className="absolute inset-0 bg-linear-to-br from-white/10 via-transparent to-transparent pointer-events-none"></div>
                 
-                {/* Strong background layer for text readability */}
-                <div className="absolute inset-0 bg-white/65 backdrop-blur-xl"></div>
+                {/* Subtle accent gradient overlay */}
+                <div className="absolute inset-0 opacity-[0.08]" style={{ background: theme.getAccentGradient(135) }}></div>
                 
-                {/* Subtle grid pattern */}
-                <div className="absolute inset-0 opacity-[0.015]" style={{
-                  backgroundImage: 'repeating-linear-gradient(0deg, #000 0px, #000 1px, transparent 1px, transparent 20px), repeating-linear-gradient(90deg, #000 0px, #000 1px, transparent 1px, transparent 20px)'
-                }}></div>
+                {/* Top highlight edge */}
+                <div className="absolute top-0 left-0 right-0 h-px bg-linear-to-r from-transparent via-white/40 to-transparent"></div>
 
                 <div className="relative z-10">
-                  {/* Header with premium styling */}
+                  {/* Header with premium styling - Dark Theme */}
                   <div className="flex items-center justify-between mb-8">
                     <div>
-                      <h3 className="text-3xl font-black text-gray-900 mb-1 tracking-tight drop-shadow-sm">
+                      <h3 className="text-3xl font-black text-white mb-1 tracking-tight">
                         Job Applications
                       </h3>
-                      <p className="text-sm text-gray-700 font-semibold">Real-time automation dashboard</p>
+                      <p className="text-sm text-gray-300 font-medium">Real-time automation dashboard</p>
                     </div>
-                    <div className="flex gap-2 bg-white/90 backdrop-blur-sm rounded-full px-3 py-2 border-2 border-white shadow-lg">
-                      <div className="w-2 h-2 bg-green-500 rounded-full animate-pulse shadow-sm"></div>
-                      <div className="w-2 h-2 bg-yellow-500 rounded-full animate-pulse shadow-sm" style={{ animationDelay: '0.3s' }}></div>
-                      <div className="w-2 h-2 bg-red-500 rounded-full animate-pulse shadow-sm" style={{ animationDelay: '0.6s' }}></div>
+                    <div className="flex gap-2 bg-white/10 backdrop-blur-sm rounded-full px-3 py-2 border border-white/20">
+                      <div className="w-2 h-2 bg-green-400 rounded-full animate-pulse shadow-sm shadow-green-400/50"></div>
+                      <div className="w-2 h-2 bg-yellow-400 rounded-full animate-pulse shadow-sm shadow-yellow-400/50" style={{ animationDelay: '0.3s' }}></div>
+                      <div className="w-2 h-2 bg-red-400 rounded-full animate-pulse shadow-sm shadow-red-400/50" style={{ animationDelay: '0.6s' }}></div>
                     </div>
                   </div>
 
@@ -302,20 +302,20 @@ export default function HeroParallax() {
                       return (
                         <div 
                           key={i} 
-                          className={`relative bg-white/75 backdrop-blur-xl rounded-2xl p-5 border-2 border-white/90 shadow-xl overflow-hidden hover:scale-105 transition-transform duration-300`}
+                          className={`relative rounded-2xl p-5 shadow-xl overflow-hidden hover:scale-105 transition-transform duration-300`}
                           style={{
                             transform: `translateY(${parallaxSpeed * (0.02 + i * 0.005)}px)`,
-                            boxShadow: `0 10px 30px -8px rgba(0, 0, 0, 0.2), inset 0 1px 0 0 rgba(255, 255, 255, 0.9)`,
+                            background: 'rgba(255, 255, 255, 0.08)',
+                            backdropFilter: 'blur(20px)',
+                            border: '1px solid rgba(255, 255, 255, 0.15)',
+                            boxShadow: `0 10px 30px -8px rgba(0, 0, 0, 0.3), inset 0 1px 0 0 rgba(255, 255, 255, 0.1)`,
                           }}
                         >
                           {/* Premium glass reflection */}
-                          <div className="absolute inset-0 bg-linear-to-br from-white/50 via-white/20 to-transparent pointer-events-none"></div>
-                          
-                          {/* Solid background for text readability */}
-                          <div className="absolute inset-0 bg-white/60 backdrop-blur-md"></div>
+                          <div className="absolute inset-0 bg-linear-to-br from-white/10 via-transparent to-transparent pointer-events-none"></div>
                           
                           {/* Accent overlay */}
-                          <div className="absolute inset-0 opacity-[0.06]" style={{ background: theme.getAccentGradient(135) }}></div>
+                          <div className="absolute inset-0 opacity-[0.08]" style={{ background: theme.getAccentGradient(135) }}></div>
                           
                           <div className="relative z-10">
                             <div className="flex items-start justify-between mb-2">
@@ -324,29 +324,33 @@ export default function HeroParallax() {
                                 <div className="absolute inset-0 bg-linear-to-br from-white/30 to-transparent"></div>
                                 <IconComponent className="w-5 h-5 text-white relative z-10" strokeWidth={2.5} />
                               </div>
-                              <div className="text-4xl font-black text-gray-900 drop-shadow-sm">{stat.value}</div>
+                              <div className="text-4xl font-black text-white">{stat.value}</div>
                             </div>
-                            <div className="text-xs font-bold text-gray-700 uppercase tracking-wider">{stat.label}</div>
+                            <div className="text-xs font-bold text-gray-300 uppercase tracking-wider">{stat.label}</div>
                           </div>
                         </div>
                       );
                     })}
                   </div>
 
-                  {/* Premium progress section */}
-                  <div className="relative bg-white/75 backdrop-blur-xl rounded-2xl p-5 border-2 border-white/90 shadow-xl overflow-hidden">
+                  {/* Premium progress section - Dark Theme */}
+                  <div 
+                    className="relative rounded-2xl p-5 shadow-xl overflow-hidden"
+                    style={{
+                      background: 'rgba(255, 255, 255, 0.08)',
+                      backdropFilter: 'blur(20px)',
+                      border: '1px solid rgba(255, 255, 255, 0.15)',
+                    }}
+                  >
                     {/* Premium glass reflection */}
-                    <div className="absolute inset-0 bg-linear-to-br from-white/50 via-white/20 to-transparent pointer-events-none"></div>
-                    
-                    {/* Solid background for text readability */}
-                    <div className="absolute inset-0 bg-white/60 backdrop-blur-md"></div>
+                    <div className="absolute inset-0 bg-linear-to-br from-white/10 via-transparent to-transparent pointer-events-none"></div>
                     
                     <div className="relative z-10">
                       <div className="flex items-center justify-between mb-3">
-                        <span className="text-sm font-bold text-gray-900 drop-shadow-sm">Success Rate</span>
-                        <span className="text-2xl font-black bg-clip-text text-transparent drop-shadow-sm" style={{ backgroundImage: theme.getAccentGradient(90) }}>68%</span>
+                        <span className="text-sm font-bold text-white">Success Rate</span>
+                        <span className="text-2xl font-black bg-clip-text text-transparent" style={{ backgroundImage: theme.getAccentGradient(90) }}>68%</span>
                       </div>
-                      <div className="relative h-4 bg-gray-200/80 rounded-full overflow-hidden backdrop-blur-sm shadow-inner">
+                      <div className="relative h-4 bg-gray-800/50 rounded-full overflow-hidden shadow-inner">
                         <div 
                           className="absolute inset-y-0 left-0 rounded-full shadow-lg animate-progress-hero"
                           style={{ width: '68%', background: theme.getAccentGradient(90) }}
@@ -355,7 +359,7 @@ export default function HeroParallax() {
                           <div className="absolute inset-0 animate-shimmer" style={{ background: 'linear-gradient(90deg, transparent, rgba(255,255,255,0.4), transparent)' }}></div>
                         </div>
                       </div>
-                      <p className="text-xs text-gray-700 mt-2 font-semibold">This week's performance</p>
+                      <p className="text-xs text-gray-300 mt-2 font-medium">This week's performance</p>
                     </div>
                   </div>
                 </div>
@@ -371,7 +375,7 @@ export default function HeroParallax() {
                 return (
                   <div
                     key={i}
-                    className="absolute bg-white/20 backdrop-blur-2xl rounded-2xl p-5 border-2 border-white/90 shadow-2xl w-64 z-20 animate-float transition-all duration-300 overflow-hidden"
+                    className="absolute rounded-2xl p-5 w-64 z-20 animate-float transition-all duration-300 overflow-hidden hover:scale-105"
                     style={{
                       top: job.top,
                       bottom: job.bottom,
@@ -379,14 +383,14 @@ export default function HeroParallax() {
                       right: job.right,
                       animationDelay: job.delay,
                       transform: `translateY(${parallaxSpeed * job.parallax}px)`,
-                      boxShadow: `0 30px 60px -15px rgba(0, 0, 0, 0.3), inset 0 1px 0 0 rgba(255, 255, 255, 0.9), 0 0 0 1px ${theme.accentPrimary}20`,
+                      background: 'rgba(255, 255, 255, 0.06)',
+                      backdropFilter: 'blur(30px)',
+                      border: '1px solid rgba(255, 255, 255, 0.12)',
+                      boxShadow: `0 30px 60px -15px rgba(0, 0, 0, 0.35), inset 0 1px 0 0 rgba(255, 255, 255, 0.08), 0 0 0 1px ${theme.accentPrimary}15`,
                     }}
                   >
                     {/* Premium glass reflection layer */}
-                    <div className="absolute inset-0 bg-linear-to-br from-white/70 via-white/30 to-transparent pointer-events-none"></div>
-                    
-                    {/* Strong opaque background layer for text readability */}
-                    <div className="absolute inset-0 bg-white/10 backdrop-blur-xl"></div>
+                    <div className="absolute inset-0 bg-linear-to-br from-white/08 via-transparent to-transparent pointer-events-none"></div>
                     
                     <div className="relative z-10">
                       <div className="flex items-center gap-3 mb-4">
@@ -396,15 +400,22 @@ export default function HeroParallax() {
                           <JobIcon className="w-6 h-6 text-white relative z-10" strokeWidth={2.5} />
                         </div>
                         <div className="flex-1 min-w-0">
-                          <h4 className="font-bold text-base text-gray-900 truncate drop-shadow-sm">{job.company}</h4>
-                          <p className="text-xs text-gray-700 font-semibold truncate">{job.role}</p>
+                          <h4 className="font-bold text-base text-white truncate">{job.company}</h4>
+                          <p className="text-xs text-gray-300 font-medium truncate">{job.role}</p>
                         </div>
                       </div>
-                      <div className="flex items-center justify-between pt-3 border-t-2 border-gray-200/60">
-                        <span className="text-xs font-bold text-green-700 bg-green-100/90 backdrop-blur-sm px-3 py-1.5 rounded-full shadow-sm border border-green-200/50">
+                      <div className="flex items-center justify-between pt-3 border-t border-white/10">
+                        <span 
+                          className="text-xs font-bold px-3 py-1.5 rounded-full"
+                          style={{
+                            background: `linear-gradient(135deg, ${theme.accentPrimary}20, ${theme.accentSecondary}15)`,
+                            color: theme.accentPrimary,
+                            border: `1px solid ${theme.accentPrimary}30`,
+                          }}
+                        >
                           {job.match} Match
                         </span>
-                        <span className="text-xs text-gray-600 font-bold bg-gray-100/80 px-2.5 py-1 rounded-full">Just now</span>
+                        <span className="text-xs text-gray-400 font-medium">Just now</span>
                       </div>
                     </div>
                   </div>

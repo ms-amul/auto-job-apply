@@ -4,17 +4,17 @@
 // Uncomment the theme you want to use and comment out the others
 
 // 🌊 OCEAN (Default) - Cool blue/cyan tones
-export const theme = {
-	accentPrimary: '#056592',
-	accentSecondary: '#087c71',
-	// Helpers
-	getAccentGradient(angle = 90) {
-		return `linear-gradient(${angle}deg, ${this.accentPrimary}, ${this.accentSecondary})`;
-	},
-	getAccentFromTo() {
-		return { from: this.accentPrimary, to: this.accentSecondary };
-	},
-};
+// export const theme = {
+// 	accentPrimary: '#056592',
+// 	accentSecondary: '#087c71',
+// 	// Helpers
+// 	getAccentGradient(angle = 90) {
+// 		return `linear-gradient(${angle}deg, ${this.accentPrimary}, ${this.accentSecondary})`;
+// 	},
+// 	getAccentFromTo() {
+// 		return { from: this.accentPrimary, to: this.accentSecondary };
+// 	},
+// };
 
 // 🌅 SUNSET - Warm orange/red vibes
 // export const theme = {
@@ -53,16 +53,16 @@ export const theme = {
 // };
 
 // 🌙 MIDNIGHT - Deep blue/indigo
-// export const theme = {
-// 	accentPrimary: '#1e40af',
-// 	accentSecondary: '#4f46e5',
-// 	getAccentGradient(angle = 90) {
-// 		return `linear-gradient(${angle}deg, ${this.accentPrimary}, ${this.accentSecondary})`;
-// 	},
-// 	getAccentFromTo() {
-// 		return { from: this.accentPrimary, to: this.accentSecondary };
-// 	},
-// };
+export const theme = {
+	accentPrimary: '#1e40af',
+	accentSecondary: '#4f46e5',
+	getAccentGradient(angle = 90) {
+		return `linear-gradient(${angle}deg, ${this.accentPrimary}, ${this.accentSecondary})`;
+	},
+	getAccentFromTo() {
+		return { from: this.accentPrimary, to: this.accentSecondary };
+	},
+};
 
 // 🌹 ROSE - Romantic red/pink
 // export const theme = {
