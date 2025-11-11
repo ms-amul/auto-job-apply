@@ -3,6 +3,7 @@
 import Container from '../Container';
 import { useState } from 'react';
 import SignInModal from '../auth/SignInModal';
+import { theme } from '../../utils/theme';
 
 export default function CTA() {
   const [isSignInOpen, setIsSignInOpen] = useState(false);
@@ -20,7 +21,8 @@ export default function CTA() {
             </p>
             <button 
               onClick={() => setIsSignInOpen(true)}
-              className="bg-black cursor-pointer text-white px-8 md:px-10 py-4 md:py-5 rounded-full text-base md:text-lg font-medium hover:bg-gray-800 transition-all shadow-xl hover:shadow-2xl inline-flex items-center gap-2"
+              className="cursor-pointer text-white px-8 md:px-10 py-4 md:py-5 rounded-full text-base md:text-lg font-medium transition-all shadow-xl hover:shadow-2xl inline-flex items-center gap-2"
+              style={{ background: theme.getAccentGradient(90) }}
             >
               Start Applying for Free
               <svg className="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24">

@@ -4,6 +4,7 @@ import { useEffect, useRef, useState } from 'react';
 import Container from '../Container';
 import { ArrowRight, Play, Sparkles, Star } from 'lucide-react';
 import { useMobile } from '@/hooks/useMobile';
+import { theme } from '../../utils/theme';
 
 export default function HeroParallax() {
   const [scrollY, setScrollY] = useState(0);
@@ -51,38 +52,44 @@ export default function HeroParallax() {
   return (
     <section 
       ref={heroRef}
-      className="relative min-h-screen flex items-center overflow-hidden bg-linear-to-br from-gray-50 via-orange-50/30 to-rose-50/40"
+      className="relative min-h-screen flex items-center overflow-hidden"
+      style={{
+        background: `radial-gradient(1200px 600px at 100% 0%, ${theme.accentPrimary}0F, transparent 60%), radial-gradient(1000px 500px at 0% 100%, ${theme.accentSecondary}12, transparent 60%), linear-gradient(180deg, #ffffff, #fafafa)`,
+      }}
     >
       {/* Premium layered background with parallax */}
       <div className="absolute inset-0 overflow-hidden pointer-events-none">
         {/* Base gradient overlay */}
-        <div className="absolute inset-0 bg-[radial-gradient(ellipse_at_top_right,var(--tw-gradient-stops))] from-orange-100/40 via-transparent to-transparent"></div>
-        <div className="absolute inset-0 bg-[radial-gradient(ellipse_at_bottom_left,var(--tw-gradient-stops))] from-rose-100/30 via-transparent to-transparent"></div>
+        <div className="absolute inset-0" style={{ background: `radial-gradient(ellipse at top right, ${theme.accentPrimary}18, transparent 60%)` }}></div>
+        <div className="absolute inset-0" style={{ background: `radial-gradient(ellipse at bottom left, ${theme.accentSecondary}14, transparent 60%)` }}></div>
         
         {/* Multi-layered floating orbs - reduced on mobile */}
         {!isMobile && (
           <>
             <div 
-              className={`absolute top-20 -left-20 w-96 h-96 bg-linear-to-br from-orange-300/40 to-rose-400/40 rounded-full blur-3xl ${shouldAnimate ? 'animate-float' : ''}`}
+              className={`absolute top-20 -left-20 w-96 h-96 rounded-full blur-3xl ${shouldAnimate ? 'animate-float' : ''}`}
               style={{ 
+                background: theme.getAccentGradient(135),
+                opacity: 0.25,
                 transform: shouldAnimate ? `translate(${parallaxSpeed * 0.3}px, ${parallaxSpeed * 0.4}px) scale(${1 + scrollY * 0.0001})` : 'none',
-                mixBlendMode: 'multiply',
               }}
             ></div>
             <div 
-              className={`absolute top-40 -right-32 w-[500px] h-[500px] bg-linear-to-br from-purple-300/30 to-pink-400/30 rounded-full blur-3xl ${shouldAnimate ? 'animate-float' : ''}`}
+              className={`absolute top-40 -right-32 w-[500px] h-[500px] rounded-full blur-3xl ${shouldAnimate ? 'animate-float' : ''}`}
               style={{ 
+                background: theme.getAccentGradient(45),
+                opacity: 0.2,
                 transform: shouldAnimate ? `translate(${parallaxSpeed * -0.5}px, ${parallaxSpeed * 0.6}px) scale(${1 + scrollY * 0.00012})` : 'none',
                 animationDelay: '1s',
-                mixBlendMode: 'multiply',
               }}
             ></div>
             <div 
-              className={`absolute bottom-20 left-1/4 w-[600px] h-[600px] bg-linear-to-br from-blue-300/20 to-cyan-400/20 rounded-full blur-3xl ${shouldAnimate ? 'animate-float' : ''}`}
+              className={`absolute bottom-20 left-1/4 w-[600px] h-[600px] rounded-full blur-3xl ${shouldAnimate ? 'animate-float' : ''}`}
               style={{ 
+                background: theme.getAccentGradient(180),
+                opacity: 0.18,
                 transform: shouldAnimate ? `translate(${parallaxSpeed * 0.4}px, ${parallaxSpeed * -0.3}px) scale(${1 + scrollY * 0.00008})` : 'none',
                 animationDelay: '2s',
-                mixBlendMode: 'multiply',
               }}
             ></div>
           </>
@@ -96,11 +103,11 @@ export default function HeroParallax() {
             style={{
               left: `${particle.left}%`,
               top: `${particle.top}%`,
-              background: `linear-gradient(135deg, rgba(249, 115, 22, ${0.3 + Math.random() * 0.3}), rgba(244, 63, 94, ${0.2 + Math.random() * 0.3}))`,
+              background: `linear-gradient(135deg, ${theme.accentPrimary}66, ${theme.accentSecondary}55)`,
               animation: shouldAnimate ? `float ${particle.duration}s ease-in-out infinite` : 'none',
               animationDelay: `${particle.delay}s`,
               transform: shouldAnimate ? `translateY(${parallaxSpeed * particle.speed}px) translateX(${parallaxSpeed * particle.speed * 0.5}px)` : 'none',
-              boxShadow: `0 0 ${4 + Math.random() * 8}px rgba(249, 115, 22, ${isMobile ? 0.2 : 0.4})`,
+              boxShadow: `0 0 ${4 + Math.random() * 8}px ${theme.accentPrimary}40`,
             }}
           ></div>
         ))}
@@ -131,14 +138,14 @@ export default function HeroParallax() {
             <div 
               className="inline-flex items-center gap-2 bg-white/60 backdrop-blur-xl border border-white/80 rounded-full px-5 py-2.5 mb-6 shadow-xl animate-fadeInUp"
               style={{
-                boxShadow: '0 10px 30px -5px rgba(249, 115, 22, 0.3), inset 0 1px 0 0 rgba(255, 255, 255, 0.8)',
+                boxShadow: `0 10px 30px -5px ${theme.accentPrimary}4D, inset 0 1px 0 0 rgba(255, 255, 255, 0.8)`,
               }}
             >
-              <Sparkles className="w-4 h-4 text-orange-600" />
-              <span className="text-sm font-bold bg-linear-to-r from-orange-600 to-rose-600 bg-clip-text text-transparent">
+              <Sparkles className="w-4 h-4" style={{ color: theme.accentPrimary }} />
+              <span className="text-sm font-bold bg-clip-text text-transparent" style={{ backgroundImage: theme.getAccentGradient(90) }}>
                 AI-Powered Job Applications
               </span>
-              <Star className="w-4 h-4 text-orange-500 fill-orange-500" />
+              <Star className="w-4 h-4" style={{ color: theme.accentSecondary, fill: theme.accentSecondary }} />
             </div>
 
             {/* Enhanced Heading with Parallax */}
@@ -150,7 +157,7 @@ export default function HeroParallax() {
             >
               Your dream job is{' '}
               <span className="relative inline-block">
-                <span className="relative z-10 bg-linear-to-r from-orange-500 via-rose-500 to-pink-500 bg-clip-text text-transparent drop-shadow-sm">
+                <span className="relative z-10 bg-clip-text text-transparent drop-shadow-sm" style={{ backgroundImage: theme.getAccentGradient(90) }}>
                   one click
                 </span>
                 <svg 
@@ -167,8 +174,8 @@ export default function HeroParallax() {
                   />
                   <defs>
                     <linearGradient id="gradient" x1="0%" y1="0%" x2="100%" y2="0%">
-                      <stop offset="0%" stopColor="#F97316" />
-                      <stop offset="100%" stopColor="#F43F5E" />
+                      <stop offset="0%" stopColor={theme.accentPrimary} />
+                      <stop offset="100%" stopColor={theme.accentSecondary} />
                     </linearGradient>
                   </defs>
                 </svg>
@@ -184,8 +191,8 @@ export default function HeroParallax() {
                 transform: `translateY(${parallaxSpeed * 0.08}px)`,
               }}
             >
-              Join <span className="font-black bg-linear-to-r from-orange-600 to-rose-600 bg-clip-text text-transparent">2,500+</span> professionals who automated their job search and landed{' '}
-              <span className="font-black bg-linear-to-r from-orange-600 to-rose-600 bg-clip-text text-transparent">5x more interviews</span> in half the time.
+              Join <span className="font-black bg-clip-text text-transparent" style={{ backgroundImage: theme.getAccentGradient(90) }}>2,500+</span> professionals who automated their job search and landed{' '}
+              <span className="font-black bg-clip-text text-transparent" style={{ backgroundImage: theme.getAccentGradient(90) }}>5x more interviews</span> in half the time.
             </p>
 
             {/* Premium Glassmorphic Buttons */}
@@ -197,9 +204,10 @@ export default function HeroParallax() {
               }}
             >
               <button 
-                className="cursor-pointer relative group bg-linear-to-r from-orange-500 via-rose-500 to-pink-500 text-white px-8 py-4 rounded-full text-lg font-bold flex items-center justify-center gap-2 shadow-2xl overflow-hidden"
+                className="cursor-pointer relative group text-white px-8 py-4 rounded-full text-lg font-bold flex items-center justify-center gap-2 shadow-2xl overflow-hidden"
                 style={{
-                  boxShadow: '0 20px 40px -10px rgba(249, 115, 22, 0.5)',
+                  background: theme.getAccentGradient(90),
+                  boxShadow: `0 20px 40px -10px ${theme.accentPrimary}80`,
                 }}
               >
                 <span className="relative z-10 flex items-center gap-2">
@@ -207,7 +215,7 @@ export default function HeroParallax() {
                   <ArrowRight className="w-5 h-5" />
                 </span>
                 {/* Glass shine effect */}
-                <div className="absolute inset-0 bg-linear-to-r from-transparent via-white/20 to-transparent"></div>
+                <div className="absolute inset-0" style={{ background: 'linear-gradient(90deg, transparent, rgba(255,255,255,0.2), transparent)' }}></div>
               </button>
               
               <button 
@@ -264,12 +272,12 @@ export default function HeroParallax() {
               {/* Background glow effects */}
               <div className="absolute inset-0">
                 <div 
-                  className="absolute top-0 left-0 w-96 h-96 bg-linear-to-br from-orange-400/30 to-rose-400/30 rounded-full blur-3xl"
-                  style={{ transform: `translate(${parallaxSpeed * 0.1}px, ${parallaxSpeed * 0.15}px)` }}
+                  className="absolute top-0 left-0 w-96 h-96 rounded-full blur-3xl"
+                  style={{ background: theme.getAccentGradient(135), opacity: 0.2, transform: `translate(${parallaxSpeed * 0.1}px, ${parallaxSpeed * 0.15}px)` }}
                 ></div>
                 <div 
-                  className="absolute bottom-0 right-0 w-80 h-80 bg-linear-to-br from-purple-400/20 to-pink-400/20 rounded-full blur-3xl"
-                  style={{ transform: `translate(${parallaxSpeed * -0.1}px, ${parallaxSpeed * -0.12}px)` }}
+                  className="absolute bottom-0 right-0 w-80 h-80 rounded-full blur-3xl"
+                  style={{ background: theme.getAccentGradient(30), opacity: 0.18, transform: `translate(${parallaxSpeed * -0.1}px, ${parallaxSpeed * -0.12}px)` }}
                 ></div>
               </div>
 
@@ -308,10 +316,10 @@ export default function HeroParallax() {
                   {/* Glassmorphic stat cards */}
                   <div className="grid grid-cols-2 gap-4 mb-8">
                     {[
-                      { label: 'Applied', value: '127', icon: '📤', gradient: 'from-blue-500/20 to-cyan-500/20' },
-                      { label: 'Responses', value: '43', icon: '✉️', gradient: 'from-green-500/20 to-emerald-500/20' },
-                      { label: 'Interviews', value: '12', icon: '🎯', gradient: 'from-orange-500/20 to-red-500/20' },
-                      { label: 'Offers', value: '3', icon: '🎉', gradient: 'from-purple-500/20 to-pink-500/20' },
+                      { label: 'Applied', value: '127', icon: '📤' },
+                      { label: 'Responses', value: '43', icon: '✉️' },
+                      { label: 'Interviews', value: '12', icon: '🎯' },
+                      { label: 'Offers', value: '3', icon: '🎉' },
                     ].map((stat, i) => (
                       <div 
                         key={i} 
@@ -320,8 +328,8 @@ export default function HeroParallax() {
                           transform: `translateY(${parallaxSpeed * (0.02 + i * 0.005)}px)`,
                         }}
                       >
-                        {/* Gradient overlay */}
-                        <div className={`absolute inset-0 bg-linear-to-br ${stat.gradient} opacity-50`}></div>
+                        {/* Accent overlay */}
+                        <div className="absolute inset-0 opacity-30" style={{ background: theme.getAccentGradient(135) }}></div>
                         
                         <div className="relative z-10">
                           <div className="flex items-start justify-between mb-2">
@@ -338,15 +346,15 @@ export default function HeroParallax() {
                   <div className="bg-white/50 backdrop-blur-sm rounded-2xl p-5 border border-white/80 shadow-lg">
                     <div className="flex items-center justify-between mb-3">
                       <span className="text-sm font-bold text-gray-900">Success Rate</span>
-                      <span className="text-2xl font-black bg-linear-to-r from-orange-600 to-rose-600 bg-clip-text text-transparent">68%</span>
+                      <span className="text-2xl font-black bg-clip-text text-transparent" style={{ backgroundImage: theme.getAccentGradient(90) }}>68%</span>
                     </div>
                     <div className="relative h-4 bg-gray-200/50 rounded-full overflow-hidden backdrop-blur-sm">
                       <div 
-                        className="absolute inset-y-0 left-0 bg-linear-to-r from-orange-500 via-rose-500 to-pink-500 rounded-full shadow-lg animate-progress-hero"
-                        style={{ width: '68%' }}
+                        className="absolute inset-y-0 left-0 rounded-full shadow-lg animate-progress-hero"
+                        style={{ width: '68%', background: theme.getAccentGradient(90) }}
                       >
                         {/* Shimmer effect */}
-                        <div className="absolute inset-0 bg-linear-to-r from-transparent via-white/40 to-transparent animate-shimmer"></div>
+                        <div className="absolute inset-0 animate-shimmer" style={{ background: 'linear-gradient(90deg, transparent, rgba(255,255,255,0.4), transparent)' }}></div>
                       </div>
                     </div>
                     <p className="text-xs text-gray-600 mt-2 font-medium">This week's performance</p>
