@@ -1,5 +1,48 @@
 This is a [Next.js](https://nextjs.org) project bootstrapped with [`create-next-app`](https://github.com/vercel/next.js/tree/canary/packages/create-next-app).
 
+## Database Setup
+
+This project uses PostgreSQL with Supabase. You have **two options**:
+
+### Option 1: Prisma ORM (Recommended)
+Type-safe, great developer experience with autocomplete.
+
+```bash
+# 1. Create .env.local with DATABASE_URL (from Supabase)
+# 2. Install dependencies
+npm install
+
+# 3. Pull existing schema from Supabase
+npx prisma db pull
+
+# 4. Generate Prisma Client
+npx prisma generate
+```
+
+**Quick test:** http://localhost:3000/api/prisma-test
+
+📖 **Full guide:** [PRISMA_SETUP.md](./PRISMA_SETUP.md)
+
+### Option 2: Raw SQL with `pg`
+Maximum flexibility with direct SQL queries.
+
+```bash
+# 1. Create .env.local with DATABASE_URL (from Supabase)
+# 2. Install dependencies
+npm install
+```
+
+**Quick test:** http://localhost:3000/api/db-test
+
+📖 **Full guide:** [SETUP_DATABASE.md](./SETUP_DATABASE.md)
+
+### Comparison & Migration
+- 📊 [Compare Both Approaches](./COMPARISON_PRISMA_VS_RAW_SQL.md)
+- 🔄 [Hybrid Approach (Use Both)](./lib/db-hybrid.js)
+- ✅ [Setup Complete Guide](./DATABASE_SETUP_COMPLETE.md)
+
+Both approaches are **migration-friendly** - switch databases by just changing `DATABASE_URL`!
+
 ## Getting Started
 
 First, run the development server:

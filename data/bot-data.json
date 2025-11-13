@@ -1,0 +1,75 @@
+{
+  "applicantBot": {
+    "2": {
+      "enabled": true,
+      "status": "active",
+      "applicationsToday": 8,
+      "applicationsThisWeek": 32,
+      "applicationsTotal": 127,
+      "successRate": "67%",
+      "lastRun": "2025-11-13T08:30:00Z",
+      "nextRun": "2025-11-13T14:00:00Z",
+      "settings": {
+        "autoApply": true,
+        "dailyLimit": 10,
+        "jobTypes": ["Full-time", "Contract"],
+        "locations": ["Remote", "San Francisco", "New York"],
+        "salaryMin": 100000,
+        "keywords": ["React", "Node.js", "Full Stack"]
+      },
+      "recentActivity": [
+        {
+          "jobId": "5",
+          "jobTitle": "Senior Developer",
+          "company": "TechCorp",
+          "applied": "2025-11-13T08:30:00Z",
+          "status": "pending"
+        },
+        {
+          "jobId": "6",
+          "jobTitle": "Full Stack Engineer",
+          "company": "StartupXYZ",
+          "applied": "2025-11-13T07:15:00Z",
+          "status": "pending"
+        }
+      ]
+    }
+  },
+  "recruiterBot": {
+    "1": {
+      "enabled": true,
+      "status": "active",
+      "candidatesScreened": 156,
+      "candidatesShortlisted": 23,
+      "messagesS": 45,
+      "lastRun": "2025-11-13T09:00:00Z",
+      "settings": {
+        "autoScreen": true,
+        "autoShortlist": false,
+        "autoMessage": true,
+        "screeningCriteria": {
+          "minExperience": 3,
+          "requiredSkills": ["React", "Node.js"],
+          "locations": ["Remote", "San Francisco"]
+        }
+      },
+      "recentActivity": [
+        {
+          "applicantId": "app-1",
+          "applicantName": "Sarah Johnson",
+          "action": "shortlisted",
+          "jobId": "1",
+          "timestamp": "2025-11-13T09:00:00Z"
+        },
+        {
+          "applicantId": "app-4",
+          "applicantName": "David Kim",
+          "action": "screened",
+          "jobId": "1",
+          "timestamp": "2025-11-13T08:45:00Z"
+        }
+      ]
+    }
+  }
+}
+

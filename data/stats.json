@@ -1,0 +1,26 @@
+{
+  "applicantStats": {
+    "2": {
+      "totalApplications": 15,
+      "pending": 8,
+      "interview": 4,
+      "accepted": 2,
+      "rejected": 1,
+      "profileViews": 342,
+      "responseRate": "73%",
+      "avgResponseTime": "2 days"
+    }
+  },
+  "recruiterStats": {
+    "1": {
+      "activeJobs": 12,
+      "totalApplications": 234,
+      "shortlisted": 45,
+      "interviewed": 28,
+      "hired": 8,
+      "positionsToFill": 15,
+      "avgTimeToHire": "21 days"
+    }
+  }
+}
+

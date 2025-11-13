@@ -1,7 +1,4 @@
 import { Geist, Geist_Mono } from "next/font/google";
-import Header from '@/components/Header';
-import Footer from '@/components/Footer';
-import CookieConsent from '@/components/CookieConsent';
 import "./globals.css";
 
 const geistSans = Geist({
@@ -19,20 +16,14 @@ export const metadata = {
   description: "AI-powered job application assistant that automatically applies to jobs matching your profile",
 };
 
+// Root layout - only global styles, no header/footer
 export default function RootLayout({ children }) {
   return (
     <html lang="en">
       <body
         className={`${geistSans.variable} ${geistMono.variable} antialiased`}
       >
-        <div className="min-h-screen bg-white">
-          <Header />
-          <main className=''>
-            {children}
-          </main>
-          <Footer />
-          <CookieConsent />
-        </div>
+        {children}
       </body>
     </html>
   );

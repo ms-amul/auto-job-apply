@@ -1,303 +1,85 @@
 @import "tailwindcss";
 
-:root {
-  --background: #fafafa;
-  --foreground: #171717;
-  --accent-primary: #056592; /* sky-500 */
-  --accent-secondary: #087c71; /* cyan-400 */
-  --accent-gradient: linear-gradient(90deg, var(--accent-primary), var(--accent-secondary));
-}
-
-html {
-  scroll-behavior: smooth;
-  scroll-padding-top: 6rem; /* Account for fixed header */
-}
-
-body {
-  background: var(--background);
-  color: var(--foreground);
-  font-family: var(--font-geist-sans), system-ui, -apple-system, sans-serif;
-}
-
-* {
-  box-sizing: border-box;
-}
-
-/* Accent utilities for global reuse */
-.text-accent {
-  color: var(--accent-primary);
-}
-
-.bg-accent-gradient {
-  background-image: var(--accent-gradient);
-}
-
-.border-accent {
-  border-color: var(--accent-primary);
-}
-
-@keyframes float {
-  0%, 100% {
-    transform: translateY(0px);
-  }
-  50% {
-    transform: translateY(-10px);
-  }
-}
-
-@keyframes fadeInUp {
-  from {
-    opacity: 0;
-    transform: translateY(30px);
-  }
-  to {
-    opacity: 1;
-    transform: translateY(0);
-  }
-}
-
-.animate-float {
-  animation: float 3s ease-in-out infinite;
-}
-
-.animate-fadeInUp {
-  animation: fadeInUp 1.2s cubic-bezier(0.16, 1, 0.3, 1) forwards;
-  opacity: 0;
-}
-
-@keyframes slideIn {
-  from {
-    opacity: 0;
-    transform: translateX(-100%);
-  }
-  to {
-    opacity: 1;
-    transform: translateX(0);
-  }
-}
-
-.animate-slideIn {
-  animation: slideIn 0.4s ease-out;
-}
-
-/* Marquee Animation */
-@keyframes marquee {
-  0% {
-    transform: translateX(0);
-  }
-  100% {
-    transform: translateX(-50%);
-  }
-}
-
-.marquee-container {
-  animation: marquee 15s linear infinite;
-}
-
-.marquee-container:hover {
-  animation-play-state: paused;
-}
-
-/* Blob Animation */
-@keyframes blob {
-  0%, 100% {
-    transform: translate(0px, 0px) scale(1);
-  }
-  33% {
-    transform: translate(30px, -50px) scale(1.1);
-  }
-  66% {
-    transform: translate(-20px, 20px) scale(0.9);
-  }
-}
-
-.animate-blob {
-  animation: blob 7s infinite;
-}
-
-.animation-delay-2000 {
-  animation-delay: 2s;
-}
-
-.animation-delay-4000 {
-  animation-delay: 4s;
-}
-
-/* Progress Animation (HeroParallax & ProcessParallax) */
-@keyframes progress {
-  0% {
-    width: 0%;
-    opacity: 0.8;
-  }
-  50% {
-    opacity: 1;
-  }
-  100% {
-    width: 100%;
-    opacity: 1;
-  }
-}
-
-.animate-progress {
-  animation: progress 2s cubic-bezier(0.4, 0, 0.2, 1) forwards;
-}
-
-/* Hero specific progress (68%) */
-@keyframes progress-hero {
-  from {
-    width: 0%;
-  }
-  to {
-    width: 68%;
-  }
-}
-
-.animate-progress-hero {
-  animation: progress-hero 2s ease-out forwards;
-}
-
-/* Scroll Animation (HeroParallax) */
-@keyframes scroll {
-  0%, 100% {
-    transform: translateY(0);
-    opacity: 1;
-  }
-  50% {
-    transform: translateY(8px);
-    opacity: 0.5;
-  }
-}
-
-.animate-scroll {
-  animation: scroll 1.5s ease-in-out infinite;
-}
-
-/* Count Up Animation (ParallaxStats) */
-@keyframes countUp {
-  from {
-    opacity: 0;
-    transform: translateY(20px);
-  }
-  to {
-    opacity: 1;
-    transform: translateY(0);
-  }
-}
-
-.animate-countUp {
-  animation: countUp 0.8s ease-out both;
-}
-
-/* Shimmer Animation (ProcessParallax) */
+/* Premium Button Shimmer Effect - Subtle & Elegant */
 @keyframes shimmer {
   0% {
-    transform: translateX(-100%);
+    left: -100%;
   }
   100% {
-    transform: translateX(200%);
+    left: 100%;
   }
 }
 
-.animate-shimmer {
-  animation: shimmer 2s ease-in-out infinite;
+.btn-shimmer {
+  position: relative;
+  overflow: hidden;
 }
 
-/* Draw Line Animation (ProcessParallax heading) */
-@keyframes drawLine {
-  from {
-    stroke-dasharray: 200;
-    stroke-dashoffset: 200;
-  }
-  to {
-    stroke-dasharray: 200;
-    stroke-dashoffset: 0;
-  }
+.btn-shimmer::before {
+  content: '';
+  position: absolute;
+  top: 0;
+  left: -100%;
+  width: 100%;
+  height: 100%;
+  background: linear-gradient(
+    90deg,
+    transparent 0%,
+    rgba(255, 255, 255, 0.3) 50%,
+    transparent 100%
+  );
+  transition: left 0.6s ease;
 }
 
-.animate-draw-line {
-  animation: drawLine 1s ease-out forwards;
+.btn-shimmer:hover::before {
+  left: 100%;
 }
 
-/* Slow Spin Animation (ProcessParallax icon ring) */
-@keyframes spin-slow {
-  from {
-    transform: rotate(0deg);
-  }
-  to {
-    transform: rotate(360deg);
-  }
+/* Premium Card Hover Effect */
+.card-hover {
+  transition: all 0.3s cubic-bezier(0.4, 0, 0.2, 1);
 }
 
-.animate-spin-slow {
-  animation: spin-slow 3s linear infinite;
+.card-hover:hover {
+  transform: translateY(-4px);
+  box-shadow: 0 20px 40px -12px rgba(0, 0, 0, 0.12);
 }
 
-/* Mobile Performance Optimizations */
-@media (max-width: 768px) {
-  /* Reduce animation complexity on mobile */
-  .animate-float,
-  .animate-blob {
-    animation-duration: 4s !important;
-  }
-  
-  /* Disable heavy animations on mobile */
-  .marquee-container {
-    animation: none !important;
-  }
-  
-  /* Reduce blur effects on mobile */
-  * {
-    will-change: auto !important;
-  }
-  
-  /* Hide scrollbars on mobile */
-  .scrollbar-hide {
-    -ms-overflow-style: none;
-    scrollbar-width: none;
-  }
-  
-  .scrollbar-hide::-webkit-scrollbar {
-    display: none;
-  }
+/* Smooth Scrollbar */
+::-webkit-scrollbar {
+  width: 8px;
+  height: 8px;
 }
 
-/* Respect reduced motion preference */
-@media (prefers-reduced-motion: reduce) {
-  *,
-  *::before,
-  *::after {
-    animation-duration: 0.01ms !important;
-    animation-iteration-count: 1 !important;
-    transition-duration: 0.01ms !important;
-    scroll-behavior: auto !important;
-  }
+::-webkit-scrollbar-track {
+  background: #f1f5f9;
 }
 
-/* Modal Animations */
-@keyframes fadeIn {
-  from {
-    opacity: 0;
-  }
-  to {
-    opacity: 1;
-  }
+::-webkit-scrollbar-thumb {
+  background: #cbd5e1;
+  border-radius: 4px;
 }
 
-@keyframes slideUp {
-  from {
-    opacity: 0;
-    transform: translateY(20px) scale(0.95);
-  }
-  to {
-    opacity: 1;
-    transform: translateY(0) scale(1);
-  }
+::-webkit-scrollbar-thumb:hover {
+  background: #94a3b8;
 }
 
-.animate-modal-fadeIn {
-  animation: fadeIn 0.3s ease-out;
+/* Professional Focus States */
+*:focus-visible {
+  outline: 2px solid #3b82f6;
+  outline-offset: 2px;
 }
 
-.animate-modal-slideUp {
-  animation: slideUp 0.4s ease-out;
+/* Gradient Text */
+.gradient-text {
+  background: linear-gradient(135deg, #1e40af, #4f46e5);
+  -webkit-background-clip: text;
+  -webkit-text-fill-color: transparent;
+  background-clip: text;
+}
+
+/* Smooth Transitions */
+* {
+  -webkit-font-smoothing: antialiased;
+  -moz-osx-font-smoothing: grayscale;
 }

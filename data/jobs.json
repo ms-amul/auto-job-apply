@@ -1,0 +1,85 @@
+{
+  "jobs": [
+    {
+      "id": "1",
+      "title": "Senior Full Stack Engineer",
+      "company": "Tech Innovations Inc.",
+      "location": "San Francisco, CA",
+      "type": "Full-time",
+      "salary": "$140k - $180k",
+      "description": "We're looking for an experienced full stack engineer to join our growing team. You'll work on cutting-edge technologies and help shape the future of our product.",
+      "requirements": ["5+ years experience", "React & Node.js", "AWS experience", "Strong communication skills"],
+      "benefits": ["Health Insurance", "401(k)", "Flexible PTO", "Remote work options"],
+      "postedDate": "2025-11-10T09:00:00Z",
+      "status": "active",
+      "applicants": 45,
+      "views": 230,
+      "recruiterId": "1"
+    },
+    {
+      "id": "2",
+      "title": "Frontend Developer",
+      "company": "StartupXYZ",
+      "location": "Remote",
+      "type": "Full-time",
+      "salary": "$100k - $140k",
+      "description": "Join our dynamic team to build amazing user experiences. We value creativity, innovation, and collaboration.",
+      "requirements": ["3+ years React experience", "TypeScript proficiency", "UI/UX design sense"],
+      "benefits": ["Remote-first", "Competitive salary", "Learning budget", "Latest equipment"],
+      "postedDate": "2025-11-08T14:30:00Z",
+      "status": "active",
+      "applicants": 32,
+      "views": 180,
+      "recruiterId": "1"
+    },
+    {
+      "id": "3",
+      "title": "Backend Engineer",
+      "company": "DataFlow Systems",
+      "location": "Austin, TX",
+      "type": "Full-time",
+      "salary": "$120k - $160k",
+      "description": "Help us build scalable backend systems that power millions of users. Work with cutting-edge technologies in a fast-paced environment.",
+      "requirements": ["Node.js or Python", "Database design", "Microservices architecture", "Docker & Kubernetes"],
+      "benefits": ["Stock options", "Health & dental", "Gym membership", "Team outings"],
+      "postedDate": "2025-11-05T11:00:00Z",
+      "status": "active",
+      "applicants": 28,
+      "views": 156,
+      "recruiterId": "1"
+    },
+    {
+      "id": "4",
+      "title": "DevOps Engineer",
+      "company": "Cloud Solutions Ltd",
+      "location": "Seattle, WA",
+      "type": "Full-time",
+      "salary": "$130k - $170k",
+      "description": "Looking for a DevOps engineer to streamline our deployment pipeline and infrastructure.",
+      "requirements": ["AWS/Azure/GCP", "CI/CD pipelines", "Infrastructure as Code", "Monitoring tools"],
+      "benefits": ["Great salary", "Stock options", "Remote flexibility", "Professional development"],
+      "postedDate": "2025-11-12T08:00:00Z",
+      "status": "active",
+      "applicants": 19,
+      "views": 95,
+      "recruiterId": "1"
+    },
+    {
+      "id": "5",
+      "title": "Product Manager",
+      "company": "Innovation Labs",
+      "location": "Boston, MA",
+      "type": "Full-time",
+      "salary": "$130k - $180k",
+      "description": "Lead product strategy and work with cross-functional teams to deliver exceptional products.",
+      "requirements": ["5+ years PM experience", "Technical background", "Strong leadership", "Data-driven mindset"],
+      "benefits": ["Competitive package", "Equity", "Unlimited PTO", "Healthcare"],
+      "postedDate": "2025-11-09T13:00:00Z",
+      "status": "active",
+      "applicants": 41,
+      "views": 210,
+      "recruiterId": "1"
+    }
+  ]
+}
+

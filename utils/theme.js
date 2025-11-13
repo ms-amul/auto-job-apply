@@ -52,7 +52,7 @@
 // 	},
 // };
 
-// 🌙 MIDNIGHT - Deep blue/indigo
+// 🌙 MIDNIGHT - Deep blue/indigo (ACTIVE)
 export const theme = {
 	accentPrimary: '#1e40af',
 	accentSecondary: '#4f46e5',
@@ -75,5 +75,3 @@ export const theme = {
 // 		return { from: this.accentPrimary, to: this.accentSecondary };
 // 	},
 // };
-
-

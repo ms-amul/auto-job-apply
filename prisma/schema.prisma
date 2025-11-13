@@ -1,0 +1,69 @@
+// This is your Prisma schema file
+// Learn more: https://pris.ly/d/prisma-schema
+
+generator client {
+  provider = "prisma-client-js"
+}
+
+datasource db {
+  provider = "postgresql"
+  url      = env("DATABASE_URL")
+}
+
+// Example models - Replace these with your actual Supabase tables
+// Or use: npx prisma db pull
+// to automatically generate models from your existing Supabase database
+
+model User {
+  id        String   @id @default(uuid())
+  email     String   @unique
+  name      String?
+  createdAt DateTime @default(now()) @map("created_at")
+  updatedAt DateTime @updatedAt @map("updated_at")
+  
+  jobs      Job[]
+  applications Application[]
+
+  @@map("users")
+}
+
+model Job {
+  id          String   @id @default(uuid())
+  title       String
+  company     String
+  description String?
+  location    String?
+  salary      String?
+  url         String?
+  status      String   @default("active")
+  userId      String?  @map("user_id")
+  createdAt   DateTime @default(now()) @map("created_at")
+  updatedAt   DateTime @updatedAt @map("updated_at")
+  
+  user        User?    @relation(fields: [userId], references: [id], onDelete: Cascade)
+  applications Application[]
+
+  @@map("jobs")
+}
+
+model Application {
+  id          String   @id @default(uuid())
+  jobId       String   @map("job_id")
+  userId      String   @map("user_id")
+  status      String   @default("pending")
+  coverLetter String?  @map("cover_letter")
+  resume      String?
+  appliedAt   DateTime @default(now()) @map("applied_at")
+  updatedAt   DateTime @updatedAt @map("updated_at")
+  
+  job         Job      @relation(fields: [jobId], references: [id], onDelete: Cascade)
+  user        User     @relation(fields: [userId], references: [id], onDelete: Cascade)
+
+  @@unique([jobId, userId])
+  @@map("applications")
+}
+
+// Add more models based on your Supabase schema
+// Example: Profile, Company, etc.
+
+

@@ -1,0 +1,46 @@
+{
+  "applications": [
+    {
+      "id": "1",
+      "jobId": "1",
+      "applicantId": "2",
+      "status": "pending",
+      "appliedDate": "2025-11-11T10:30:00Z",
+      "coverLetter": "I am excited to apply for the Senior Full Stack Engineer position. With 5 years of experience...",
+      "resume": "resume_rajgopal_kumar.pdf",
+      "notes": []
+    },
+    {
+      "id": "2",
+      "jobId": "2",
+      "applicantId": "2",
+      "status": "interview",
+      "appliedDate": "2025-11-09T14:20:00Z",
+      "coverLetter": "I would love to join your team as a Frontend Developer...",
+      "resume": "resume_rajgopal_kumar.pdf",
+      "interviewDate": "2025-11-15T15:00:00Z",
+      "notes": [
+        {
+          "date": "2025-11-10T09:00:00Z",
+          "note": "Strong portfolio, scheduling interview"
+        }
+      ]
+    },
+    {
+      "id": "3",
+      "jobId": "3",
+      "applicantId": "2",
+      "status": "rejected",
+      "appliedDate": "2025-11-06T11:00:00Z",
+      "coverLetter": "I am interested in the Backend Engineer role...",
+      "resume": "resume_rajgopal_kumar.pdf",
+      "notes": [
+        {
+          "date": "2025-11-08T10:00:00Z",
+          "note": "Looking for more experience with Kubernetes"
+        }
+      ]
+    }
+  ]
+}
+

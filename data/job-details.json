@@ -1,0 +1,110 @@
+{
+  "jobDetails": {
+    "1": {
+      "id": "1",
+      "title": "Senior Full Stack Engineer",
+      "company": "Tech Innovations Inc.",
+      "companyLogo": null,
+      "location": "San Francisco, CA",
+      "locationType": "Hybrid",
+      "type": "Full-time",
+      "salary": "$140k - $180k",
+      "postedDate": "2025-11-10T09:00:00Z",
+      "closingDate": "2025-12-10T23:59:00Z",
+      "status": "active",
+      "views": 230,
+      "applicants": 45,
+      "description": "We're looking for an experienced full stack engineer to join our growing team. You'll work on cutting-edge technologies and help shape the future of our product. This is an excellent opportunity for someone passionate about building scalable web applications.",
+      "responsibilities": [
+        "Design and develop full-stack web applications",
+        "Collaborate with cross-functional teams",
+        "Write clean, maintainable code",
+        "Participate in code reviews",
+        "Mentor junior developers",
+        "Contribute to technical documentation"
+      ],
+      "requirements": [
+        "5+ years of professional software development experience",
+        "Strong proficiency in React and Node.js",
+        "Experience with AWS or similar cloud platforms",
+        "Solid understanding of RESTful APIs",
+        "Experience with SQL and NoSQL databases",
+        "Strong communication skills"
+      ],
+      "niceToHave": [
+        "Experience with TypeScript",
+        "Knowledge of Docker and Kubernetes",
+        "Contributions to open-source projects",
+        "Experience with CI/CD pipelines"
+      ],
+      "benefits": [
+        "Competitive salary and equity",
+        "Health, dental, and vision insurance",
+        "401(k) with company match",
+        "Flexible PTO",
+        "Remote work options",
+        "Professional development budget",
+        "Latest equipment (MacBook Pro, etc.)",
+        "Team outings and events"
+      ],
+      "companyInfo": {
+        "name": "Tech Innovations Inc.",
+        "size": "50-200 employees",
+        "industry": "Technology",
+        "founded": "2018",
+        "website": "https://techinnovations.com",
+        "description": "We're a fast-growing tech company building the next generation of enterprise software."
+      },
+      "recruiterId": "1"
+    },
+    "2": {
+      "id": "2",
+      "title": "Frontend Developer",
+      "company": "StartupXYZ",
+      "companyLogo": null,
+      "location": "Remote",
+      "locationType": "Remote",
+      "type": "Full-time",
+      "salary": "$100k - $140k",
+      "postedDate": "2025-11-08T14:30:00Z",
+      "closingDate": "2025-12-08T23:59:00Z",
+      "status": "active",
+      "views": 180,
+      "applicants": 32,
+      "description": "Join our dynamic team to build amazing user experiences. We value creativity, innovation, and collaboration.",
+      "responsibilities": [
+        "Build responsive web applications",
+        "Implement pixel-perfect designs",
+        "Optimize application performance",
+        "Work closely with designers"
+      ],
+      "requirements": [
+        "3+ years React experience",
+        "TypeScript proficiency",
+        "UI/UX design sense",
+        "Strong CSS skills"
+      ],
+      "niceToHave": [
+        "Next.js experience",
+        "Animation libraries (Framer Motion)",
+        "Design tools (Figma)"
+      ],
+      "benefits": [
+        "Remote-first culture",
+        "Competitive salary",
+        "Learning budget",
+        "Latest equipment"
+      ],
+      "companyInfo": {
+        "name": "StartupXYZ",
+        "size": "10-50 employees",
+        "industry": "SaaS",
+        "founded": "2020",
+        "website": "https://startupxyz.com",
+        "description": "We're disrupting the industry with innovative solutions."
+      },
+      "recruiterId": "1"
+    }
+  }
+}
+

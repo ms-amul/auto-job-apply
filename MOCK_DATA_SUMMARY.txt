@@ -1,0 +1,199 @@
+╔═══════════════════════════════════════════════════════════════════════════════╗
+║                                                                               ║
+║                  📋 MOCK DATA & API INTEGRATION SUMMARY                       ║
+║                                                                               ║
+╚═══════════════════════════════════════════════════════════════════════════════╝
+
+
+🗄️ MOCK DATA LOCATIONS
+━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━
+
+1. data/users.json
+   • Test users: rajgopal@gmail.com (applicant), rajgopal@jobvita.com (recruiter)
+   • Replace with: Prisma User.findUnique()
+
+2. data/jobs.json
+   • 5 sample jobs
+   • Replace with: Prisma Job.findMany()
+
+3. data/applications.json
+   • 3 sample applications
+   • Replace with: Prisma Application.findMany()
+
+4. data/stats.json
+   • Dashboard statistics
+   • Replace with: Prisma aggregations (count, sum, etc.)
+
+
+🔌 API ROUTES WITH MOCK DATA
+━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━
+
+✅ app/api/auth/signin/route.js
+   MOCK: Checks users.json for email match (any password works)
+   TODO: Add bcrypt password verification, JWT tokens, rate limiting
+   LINES: 25-35
+
+✅ app/api/jobs/all/route.js
+   MOCK: Returns & filters data/jobs.json
+   TODO: Replace with Prisma, add pagination, full-text search
+   LINES: 25-62
+
+✅ app/api/applications/user/[userId]/route.js
+   MOCK: Filters data/applications.json and joins with jobs
+   TODO: Replace with Prisma includes
+   LINES: 21-37
+
+✅ app/api/applications/create/route.js
+   MOCK: Returns fake application ID with setTimeout
+   TODO: Insert into database, check for duplicates
+   LINES: 25-48
+
+✅ app/api/stats/[userId]/route.js
+   MOCK: Returns data/stats.json based on user role
+   TODO: Calculate with Prisma aggregations
+   LINES: 20-36
+
+
+📄 PAGES WITH MOCK DATA
+━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━
+
+✅ app/(dashboard)/dashboard/page.js
+   MOCK: User from localStorage, stats from API (which uses JSON)
+   TODO: Keep localStorage for now, replace stats API backend
+   LINES: 18-35
+
+✅ app/(dashboard)/dashboard/jobs/page.js
+   MOCK: Jobs from API call (returns JSON data)
+   TODO: API should query database
+   LINES: 37-60
+
+✅ app/(dashboard)/dashboard/applications/page.js
+   MOCK: Applications from API (returns JSON with joins)
+   TODO: API should use Prisma with includes
+   LINES: 36-48
+
+✅ app/(dashboard)/dashboard/applicants/page.js
+   MOCK: Hardcoded applicants array (lines 15-34)
+   TODO: Create API endpoint GET /api/recruiters/[id]/applicants
+   LINES: 15-34
+
+✅ app/(dashboard)/dashboard/post-job/page.js
+   MOCK: Simulated delay only, console.log
+   TODO: Create API POST /api/jobs/create
+   LINES: 34-38
+
+✅ app/(dashboard)/dashboard/profile/page.js
+   MOCK: Hardcoded profile data (lines 46-52)
+   TODO: Load from GET /api/users/[id], save to PUT /api/users/[id]
+   COMMENT BLOCKS: Lines 8-31 (comprehensive TODO block)
+
+✅ app/(dashboard)/dashboard/settings/page.js
+   MOCK: Hardcoded settings (lines 44-49)
+   TODO: Load/save to /api/users/[id]/settings
+   COMMENT BLOCKS: Lines 8-31 (comprehensive TODO block)
+
+
+🔍 HOW TO FIND ALL TODOs
+━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━
+
+Search your codebase for: "TODO:"
+
+You'll find:
+• Clear comments about what's mock data
+• What API endpoint is needed
+• Example Prisma queries to use
+• Database fields required
+• Implementation steps
+
+
+📚 COMPREHENSIVE DOCUMENTATION
+━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━
+
+📖 TODO_API_INTEGRATION.md
+   • Complete checklist of all mock data
+   • API endpoints to create
+   • Database schema needed
+   • Step-by-step migration guide
+   • Code examples for each replacement
+
+
+✅ WHAT'S ALREADY GOOD
+━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━
+
+✓ User in localStorage (temporary solution is fine)
+✓ API structure is perfect for switching to DB
+✓ All TODOs clearly marked in code
+✓ Loading states implemented everywhere
+✓ Toast notifications ready
+✓ Error handling in place
+✓ Theme system (MIDNIGHT blue) used consistently
+✓ Zero linter errors
+
+
+🚀 MIGRATION PRIORITY ORDER
+━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━
+
+1. AUTHENTICATION FIRST
+   • Set up bcrypt password hashing
+   • Implement JWT or NextAuth
+   • Update /api/auth/signin
+
+2. USER MANAGEMENT
+   • Replace users.json with Prisma
+   • Create /api/users/[id] endpoint
+   • Update profile & settings pages
+
+3. JOBS & APPLICATIONS
+   • Replace jobs.json with Prisma
+   • Replace applications.json with Prisma
+   • Update all job-related pages
+
+4. STATISTICS
+   • Replace stats.json with aggregations
+   • Calculate real-time from database
+
+5. FILE UPLOADS
+   • Implement S3/Cloudinary
+   • Add avatar upload
+   • Add resume upload
+
+
+💡 QUICK EXAMPLE: Replacing Jobs API
+━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━
+
+CURRENT (app/api/jobs/all/route.js):
+  import jobs from '@/data/jobs.json';
+  let filteredJobs = jobs.jobs;
+
+REPLACE WITH:
+  import prisma from '@/lib/prisma';
+  
+  const jobs = await prisma.job.findMany({
+    where: {
+      OR: [
+        { title: { contains: search, mode: 'insensitive' } },
+        { company: { contains: search, mode: 'insensitive' } }
+      ]
+    },
+    orderBy: { createdAt: 'desc' },
+    take: 20
+  });
+
+
+📋 CHECKLIST FOR EACH FILE
+━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━
+
+Before marking as "done":
+☐ Remove mock data imports
+☐ Add Prisma import
+☐ Replace mock data with DB query
+☐ Add error handling
+☐ Add loading states
+☐ Test with real data
+☐ Remove TODO comments (or mark as DONE)
+
+
+━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━
+For complete details, see: TODO_API_INTEGRATION.md
+━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━
+

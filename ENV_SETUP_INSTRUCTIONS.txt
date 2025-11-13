@@ -1,0 +1,92 @@
+====================================
+  ENVIRONMENT SETUP INSTRUCTIONS
+====================================
+
+STEP 1: Create .env.local file
+-------------------------------
+Create a new file in your project root called: .env.local
+
+STEP 2: Get your Supabase Connection String
+--------------------------------------------
+1. Go to: https://app.supabase.com
+2. Select your project
+3. Click "Project Settings" (gear icon)
+4. Click "Database" in the left sidebar
+5. Scroll to "Connection string" section
+6. Select "URI" tab
+7. Copy the connection string
+
+STEP 3: Add to .env.local
+--------------------------
+Paste this into your .env.local file (replace with your actual values):
+
+DATABASE_URL=postgresql://postgres.[project-ref]:[YOUR-PASSWORD]@aws-0-[region].pooler.supabase.com:6543/postgres
+
+IMPORTANT NOTES:
+- Replace [YOUR-PASSWORD] with your actual Supabase password
+- Replace [project-ref] with your project reference
+- Replace [region] with your region (e.g., us-east-1)
+- Use PORT 6543 (connection pooling) for Next.js - NOT port 5432
+- The password is URL-encoded (Supabase provides this automatically)
+
+EXAMPLE:
+DATABASE_URL=postgresql://postgres.abcdefghijklmnop:MyP%40ssw0rd@aws-0-us-east-1.pooler.supabase.com:6543/postgres
+
+STEP 4: Install Dependencies
+-----------------------------
+Run in your terminal:
+
+npm install
+
+STEP 5: Test Connection
+------------------------
+Run your dev server:
+
+npm run dev
+
+Then visit in your browser:
+
+http://localhost:3000/api/db-test
+
+You should see a success message with your database info!
+
+====================================
+  TROUBLESHOOTING
+====================================
+
+Problem: "Cannot find module 'pg'"
+Solution: Run: npm install pg
+
+Problem: "password authentication failed"
+Solution: Check your password in the connection string
+
+Problem: "Connection timeout"
+Solution: Make sure you're using the pooling URL (port 6543)
+
+Problem: "getaddrinfo ENOTFOUND"
+Solution: Check your internet connection and firewall settings
+
+====================================
+  WHAT WAS CREATED
+====================================
+
+✅ lib/db.js - Main database connection file
+✅ lib/db-examples.js - Example queries and patterns
+✅ app/api/db-test/route.js - Test endpoint
+✅ SETUP_DATABASE.md - Full documentation
+✅ package.json - Updated with 'pg' dependency
+✅ .gitignore - Configured to ignore .env files
+
+====================================
+  NEXT STEPS
+====================================
+
+1. Create .env.local with your DATABASE_URL
+2. Run: npm install
+3. Run: npm run dev
+4. Test: http://localhost:3000/api/db-test
+5. Start building your API routes!
+
+Need help? Check SETUP_DATABASE.md for examples.
+
+

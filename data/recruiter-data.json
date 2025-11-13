@@ -1,0 +1,89 @@
+{
+  "applicants": [
+    {
+      "id": "app1",
+      "name": "Alice Johnson",
+      "email": "alice@example.com",
+      "jobTitle": "Frontend Developer",
+      "status": "shortlisted",
+      "appliedDate": "2024-07-10T10:00:00Z",
+      "resumeLink": "/resumes/alice_johnson.pdf",
+      "coverLetter": "Passionate about creating intuitive user interfaces...",
+      "skills": ["React", "JavaScript", "HTML", "CSS", "Tailwind CSS"]
+    },
+    {
+      "id": "app2",
+      "name": "Bob Williams",
+      "email": "bob@example.com",
+      "jobTitle": "Backend Engineer",
+      "status": "interviewed",
+      "appliedDate": "2024-07-08T14:30:00Z",
+      "resumeLink": "/resumes/bob_williams.pdf",
+      "coverLetter": "Experienced in building scalable backend systems...",
+      "skills": ["Node.js", "Express", "MongoDB", "AWS", "Docker"]
+    },
+    {
+      "id": "app3",
+      "name": "Charlie Brown",
+      "email": "charlie@example.com",
+      "jobTitle": "UI/UX Designer",
+      "status": "pending",
+      "appliedDate": "2024-07-12T09:15:00Z",
+      "resumeLink": "/resumes/charlie_brown.pdf",
+      "coverLetter": "Creative designer with a focus on user-centered design...",
+      "skills": ["Figma", "Sketch", "Adobe XD", "User Research", "Prototyping"]
+    },
+    {
+      "id": "app4",
+      "name": "Diana Martinez",
+      "email": "diana@example.com",
+      "jobTitle": "Full Stack Developer",
+      "status": "shortlisted",
+      "appliedDate": "2024-07-11T11:00:00Z",
+      "resumeLink": "/resumes/diana_martinez.pdf",
+      "coverLetter": "Full-stack engineer with passion for clean code...",
+      "skills": ["React", "Node.js", "PostgreSQL", "TypeScript", "Next.js"]
+    },
+    {
+      "id": "app5",
+      "name": "Ethan Davis",
+      "email": "ethan@example.com",
+      "jobTitle": "DevOps Engineer",
+      "status": "interviewed",
+      "appliedDate": "2024-07-09T15:30:00Z",
+      "resumeLink": "/resumes/ethan_davis.pdf",
+      "coverLetter": "DevOps expert with cloud infrastructure experience...",
+      "skills": ["AWS", "Kubernetes", "Docker", "Terraform", "CI/CD"]
+    }
+  ],
+  "recruiterJobs": [
+    {
+      "id": "jobR1",
+      "title": "Senior Frontend Developer",
+      "company": "Tech Solutions Inc.",
+      "location": "Remote",
+      "type": "Full-time",
+      "postedDate": "2024-07-01",
+      "applicantsCount": 15,
+      "status": "Active"
+    },
+    {
+      "id": "jobR2",
+      "title": "DevOps Engineer",
+      "company": "Cloud Innovations",
+      "location": "New York, NY",
+      "type": "Full-time",
+      "postedDate": "2024-06-20",
+      "applicantsCount": 8,
+      "status": "Active"
+    }
+  ],
+  "pipeline": {
+    "totalApplications": 87,
+    "pending": 32,
+    "shortlisted": 28,
+    "interviewed": 15,
+    "offered": 8,
+    "hired": 4
+  }
+}
