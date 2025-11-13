@@ -30,6 +30,8 @@ export default function Button({
   type = 'button',
   disabled = false,
   loading = false,
+  fullWidth = false,
+  icon,
   ...props 
 }) {
   const getButtonStyle = () => {
@@ -51,6 +53,7 @@ export default function Button({
         transition-all duration-300
         ${variants[variant] || variants.primary}
         ${sizes[size] || sizes.md}
+        ${fullWidth ? 'w-full' : ''}
         ${disabled || loading ? 'opacity-50 cursor-not-allowed' : ''}
         ${className}
       `}
@@ -66,7 +69,12 @@ export default function Button({
             </svg>
             <span>Loading...</span>
           </>
-        ) : children}
+        ) : (
+          <>
+            {icon && icon}
+            {children}
+          </>
+        )}
       </span>
     </button>
   );
