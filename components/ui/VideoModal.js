@@ -40,7 +40,7 @@ export default function VideoModal({ isOpen, onClose, videoId, title = 'Watch De
       onClick={onClose}
     >
       {/* Light Transparent Backdrop with blur */}
-      <div className="absolute inset-0 backdrop-blur-2xl bg-white/30" />
+      <div className="absolute inset-0 backdrop-blur-2xl" />
 
       {/* MacBook Container */}
       <div 

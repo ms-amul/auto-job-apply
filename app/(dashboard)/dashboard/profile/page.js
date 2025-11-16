@@ -1,34 +1,6 @@
 /**
- * Profile Page
- * 
- * Manage user profile and resume
- * 
- * ============================================
- * TODO: API INTEGRATION REQUIRED
- * ============================================
- * 
- * MOCK DATA (Lines 14-20):
- * - Replace hardcoded profile data with API call
- * - Fetch user data from: GET /api/users/[userId]
- * 
- * API ENDPOINTS NEEDED:
- * 1. GET /api/users/[userId] - Fetch user profile
- * 2. PUT /api/users/[userId] - Update profile
- * 3. POST /api/upload/avatar - Upload profile picture
- * 4. POST /api/upload/resume - Upload resume
- * 
- * DATABASE FIELDS:
- * - user.name, user.email, user.phone
- * - user.location, user.title, user.bio
- * - user.avatar_url, user.resume_url
- * 
- * IMPLEMENTATION STEPS:
- * 1. useEffect to fetch user from localStorage
- * 2. API call to load profile data
- * 3. Form validation before submit
- * 4. File upload handling with FormData
- * 5. Success/error toast notifications
- * ============================================
+ * Profile Page - Premium Design
+ * Classy, trendy, and professional profile management
  */
 
 'use client';
@@ -45,21 +17,20 @@ import {
   ShieldCheck,
   Plane,
   DollarSign,
+  CheckCircle2,
+  X,
+  Plus,
 } from 'lucide-react';
 import Button from '@/components/ui/Button';
 import Input from '@/components/ui/Input';
-import Card from '@/components/ui/Card';
-import GlassPanel from '@/components/ui/GlassPanel';
-import StatusPill from '@/components/ui/StatusPill';
 import toast from 'react-hot-toast';
-import { theme } from '@/utils/theme';
 
 export default function ProfilePage() {
   const [initialLoading, setInitialLoading] = useState(true);
   const [saving, setSaving] = useState(false);
   const [userId, setUserId] = useState(null);
   const [profileCompleted, setProfileCompleted] = useState(false);
-  const [agentStatus, setAgentStatus] = useState('none'); // 'none' | 'paused' | 'running'
+  const [agentStatus, setAgentStatus] = useState('none');
 
   const [profile, setProfile] = useState({
     name: '',
@@ -75,13 +46,11 @@ export default function ProfilePage() {
     preferredLocations: '',
     salaryExpectation: '',
     resumeUrl: '',
-    // Skills
     technicalSkills: [],
     softSkills: [],
     languages: [],
     certifications: [],
     tools: [],
-    // Diversity & Inclusion (Optional)
     ethnicity: '',
     hasDisability: null,
     isVeteran: null,
@@ -93,42 +62,42 @@ export default function ProfilePage() {
     setProfile((prev) => ({ ...prev, [field]: value }));
   };
 
+  // Get initials for avatar
+  const getInitials = (name) => {
+    if (!name) return 'U';
+    const parts = name.trim().split(' ');
+    if (parts.length === 1) return parts[0].charAt(0).toUpperCase();
+    return (parts[0].charAt(0) + parts[parts.length - 1].charAt(0)).toUpperCase();
+  };
+
   useEffect(() => {
     const load = async () => {
       try {
         const stored = typeof window !== 'undefined' ? localStorage.getItem('user') : null;
         if (!stored) {
-          console.log('No user in localStorage');
           toast.error('Please sign in first');
           setInitialLoading(false);
           return;
         }
         
         const user = JSON.parse(stored);
-        console.log('User from localStorage:', user);
-        
         if (!user?.id) {
-          console.log('No user ID found');
           toast.error('Invalid user data. Please sign in again.');
           setInitialLoading(false);
           return;
         }
         
         setUserId(user.id);
-        console.log('Fetching profile for user ID:', user.id);
 
         const [userRes, agentRes] = await Promise.all([
           fetch(`/api/users/${user.id}`),
           fetch(`/api/agent/${user.id}`),
         ]);
 
-        console.log('User API response status:', userRes.status);
         const data = await userRes.json();
-        console.log('User API response data:', data);
         
         if (!data.success) {
           toast.error(data.error || 'Failed to load profile');
-          console.error('API error:', data.error);
           setInitialLoading(false);
           return;
         }
@@ -155,6 +124,11 @@ export default function ProfilePage() {
           languages: u.languages || [],
           certifications: u.certifications || [],
           tools: u.tools || [],
+          ethnicity: u.ethnicity || '',
+          hasDisability: u.hasDisability ?? null,
+          isVeteran: u.isVeteran ?? null,
+          lgbtqPlus: u.lgbtqPlus ?? null,
+          gender: u.gender || '',
         });
 
         const agentData = await agentRes.json();
@@ -212,91 +186,102 @@ export default function ProfilePage() {
   if (initialLoading) {
     return (
       <div className="min-h-[60vh] flex items-center justify-center">
-        <div className="w-8 h-8 border-2 border-slate-300 border-t-sky-500 rounded-full animate-spin" />
+        <div className="w-8 h-8 border-2 border-slate-300 border-t-blue-500 rounded-full animate-spin" />
       </div>
     );
   }
 
   return (
-    <div className="space-y-8 max-w-6xl mx-auto pb-16">
-      {/* Profile Header */}
-      <GlassPanel>
-        <div className="flex flex-col md:flex-row md:items-start justify-between gap-8">
-          {/* Left: Avatar & Info */}
-          <div className="flex items-start gap-6">
-            <div className="relative shrink-0">
-              <div
-                className="w-24 h-24 rounded-2xl flex items-center justify-center shadow-lg"
-                style={{ background: theme.getAccentGradient(135) }}
-              >
-                <span className="text-3xl font-bold text-white">
-                  {profile.name ? profile.name.charAt(0).toUpperCase() : 'U'}
-                </span>
-              </div>
+    <div className="max-w-6xl mx-auto px-4 md:px-6 pb-16">
+      {/* Premium Profile Header */}
+      <div 
+        className="relative bg-white rounded-3xl border border-gray-100 p-6 md:p-8 mb-6 overflow-hidden"
+        style={{ boxShadow: '0 4px 20px rgba(0, 0, 0, 0.06)' }}
+      >
+        {/* Gradient accent */}
+        <div className="absolute top-0 left-0 right-0 h-1.5 bg-gradient-to-r from-blue-500 via-purple-500 to-pink-500"></div>
+        
+        <div className="flex flex-col md:flex-row md:items-start gap-6 md:gap-8">
+          {/* Avatar with initials */}
+          <div className="relative">
+            <div className="w-24 h-24 md:w-28 md:h-28 rounded-3xl bg-gradient-to-br from-blue-500 via-blue-600 to-purple-600 flex items-center justify-center shadow-lg">
+              <span className="text-3xl md:text-4xl font-bold text-white tracking-tight">
+                {getInitials(profile.name)}
+              </span>
             </div>
-            
-            <div className="flex-1 min-w-0">
-              <h1 className="text-3xl font-bold text-slate-900 mb-2">
-                {profile.name || 'Your Name'}
-              </h1>
-              <p className="text-base text-slate-600 mb-4">
-                {profile.title || 'Add your professional title'}
-              </p>
-              
-              <div className="flex flex-wrap gap-3 text-sm text-slate-600">
-                {profile.email && (
-                  <div className="flex items-center gap-2">
-                    <Mail className="w-4 h-4 text-slate-400" />
-                    <span>{profile.email}</span>
-                  </div>
-                )}
-                {profile.phone && (
-                  <div className="flex items-center gap-2">
-                    <Phone className="w-4 h-4 text-slate-400" />
-                    <span>{profile.phone}</span>
-                  </div>
-                )}
-                {profile.location && (
-                  <div className="flex items-center gap-2">
-                    <MapPin className="w-4 h-4 text-slate-400" />
-                    <span>{profile.location}</span>
-                  </div>
-                )}
+            {profileCompleted && (
+              <div className="absolute -bottom-2 -right-2 w-8 h-8 bg-emerald-500 rounded-full flex items-center justify-center shadow-lg border-2 border-white">
+                <CheckCircle2 className="w-5 h-5 text-white" />
               </div>
-            </div>
+            )}
           </div>
-
-          {/* Right: Status Indicators */}
-          <div className="flex flex-col gap-3 md:items-end">
-            <div className="flex items-center gap-2 px-4 py-2 rounded-lg bg-white border border-gray-200">
-              <div className={`w-2 h-2 rounded-full ${profileCompleted ? 'bg-emerald-500' : 'bg-gray-300'}`} />
-              <span className="text-sm font-medium text-slate-700">
-                {profileCompleted ? 'Profile Active' : 'Profile Incomplete'}
-              </span>
+          
+          {/* User Info */}
+          <div className="flex-1 min-w-0">
+            <div className="flex flex-col md:flex-row md:items-start md:justify-between gap-4 mb-4">
+              <div>
+                <h1 className="text-2xl md:text-3xl font-bold text-slate-900 mb-1">
+                  {profile.name || 'Your Name'}
+                </h1>
+                <p className="text-base md:text-lg text-slate-600">
+                  {profile.title || 'Add your professional title'}
+                </p>
+              </div>
+              
+              {/* Status Badges */}
+              <div className="flex flex-wrap gap-2">
+                <div className={`flex items-center gap-2 px-4 py-2 rounded-full border text-sm font-medium ${
+                  profileCompleted 
+                    ? 'bg-emerald-50 border-emerald-200 text-emerald-700' 
+                    : 'bg-gray-50 border-gray-200 text-gray-600'
+                }`}>
+                  <div className={`w-2 h-2 rounded-full ${profileCompleted ? 'bg-emerald-500' : 'bg-gray-400'}`}></div>
+                  {profileCompleted ? 'Active' : 'Incomplete'}
+                </div>
+                
+                <div className={`flex items-center gap-2 px-4 py-2 rounded-full border text-sm font-medium ${
+                  agentStatus === 'running' 
+                    ? 'bg-blue-50 border-blue-200 text-blue-700' 
+                    : 'bg-gray-50 border-gray-200 text-gray-600'
+                }`}>
+                  <div className={`w-2 h-2 rounded-full ${
+                    agentStatus === 'running' ? 'bg-blue-500 animate-pulse' : 'bg-gray-400'
+                  }`}></div>
+                  Agent {agentStatus === 'running' ? 'Running' : 'Paused'}
+                </div>
+              </div>
             </div>
             
-            <div className="flex items-center gap-2 px-4 py-2 rounded-lg bg-white border border-gray-200">
-              <div className={`w-2 h-2 rounded-full ${agentStatus === 'running' ? 'bg-blue-500 animate-pulse' : 'bg-gray-300'}`} />
-              <span className="text-sm font-medium text-slate-700">
-                {agentStatus === 'running' ? 'Agent Running' : 'Agent Paused'}
-              </span>
+            {/* Contact Info Pills */}
+            <div className="flex flex-wrap gap-3 text-sm">
+              {profile.email && (
+                <div className="flex items-center gap-2 px-3 py-1.5 bg-gray-50 rounded-full border border-gray-200">
+                  <Mail className="w-4 h-4 text-slate-500" />
+                  <span className="text-slate-700 font-medium">{profile.email}</span>
+                </div>
+              )}
+              {profile.phone && (
+                <div className="flex items-center gap-2 px-3 py-1.5 bg-gray-50 rounded-full border border-gray-200">
+                  <Phone className="w-4 h-4 text-slate-500" />
+                  <span className="text-slate-700 font-medium">{profile.phone}</span>
+                </div>
+              )}
+              {profile.location && (
+                <div className="flex items-center gap-2 px-3 py-1.5 bg-gray-50 rounded-full border border-gray-200">
+                  <MapPin className="w-4 h-4 text-slate-500" />
+                  <span className="text-slate-700 font-medium">{profile.location}</span>
+                </div>
+              )}
             </div>
           </div>
         </div>
-      </GlassPanel>
+      </div>
 
-      {/* Profile Form */}
-      <form onSubmit={handleSubmit} className="space-y-8">
+      {/* Form Sections */}
+      <form onSubmit={handleSubmit} className="space-y-6">
         {/* Basic Information */}
-        <GlassPanel>
-          <div className="mb-6">
-            <h2 className="text-xl font-semibold text-slate-900 mb-2">Basic Information</h2>
-            <p className="text-sm text-slate-600">
-              Your core details that will be visible to recruiters
-            </p>
-          </div>
-          
-          <div className="grid grid-cols-1 md:grid-cols-2 gap-6">
+        <SectionCard title="Basic Information" description="Your core details visible to recruiters">
+          <div className="grid grid-cols-1 md:grid-cols-2 gap-4 md:gap-6">
             <Input
               label="Full Name"
               type="text"
@@ -344,7 +329,7 @@ export default function ProfilePage() {
             </div>
 
             <div className="md:col-span-2">
-              <label className="block text-sm font-medium text-slate-700 mb-2">
+              <label className="block text-sm font-semibold text-slate-700 mb-2">
                 Professional Bio
               </label>
               <textarea
@@ -352,22 +337,15 @@ export default function ProfilePage() {
                 onChange={(e) => updateField('bio', e.target.value)}
                 rows={4}
                 placeholder="Tell us about your experience, skills, and what you're looking for..."
-                className="w-full px-4 py-3 border border-gray-200 rounded-xl focus:outline-none focus:ring-2 focus:ring-blue-500 focus:border-transparent resize-none text-slate-900"
+                className="w-full px-4 py-3 border border-gray-200 rounded-xl focus:outline-none focus:ring-2 focus:ring-blue-500 focus:border-transparent resize-none text-slate-900 text-sm"
               />
             </div>
           </div>
-        </GlassPanel>
+        </SectionCard>
 
         {/* Career Preferences */}
-        <GlassPanel>
-          <div className="mb-6">
-            <h2 className="text-xl font-semibold text-slate-900 mb-2">Career Preferences</h2>
-            <p className="text-sm text-slate-600">
-              Help us match you with the right opportunities
-            </p>
-          </div>
-
-          <div className="grid grid-cols-1 md:grid-cols-3 gap-6">
+        <SectionCard title="Career Preferences" description="Help us match you with the right opportunities">
+          <div className="grid grid-cols-1 md:grid-cols-3 gap-4 md:gap-6">
             <Input
               label="Years of Experience"
               value={profile.yearsOfExperience}
@@ -388,19 +366,11 @@ export default function ProfilePage() {
               placeholder="e.g., $120,000 - $150,000"
             />
           </div>
-        </GlassPanel>
+        </SectionCard>
 
         {/* Skills & Expertise */}
-        <GlassPanel>
-          <div className="mb-6">
-            <h2 className="text-xl font-semibold text-slate-900 mb-2">Skills & Expertise</h2>
-            <p className="text-sm text-slate-600">
-              Add your skills to help us match you with relevant job opportunities
-            </p>
-          </div>
-
+        <SectionCard title="Skills & Expertise" description="Add your skills to match with relevant opportunities">
           <div className="space-y-6">
-            {/* Technical Skills */}
             <SkillInput
               label="Technical Skills"
               placeholder="e.g., React, Node.js, Python, AWS"
@@ -409,16 +379,14 @@ export default function ProfilePage() {
               onChange={(skills) => updateField('technicalSkills', skills)}
             />
 
-            {/* Tools & Platforms */}
             <SkillInput
               label="Tools & Platforms"
               placeholder="e.g., Git, Docker, Jira, Figma"
-              description="Development tools, software, and platforms you use"
+              description="Development tools, software, and platforms"
               skills={profile.tools}
               onChange={(skills) => updateField('tools', skills)}
             />
 
-            {/* Soft Skills */}
             <SkillInput
               label="Soft Skills"
               placeholder="e.g., Leadership, Communication, Problem Solving"
@@ -427,7 +395,6 @@ export default function ProfilePage() {
               onChange={(skills) => updateField('softSkills', skills)}
             />
 
-            {/* Languages */}
             <SkillInput
               label="Languages"
               placeholder="e.g., English (Native), Spanish (Fluent)"
@@ -436,7 +403,6 @@ export default function ProfilePage() {
               onChange={(skills) => updateField('languages', skills)}
             />
 
-            {/* Certifications */}
             <SkillInput
               label="Certifications"
               placeholder="e.g., AWS Certified, PMP, Scrum Master"
@@ -445,21 +411,19 @@ export default function ProfilePage() {
               onChange={(skills) => updateField('certifications', skills)}
             />
           </div>
-        </GlassPanel>
+        </SectionCard>
 
         {/* US Mobility & Visa */}
-        <GlassPanel>
-          <div className="mb-6">
-            <h2 className="text-xl font-semibold text-slate-900 mb-2 flex items-center gap-2">
+        <SectionCard 
+          title={
+            <div className="flex items-center gap-2">
               <Globe2 className="w-5 h-5 text-blue-600" />
-              US Mobility & Visa
-            </h2>
-            <p className="text-sm text-slate-600">
-              Optional information to help match you with suitable opportunities
-            </p>
-          </div>
-
-          <div className="grid grid-cols-1 md:grid-cols-3 gap-6">
+              <span>US Mobility & Visa</span>
+            </div>
+          } 
+          description="Optional information for suitable opportunities"
+        >
+          <div className="grid grid-cols-1 md:grid-cols-3 gap-4 md:gap-6">
             <ToggleCard
               label="Willing to relocate to US"
               icon={Plane}
@@ -479,24 +443,22 @@ export default function ProfilePage() {
               onChange={(v) => updateField('needsVisaSponsorship', v)}
             />
           </div>
-        </GlassPanel>
+        </SectionCard>
 
-        {/* Diversity & Inclusion (Optional) */}
-        <GlassPanel>
-          <div className="mb-6">
-            <h2 className="text-xl font-semibold text-slate-900 mb-2">Diversity & Inclusion</h2>
-            <p className="text-sm text-slate-600 mb-1">
-              Optional information to help employers meet diversity goals
-            </p>
-            <p className="text-xs text-slate-500 italic">
-              By continuing you agree to the definitions set by the U.S. EEOC
-            </p>
-          </div>
-
+        {/* Diversity & Inclusion */}
+        <SectionCard 
+          title="Diversity & Inclusion" 
+          description={
+            <div>
+              <p className="text-sm text-slate-600 mb-1">Optional information to help employers meet diversity goals</p>
+              <p className="text-xs text-slate-500 italic">By continuing you agree to the definitions set by the U.S. EEOC</p>
+            </div>
+          }
+        >
           <div className="space-y-6">
             {/* Ethnicity */}
             <div>
-              <label className="block text-sm font-medium text-slate-700 mb-3">
+              <label className="block text-sm font-semibold text-slate-700 mb-3">
                 What is your ethnicity?
               </label>
               <EthnicitySelect
@@ -507,200 +469,72 @@ export default function ProfilePage() {
 
             {/* Disability */}
             <div>
-              <label className="block text-sm font-medium text-slate-700 mb-3">
+              <label className="block text-sm font-semibold text-slate-700 mb-3">
                 Do you have a disability?
               </label>
-              <div className="flex gap-3">
-                <button
-                  type="button"
-                  className={`flex-1 rounded-lg px-4 py-2.5 text-sm font-medium transition-all ${
-                    profile.hasDisability === true
-                      ? 'bg-blue-500 text-white shadow-sm'
-                      : 'bg-gray-100 text-slate-600 hover:bg-gray-200'
-                  }`}
-                  onClick={() => updateField('hasDisability', true)}
-                >
-                  Yes
-                </button>
-                <button
-                  type="button"
-                  className={`flex-1 rounded-lg px-4 py-2.5 text-sm font-medium transition-all ${
-                    profile.hasDisability === false
-                      ? 'bg-blue-500 text-white shadow-sm'
-                      : 'bg-gray-100 text-slate-600 hover:bg-gray-200'
-                  }`}
-                  onClick={() => updateField('hasDisability', false)}
-                >
-                  No
-                </button>
-                <button
-                  type="button"
-                  className={`flex-1 rounded-lg px-4 py-2.5 text-sm font-medium transition-all ${
-                    profile.hasDisability === null
-                      ? 'bg-gray-200 text-slate-700 shadow-sm'
-                      : 'bg-gray-100 text-slate-600 hover:bg-gray-200'
-                  }`}
-                  onClick={() => updateField('hasDisability', null)}
-                >
-                  Decline to state
-                </button>
-              </div>
+              <YesNoDecline
+                value={profile.hasDisability}
+                onChange={(value) => updateField('hasDisability', value)}
+              />
             </div>
 
             {/* Veteran Status */}
             <div>
-              <label className="block text-sm font-medium text-slate-700 mb-3">
+              <label className="block text-sm font-semibold text-slate-700 mb-3">
                 Are you a veteran?
               </label>
-              <div className="flex gap-3">
-                <button
-                  type="button"
-                  className={`flex-1 rounded-lg px-4 py-2.5 text-sm font-medium transition-all ${
-                    profile.isVeteran === true
-                      ? 'bg-blue-500 text-white shadow-sm'
-                      : 'bg-gray-100 text-slate-600 hover:bg-gray-200'
-                  }`}
-                  onClick={() => updateField('isVeteran', true)}
-                >
-                  Yes
-                </button>
-                <button
-                  type="button"
-                  className={`flex-1 rounded-lg px-4 py-2.5 text-sm font-medium transition-all ${
-                    profile.isVeteran === false
-                      ? 'bg-blue-500 text-white shadow-sm'
-                      : 'bg-gray-100 text-slate-600 hover:bg-gray-200'
-                  }`}
-                  onClick={() => updateField('isVeteran', false)}
-                >
-                  No
-                </button>
-                <button
-                  type="button"
-                  className={`flex-1 rounded-lg px-4 py-2.5 text-sm font-medium transition-all ${
-                    profile.isVeteran === null
-                      ? 'bg-gray-200 text-slate-700 shadow-sm'
-                      : 'bg-gray-100 text-slate-600 hover:bg-gray-200'
-                  }`}
-                  onClick={() => updateField('isVeteran', null)}
-                >
-                  Decline to state
-                </button>
-              </div>
+              <YesNoDecline
+                value={profile.isVeteran}
+                onChange={(value) => updateField('isVeteran', value)}
+              />
             </div>
 
             {/* LGBTQ+ */}
             <div>
-              <label className="block text-sm font-medium text-slate-700 mb-3">
+              <label className="block text-sm font-semibold text-slate-700 mb-3">
                 Do you identify as LGBTQ+?
               </label>
-              <div className="flex gap-3">
-                <button
-                  type="button"
-                  className={`flex-1 rounded-lg px-4 py-2.5 text-sm font-medium transition-all ${
-                    profile.lgbtqPlus === true
-                      ? 'bg-blue-500 text-white shadow-sm'
-                      : 'bg-gray-100 text-slate-600 hover:bg-gray-200'
-                  }`}
-                  onClick={() => updateField('lgbtqPlus', true)}
-                >
-                  Yes
-                </button>
-                <button
-                  type="button"
-                  className={`flex-1 rounded-lg px-4 py-2.5 text-sm font-medium transition-all ${
-                    profile.lgbtqPlus === false
-                      ? 'bg-blue-500 text-white shadow-sm'
-                      : 'bg-gray-100 text-slate-600 hover:bg-gray-200'
-                  }`}
-                  onClick={() => updateField('lgbtqPlus', false)}
-                >
-                  No
-                </button>
-                <button
-                  type="button"
-                  className={`flex-1 rounded-lg px-4 py-2.5 text-sm font-medium transition-all ${
-                    profile.lgbtqPlus === null
-                      ? 'bg-gray-200 text-slate-700 shadow-sm'
-                      : 'bg-gray-100 text-slate-600 hover:bg-gray-200'
-                  }`}
-                  onClick={() => updateField('lgbtqPlus', null)}
-                >
-                  Decline to state
-                </button>
-              </div>
+              <YesNoDecline
+                value={profile.lgbtqPlus}
+                onChange={(value) => updateField('lgbtqPlus', value)}
+              />
             </div>
 
             {/* Gender */}
             <div>
-              <label className="block text-sm font-medium text-slate-700 mb-3">
+              <label className="block text-sm font-semibold text-slate-700 mb-3">
                 What is your gender?
               </label>
               <div className="grid grid-cols-2 md:grid-cols-4 gap-3">
-                <button
-                  type="button"
-                  className={`rounded-lg px-4 py-2.5 text-sm font-medium transition-all ${
-                    profile.gender === 'male'
-                      ? 'bg-blue-500 text-white shadow-sm'
-                      : 'bg-gray-100 text-slate-600 hover:bg-gray-200'
-                  }`}
-                  onClick={() => updateField('gender', 'male')}
-                >
-                  Male
-                </button>
-                <button
-                  type="button"
-                  className={`rounded-lg px-4 py-2.5 text-sm font-medium transition-all ${
-                    profile.gender === 'female'
-                      ? 'bg-blue-500 text-white shadow-sm'
-                      : 'bg-gray-100 text-slate-600 hover:bg-gray-200'
-                  }`}
-                  onClick={() => updateField('gender', 'female')}
-                >
-                  Female
-                </button>
-                <button
-                  type="button"
-                  className={`rounded-lg px-4 py-2.5 text-sm font-medium transition-all ${
-                    profile.gender === 'non-binary'
-                      ? 'bg-blue-500 text-white shadow-sm'
-                      : 'bg-gray-100 text-slate-600 hover:bg-gray-200'
-                  }`}
-                  onClick={() => updateField('gender', 'non-binary')}
-                >
-                  Non-Binary
-                </button>
-                <button
-                  type="button"
-                  className={`rounded-lg px-4 py-2.5 text-sm font-medium transition-all ${
-                    profile.gender === 'decline'
-                      ? 'bg-gray-200 text-slate-700 shadow-sm'
-                      : 'bg-gray-100 text-slate-600 hover:bg-gray-200'
-                  }`}
-                  onClick={() => updateField('gender', 'decline')}
-                >
-                  Decline to state
-                </button>
+                {['male', 'female', 'non-binary', 'decline'].map((g) => (
+                  <button
+                    key={g}
+                    type="button"
+                    className={`rounded-xl px-4 py-3 text-sm font-semibold transition-all border ${
+                      profile.gender === g
+                        ? 'bg-blue-500 text-white border-blue-600 shadow-md'
+                        : 'bg-white border-gray-200 text-slate-700 hover:border-gray-300'
+                    }`}
+                    onClick={() => updateField('gender', g)}
+                  >
+                    {g === 'male' ? 'Male' : g === 'female' ? 'Female' : g === 'non-binary' ? 'Non-Binary' : 'Decline to state'}
+                  </button>
+                ))}
               </div>
             </div>
           </div>
-        </GlassPanel>
+        </SectionCard>
 
         {/* Resume */}
-        <GlassPanel>
-          <div className="mb-6">
-            <h2 className="text-xl font-semibold text-slate-900 mb-2">Resume</h2>
-            <p className="text-sm text-slate-600">
-              Upload your resume or provide a link to your online resume
-            </p>
-          </div>
-          
+        <SectionCard title="Resume" description="Upload your resume or provide a link">
           <div 
-            className="border-2 border-dashed border-gray-300 rounded-xl p-12 text-center hover:border-blue-400 hover:bg-blue-50/30 transition-all cursor-pointer mb-6"
+            className="border-2 border-dashed border-gray-300 rounded-2xl p-8 md:p-12 text-center transition-all cursor-pointer mb-6 bg-gray-50/50 hover:border-blue-400 hover:bg-blue-50/30"
             onClick={() => toast('File upload coming soon!')}
           >
-            <Upload className="w-10 h-10 text-gray-400 mx-auto mb-3" />
-            <p className="text-slate-700 mb-1">
+            <div className="inline-flex w-16 h-16 rounded-2xl bg-white border border-gray-200 items-center justify-center mb-4">
+              <Upload className="w-8 h-8 text-gray-400" />
+            </div>
+            <p className="text-slate-700 mb-1 font-medium">
               <span className="text-blue-600 font-semibold">Click to upload</span> or drag and drop
             </p>
             <p className="text-sm text-slate-500">PDF, DOC, DOCX (max. 5MB)</p>
@@ -712,47 +546,72 @@ export default function ProfilePage() {
             value={profile.resumeUrl}
             onChange={(e) => updateField('resumeUrl', e.target.value)}
           />
-        </GlassPanel>
+        </SectionCard>
 
         {/* Action Buttons */}
-        <div className="flex justify-end gap-4 pt-4">
-          <Button
+        <div className="flex flex-col sm:flex-row justify-end gap-3 pt-4">
+          <button
             type="button"
-            variant="secondary"
             onClick={() => window.history.back()}
+            className="px-6 py-3 border border-gray-300 rounded-xl hover:bg-gray-50 transition-all text-sm text-slate-700 font-semibold"
           >
             Cancel
-          </Button>
-          <Button
+          </button>
+          <button
             type="submit"
-            variant="primary"
-            loading={saving}
+            disabled={saving}
+            className="px-6 py-3 bg-gradient-to-r from-blue-600 to-blue-500 text-white rounded-xl font-semibold text-sm transition-all shadow-lg hover:shadow-xl disabled:opacity-50 disabled:cursor-not-allowed"
+            style={{ boxShadow: '0 4px 20px rgba(59, 130, 246, 0.4)' }}
           >
-            Save Changes
-          </Button>
+            {saving ? 'Saving...' : 'Save Changes'}
+          </button>
         </div>
       </form>
     </div>
   );
 }
 
+// Section Card Component
+function SectionCard({ title, description, children }) {
+  return (
+    <div 
+      className="bg-white rounded-2xl border border-gray-100 p-5 md:p-6 relative overflow-hidden"
+      style={{ boxShadow: '0 2px 12px rgba(0, 0, 0, 0.04)' }}
+    >
+      <div className="mb-6">
+        <h2 className="text-lg md:text-xl font-bold text-slate-900 mb-2 flex items-center gap-2">
+          <span className="w-1.5 h-1.5 bg-blue-500 rounded-full"></span>
+          {title}
+        </h2>
+        {typeof description === 'string' ? (
+          <p className="text-sm text-slate-600">{description}</p>
+        ) : (
+          description
+        )}
+      </div>
+      {children}
+    </div>
+  );
+}
+
+// Toggle Card Component
 function ToggleCard({ label, icon: Icon, value, onChange }) {
   const yes = value === true;
   const no = value === false;
 
   return (
-    <div className="rounded-xl border border-gray-200 bg-white/60 p-5">
+    <div className="rounded-xl border border-gray-200 bg-white p-4">
       <div className="flex items-center gap-2 mb-4">
         {Icon && <Icon className="w-5 h-5 text-slate-600" />}
-        <span className="text-sm font-medium text-slate-900">{label}</span>
+        <span className="text-sm font-semibold text-slate-900">{label}</span>
       </div>
-      <div className="flex gap-3">
+      <div className="flex gap-2">
         <button
           type="button"
-          className={`flex-1 rounded-lg px-4 py-2.5 text-sm font-medium transition-all ${
+          className={`flex-1 rounded-lg px-3 py-2.5 text-sm font-semibold transition-all border ${
             yes
-              ? 'bg-emerald-500 text-white shadow-sm'
-              : 'bg-gray-100 text-slate-600 hover:bg-gray-200'
+              ? 'bg-emerald-500 text-white border-emerald-600 shadow-sm'
+              : 'bg-white border-gray-200 text-slate-600 hover:border-gray-300'
           }`}
           onClick={() => onChange(true)}
         >
@@ -760,10 +619,10 @@ function ToggleCard({ label, icon: Icon, value, onChange }) {
         </button>
         <button
           type="button"
-          className={`flex-1 rounded-lg px-4 py-2.5 text-sm font-medium transition-all ${
+          className={`flex-1 rounded-lg px-3 py-2.5 text-sm font-semibold transition-all border ${
             no
-              ? 'bg-rose-500 text-white shadow-sm'
-              : 'bg-gray-100 text-slate-600 hover:bg-gray-200'
+              ? 'bg-rose-500 text-white border-rose-600 shadow-sm'
+              : 'bg-white border-gray-200 text-slate-600 hover:border-gray-300'
           }`}
           onClick={() => onChange(false)}
         >
@@ -774,6 +633,48 @@ function ToggleCard({ label, icon: Icon, value, onChange }) {
   );
 }
 
+// Yes/No/Decline Component
+function YesNoDecline({ value, onChange }) {
+  return (
+    <div className="flex gap-3">
+      <button
+        type="button"
+        className={`flex-1 rounded-xl px-4 py-3 text-sm font-semibold transition-all border ${
+          value === true
+            ? 'bg-blue-500 text-white border-blue-600 shadow-md'
+            : 'bg-white border-gray-200 text-slate-700 hover:border-gray-300'
+        }`}
+        onClick={() => onChange(true)}
+      >
+        Yes
+      </button>
+      <button
+        type="button"
+        className={`flex-1 rounded-xl px-4 py-3 text-sm font-semibold transition-all border ${
+          value === false
+            ? 'bg-blue-500 text-white border-blue-600 shadow-md'
+            : 'bg-white border-gray-200 text-slate-700 hover:border-gray-300'
+        }`}
+        onClick={() => onChange(false)}
+      >
+        No
+      </button>
+      <button
+        type="button"
+        className={`flex-1 rounded-xl px-4 py-3 text-sm font-semibold transition-all border ${
+          value === null
+            ? 'bg-gray-200 text-slate-700 border-gray-300 shadow-md'
+            : 'bg-white border-gray-200 text-slate-700 hover:border-gray-300'
+        }`}
+        onClick={() => onChange(null)}
+      >
+        Decline
+      </button>
+    </div>
+  );
+}
+
+// Skill Input Component
 function SkillInput({ label, placeholder, description, skills, onChange }) {
   const [inputValue, setInputValue] = useState('');
 
@@ -798,7 +699,7 @@ function SkillInput({ label, placeholder, description, skills, onChange }) {
 
   return (
     <div>
-      <label className="block text-sm font-medium text-slate-700 mb-1">
+      <label className="block text-sm font-semibold text-slate-700 mb-1">
         {label}
       </label>
       {description && (
@@ -812,13 +713,14 @@ function SkillInput({ label, placeholder, description, skills, onChange }) {
           onChange={(e) => setInputValue(e.target.value)}
           onKeyDown={handleKeyDown}
           placeholder={placeholder}
-          className="flex-1 px-4 py-2 border border-gray-200 rounded-lg focus:outline-none focus:ring-2 focus:ring-blue-500 focus:border-transparent text-sm"
+          className="flex-1 px-4 py-2.5 border border-gray-200 rounded-xl focus:outline-none focus:ring-2 focus:ring-blue-500 focus:border-transparent text-sm"
         />
         <button
           type="button"
           onClick={addSkill}
-          className="px-4 py-2 bg-blue-600 text-white rounded-lg hover:bg-blue-700 transition-colors text-sm font-medium"
+          className="px-4 py-2.5 bg-blue-600 text-white rounded-xl hover:bg-blue-700 transition-colors text-sm font-semibold flex items-center gap-2"
         >
+          <Plus className="w-4 h-4" />
           Add
         </button>
       </div>
@@ -828,7 +730,7 @@ function SkillInput({ label, placeholder, description, skills, onChange }) {
           {skills.map((skill, index) => (
             <span
               key={index}
-              className="inline-flex items-center gap-1.5 px-3 py-1.5 bg-blue-50 text-blue-700 rounded-lg text-sm border border-blue-200"
+              className="inline-flex items-center gap-2 px-3 py-2 bg-blue-50 text-blue-700 rounded-xl text-sm border border-blue-200 font-medium"
             >
               {skill}
               <button
@@ -836,9 +738,7 @@ function SkillInput({ label, placeholder, description, skills, onChange }) {
                 onClick={() => removeSkill(skill)}
                 className="hover:bg-blue-200 rounded-full p-0.5 transition-colors"
               >
-                <svg className="w-3.5 h-3.5" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-                  <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M6 18L18 6M6 6l12 12" />
-                </svg>
+                <X className="w-3.5 h-3.5" />
               </button>
             </span>
           ))}
@@ -848,6 +748,7 @@ function SkillInput({ label, placeholder, description, skills, onChange }) {
   );
 }
 
+// Ethnicity Select Component
 function EthnicitySelect({ value = '', onChange }) {
   const ethnicities = [
     'American Indian or Alaska Native',
@@ -865,7 +766,7 @@ function EthnicitySelect({ value = '', onChange }) {
       {ethnicities.map((ethnicity) => (
         <label
           key={ethnicity}
-          className={`flex items-center gap-3 p-3 rounded-lg border cursor-pointer transition-all ${
+          className={`flex items-center gap-3 p-3.5 rounded-xl border cursor-pointer transition-all ${
             value === ethnicity
               ? 'border-blue-500 bg-blue-50'
               : 'border-gray-200 hover:bg-gray-50'
@@ -878,7 +779,7 @@ function EthnicitySelect({ value = '', onChange }) {
             onChange={() => onChange(ethnicity)}
             className="w-4 h-4 border-gray-300 text-blue-600 focus:ring-blue-500"
           />
-          <span className="text-sm text-slate-700">{ethnicity}</span>
+          <span className="text-sm text-slate-700 font-medium">{ethnicity}</span>
         </label>
       ))}
     </div>

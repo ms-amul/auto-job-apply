@@ -61,22 +61,22 @@ export default function Hero() {
 
             <div className="flex flex-wrap items-center gap-3 justify-center lg:justify-start animate-fadeInUp" style={{ animationDuration: '1s', animationDelay: '0.5s' }}>
               <div 
-                className="relative bg-white/80 backdrop-blur-sm border-2 border-white rounded-xl px-4 py-2.5 flex items-center gap-2.5 shadow-lg overflow-hidden hover:scale-105 transition-transform duration-300"
+                className="relative bg-white/90 backdrop-blur-sm border-2 border-white rounded-xl px-4 py-2.5 flex items-center gap-2.5 shadow-lg overflow-hidden hover:scale-105 transition-transform duration-300"
                 style={{
-                  boxShadow: '0 10px 25px -5px rgba(14, 165, 233, 0.2), inset 0 1px 0 0 rgba(255, 255, 255, 0.8)',
+                  boxShadow: '0 10px 25px -5px rgba(0, 0, 0, 0.08), inset 0 1px 0 0 rgba(255, 255, 255, 0.9)',
                 }}
               >
-                <div className="absolute inset-0 opacity-[0.08]" style={{ background: theme.getAccentGradient(135) }}></div>
+                <div className="absolute inset-0 opacity-[0.04]" style={{ background: theme.getAccentGradient(135) }}></div>
                 <Trophy className="w-4 h-4 relative z-10" style={{ color: theme.accentPrimary }} strokeWidth={2.5} />
                 <span className="text-xs font-bold relative z-10" style={{ color: theme.accentPrimary }}>#1 Product of the Day</span>
               </div>
               <div 
-                className="relative bg-white/80 backdrop-blur-sm border-2 border-white rounded-xl px-4 py-2.5 flex items-center gap-2.5 shadow-lg overflow-hidden hover:scale-105 transition-transform duration-300"
+                className="relative bg-white/90 backdrop-blur-sm border-2 border-white rounded-xl px-4 py-2.5 flex items-center gap-2.5 shadow-lg overflow-hidden hover:scale-105 transition-transform duration-300"
                 style={{
-                  boxShadow: '0 10px 25px -5px rgba(14, 165, 233, 0.2), inset 0 1px 0 0 rgba(255, 255, 255, 0.8)',
+                  boxShadow: '0 10px 25px -5px rgba(0, 0, 0, 0.08), inset 0 1px 0 0 rgba(255, 255, 255, 0.9)',
                 }}
               >
-                <div className="absolute inset-0 opacity-[0.08]" style={{ background: theme.getAccentGradient(135) }}></div>
+                <div className="absolute inset-0 opacity-[0.04]" style={{ background: theme.getAccentGradient(135) }}></div>
                 <Rocket className="w-4 h-4 relative z-10" style={{ color: theme.accentSecondary }} strokeWidth={2.5} />
                 <span className="text-xs font-bold relative z-10" style={{ color: theme.accentPrimary }}>#3 Product of the Week</span>
               </div>
@@ -87,8 +87,8 @@ export default function Hero() {
           <div className="relative hidden lg:block">
             <div className="relative w-full h-[600px]">
               {/* Main Profile Image Placeholder */}
-              <div className="absolute top-1/2 left-1/2 -translate-x-1/2 -translate-y-1/2 w-80 h-80 rounded-full shadow-xl overflow-hidden" style={{ background: theme.getAccentGradient(135), opacity: 0.25 }}>
-                <div className="w-full h-full flex items-center justify-center text-gray-400">
+              <div className="absolute top-1/2 left-1/2 -translate-x-1/2 -translate-y-1/2 w-80 h-80 rounded-full shadow-xl overflow-hidden" style={{ background: theme.getAccentGradient(135), opacity: 0.12 }}>
+                <div className="w-full h-full flex items-center justify-center text-gray-300">
                   <svg className="w-32 h-32" fill="currentColor" viewBox="0 0 24 24">
                     <path d="M12 12c2.21 0 4-1.79 4-4s-1.79-4-4-4-4 1.79-4 4 1.79 4 4 4zm0 2c-2.67 0-8 1.34-8 4v2h16v-2c0-2.66-5.33-4-8-4z"/>
                   </svg>
@@ -97,16 +97,16 @@ export default function Hero() {
 
               {/* Floating Feature Card 1 */}
               <div 
-                className="absolute top-8 left-0 bg-white/80 backdrop-blur-xl rounded-2xl shadow-2xl p-4 max-w-xs animate-float border-2 border-white/90 overflow-hidden hover:scale-105 transition-all duration-300" 
+                className="absolute top-8 left-0 bg-white/90 backdrop-blur-xl rounded-2xl shadow-2xl p-4 max-w-xs animate-float border-2 border-white/95 overflow-hidden hover:scale-105 transition-all duration-300" 
                 style={{
                   animationDelay: '0s',
-                  boxShadow: `0 25px 50px -12px rgba(0, 0, 0, 0.25), inset 0 1px 0 0 rgba(255, 255, 255, 0.9), 0 0 0 1px ${theme.accentPrimary}15`
+                  boxShadow: `0 25px 50px -12px rgba(0, 0, 0, 0.12), inset 0 1px 0 0 rgba(255, 255, 255, 0.95), 0 0 0 1px rgba(148, 163, 184, 0.1)`
                 }}
               >
                 {/* Premium glass reflection */}
-                <div className="absolute inset-0 bg-linear-to-br from-white/60 via-white/20 to-transparent pointer-events-none"></div>
+                <div className="absolute inset-0 bg-linear-to-br from-white/70 via-white/30 to-transparent pointer-events-none"></div>
                 {/* Solid background behind text */}
-                <div className="absolute inset-0 bg-white/60 backdrop-blur-md"></div>
+                <div className="absolute inset-0 bg-white/70 backdrop-blur-md"></div>
                 
                 <div className="flex items-center gap-3 relative z-10">
                   <div className="w-10 h-10 rounded-lg flex items-center justify-center shrink-0 shadow-lg" style={{ background: theme.getAccentGradient(135) }}>
@@ -122,16 +122,16 @@ export default function Hero() {
 
               {/* Floating Feature Card 2 - Job Card */}
               <div 
-                className="absolute top-32 right-0 bg-white/80 backdrop-blur-xl rounded-2xl shadow-2xl p-4 w-64 animate-float border-2 border-white/90 overflow-hidden hover:scale-105 transition-all duration-300" 
+                className="absolute top-32 right-0 bg-white/90 backdrop-blur-xl rounded-2xl shadow-2xl p-4 w-64 animate-float border-2 border-white/95 overflow-hidden hover:scale-105 transition-all duration-300" 
                 style={{
                   animationDelay: '0.5s',
-                  boxShadow: `0 25px 50px -12px rgba(0, 0, 0, 0.25), inset 0 1px 0 0 rgba(255, 255, 255, 0.9), 0 0 0 1px ${theme.accentPrimary}15`
+                  boxShadow: `0 25px 50px -12px rgba(0, 0, 0, 0.12), inset 0 1px 0 0 rgba(255, 255, 255, 0.95), 0 0 0 1px rgba(148, 163, 184, 0.1)`
                 }}
               >
                 {/* Premium glass reflection */}
-                <div className="absolute inset-0 bg-linear-to-br from-white/60 via-white/20 to-transparent pointer-events-none"></div>
+                <div className="absolute inset-0 bg-linear-to-br from-white/70 via-white/30 to-transparent pointer-events-none"></div>
                 {/* Solid background behind text */}
-                <div className="absolute inset-0 bg-white/60 backdrop-blur-md"></div>
+                <div className="absolute inset-0 bg-white/70 backdrop-blur-md"></div>
                 
                 <div className="flex items-start gap-3 relative z-10">
                   <div className="w-12 h-12 rounded-full shrink-0 shadow-lg" style={{ background: theme.getAccentGradient(135) }}></div>
@@ -154,16 +154,16 @@ export default function Hero() {
 
               {/* Floating Feature Card 3 */}
               <div 
-                className="absolute bottom-32 left-4 bg-white/80 backdrop-blur-xl rounded-2xl shadow-2xl p-4 max-w-xs animate-float border-2 border-white/90 overflow-hidden hover:scale-105 transition-all duration-300" 
+                className="absolute bottom-32 left-4 bg-white/90 backdrop-blur-xl rounded-2xl shadow-2xl p-4 max-w-xs animate-float border-2 border-white/95 overflow-hidden hover:scale-105 transition-all duration-300" 
                 style={{
                   animationDelay: '1s',
-                  boxShadow: `0 25px 50px -12px rgba(0, 0, 0, 0.25), inset 0 1px 0 0 rgba(255, 255, 255, 0.9), 0 0 0 1px ${theme.accentPrimary}15`
+                  boxShadow: `0 25px 50px -12px rgba(0, 0, 0, 0.12), inset 0 1px 0 0 rgba(255, 255, 255, 0.95), 0 0 0 1px rgba(148, 163, 184, 0.1)`
                 }}
               >
                 {/* Premium glass reflection */}
-                <div className="absolute inset-0 bg-linear-to-br from-white/60 via-white/20 to-transparent pointer-events-none"></div>
+                <div className="absolute inset-0 bg-linear-to-br from-white/70 via-white/30 to-transparent pointer-events-none"></div>
                 {/* Solid background behind text */}
-                <div className="absolute inset-0 bg-white/60 backdrop-blur-md"></div>
+                <div className="absolute inset-0 bg-white/70 backdrop-blur-md"></div>
                 
                 <div className="flex items-center gap-3 relative z-10">
                   <div className="w-10 h-10 rounded-lg flex items-center justify-center shrink-0 shadow-lg" style={{ background: theme.getAccentGradient(135) }}>
@@ -179,16 +179,16 @@ export default function Hero() {
 
               {/* Floating Feature Card 4 - Search */}
               <div 
-                className="absolute bottom-8 right-8 bg-white/80 backdrop-blur-xl rounded-2xl shadow-2xl p-4 w-72 animate-float border-2 border-white/90 overflow-hidden hover:scale-105 transition-all duration-300" 
+                className="absolute bottom-8 right-8 bg-white/90 backdrop-blur-xl rounded-2xl shadow-2xl p-4 w-72 animate-float border-2 border-white/95 overflow-hidden hover:scale-105 transition-all duration-300" 
                 style={{
                   animationDelay: '1.5s',
-                  boxShadow: `0 25px 50px -12px rgba(0, 0, 0, 0.25), inset 0 1px 0 0 rgba(255, 255, 255, 0.9), 0 0 0 1px ${theme.accentPrimary}15`
+                  boxShadow: `0 25px 50px -12px rgba(0, 0, 0, 0.12), inset 0 1px 0 0 rgba(255, 255, 255, 0.95), 0 0 0 1px rgba(148, 163, 184, 0.1)`
                 }}
               >
                 {/* Premium glass reflection */}
-                <div className="absolute inset-0 bg-linear-to-br from-white/60 via-white/20 to-transparent pointer-events-none"></div>
+                <div className="absolute inset-0 bg-linear-to-br from-white/70 via-white/30 to-transparent pointer-events-none"></div>
                 {/* Solid background behind text */}
-                <div className="absolute inset-0 bg-white/60 backdrop-blur-md"></div>
+                <div className="absolute inset-0 bg-white/70 backdrop-blur-md"></div>
                 
                 <div className="flex items-center gap-3 relative z-10">
                   <div className="w-8 h-8 rounded-full flex items-center justify-center shrink-0 shadow-lg" style={{ background: theme.getAccentGradient(135) }}>

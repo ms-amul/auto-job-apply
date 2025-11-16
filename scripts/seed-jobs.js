@@ -1,36 +1,41 @@
 /**
  * Seed Jobs Script
- * Populates MongoDB with 100+ realistic job listings
+ * Populates MongoDB with 150+ realistic job listings across multiple industries
+ * 
+ * Categories:
+ * - Technology (General Tech)
+ * - Medical & Healthcare
+ * - Automotive & Transportation
+ * - Finance & Fintech
+ * - Retail & E-commerce
+ * - Education & EdTech
  * 
  * Run with: node scripts/seed-jobs.js
  */
 
 const { MongoClient } = require('mongodb');
+const { generateMedicalJobs } = require('./seed-medical-jobs');
+const { generateAutomotiveJobs } = require('./seed-automotive-jobs');
+const { generateFinanceJobs } = require('./seed-finance-jobs');
+const { generateRetailJobs } = require('./seed-retail-jobs');
+const { generateEducationJobs } = require('./seed-education-jobs');
 
 const uri = '';
 const dbName = 'jobvita';
 
-// Job templates with realistic data
+// Technology (General Tech) Job templates
 const companies = [
   { name: 'Google', logo: 'https://logo.clearbit.com/google.com', industry: 'Technology' },
   { name: 'Meta', logo: 'https://logo.clearbit.com/meta.com', industry: 'Technology' },
-  { name: 'Amazon', logo: 'https://logo.clearbit.com/amazon.com', industry: 'E-commerce' },
   { name: 'Microsoft', logo: 'https://logo.clearbit.com/microsoft.com', industry: 'Technology' },
   { name: 'Apple', logo: 'https://logo.clearbit.com/apple.com', industry: 'Technology' },
   { name: 'Netflix', logo: 'https://logo.clearbit.com/netflix.com', industry: 'Entertainment' },
-  { name: 'Tesla', logo: 'https://logo.clearbit.com/tesla.com', industry: 'Automotive' },
   { name: 'SpaceX', logo: 'https://logo.clearbit.com/spacex.com', industry: 'Aerospace' },
-  { name: 'Stripe', logo: 'https://logo.clearbit.com/stripe.com', industry: 'Fintech' },
   { name: 'Airbnb', logo: 'https://logo.clearbit.com/airbnb.com', industry: 'Travel' },
-  { name: 'Uber', logo: 'https://logo.clearbit.com/uber.com', industry: 'Transportation' },
   { name: 'LinkedIn', logo: 'https://logo.clearbit.com/linkedin.com', industry: 'Social Media' },
   { name: 'Salesforce', logo: 'https://logo.clearbit.com/salesforce.com', industry: 'SaaS' },
   { name: 'Oracle', logo: 'https://logo.clearbit.com/oracle.com', industry: 'Enterprise Software' },
   { name: 'Adobe', logo: 'https://tse3.mm.bing.net/th/id/OIP.oGUoxYV6DNGtGTdzVNXI5wHaHa?rs=1&pid=ImgDetMain&o=7&rm=3', industry: 'Creative Software' },
-  { name: 'Shopify', logo: 'https://logo.clearbit.com/shopify.com', industry: 'E-commerce' },
-  { name: 'Square', logo: 'https://logo.clearbit.com/squareup.com', industry: 'Fintech' },
-  { name: 'Coinbase', logo: 'https://logo.clearbit.com/coinbase.com', industry: 'Cryptocurrency' },
-  { name: 'Robinhood', logo: 'https://logo.clearbit.com/robinhood.com', industry: 'Fintech' },
   { name: 'Zoom', logo: 'https://logo.clearbit.com/zoom.us', industry: 'Communication' },
 ];
 
@@ -162,102 +167,154 @@ function generateSalaryRange(experienceLevel) {
   return ranges[experienceLevel];
 }
 
+function generateTechJobs(count = 30) {
+  const jobs = [];
+  const now = new Date();
+
+  for (let i = 0; i < count; i++) {
+    const company = companies[i % companies.length];
+    const title = jobTitles[Math.floor(Math.random() * jobTitles.length)];
+    const location = locations[Math.floor(Math.random() * locations.length)];
+    const employmentType = employmentTypes[Math.floor(Math.random() * employmentTypes.length)];
+    const experienceLevel = experienceLevels[Math.floor(Math.random() * experienceLevels.length)];
+    const stack = techStacks[Math.floor(Math.random() * techStacks.length)];
+    const salaryRange = generateSalaryRange(experienceLevel);
+    
+    // Random date within last 30 days
+    const daysAgo = Math.floor(Math.random() * 30);
+    const postedDate = new Date(now);
+    postedDate.setDate(postedDate.getDate() - daysAgo);
+
+    const description = generateJobDescription(title, company.name, stack);
+    
+    const job = {
+      title,
+      company: company.name,
+      companyLogo: company.logo,
+      location,
+      locationType: location.includes('Remote') ? 'remote' : location.includes('Hybrid') ? 'hybrid' : 'onsite',
+      employmentType,
+      experienceLevel,
+      
+      // Detailed description fields
+      summary: description.summary,
+      aboutRole: description.aboutRole,
+      responsibilities: description.responsibilities,
+      aboutCompany: description.aboutCompany,
+      culture: description.culture,
+      
+      requirements: generateRequirements(experienceLevel, stack),
+      skills: stack,
+      salary: {
+        min: salaryRange.min,
+        max: salaryRange.max,
+        currency: 'USD',
+        period: 'year',
+      },
+      benefits: benefits.slice(0, Math.floor(Math.random() * 5) + 5),
+      industry: company.industry,
+      category: 'Technology',
+      applicants: Math.floor(Math.random() * 200),
+      views: Math.floor(Math.random() * 1000) + 100,
+      postedDate,
+      expiryDate: new Date(postedDate.getTime() + 30 * 24 * 60 * 60 * 1000),
+      status: 'active',
+      isRemote: location.includes('Remote'),
+      isHybrid: location.includes('Hybrid'),
+      visaSponsorship: Math.random() > 0.5,
+      
+      // Contact info
+      contactEmail: `careers@${company.name.toLowerCase().replace(/\s+/g, '')}.com`,
+      applicationUrl: `https://${company.name.toLowerCase().replace(/\s+/g, '')}.com/careers`,
+      
+      createdAt: postedDate,
+      updatedAt: now,
+    };
+
+    jobs.push(job);
+  }
+
+  return jobs;
+}
+
 async function seedJobs() {
   const client = new MongoClient(uri);
 
   try {
     await client.connect();
-    console.log('Connected to MongoDB');
+    console.log('✅ Connected to MongoDB');
 
     const db = client.db(dbName);
     const jobsCollection = db.collection('jobs');
 
     // Clear existing jobs
     await jobsCollection.deleteMany({});
-    console.log('Cleared existing jobs');
+    console.log('✅ Cleared existing jobs');
 
-    const jobs = [];
-    const now = new Date();
+    console.log('\n📦 Generating jobs by category...');
+    
+    // Generate jobs from all categories
+    const techJobs = generateTechJobs(30);
+    console.log(`  ✓ Generated ${techJobs.length} Technology jobs`);
+    
+    const medicalJobs = generateMedicalJobs(30);
+    console.log(`  ✓ Generated ${medicalJobs.length} Medical & Healthcare jobs`);
+    
+    const automotiveJobs = generateAutomotiveJobs(30);
+    console.log(`  ✓ Generated ${automotiveJobs.length} Automotive & Transportation jobs`);
+    
+    const financeJobs = generateFinanceJobs(30);
+    console.log(`  ✓ Generated ${financeJobs.length} Finance & Fintech jobs`);
+    
+    const retailJobs = generateRetailJobs(30);
+    console.log(`  ✓ Generated ${retailJobs.length} Retail & E-commerce jobs`);
+    
+    const educationJobs = generateEducationJobs(30);
+    console.log(`  ✓ Generated ${educationJobs.length} Education & EdTech jobs`);
 
-    // Generate 120 jobs
-    for (let i = 0; i < 120; i++) {
-      const company = companies[i % companies.length];
-      const title = jobTitles[Math.floor(Math.random() * jobTitles.length)];
-      const location = locations[Math.floor(Math.random() * locations.length)];
-      const employmentType = employmentTypes[Math.floor(Math.random() * employmentTypes.length)];
-      const experienceLevel = experienceLevels[Math.floor(Math.random() * experienceLevels.length)];
-      const stack = techStacks[Math.floor(Math.random() * techStacks.length)];
-      const salaryRange = generateSalaryRange(experienceLevel);
-      
-      // Random date within last 30 days
-      const daysAgo = Math.floor(Math.random() * 30);
-      const postedDate = new Date(now);
-      postedDate.setDate(postedDate.getDate() - daysAgo);
-
-      const description = generateJobDescription(title, company.name, stack);
-      
-      const job = {
-        title,
-        company: company.name,
-        companyLogo: company.logo,
-        location,
-        locationType: location.includes('Remote') ? 'remote' : location.includes('Hybrid') ? 'hybrid' : 'onsite',
-        employmentType,
-        experienceLevel,
-        
-        // Detailed description fields
-        summary: description.summary,
-        aboutRole: description.aboutRole,
-        responsibilities: description.responsibilities,
-        aboutCompany: description.aboutCompany,
-        culture: description.culture,
-        
-        requirements: generateRequirements(experienceLevel, stack),
-        skills: stack,
-        salary: {
-          min: salaryRange.min,
-          max: salaryRange.max,
-          currency: 'USD',
-          period: 'year',
-        },
-        benefits: benefits.slice(0, Math.floor(Math.random() * 5) + 5),
-        industry: company.industry,
-        applicants: Math.floor(Math.random() * 200),
-        views: Math.floor(Math.random() * 1000) + 100,
-        postedDate,
-        expiryDate: new Date(postedDate.getTime() + 30 * 24 * 60 * 60 * 1000), // 30 days from posted
-        status: 'active',
-        isRemote: location.includes('Remote'),
-        isHybrid: location.includes('Hybrid'),
-        visaSponsorship: Math.random() > 0.5,
-        
-        // Contact info
-        contactEmail: `careers@${company.name.toLowerCase().replace(/\s+/g, '')}.com`,
-        applicationUrl: `https://${company.name.toLowerCase().replace(/\s+/g, '')}.com/careers`,
-        
-        createdAt: postedDate,
-        updatedAt: now,
-      };
-
-      jobs.push(job);
-    }
+    // Combine all jobs
+    const allJobs = [
+      ...techJobs,
+      ...medicalJobs,
+      ...automotiveJobs,
+      ...financeJobs,
+      ...retailJobs,
+      ...educationJobs,
+    ];
 
     // Insert all jobs
-    const result = await jobsCollection.insertMany(jobs);
-    console.log(`✅ Successfully inserted ${result.insertedCount} jobs`);
+    const result = await jobsCollection.insertMany(allJobs);
+    console.log(`\n✅ Successfully inserted ${result.insertedCount} total jobs`);
 
     // Create indexes for better query performance
-    await jobsCollection.createIndex({ title: 'text', description: 'text', company: 'text' });
+    await jobsCollection.createIndex({ title: 'text', summary: 'text', company: 'text' });
     await jobsCollection.createIndex({ location: 1 });
     await jobsCollection.createIndex({ experienceLevel: 1 });
     await jobsCollection.createIndex({ skills: 1 });
+    await jobsCollection.createIndex({ category: 1 });
     await jobsCollection.createIndex({ postedDate: -1 });
     await jobsCollection.createIndex({ status: 1 });
     console.log('✅ Created indexes');
 
-    // Print summary
-    console.log('\n📊 Jobs Summary:');
-    const summary = await jobsCollection.aggregate([
+    // Print summary by category
+    console.log('\n📊 Jobs Summary by Category:');
+    const categorySummary = await jobsCollection.aggregate([
+      {
+        $group: {
+          _id: '$category',
+          count: { $sum: 1 },
+        },
+      },
+      { $sort: { count: -1 } },
+    ]).toArray();
+
+    categorySummary.forEach((item) => {
+      console.log(`  ${item._id}: ${item.count} jobs`);
+    });
+
+    // Print summary by company
+    console.log('\n📊 Top 15 Companies by Job Count:');
+    const companySummary = await jobsCollection.aggregate([
       {
         $group: {
           _id: '$company',
@@ -265,11 +322,10 @@ async function seedJobs() {
         },
       },
       { $sort: { count: -1 } },
-      { $limit: 10 },
+      { $limit: 15 },
     ]).toArray();
 
-    console.log('\nTop 10 Companies by Job Count:');
-    summary.forEach((item) => {
+    companySummary.forEach((item) => {
       console.log(`  ${item._id}: ${item.count} jobs`);
     });
 
@@ -277,7 +333,7 @@ async function seedJobs() {
     console.error('❌ Error seeding jobs:', error);
   } finally {
     await client.close();
-    console.log('\nDisconnected from MongoDB');
+    console.log('\n✅ Disconnected from MongoDB');
   }
 }
 

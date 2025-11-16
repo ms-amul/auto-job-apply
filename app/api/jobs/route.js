@@ -8,7 +8,11 @@ export async function GET(request) {
     const location = searchParams.get('location');
     const experienceLevel = searchParams.get('experienceLevel');
     const remote = searchParams.get('remote');
-    const limit = parseInt(searchParams.get('limit') || '100');
+    const category = searchParams.get('category');
+    const employmentType = searchParams.get('employmentType');
+    const salaryMin = searchParams.get('salaryMin');
+    const visaSponsorship = searchParams.get('visaSponsorship');
+    const limit = parseInt(searchParams.get('limit') || '20');
     const skip = parseInt(searchParams.get('skip') || '0');
 
     const db = await getDb();
@@ -38,6 +42,24 @@ export async function GET(request) {
       query.isHybrid = false;
     }
 
+    if (category) {
+      query.category = category;
+    }
+
+    if (employmentType) {
+      query.employmentType = employmentType;
+    }
+
+    if (salaryMin) {
+      query['salary.min'] = { $gte: parseInt(salaryMin) };
+    }
+
+    if (visaSponsorship === 'true') {
+      query.visaSponsorship = true;
+    } else if (visaSponsorship === 'false') {
+      query.visaSponsorship = false;
+    }
+
     // Fetch jobs with only necessary fields for list view
     const jobs = await jobsCollection
       .find(query)
@@ -57,6 +79,8 @@ export async function GET(request) {
         visaSponsorship: 1,
         postedDate: 1,
         applicants: 1,
+        category: 1,
+        industry: 1,
       })
       .sort({ postedDate: -1 })
       .skip(skip)

@@ -100,7 +100,7 @@ export default function DashboardLayout({ children }) {
         className={`${sidebarOpen ? 'lg:ml-64' : 'lg:ml-20'} transition-all duration-200 ease-in-out`}
       >
         {/* Page Content */}
-        <main className="p-6 lg:p-8 max-w-7xl mx-auto">
+        <main className="p-3 lg:p-8 max-w-7xl mx-auto">
           {children}
         </main>
       </div>
