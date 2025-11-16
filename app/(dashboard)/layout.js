@@ -61,7 +61,7 @@ export default function DashboardLayout({ children }) {
   }
 
   return (
-    <div className="min-h-screen bg-gray-50">
+    <div className="min-h-screen">
       {/* Toast Notifications */}
       <Toaster
         position="top-right"
@@ -89,6 +89,8 @@ export default function DashboardLayout({ children }) {
           },
         }}
       />
+
+      <div className="gradient"></div>
 
       {/* Sidebar */}
       <CompactSidebar isOpen={sidebarOpen} setIsOpen={setSidebarOpen} user={user} />

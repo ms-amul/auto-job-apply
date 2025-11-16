@@ -1,62 +1,78 @@
 /**
  * Get User Applications API Route
+ *
+ * - Reads applications from MongoDB
+ * - Enriches with job details from jobs collection
  * 
- * TODO: Replace with Prisma database query
- * TODO: Add authentication check
- * TODO: Verify user can only see their own applications
+ * NOTE: Auto-apply logic moved to /api/agent/[userId]/apply
+ * This endpoint now ONLY fetches and returns applications
  */
 
 import { NextResponse } from 'next/server';
-import applications from '@/data/applications.json';
-import jobs from '@/data/jobs.json';
+import { ObjectId } from 'mongodb';
+import { getDb } from '@/lib/mongodb';
 
-export async function GET(request, { params }) {
+export async function GET(_request, { params }) {
   try {
     const { userId } = await params;
+    const db = await getDb();
 
-    // Simulate network delay
-    await new Promise(resolve => setTimeout(resolve, 500));
+    const appsCol = db.collection('applications');
+    const jobsCol = db.collection('jobs');
 
-    // Get user's applications
-    const userApplications = applications.applications.filter(
-      app => app.applicantId === userId
+    // Fetch all applications for this user
+    const userApplications = await appsCol
+      .find({ userId })
+      .sort({ appliedDate: -1 })
+      .toArray();
+
+    // Enrich with job details from jobs collection
+    const enrichedApplications = await Promise.all(
+      userApplications.map(async (app) => {
+        let job = null;
+        
+        try {
+          if (ObjectId.isValid(app.jobId)) {
+            job = await jobsCol.findOne({ _id: new ObjectId(app.jobId) });
+          }
+        } catch (err) {
+          console.error('Error fetching job:', err);
+        }
+
+        return {
+          id: app._id.toString(),
+          jobId: app.jobId,
+          applicantId: app.userId,
+          status: app.status,
+          appliedDate: app.appliedDate,
+          source: app.source ?? 'manual',
+          coverLetter: app.coverLetter ?? '',
+          job: job ? {
+            id: job._id.toString(),
+            title: job.title,
+            company: job.company,
+            companyLogo: job.companyLogo,
+            location: job.location,
+            employmentType: job.employmentType,
+            salary: job.salary,
+          } : null,
+          notes: app.notes ?? [],
+        };
+      })
     );
-
-    // Enrich with job details
-    const enrichedApplications = userApplications.map(app => {
-      const job = jobs.jobs.find(j => j.id === app.jobId);
-      return {
-        ...app,
-        job: job || null,
-      };
-    });
-
-    // TODO: In production, use Prisma with joins:
-    // const applications = await prisma.application.findMany({
-    //   where: { applicantId: userId },
-    //   include: {
-    //     job: {
-    //       include: {
-    //         company: true,
-    //       }
-    //     }
-    //   },
-    //   orderBy: { appliedDate: 'desc' },
-    // });
 
     return NextResponse.json({
       success: true,
       data: enrichedApplications,
     });
-
   } catch (error) {
     console.error('Get applications error:', error);
     return NextResponse.json(
-      { 
-        success: false, 
-        error: 'Failed to fetch applications' 
+      {
+        success: false,
+        error: 'Failed to fetch applications',
       },
-      { status: 500 }
+      { status: 500 },
     );
   }
 }

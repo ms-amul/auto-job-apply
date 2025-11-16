@@ -32,7 +32,7 @@ export default function CompactSidebar({ isOpen, setIsOpen, user }) {
     { href: '/dashboard', icon: LayoutDashboard, label: 'Dashboard' },
     { href: '/dashboard/jobs', icon: Briefcase, label: 'Browse Jobs' },
     { href: '/dashboard/applications', icon: FileText, label: 'Applications' },
-    { href: '/dashboard/bot', icon: Bot, label: 'Auto-Apply Bot' },
+    { href: '/dashboard/agent', icon: Bot, label: 'AI Agent' },
     { href: '/dashboard/analytics', icon: BarChart3, label: 'Analytics' },
     { href: '/dashboard/settings', icon: Settings, label: 'Settings' },
   ];
@@ -41,7 +41,7 @@ export default function CompactSidebar({ isOpen, setIsOpen, user }) {
     { href: '/dashboard', icon: LayoutDashboard, label: 'Dashboard' },
     { href: '/dashboard/jobs', icon: Briefcase, label: 'My Jobs' },
     { href: '/dashboard/applicants', icon: Users, label: 'Applicants' },
-    { href: '/dashboard/bot', icon: Zap, label: 'AI Assistant' },
+    { href: '/dashboard/agent', icon: Zap, label: 'AI Assistant' },
     { href: '/dashboard/analytics', icon: BarChart3, label: 'Analytics' },
     { href: '/dashboard/settings', icon: Settings, label: 'Settings' },
   ];
@@ -54,7 +54,7 @@ export default function CompactSidebar({ isOpen, setIsOpen, user }) {
       {/* Mobile Toggle Button - Fixed Top Right */}
       <button
         onClick={() => setIsOpen(!isOpen)}
-        className="lg:hidden fixed top-4 right-4 z-50 w-12 h-12 rounded-xl bg-white border border-gray-300 flex items-center justify-center shadow-lg"
+        className="lg:hidden fixed top-4 right-4 z-50 w-12 h-12 rounded-xl border border-gray-300 flex items-center justify-center shadow-lg backdrop-blur-xl bg-white/90"
         style={{ 
           color: theme.accentPrimary,
         }}
@@ -73,7 +73,7 @@ export default function CompactSidebar({ isOpen, setIsOpen, user }) {
       {/* Sidebar */}
       <aside
         className={`
-          fixed left-0 top-0 h-full bg-white
+          fixed left-0 top-0 h-full backdrop-blur-xl bg-white/90
           transition-all duration-300 ease-in-out z-40 flex flex-col
           border-r border-gray-200
           ${isOpen ? 'w-64' : 'w-20'}

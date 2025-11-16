@@ -22,6 +22,13 @@ export default function ApplicationsPage() {
 
   useEffect(() => {
     loadApplications();
+
+    // Auto-refresh every 30 seconds to show status updates
+    const refreshInterval = setInterval(() => {
+      loadApplications();
+    }, 30000); // 30 seconds
+
+    return () => clearInterval(refreshInterval);
   }, []);
 
   const loadApplications = async () => {
@@ -149,13 +156,26 @@ function ApplicationCard({ application, getStatusColor }) {
         <div className="flex flex-col sm:flex-row sm:items-start sm:justify-between gap-4">
           {/* Left: Job Info */}
           <div className="flex items-start gap-4 flex-1 min-w-0">
-            <div className="w-16 h-16 rounded-xl bg-gradient-to-br from-blue-500 to-indigo-600 flex items-center justify-center shrink-0 shadow-md">
-              <Briefcase className="w-8 h-8 text-white" />
+            {/* Company Logo */}
+            <div className="w-16 h-16 rounded-xl bg-white border border-gray-200 flex items-center justify-center shrink-0 overflow-hidden">
+              {job?.companyLogo ? (
+                <img src={job.companyLogo} alt={job.company} className="w-12 h-12 object-contain" />
+              ) : (
+                <Building2 className="w-8 h-8 text-slate-400" />
+              )}
             </div>
             <div className="flex-1 min-w-0 space-y-2">
-              <h3 className="text-xl font-bold text-gray-900">
-                {job?.title || 'Job Title'}
-              </h3>
+              <div className="flex items-center gap-2 flex-wrap">
+                <h3 className="text-xl font-bold text-gray-900">
+                  {job?.title || 'Job Title'}
+                </h3>
+                {/* Source Badge */}
+                {application.source === 'agent' && (
+                  <span className="px-2 py-1 bg-purple-50 text-purple-700 rounded-lg text-xs font-medium border border-purple-200">
+                    Agent Applied
+                  </span>
+                )}
+              </div>
               <div className="flex items-center gap-2 text-gray-600">
                 <Building2 className="w-4 h-4 shrink-0" />
                 <span className="font-medium">{job?.company || 'Company'}</span>

@@ -16,6 +16,7 @@ import Button from '@/components/ui/Button';
 import Input from '@/components/ui/Input';
 import toast from 'react-hot-toast';
 import { theme } from '@/utils/theme';
+import { setCookie } from '@/utils/cookies';
 
 export default function SignInModal({ isOpen, onClose }) {
   const router = useRouter();
@@ -74,8 +75,14 @@ export default function SignInModal({ isOpen, onClose }) {
       const data = await response.json();
 
       if (data.success) {
-        // Store user in localStorage
+        // Store user in localStorage (Mongo-backed id)
         localStorage.setItem('user', JSON.stringify(data.user));
+        // Demo: also store id in a cookie for easy access
+        try {
+          setCookie('jobvita_user_id', data.user.id, 7);
+        } catch (e) {
+          console.error('Failed to set id cookie', e);
+        }
 
         // Show success toast
         toast.success(`Welcome back, ${data.user.name}!`);
@@ -83,8 +90,8 @@ export default function SignInModal({ isOpen, onClose }) {
         // Close modal
         onClose();
 
-        // Redirect to dashboard
-        router.push('/dashboard');
+        // Redirect to profile so they can complete details first
+        router.push('/dashboard/profile');
       } else {
         // Show error toast
         toast.error(data.error || 'Sign in failed');
@@ -219,7 +226,10 @@ export default function SignInModal({ isOpen, onClose }) {
             Don't have an account?{' '}
             <button 
               className="text-blue-600 hover:text-blue-700 font-medium"
-              onClick={() => toast('Sign up coming soon!')}
+              onClick={() => {
+                onClose?.();
+                router.push('/signup');
+              }}
             >
               Sign up
             </button>

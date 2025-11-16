@@ -1,13 +1,11 @@
 /**
  * Create Application API Route
- * 
- * TODO: Replace with Prisma database insert
- * TODO: Add authentication check
- * TODO: Validate user hasn't already applied
- * TODO: Send email notification
+ *
+ * - Persists a manual application in MongoDB
  */
 
 import { NextResponse } from 'next/server';
+import { getDb } from '@/lib/mongodb';
 
 export async function POST(request) {
   try {
@@ -15,57 +13,55 @@ export async function POST(request) {
     const { jobId, applicantId, coverLetter } = body;
 
     // Simulate network delay
-    await new Promise(resolve => setTimeout(resolve, 800));
+    await new Promise((resolve) => setTimeout(resolve, 800));
 
     // Validate input
     if (!jobId || !applicantId) {
       return NextResponse.json(
-        { 
-          success: false, 
-          error: 'Job ID and Applicant ID are required' 
+        {
+          success: false,
+          error: 'Job ID and Applicant ID are required',
         },
-        { status: 400 }
+        { status: 400 },
       );
     }
 
-    // TODO: In production, use Prisma:
-    // const application = await prisma.application.create({
-    //   data: {
-    //     jobId,
-    //     applicantId,
-    //     coverLetter,
-    //     status: 'pending',
-    //     appliedDate: new Date(),
-    //   },
-    //   include: {
-    //     job: true,
-    //   }
-    // });
+    const db = await getDb();
+    const appsCol = db.collection('applications');
 
-    // Mock response
-    const mockApplication = {
-      id: `app-${Date.now()}`,
+    const now = new Date();
+
+    const result = await appsCol.insertOne({
+      userId: applicantId,
+      jobId,
+      coverLetter: coverLetter ?? '',
+      status: 'pending',
+      source: 'manual',
+      appliedDate: now,
+    });
+
+    const application = {
+      id: result.insertedId.toString(),
       jobId,
       applicantId,
-      coverLetter,
+      coverLetter: coverLetter ?? '',
       status: 'pending',
-      appliedDate: new Date().toISOString(),
+      appliedDate: now.toISOString(),
     };
 
     return NextResponse.json({
       success: true,
       message: 'Application submitted successfully',
-      data: mockApplication,
+      data: application,
     });
-
   } catch (error) {
     console.error('Create application error:', error);
     return NextResponse.json(
-      { 
-        success: false, 
-        error: 'Failed to submit application' 
+      {
+        success: false,
+        error: 'Failed to submit application',
       },
-      { status: 500 }
+      { status: 500 },
     );
   }
 }
