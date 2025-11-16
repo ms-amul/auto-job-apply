@@ -7,7 +7,7 @@
 
 const { MongoClient } = require('mongodb');
 
-const uri = 'mongodb+srv://raja:2003@cluster0.a5zryul.mongodb.net/';
+const uri = '';
 const dbName = 'jobvita';
 
 // Job templates with realistic data
