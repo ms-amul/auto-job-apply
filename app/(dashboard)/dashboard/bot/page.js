@@ -11,7 +11,7 @@
 import { useEffect, useState } from 'react';
 import { Bot, Zap, Play, Pause, Settings as SettingsIcon, Activity, TrendingUp, CheckCircle } from 'lucide-react';
 import Button from '@/components/ui/Button';
-import { SectionLoader } from '@/components/ui/Loader';
+import Loader from '@/components/ui/Loader';
 import toast from 'react-hot-toast';
 import botData from '@/data/bot-data.json';
 import { theme } from '@/utils/theme';
@@ -42,7 +42,13 @@ export default function BotPage() {
     toast.success(bot.enabled ? 'Bot paused' : 'Bot activated');
   };
 
-  if (loading) return <SectionLoader />;
+  if (loading) {
+    return (
+      <div className="min-h-[60vh] flex items-center justify-center">
+        <Loader size="lg" text="Loading bot..." />
+      </div>
+    );
+  }
 
   if (user?.role === 'recruiter') {
     return <RecruiterBotView bot={bot} toggleBot={toggleBot} />;
