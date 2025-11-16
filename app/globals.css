@@ -323,3 +323,23 @@ html {
 .animate-fadeIn {
   animation: fadeIn 0.5s ease-out;
 }
+
+/* =============================== */
+/* JV Loader Fill Animation        */
+/* =============================== */
+
+@keyframes fillText {
+  0% {
+    clip-path: inset(0 100% 0 0);
+  }
+  50% {
+    clip-path: inset(0 0 0 0);
+  }
+  100% {
+    clip-path: inset(0 0 0 100%);
+  }
+}
+
+.animate-fillText {
+  animation: fillText 2s ease-in-out infinite;
+}

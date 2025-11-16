@@ -20,6 +20,7 @@ import {
 import Button from '@/components/ui/Button';
 import GlassPanel from '@/components/ui/GlassPanel';
 import Input from '@/components/ui/Input';
+import Loader from '@/components/ui/Loader';
 import toast from 'react-hot-toast';
 import { theme } from '@/utils/theme';
 
@@ -433,7 +434,7 @@ export default function AgentPage() {
   if (loading) {
     return (
       <div className="min-h-[60vh] flex items-center justify-center">
-        <div className="w-8 h-8 border-2 border-slate-300 border-t-sky-500 rounded-full animate-spin" />
+        <Loader size="lg" text="Loading agent..." />
       </div>
     );
   }

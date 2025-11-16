@@ -11,7 +11,7 @@
 import { useEffect, useState } from 'react';
 import { FileText, Calendar, ExternalLink, Trash2, Briefcase, MapPin, Building2 } from 'lucide-react';
 import Button from '@/components/ui/Button';
-import { SectionLoader } from '@/components/ui/Loader';
+import Loader from '@/components/ui/Loader';
 import { theme } from '@/utils/theme';
 import toast from 'react-hot-toast';
 
@@ -104,7 +104,11 @@ export default function ApplicationsPage() {
       </div>
 
       {/* Loading State */}
-      {loading && <SectionLoader />}
+      {loading && (
+        <div className="flex items-center justify-center py-20">
+          <Loader size="lg" text="Loading applications..." />
+        </div>
+      )}
 
       {/* Empty State */}
       {!loading && filteredApplications.length === 0 && (

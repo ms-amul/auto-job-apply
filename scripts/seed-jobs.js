@@ -26,7 +26,7 @@ const companies = [
   { name: 'LinkedIn', logo: 'https://logo.clearbit.com/linkedin.com', industry: 'Social Media' },
   { name: 'Salesforce', logo: 'https://logo.clearbit.com/salesforce.com', industry: 'SaaS' },
   { name: 'Oracle', logo: 'https://logo.clearbit.com/oracle.com', industry: 'Enterprise Software' },
-  { name: 'Adobe', logo: 'https://logo.clearbit.com/adobe.com', industry: 'Creative Software' },
+  { name: 'Adobe', logo: 'https://tse3.mm.bing.net/th/id/OIP.oGUoxYV6DNGtGTdzVNXI5wHaHa?rs=1&pid=ImgDetMain&o=7&rm=3', industry: 'Creative Software' },
   { name: 'Shopify', logo: 'https://logo.clearbit.com/shopify.com', industry: 'E-commerce' },
   { name: 'Square', logo: 'https://logo.clearbit.com/squareup.com', industry: 'Fintech' },
   { name: 'Coinbase', logo: 'https://logo.clearbit.com/coinbase.com', industry: 'Cryptocurrency' },

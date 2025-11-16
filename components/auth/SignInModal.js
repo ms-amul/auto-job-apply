@@ -195,31 +195,6 @@ export default function SignInModal({ isOpen, onClose }) {
           </Button>
         </form>
 
-        {/* Test Accounts */}
-        <div className="mt-8 pt-6 border-t border-gray-200">
-          <p className="text-sm text-gray-600 text-center mb-3">Quick Test Sign In</p>
-          <div className="space-y-2">
-            <Button
-              variant="outline"
-              fullWidth
-              size="sm"
-              onClick={() => quickSignIn('rajgopal@gmail.com')}
-              disabled={loading}
-            >
-              Sign in as <strong className="ml-1">Applicant</strong>
-            </Button>
-            <Button
-              variant="outline"
-              fullWidth
-              size="sm"
-              onClick={() => quickSignIn('rajgopal@jobvita.com')}
-              disabled={loading}
-            >
-              Sign in as <strong className="ml-1">Recruiter</strong>
-            </Button>
-          </div>
-        </div>
-
         {/* Footer */}
         <div className="mt-6 text-center text-sm text-gray-600">
           <p>

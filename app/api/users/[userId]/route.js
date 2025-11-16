@@ -59,6 +59,12 @@ export async function GET(_request, { params }) {
         languages: user.languages ?? [],
         certifications: user.certifications ?? [],
         tools: user.tools ?? [],
+        // Diversity & Inclusion (Optional)
+        ethnicity: user.ethnicity ?? '',
+        hasDisability: user.hasDisability ?? null,
+        isVeteran: user.isVeteran ?? null,
+        lgbtqPlus: user.lgbtqPlus ?? null,
+        gender: user.gender ?? '',
       },
     });
   } catch (error) {
@@ -108,6 +114,12 @@ export async function PUT(request, { params }) {
       languages: body.languages ?? [],
       certifications: body.certifications ?? [],
       tools: body.tools ?? [],
+      // Diversity & Inclusion (Optional)
+      ethnicity: body.ethnicity ?? '',
+      hasDisability: body.hasDisability ?? null,
+      isVeteran: body.isVeteran ?? null,
+      lgbtqPlus: body.lgbtqPlus ?? null,
+      gender: body.gender ?? '',
       profileCompleted: true,
       updatedAt: now,
     };

@@ -12,8 +12,8 @@ const geistMono = Geist_Mono({
 });
 
 export const metadata = {
-  title: "JobVita - Your Dream Job is One Click Away",
-  description: "AI-powered job application assistant that automatically applies to jobs matching your profile",
+  title: "JobVeda - Your Dream Job is One Click Away",
+  description: "AI-powered job application assistant that automatically applies to jobs matching your profile. Powered by Nexi.",
 };
 
 // Root layout - only global styles, no header/footer

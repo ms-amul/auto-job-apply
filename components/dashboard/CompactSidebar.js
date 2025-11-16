@@ -90,9 +90,14 @@ export default function CompactSidebar({ isOpen, setIsOpen, user }) {
               >
                 <span className="text-white font-bold text-base">JV</span>
               </div>
-              <span className="text-lg font-bold" style={{ color: theme.accentPrimary }}>
-                JobVita
-              </span>
+              <div className="flex flex-col">
+                <span className="text-lg font-bold leading-none" style={{ color: theme.accentPrimary }}>
+                  JobVeda
+                </span>
+                <span className="text-[9px] text-slate-500 font-medium leading-none mt-0.5">
+                  Powered by <span className="font-semibold text-slate-700">Nexi</span>
+                </span>
+              </div>
             </Link>
           ) : (
             <div 

@@ -81,6 +81,12 @@ export default function ProfilePage() {
     languages: [],
     certifications: [],
     tools: [],
+    // Diversity & Inclusion (Optional)
+    ethnicity: '',
+    hasDisability: null,
+    isVeteran: null,
+    lgbtqPlus: null,
+    gender: '',
   });
 
   const updateField = (field, value) => {
@@ -475,6 +481,211 @@ export default function ProfilePage() {
           </div>
         </GlassPanel>
 
+        {/* Diversity & Inclusion (Optional) */}
+        <GlassPanel>
+          <div className="mb-6">
+            <h2 className="text-xl font-semibold text-slate-900 mb-2">Diversity & Inclusion</h2>
+            <p className="text-sm text-slate-600 mb-1">
+              Optional information to help employers meet diversity goals
+            </p>
+            <p className="text-xs text-slate-500 italic">
+              By continuing you agree to the definitions set by the U.S. EEOC
+            </p>
+          </div>
+
+          <div className="space-y-6">
+            {/* Ethnicity */}
+            <div>
+              <label className="block text-sm font-medium text-slate-700 mb-3">
+                What is your ethnicity?
+              </label>
+              <EthnicitySelect
+                value={profile.ethnicity}
+                onChange={(value) => updateField('ethnicity', value)}
+              />
+            </div>
+
+            {/* Disability */}
+            <div>
+              <label className="block text-sm font-medium text-slate-700 mb-3">
+                Do you have a disability?
+              </label>
+              <div className="flex gap-3">
+                <button
+                  type="button"
+                  className={`flex-1 rounded-lg px-4 py-2.5 text-sm font-medium transition-all ${
+                    profile.hasDisability === true
+                      ? 'bg-blue-500 text-white shadow-sm'
+                      : 'bg-gray-100 text-slate-600 hover:bg-gray-200'
+                  }`}
+                  onClick={() => updateField('hasDisability', true)}
+                >
+                  Yes
+                </button>
+                <button
+                  type="button"
+                  className={`flex-1 rounded-lg px-4 py-2.5 text-sm font-medium transition-all ${
+                    profile.hasDisability === false
+                      ? 'bg-blue-500 text-white shadow-sm'
+                      : 'bg-gray-100 text-slate-600 hover:bg-gray-200'
+                  }`}
+                  onClick={() => updateField('hasDisability', false)}
+                >
+                  No
+                </button>
+                <button
+                  type="button"
+                  className={`flex-1 rounded-lg px-4 py-2.5 text-sm font-medium transition-all ${
+                    profile.hasDisability === null
+                      ? 'bg-gray-200 text-slate-700 shadow-sm'
+                      : 'bg-gray-100 text-slate-600 hover:bg-gray-200'
+                  }`}
+                  onClick={() => updateField('hasDisability', null)}
+                >
+                  Decline to state
+                </button>
+              </div>
+            </div>
+
+            {/* Veteran Status */}
+            <div>
+              <label className="block text-sm font-medium text-slate-700 mb-3">
+                Are you a veteran?
+              </label>
+              <div className="flex gap-3">
+                <button
+                  type="button"
+                  className={`flex-1 rounded-lg px-4 py-2.5 text-sm font-medium transition-all ${
+                    profile.isVeteran === true
+                      ? 'bg-blue-500 text-white shadow-sm'
+                      : 'bg-gray-100 text-slate-600 hover:bg-gray-200'
+                  }`}
+                  onClick={() => updateField('isVeteran', true)}
+                >
+                  Yes
+                </button>
+                <button
+                  type="button"
+                  className={`flex-1 rounded-lg px-4 py-2.5 text-sm font-medium transition-all ${
+                    profile.isVeteran === false
+                      ? 'bg-blue-500 text-white shadow-sm'
+                      : 'bg-gray-100 text-slate-600 hover:bg-gray-200'
+                  }`}
+                  onClick={() => updateField('isVeteran', false)}
+                >
+                  No
+                </button>
+                <button
+                  type="button"
+                  className={`flex-1 rounded-lg px-4 py-2.5 text-sm font-medium transition-all ${
+                    profile.isVeteran === null
+                      ? 'bg-gray-200 text-slate-700 shadow-sm'
+                      : 'bg-gray-100 text-slate-600 hover:bg-gray-200'
+                  }`}
+                  onClick={() => updateField('isVeteran', null)}
+                >
+                  Decline to state
+                </button>
+              </div>
+            </div>
+
+            {/* LGBTQ+ */}
+            <div>
+              <label className="block text-sm font-medium text-slate-700 mb-3">
+                Do you identify as LGBTQ+?
+              </label>
+              <div className="flex gap-3">
+                <button
+                  type="button"
+                  className={`flex-1 rounded-lg px-4 py-2.5 text-sm font-medium transition-all ${
+                    profile.lgbtqPlus === true
+                      ? 'bg-blue-500 text-white shadow-sm'
+                      : 'bg-gray-100 text-slate-600 hover:bg-gray-200'
+                  }`}
+                  onClick={() => updateField('lgbtqPlus', true)}
+                >
+                  Yes
+                </button>
+                <button
+                  type="button"
+                  className={`flex-1 rounded-lg px-4 py-2.5 text-sm font-medium transition-all ${
+                    profile.lgbtqPlus === false
+                      ? 'bg-blue-500 text-white shadow-sm'
+                      : 'bg-gray-100 text-slate-600 hover:bg-gray-200'
+                  }`}
+                  onClick={() => updateField('lgbtqPlus', false)}
+                >
+                  No
+                </button>
+                <button
+                  type="button"
+                  className={`flex-1 rounded-lg px-4 py-2.5 text-sm font-medium transition-all ${
+                    profile.lgbtqPlus === null
+                      ? 'bg-gray-200 text-slate-700 shadow-sm'
+                      : 'bg-gray-100 text-slate-600 hover:bg-gray-200'
+                  }`}
+                  onClick={() => updateField('lgbtqPlus', null)}
+                >
+                  Decline to state
+                </button>
+              </div>
+            </div>
+
+            {/* Gender */}
+            <div>
+              <label className="block text-sm font-medium text-slate-700 mb-3">
+                What is your gender?
+              </label>
+              <div className="grid grid-cols-2 md:grid-cols-4 gap-3">
+                <button
+                  type="button"
+                  className={`rounded-lg px-4 py-2.5 text-sm font-medium transition-all ${
+                    profile.gender === 'male'
+                      ? 'bg-blue-500 text-white shadow-sm'
+                      : 'bg-gray-100 text-slate-600 hover:bg-gray-200'
+                  }`}
+                  onClick={() => updateField('gender', 'male')}
+                >
+                  Male
+                </button>
+                <button
+                  type="button"
+                  className={`rounded-lg px-4 py-2.5 text-sm font-medium transition-all ${
+                    profile.gender === 'female'
+                      ? 'bg-blue-500 text-white shadow-sm'
+                      : 'bg-gray-100 text-slate-600 hover:bg-gray-200'
+                  }`}
+                  onClick={() => updateField('gender', 'female')}
+                >
+                  Female
+                </button>
+                <button
+                  type="button"
+                  className={`rounded-lg px-4 py-2.5 text-sm font-medium transition-all ${
+                    profile.gender === 'non-binary'
+                      ? 'bg-blue-500 text-white shadow-sm'
+                      : 'bg-gray-100 text-slate-600 hover:bg-gray-200'
+                  }`}
+                  onClick={() => updateField('gender', 'non-binary')}
+                >
+                  Non-Binary
+                </button>
+                <button
+                  type="button"
+                  className={`rounded-lg px-4 py-2.5 text-sm font-medium transition-all ${
+                    profile.gender === 'decline'
+                      ? 'bg-gray-200 text-slate-700 shadow-sm'
+                      : 'bg-gray-100 text-slate-600 hover:bg-gray-200'
+                  }`}
+                  onClick={() => updateField('gender', 'decline')}
+                >
+                  Decline to state
+                </button>
+              </div>
+            </div>
+          </div>
+        </GlassPanel>
+
         {/* Resume */}
         <GlassPanel>
           <div className="mb-6">
@@ -633,6 +844,43 @@ function SkillInput({ label, placeholder, description, skills, onChange }) {
           ))}
         </div>
       )}
+    </div>
+  );
+}
+
+function EthnicitySelect({ value = '', onChange }) {
+  const ethnicities = [
+    'American Indian or Alaska Native',
+    'Asian',
+    'Black or African American',
+    'Hispanic or Latino',
+    'Native Hawaiian or Other Pacific Islander',
+    'White',
+    'Two or More Races',
+    'Decline to state',
+  ];
+
+  return (
+    <div className="space-y-2">
+      {ethnicities.map((ethnicity) => (
+        <label
+          key={ethnicity}
+          className={`flex items-center gap-3 p-3 rounded-lg border cursor-pointer transition-all ${
+            value === ethnicity
+              ? 'border-blue-500 bg-blue-50'
+              : 'border-gray-200 hover:bg-gray-50'
+          }`}
+        >
+          <input
+            type="radio"
+            name="ethnicity"
+            checked={value === ethnicity}
+            onChange={() => onChange(ethnicity)}
+            className="w-4 h-4 border-gray-300 text-blue-600 focus:ring-blue-500"
+          />
+          <span className="text-sm text-slate-700">{ethnicity}</span>
+        </label>
+      ))}
     </div>
   );
 }

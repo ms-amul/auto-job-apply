@@ -39,10 +39,10 @@ export default function Footer() {
                   <div className="mt-8">
                     <p className="text-sm text-white/50 mb-2">Contact us at:</p>
                     <a
-                      href="mailto:support@jobvita.com"
+                      href="mailto:support@jobveda.com"
                       className="inline-flex items-center gap-2 text-white text-lg hover:text-white/80 transition-colors group"
                     >
-                      <span>support@jobvita.com</span>
+                      <span>support@jobveda.com</span>
                       <ArrowUpRight className="w-5 h-5 group-hover:translate-x-0.5 group-hover:-translate-y-0.5 transition-transform" />
                     </a>
                   </div>
@@ -87,10 +87,22 @@ export default function Footer() {
             </div>
 
             {/* Bottom Bar */}
-            <div className="py-6 flex flex-col md:flex-row justify-between items-center gap-4 border-t border-white/10">
-              <p className="text-sm text-white/40">
-                &copy; {new Date().getFullYear()} JobVita. All rights reserved.
-              </p>
+            <div className="py-6 flex flex-col md:flex-row justify-between items-center gap-6 border-t border-white/10">
+              <div className="flex flex-col items-center md:items-start gap-3">
+                {/* Logo and Copyright */}
+                <div className="flex items-center gap-3">
+                  <img src="/logo.png" alt="JobVeda" width={32} height={32} className="rounded-full" />
+                  <p className="text-sm text-white/40">
+                    &copy; {new Date().getFullYear()} JobVeda. All rights reserved.
+                  </p>
+                </div>
+                
+                {/* Powered by Nexi - Highlighted */}
+                <div className="flex items-center gap-2 px-3 py-1.5 rounded-lg bg-white/5 border border-white/10">
+                  <span className="text-xs text-white/50">Powered by</span>
+                  <span className="text-sm font-bold text-white">Nexi</span>
+                </div>
+              </div>
 
               <div className="flex items-center gap-6">
                 {[

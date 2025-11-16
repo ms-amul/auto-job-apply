@@ -43,13 +43,15 @@ export default function Input({
           placeholder={placeholder}
           disabled={disabled}
           className={`
-            w-full px-4 py-2 border rounded-lg
+            w-full px-4 py-2.5 rounded-lg
             ${icon ? 'pl-10' : ''}
-            ${error ? 'border-red-500 focus:ring-red-500' : 'border-gray-300 focus:ring-blue-500'}
-            ${disabled ? 'bg-gray-100 cursor-not-allowed' : 'bg-white'}
-            focus:outline-none focus:ring-2 focus:border-transparent
-            transition-all duration-200
+            ${error ? 'border border-red-300 bg-red-50' : 'border border-gray-200 bg-white'}
+            ${disabled ? 'bg-gray-100 cursor-not-allowed opacity-60' : ''}
+            focus:outline-none focus:ring-0 focus:border-gray-300
+            transition-colors duration-200
+            text-slate-900 placeholder:text-slate-400
           `}
+          style={{ outline: 'none', boxShadow: 'none' }}
           {...props}
         />
       </div>

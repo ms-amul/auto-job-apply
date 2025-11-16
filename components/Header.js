@@ -29,10 +29,10 @@ export default function Header() {
         }
       };
       const handleScroll = () => setIsMobileMenuOpen(false);
-      
+
       document.addEventListener('mousedown', handleClickOutside);
       window.addEventListener('scroll', handleScroll);
-      
+
       return () => {
         document.removeEventListener('mousedown', handleClickOutside);
         window.removeEventListener('scroll', handleScroll);
@@ -59,7 +59,7 @@ export default function Header() {
   ];
 
   return (
-    <nav 
+    <nav
       className={`
         fixed top-0 left-0 right-0 z-50 transition-all duration-700 ease-out
         ${scrolled ? 'py-3' : ''}
@@ -70,19 +70,19 @@ export default function Header() {
         ${scrolled ? 'max-w-5xl mx-auto px-4' : 'max-w-7xl mx-auto'}
       `}>
         {/* Premium glass background - only visible when scrolled */}
-        <div 
+        <div
           className={`
             absolute inset-0 
             border border-transparent
             transition-all duration-700 ease-out
-            ${scrolled 
-              ? 'bg-white/75 backdrop-blur-xl rounded-2xl shadow-xl' 
+            ${scrolled
+              ? 'bg-white/75 backdrop-blur-xl rounded-2xl shadow-xl'
               : 'bg-transparent'
             }
           `}
           style={{
             borderColor: scrolled ? 'rgba(255, 255, 255, 0.7)' : 'transparent',
-            boxShadow: scrolled 
+            boxShadow: scrolled
               ? `0 10px 40px -10px ${theme.accentPrimary}20, 0 4px 16px -4px rgba(0,0,0,0.12)`
               : 'none',
           }}
@@ -96,38 +96,20 @@ export default function Header() {
           `}>
             {/* Logo */}
             <div className="flex items-center gap-2 group cursor-pointer">
-              <div className="relative">
-                {/* Glow effect - fades in when scrolled */}
-                <div 
-                  className="absolute inset-0 rounded-lg blur-md transition-all duration-700 ease-out group-hover:opacity-70"
-                  style={{ 
-                    background: theme.getAccentGradient(135),
-                    opacity: scrolled ? 0.5 : 0,
-                  }}
-                ></div>
-                
-                <div className={`
-                  relative rounded-lg flex items-center justify-center transition-all duration-700 ease-out overflow-hidden
-                  ${scrolled ? 'w-8 h-8' : 'w-9 h-9'}
-                  group-hover:scale-105
+              <img src="/logo.png" alt="JobVeda" width={34} height={34} className='rounded-full' />
+              <div className="flex flex-col">
+                <span className={`
+                  font-black tracking-tight transition-all duration-700 ease-out
+                  bg-clip-text text-transparent leading-none
+                  ${scrolled ? 'text-base' : 'text-lg'}
                 `}
-                style={{ background: theme.getAccentGradient(135) }}
-                >
-                  <Sparkles className={`
-                    text-white relative z-10 transition-all duration-700 ease-out
-                    ${scrolled ? 'w-4 h-4' : 'w-5 h-5'}
-                  `} strokeWidth={2.5} />
-                </div>
+                  style={{ backgroundImage: theme.getAccentGradient(90) }}>
+                  JobVeda
+                </span>
+                <span className="text-[9px] text-slate-500 font-medium leading-none mt-0.5">
+                  Powered by <span className="font-semibold text-slate-700">Nexi</span>
+                </span>
               </div>
-              
-              <span className={`
-                font-black tracking-tight transition-all duration-700 ease-out
-                bg-clip-text text-transparent
-                ${scrolled ? 'text-base' : 'text-lg'}
-              `}
-              style={{ backgroundImage: theme.getAccentGradient(90) }}>
-                JobVita
-              </span>
             </div>
 
             {/* Navigation Links - Desktop */}
@@ -140,29 +122,29 @@ export default function Header() {
                   className="group relative px-4 py-2 rounded-xl font-semibold text-sm overflow-hidden"
                 >
                   {/* Premium hover background with glow */}
-                  <div 
+                  <div
                     className="absolute inset-0 bg-white/50 backdrop-blur-md border border-white/60 rounded-xl opacity-0 group-hover:opacity-100 transition-all duration-300 ease-out"
                     style={{
                       boxShadow: `0 4px 16px -4px ${theme.accentPrimary}20, inset 0 1px 0 0 rgba(255, 255, 255, 0.8)`,
                     }}
                   ></div>
-                  
+
                   {/* Subtle accent gradient overlay on hover */}
-                  <div 
+                  <div
                     className="absolute inset-0 opacity-0 group-hover:opacity-[0.03] transition-opacity duration-300"
                     style={{ background: theme.getAccentGradient(135) }}
                   ></div>
-                  
+
                   {/* Glass reflection effect */}
                   <div className="absolute inset-0 bg-linear-to-br from-white/40 via-white/10 to-transparent opacity-0 group-hover:opacity-100 transition-opacity duration-300 rounded-xl pointer-events-none"></div>
-                  
+
                   {/* Text with scale effect */}
                   <span className="relative z-10 text-gray-800 group-hover:text-gray-900 transition-all duration-300 group-hover:scale-105 inline-block">
                     {link.label}
                   </span>
-                  
+
                   {/* Bottom accent line that slides up on hover */}
-                  <div 
+                  <div
                     className="absolute bottom-1 left-1/2 -translate-x-1/2 h-0.5 w-0 group-hover:w-3/4 rounded-full transition-all duration-300 ease-out"
                     style={{ background: theme.getAccentGradient(90) }}
                   ></div>
@@ -176,8 +158,8 @@ export default function Header() {
                 onClick={() => setIsMobileMenuOpen(!isMobileMenuOpen)}
                 className={`
                   group cursor-pointer relative w-9 h-9 rounded-lg flex items-center justify-center transition-all duration-300 active:scale-95 hover:scale-105 overflow-hidden
-                  ${scrolled 
-                    ? 'bg-white/30 border border-white/40 hover:bg-white/50 hover:shadow-lg' 
+                  ${scrolled
+                    ? 'bg-white/30 border border-white/40 hover:bg-white/50 hover:shadow-lg'
                     : 'bg-white/10 border border-white/20 hover:bg-white/25 hover:shadow-md'
                   }
                 `}
@@ -185,7 +167,7 @@ export default function Header() {
               >
                 {/* Glass reflection on hover */}
                 <div className="absolute inset-0 bg-linear-to-br from-white/30 via-white/10 to-transparent opacity-0 group-hover:opacity-100 transition-opacity duration-300 rounded-lg"></div>
-                
+
                 {isMobileMenuOpen ? (
                   <X className="w-5 h-5 text-gray-800 relative z-10 group-hover:rotate-90 transition-transform duration-300" strokeWidth={2.5} />
                 ) : (
@@ -197,25 +179,25 @@ export default function Header() {
             {/* CTA Button - Desktop */}
             <div className="hidden md:block relative">
               {/* Glow effect - fades in when scrolled */}
-              <div 
+              <div
                 className="absolute inset-0 rounded-lg blur-lg transition-opacity duration-700 ease-out"
-                style={{ 
+                style={{
                   background: theme.getAccentGradient(90),
                   opacity: scrolled ? 0.4 : 0,
                 }}
               ></div>
-              
-              <button 
+
+              <button
                 onClick={() => setIsSignInOpen(true)}
                 className="group cursor-pointer relative px-4 py-1.5 rounded-full font-semibold transition-all duration-300 text-white flex items-center gap-1.5 text-sm hover:scale-105 hover:shadow-xl active:scale-95 overflow-hidden"
-                style={{ 
+                style={{
                   background: theme.getAccentGradient(90),
                   boxShadow: `0 4px 12px -2px ${theme.accentPrimary}40`
                 }}
               >
                 {/* Shine effect on hover */}
                 <div className="absolute inset-0 bg-linear-to-r from-transparent via-white/20 to-transparent translate-x-[-200%] group-hover:translate-x-[200%] transition-transform duration-700 ease-out"></div>
-                
+
                 <span className="relative z-10">Get Started</span>
                 <Sparkles className="w-3.5 h-3.5 relative z-10 group-hover:rotate-12 transition-transform duration-300" strokeWidth={2.5} />
               </button>
@@ -225,18 +207,18 @@ export default function Header() {
       </div>
 
       {/* Mobile Menu Overlay */}
-      <div 
+      <div
         className={`
           fixed inset-0 z-40 md:hidden transition-all duration-300
-          ${isMobileMenuOpen 
-            ? 'opacity-100 pointer-events-auto' 
+          ${isMobileMenuOpen
+            ? 'opacity-100 pointer-events-auto'
             : 'opacity-0 pointer-events-none'
           }
         `}
         onClick={() => setIsMobileMenuOpen(false)}
       >
         {/* Backdrop */}
-        <div 
+        <div
           className={`
             absolute inset-0 bg-black/30 backdrop-blur-sm transition-opacity duration-300
             ${isMobileMenuOpen ? 'opacity-100' : 'opacity-0'}
@@ -244,7 +226,7 @@ export default function Header() {
         ></div>
 
         {/* Menu Panel */}
-        <div 
+        <div
           className={`
             absolute top-0 right-0 h-full w-[280px]
             bg-white/80 backdrop-blur-xl
@@ -280,29 +262,29 @@ export default function Header() {
                   }}
                 >
                   {/* Premium hover background with glow */}
-                  <div 
+                  <div
                     className="absolute inset-0 bg-white/60 backdrop-blur-md border border-white/70 rounded-xl opacity-0 group-hover:opacity-100 group-active:opacity-100 transition-all duration-300 ease-out"
                     style={{
                       boxShadow: `0 4px 16px -4px ${theme.accentPrimary}20, inset 0 1px 0 0 rgba(255, 255, 255, 0.9)`,
                     }}
                   ></div>
-                  
+
                   {/* Subtle accent gradient overlay on hover */}
-                  <div 
+                  <div
                     className="absolute inset-0 opacity-0 group-hover:opacity-[0.04] transition-opacity duration-300"
                     style={{ background: theme.getAccentGradient(135) }}
                   ></div>
-                  
+
                   {/* Glass reflection effect */}
                   <div className="absolute inset-0 bg-linear-to-br from-white/50 via-white/20 to-transparent opacity-0 group-hover:opacity-100 transition-opacity duration-300 rounded-xl pointer-events-none"></div>
-                  
+
                   {/* Text with slight transform */}
                   <span className="relative z-10 text-gray-800 group-hover:text-gray-900 transition-all duration-300 group-hover:translate-x-1 inline-block">
                     {link.label}
                   </span>
-                  
+
                   {/* Left accent bar that slides in on hover */}
-                  <div 
+                  <div
                     className="absolute left-0 top-1/2 -translate-y-1/2 w-0 group-hover:w-1 h-2/3 rounded-r-full transition-all duration-300 ease-out"
                     style={{ background: theme.getAccentGradient(90) }}
                   ></div>
@@ -312,7 +294,7 @@ export default function Header() {
 
             {/* CTA Button */}
             <div className="pt-4 border-t border-white/30">
-              <button 
+              <button
                 onClick={() => {
                   setIsMobileMenuOpen(false);
                   setIsSignInOpen(true);
@@ -325,10 +307,10 @@ export default function Header() {
               >
                 {/* Animated shine effect on hover */}
                 <div className="absolute inset-0 bg-linear-to-r from-transparent via-white/25 to-transparent translate-x-[-200%] group-hover:translate-x-[200%] transition-transform duration-700 ease-out"></div>
-                
+
                 {/* Inner glow */}
                 <div className="absolute inset-0 bg-white/0 group-hover:bg-white/10 transition-colors duration-300 rounded-xl"></div>
-                
+
                 <span className="relative z-10">Get Started</span>
                 <Sparkles className="w-4 h-4 relative z-10 group-hover:rotate-12 group-hover:scale-110 transition-transform duration-300" strokeWidth={2.5} />
               </button>
@@ -339,7 +321,7 @@ export default function Header() {
 
       {/* Sign In Modal */}
       <SignInModal isOpen={isSignInOpen} onClose={() => setIsSignInOpen(false)} />
-    </nav>
+    </nav >
   );
 }
 

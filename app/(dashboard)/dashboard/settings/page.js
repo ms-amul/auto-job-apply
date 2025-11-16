@@ -43,6 +43,7 @@ import toast from 'react-hot-toast';
 
 export default function SettingsPage() {
   const [loading, setLoading] = useState(false);
+  const [user, setUser] = useState(null);
   
   // TODO: Replace with actual settings from API
   const [settings, setSettings] = useState({
@@ -52,9 +53,14 @@ export default function SettingsPage() {
     weeklyDigest: true,
   });
 
-  // TODO: Load user settings from API
+  // Load user from localStorage
   useEffect(() => {
-    // const user = JSON.parse(localStorage.getItem('user'));
+    const storedUser = localStorage.getItem('user');
+    if (storedUser) {
+      setUser(JSON.parse(storedUser));
+    }
+    
+    // TODO: Load user settings from API
     // fetch(`/api/users/${user.id}/settings`)
     //   .then(res => res.json())
     //   .then(data => setSettings(data.settings));
@@ -184,7 +190,6 @@ export default function SettingsPage() {
                 <span className="text-blue-600 text-sm font-medium">Change</span>
               </button>
 
-              {/* TODO: Load actual email from user data */}
               <button
                 type="button"
                 className="w-full flex items-center justify-between p-4 hover:bg-gray-50 rounded-xl transition-colors text-left"
@@ -194,7 +199,9 @@ export default function SettingsPage() {
                   <Mail className="w-5 h-5 text-gray-600" />
                   <div>
                     <p className="text-base font-medium text-gray-900">Email Address</p>
-                    <p className="text-sm text-gray-600 mt-0.5">john.doe@example.com</p>
+                    <p className="text-sm text-gray-600 mt-0.5">
+                      {user?.email || 'Loading...'}
+                    </p>
                   </div>
                 </div>
                 <span className="text-blue-600 text-sm font-medium">Update</span>

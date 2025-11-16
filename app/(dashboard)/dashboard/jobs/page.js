@@ -5,6 +5,7 @@ import { useRouter } from 'next/navigation';
 import { Search, MapPin, Briefcase, DollarSign, Clock, Building2, Filter } from 'lucide-react';
 import GlassPanel from '@/components/ui/GlassPanel';
 import Button from '@/components/ui/Button';
+import Loader from '@/components/ui/Loader';
 import toast from 'react-hot-toast';
 
 export default function JobsPage() {
@@ -57,7 +58,7 @@ export default function JobsPage() {
   if (loading) {
     return (
       <div className="min-h-[60vh] flex items-center justify-center">
-        <div className="w-8 h-8 border-2 border-slate-300 border-t-sky-500 rounded-full animate-spin" />
+        <Loader size="lg" text="Loading jobs..." />
       </div>
     );
   }
