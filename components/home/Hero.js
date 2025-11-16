@@ -1,12 +1,14 @@
 'use client';
 
+import { ArrowRight, Play, Rocket, Trophy } from 'lucide-react';
 import { useRouter } from 'next/navigation';
-import Container from '../Container';
+import { useState } from 'react';
 import { theme } from '../../utils/theme';
-import { Trophy, Rocket, ArrowRight, Play } from 'lucide-react';
+import Container from '../Container';
 
 export default function Hero() {
   const router = useRouter();
+  const [isVideoOpen, setIsVideoOpen] = useState(false);
   
   const handleSignupClick = () => {
     console.log('Button clicked, navigating to /signup');
@@ -47,7 +49,11 @@ export default function Hero() {
                 Start Applying for Free
                 <ArrowRight className="w-4 h-4 group-hover:translate-x-1 transition-transform" strokeWidth={2} />
               </button>
-              <button className="group border-2 border-gray-300 text-gray-800 px-6 py-3 rounded-full text-sm font-semibold hover:border-gray-400 hover:bg-white/80 backdrop-blur-sm transition-all shadow-md hover:shadow-lg flex items-center justify-center gap-2 hover:scale-105 active:scale-95">
+              <button 
+                type="button"
+                onClick={() => setIsVideoOpen(true)}
+                className="group border-2 border-gray-300 text-gray-800 px-6 py-3 rounded-full text-sm font-semibold hover:border-gray-400 hover:bg-white/80 backdrop-blur-sm transition-all shadow-md hover:shadow-lg flex items-center justify-center gap-2 hover:scale-105 active:scale-95"
+              >
                 <Play className="w-3.5 h-3.5 fill-gray-800" strokeWidth={0} />
                 Watch Demo
               </button>

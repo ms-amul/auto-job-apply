@@ -96,12 +96,7 @@ export default function SignupPage() {
           <div className="space-y-8 order-2 lg:order-1">
             {/* Logo */}
             <div className="flex items-center gap-3">
-              <div
-                className="w-12 h-12 rounded-2xl flex items-center justify-center text-white text-sm font-bold shadow-lg"
-                style={{ background: theme.getAccentGradient(135) }}
-              >
-                JV
-              </div>
+              <img src="/logo.png" alt="JobVeda" width={34} height={34} className='rounded-full scale-110' />
               <div className="flex flex-col">
                 <span className="text-2xl font-bold text-slate-900 leading-none">JobVeda</span>
                 <span className="text-[10px] text-slate-500 font-medium leading-none mt-1">
@@ -116,7 +111,7 @@ export default function SignupPage() {
                 <Sparkles className="w-4 h-4 text-blue-600" />
                 <span className="text-sm font-medium text-blue-900">AI-Powered Job Search</span>
               </div>
-              
+
               <h1 className="text-4xl lg:text-5xl font-bold tracking-tight text-slate-900 leading-tight">
                 Land your dream job{' '}
                 <span
@@ -126,9 +121,9 @@ export default function SignupPage() {
                   10x faster
                 </span>
               </h1>
-              
+
               <p className="text-lg text-slate-600 leading-relaxed">
-                Join thousands of professionals using AI to automate their job applications 
+                Join thousands of professionals using AI to automate their job applications
                 and get hired faster.
               </p>
             </div>
@@ -188,7 +183,7 @@ export default function SignupPage() {
             >
               {/* Decorative gradient */}
               <div className="absolute top-0 right-0 w-32 h-32 bg-gradient-to-br from-blue-400/20 to-indigo-400/20 rounded-full blur-3xl" />
-              
+
               <div className="relative z-10">
                 <div className="text-center mb-8">
                   <h2 className="text-3xl font-bold text-slate-900 mb-2">
@@ -308,7 +303,7 @@ export default function SignupPage() {
                         </>
                       )}
                     </span>
-                    
+
                     {/* Shimmer effect */}
                     <div className="absolute inset-0 -translate-x-full group-hover:translate-x-full transition-transform duration-1000 bg-gradient-to-r from-transparent via-white/20 to-transparent" />
                   </button>

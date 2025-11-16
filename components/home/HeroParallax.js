@@ -3,6 +3,7 @@
 import { useEffect, useRef, useState } from 'react';
 import { useRouter } from 'next/navigation';
 import Container from '../Container';
+import VideoModal from '../ui/VideoModal';
 import { ArrowRight, Play, Sparkles, Star, Trophy, Rocket, Send, Mail, Target, PartyPopper, Search, Briefcase, Palette } from 'lucide-react';
 import { useMobile } from '@/hooks/useMobile';
 import { theme } from '../../utils/theme';
@@ -11,6 +12,7 @@ export default function HeroParallax() {
   const router = useRouter();
   const [scrollY, setScrollY] = useState(0);
   const [particles, setParticles] = useState([]);
+  const [isVideoOpen, setIsVideoOpen] = useState(false);
   const heroRef = useRef(null);
   const { isMobile, isReducedMotion } = useMobile();
 
@@ -228,7 +230,9 @@ export default function HeroParallax() {
               </button>
               
               <button 
-                className="cursor-pointer relative bg-white/60 backdrop-blur-xl border-2 border-white/80 text-gray-900 px-6 py-3 rounded-full text-sm font-semibold flex items-center justify-center gap-2 shadow-md overflow-hidden hover:shadow-lg transition-shadow"
+                type="button"
+                onClick={() => setIsVideoOpen(true)}
+                className="cursor-pointer relative bg-white/60 backdrop-blur-xl border-2 border-white/80 text-gray-900 px-6 py-3 rounded-full text-sm font-semibold flex items-center justify-center gap-2 shadow-md overflow-hidden hover:shadow-lg transition-all hover:scale-105 active:scale-95"
                 style={{
                   boxShadow: '0 8px 20px -4px rgba(0, 0, 0, 0.15), inset 0 1px 0 0 rgba(255, 255, 255, 0.8)',
                 }}
@@ -436,6 +440,14 @@ export default function HeroParallax() {
           <div className="w-1 h-3 bg-gray-400 rounded-full mt-2 animate-scroll"></div>
         </div>
       </div>
+
+      {/* Video Modal */}
+      <VideoModal 
+        isOpen={isVideoOpen}
+        onClose={() => setIsVideoOpen(false)}
+        videoId=""
+        title="JobVeda Demo"
+      />
     </section>
   );
 }
