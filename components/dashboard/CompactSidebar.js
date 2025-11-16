@@ -9,10 +9,10 @@
 
 import Link from 'next/link';
 import { usePathname } from 'next/navigation';
-import { 
-  LayoutDashboard, 
-  Briefcase, 
-  FileText, 
+import {
+  LayoutDashboard,
+  Briefcase,
+  FileText,
   BarChart3,
   Settings,
   LogOut,
@@ -55,7 +55,7 @@ export default function CompactSidebar({ isOpen, setIsOpen, user }) {
       <button
         onClick={() => setIsOpen(!isOpen)}
         className="lg:hidden fixed top-4 right-4 z-50 w-12 h-12 rounded-xl border border-gray-300 flex items-center justify-center shadow-lg backdrop-blur-xl bg-white/90"
-        style={{ 
+        style={{
           color: theme.accentPrimary,
         }}
       >
@@ -84,12 +84,7 @@ export default function CompactSidebar({ isOpen, setIsOpen, user }) {
         <div className="h-16 flex items-center px-4 border-b border-gray-200">
           {isOpen ? (
             <Link href="/" className="flex items-center gap-3">
-              <div 
-                className="w-10 h-10 rounded-xl flex items-center justify-center"
-                style={{ background: theme.getAccentGradient(135) }}
-              >
-                <span className="text-white font-bold text-base">JV</span>
-              </div>
+              <img src="/logo.png" alt="JobVeda" width={34} height={34} className='rounded-full' />
               <div className="flex flex-col">
                 <span className="text-lg font-bold leading-none" style={{ color: theme.accentPrimary }}>
                   JobVeda
@@ -100,7 +95,7 @@ export default function CompactSidebar({ isOpen, setIsOpen, user }) {
               </div>
             </Link>
           ) : (
-            <div 
+            <div
               className="w-10 h-10 rounded-xl flex items-center justify-center"
               style={{ background: theme.getAccentGradient(135) }}
             >
@@ -114,7 +109,7 @@ export default function CompactSidebar({ isOpen, setIsOpen, user }) {
           {menuItems.map((item) => {
             const Icon = item.icon;
             const active = isActive(item.href);
-            
+
             return (
               <Link
                 key={item.href}
@@ -154,7 +149,7 @@ export default function CompactSidebar({ isOpen, setIsOpen, user }) {
               ${!isOpen && 'justify-center'}
             `}
           >
-            <div 
+            <div
               className="w-10 h-10 rounded-xl flex items-center justify-center shrink-0"
               style={{ background: theme.getAccentGradient(135) }}
             >

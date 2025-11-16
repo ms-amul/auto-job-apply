@@ -570,12 +570,6 @@ export default function AgentPage() {
                 {isRunning ? 'Running' : 'Paused'}
               </span>
             </div>
-            {!isConfigured && (
-              <span className="text-xs text-amber-600 flex items-center gap-1">
-                <X className="w-3 h-3" />
-                Not configured
-              </span>
-            )}
             {isConfigured && (
               <span className="text-xs text-emerald-600 flex items-center gap-1">
                 <Check className="w-3 h-3" />

@@ -29,28 +29,42 @@ export default function Loader({
   const currentSize = sizes[size] || sizes.md;
 
   const loaderContent = (
-    <div className={`flex flex-col items-center justify-center gap-4 ${className}`}>
+    <div className={`flex flex-col items-center justify-center gap-6 ${className}`}>
       {/* Animated Loader */}
       <div className="relative flex items-center justify-center">
-        {/* Outer rotating ring */}
+        {/* Outer rotating ring with gradient */}
         <div 
-          className={`absolute ${currentSize.container} rounded-full border-3 border-transparent animate-spin`}
+          className={`absolute ${currentSize.container} rounded-full animate-spin`}
           style={{
-            borderTopColor: 'rgb(59, 130, 246)',
-            borderRightColor: 'rgb(99, 102, 241)',
-            animationDuration: '1.2s',
+            background: `conic-gradient(from 0deg, transparent 0%, ${theme.accentPrimary} 50%, ${theme.accentSecondary} 100%)`,
+            WebkitMask: 'radial-gradient(farthest-side, transparent calc(100% - 3px), white calc(100% - 2px))',
+            mask: 'radial-gradient(farthest-side, transparent calc(100% - 3px), white calc(100% - 2px))',
+            animationDuration: '1s',
+            animationTimingFunction: 'linear',
           }}
         />
 
-        {/* Subtle inner glow */}
+        {/* Middle rotating ring - opposite direction */}
         <div 
-          className={`absolute ${currentSize.container} rounded-full blur-2xl opacity-10`}
+          className={`absolute ${currentSize.container} rounded-full animate-spin-reverse opacity-40`}
+          style={{
+            background: `conic-gradient(from 180deg, transparent 0%, ${theme.accentSecondary} 50%, ${theme.accentPrimary} 100%)`,
+            WebkitMask: 'radial-gradient(farthest-side, transparent calc(100% - 4px), white calc(100% - 3px))',
+            mask: 'radial-gradient(farthest-side, transparent calc(100% - 4px), white calc(100% - 3px))',
+            animationDuration: '1.5s',
+            animationTimingFunction: 'linear',
+          }}
+        />
+
+        {/* Pulsing glow */}
+        <div 
+          className={`absolute ${currentSize.container} rounded-full blur-xl opacity-20 animate-pulse-slow`}
           style={{
             background: theme.getAccentGradient(135),
           }}
         />
 
-        {/* JV Logo with fill animation */}
+        {/* JV Logo with enhanced fill animation */}
         <div className="relative">
           {/* Background text (outline) */}
           <div 
@@ -59,7 +73,7 @@ export default function Loader({
             JV
           </div>
           
-          {/* Animated fill */}
+          {/* Animated fill with gradient */}
           <div 
             className={`absolute inset-0 ${currentSize.logo} font-bold tracking-tight overflow-hidden`}
           >
@@ -75,14 +89,39 @@ export default function Loader({
               JV
             </div>
           </div>
+
+          {/* Shimmer overlay */}
+          <div 
+            className={`absolute inset-0 ${currentSize.logo} font-bold tracking-tight overflow-hidden`}
+          >
+            <div 
+              className="animate-shimmer-text"
+              style={{
+                background: 'linear-gradient(90deg, transparent 0%, rgba(255,255,255,0.8) 50%, transparent 100%)',
+                WebkitBackgroundClip: 'text',
+                WebkitTextFillColor: 'transparent',
+                backgroundClip: 'text',
+                backgroundSize: '200% 100%',
+              }}
+            >
+              JV
+            </div>
+          </div>
         </div>
       </div>
 
-      {/* Loading Text */}
+      {/* Loading Text with dots animation */}
       {text && (
-        <p className={`${currentSize.text} text-slate-600 font-medium`}>
-          {text}
-        </p>
+        <div className="flex items-center gap-1 mt-10">
+          <p className={`${currentSize.text} text-slate-600 font-medium`}>
+            {text}
+          </p>
+          <div className="flex gap-1">
+            <span className="w-1 h-1 bg-slate-400 rounded-full animate-bounce" style={{ animationDelay: '0ms' }}></span>
+            <span className="w-1 h-1 bg-slate-400 rounded-full animate-bounce" style={{ animationDelay: '150ms' }}></span>
+            <span className="w-1 h-1 bg-slate-400 rounded-full animate-bounce" style={{ animationDelay: '300ms' }}></span>
+          </div>
+        </div>
       )}
     </div>
   );

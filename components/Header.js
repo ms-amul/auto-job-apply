@@ -1,14 +1,29 @@
 'use client';
 
 import { useState, useEffect } from 'react';
-import { Sparkles, Menu, X } from 'lucide-react';
+import { Sparkles, Menu, X, LayoutDashboard, User } from 'lucide-react';
+import { useRouter } from 'next/navigation';
 import SignInModal from './auth/SignInModal';
 import { theme } from '../utils/theme';
 
 export default function Header() {
+  const router = useRouter();
   const [scrolled, setScrolled] = useState(false);
   const [isMobileMenuOpen, setIsMobileMenuOpen] = useState(false);
   const [isSignInOpen, setIsSignInOpen] = useState(false);
+  const [user, setUser] = useState(null);
+
+  // Check if user is logged in
+  useEffect(() => {
+    const storedUser = localStorage.getItem('user');
+    if (storedUser) {
+      try {
+        setUser(JSON.parse(storedUser));
+      } catch (error) {
+        console.error('Error parsing user data:', error);
+      }
+    }
+  }, []);
 
   useEffect(() => {
     const handleScroll = () => {
@@ -96,7 +111,7 @@ export default function Header() {
           `}>
             {/* Logo */}
             <div className="flex items-center gap-2 group cursor-pointer">
-              <img src="/logo.png" alt="JobVeda" width={34} height={34} className='rounded-full' />
+              <img src="/logo.png" alt="JobVeda" width={34} height={34} className='rounded-full scale-110' />
               <div className="flex flex-col">
                 <span className={`
                   font-black tracking-tight transition-all duration-700 ease-out
@@ -138,8 +153,8 @@ export default function Header() {
                   {/* Glass reflection effect */}
                   <div className="absolute inset-0 bg-linear-to-br from-white/40 via-white/10 to-transparent opacity-0 group-hover:opacity-100 transition-opacity duration-300 rounded-xl pointer-events-none"></div>
 
-                  {/* Text with scale effect */}
-                  <span className="relative z-10 text-gray-800 group-hover:text-gray-900 transition-all duration-300 group-hover:scale-105 inline-block">
+                  {/* Text with elegant styling */}
+                  <span className="relative z-10 text-slate-700 group-hover:text-slate-900 transition-all duration-300 font-medium tracking-wide inline-block">
                     {link.label}
                   </span>
 
@@ -178,29 +193,59 @@ export default function Header() {
 
             {/* CTA Button - Desktop */}
             <div className="hidden md:block relative">
-              {/* Glow effect - fades in when scrolled */}
-              <div
-                className="absolute inset-0 rounded-lg blur-lg transition-opacity duration-700 ease-out"
-                style={{
-                  background: theme.getAccentGradient(90),
-                  opacity: scrolled ? 0.4 : 0,
-                }}
-              ></div>
+              {user ? (
+                // Dashboard Button for logged-in users
+                <>
+                  <div
+                    className="absolute inset-0 rounded-lg blur-lg transition-opacity duration-700 ease-out"
+                    style={{
+                      background: theme.getAccentGradient(90),
+                      opacity: scrolled ? 0.3 : 0,
+                    }}
+                  ></div>
+                  
+                  <button
+                    onClick={() => router.push('/dashboard')}
+                    className="group cursor-pointer relative px-5 py-2 rounded-full font-semibold transition-all duration-300 text-white flex items-center gap-2 text-sm hover:scale-105 hover:shadow-xl active:scale-95 overflow-hidden border border-white/20"
+                    style={{
+                      background: theme.getAccentGradient(90),
+                      boxShadow: `0 4px 16px -2px ${theme.accentPrimary}30`
+                    }}
+                  >
+                    {/* Shine effect on hover */}
+                    <div className="absolute inset-0 bg-linear-to-r from-transparent via-white/20 to-transparent translate-x-[-200%] group-hover:translate-x-[200%] transition-transform duration-700 ease-out"></div>
 
-              <button
-                onClick={() => setIsSignInOpen(true)}
-                className="group cursor-pointer relative px-4 py-1.5 rounded-full font-semibold transition-all duration-300 text-white flex items-center gap-1.5 text-sm hover:scale-105 hover:shadow-xl active:scale-95 overflow-hidden"
-                style={{
-                  background: theme.getAccentGradient(90),
-                  boxShadow: `0 4px 12px -2px ${theme.accentPrimary}40`
-                }}
-              >
-                {/* Shine effect on hover */}
-                <div className="absolute inset-0 bg-linear-to-r from-transparent via-white/20 to-transparent translate-x-[-200%] group-hover:translate-x-[200%] transition-transform duration-700 ease-out"></div>
+                    <LayoutDashboard className="w-4 h-4 relative z-10" strokeWidth={2.5} />
+                    <span className="relative z-10 font-medium">Dashboard</span>
+                  </button>
+                </>
+              ) : (
+                // Get Started Button for guests
+                <>
+                  <div
+                    className="absolute inset-0 rounded-lg blur-lg transition-opacity duration-700 ease-out"
+                    style={{
+                      background: theme.getAccentGradient(90),
+                      opacity: scrolled ? 0.4 : 0,
+                    }}
+                  ></div>
 
-                <span className="relative z-10">Get Started</span>
-                <Sparkles className="w-3.5 h-3.5 relative z-10 group-hover:rotate-12 transition-transform duration-300" strokeWidth={2.5} />
-              </button>
+                  <button
+                    onClick={() => setIsSignInOpen(true)}
+                    className="group cursor-pointer relative px-5 py-2 rounded-full font-semibold transition-all duration-300 text-white flex items-center gap-2 text-sm hover:scale-105 hover:shadow-xl active:scale-95 overflow-hidden"
+                    style={{
+                      background: theme.getAccentGradient(90),
+                      boxShadow: `0 4px 16px -2px ${theme.accentPrimary}40`
+                    }}
+                  >
+                    {/* Shine effect on hover */}
+                    <div className="absolute inset-0 bg-linear-to-r from-transparent via-white/20 to-transparent translate-x-[-200%] group-hover:translate-x-[200%] transition-transform duration-700 ease-out"></div>
+
+                    <span className="relative z-10 font-medium">Get Started</span>
+                    <Sparkles className="w-4 h-4 relative z-10 group-hover:rotate-12 transition-transform duration-300" strokeWidth={2.5} />
+                  </button>
+                </>
+              )}
             </div>
           </div>
         </div>
@@ -278,8 +323,8 @@ export default function Header() {
                   {/* Glass reflection effect */}
                   <div className="absolute inset-0 bg-linear-to-br from-white/50 via-white/20 to-transparent opacity-0 group-hover:opacity-100 transition-opacity duration-300 rounded-xl pointer-events-none"></div>
 
-                  {/* Text with slight transform */}
-                  <span className="relative z-10 text-gray-800 group-hover:text-gray-900 transition-all duration-300 group-hover:translate-x-1 inline-block">
+                  {/* Text with elegant styling */}
+                  <span className="relative z-10 text-slate-700 group-hover:text-slate-900 transition-all duration-300 group-hover:translate-x-1 inline-block font-medium tracking-wide">
                     {link.label}
                   </span>
 
@@ -294,26 +339,49 @@ export default function Header() {
 
             {/* CTA Button */}
             <div className="pt-4 border-t border-white/30">
-              <button
-                onClick={() => {
-                  setIsMobileMenuOpen(false);
-                  setIsSignInOpen(true);
-                }}
-                className="group relative w-full px-4 py-3 rounded-xl font-bold text-sm text-white transition-all duration-300 hover:scale-[1.02] hover:shadow-2xl active:scale-95 flex items-center justify-center gap-2 overflow-hidden"
-                style={{
-                  background: theme.getAccentGradient(90),
-                  boxShadow: `0 8px 20px -4px ${theme.accentPrimary}40`
-                }}
-              >
-                {/* Animated shine effect on hover */}
-                <div className="absolute inset-0 bg-linear-to-r from-transparent via-white/25 to-transparent translate-x-[-200%] group-hover:translate-x-[200%] transition-transform duration-700 ease-out"></div>
+              {user ? (
+                <button
+                  onClick={() => {
+                    setIsMobileMenuOpen(false);
+                    router.push('/dashboard');
+                  }}
+                  className="group relative w-full px-4 py-3 rounded-full font-semibold text-sm text-white transition-all duration-300 hover:scale-[1.02] hover:shadow-2xl active:scale-95 flex items-center justify-center gap-2 overflow-hidden border border-white/20"
+                  style={{
+                    background: theme.getAccentGradient(90),
+                    boxShadow: `0 8px 20px -4px ${theme.accentPrimary}40`
+                  }}
+                >
+                  {/* Animated shine effect on hover */}
+                  <div className="absolute inset-0 bg-linear-to-r from-transparent via-white/25 to-transparent translate-x-[-200%] group-hover:translate-x-[200%] transition-transform duration-700 ease-out"></div>
 
-                {/* Inner glow */}
-                <div className="absolute inset-0 bg-white/0 group-hover:bg-white/10 transition-colors duration-300 rounded-xl"></div>
+                  {/* Inner glow */}
+                  <div className="absolute inset-0 bg-white/0 group-hover:bg-white/10 transition-colors duration-300 rounded-full"></div>
 
-                <span className="relative z-10">Get Started</span>
-                <Sparkles className="w-4 h-4 relative z-10 group-hover:rotate-12 group-hover:scale-110 transition-transform duration-300" strokeWidth={2.5} />
-              </button>
+                  <LayoutDashboard className="w-4 h-4 relative z-10" strokeWidth={2.5} />
+                  <span className="relative z-10 font-medium">Dashboard</span>
+                </button>
+              ) : (
+                <button
+                  onClick={() => {
+                    setIsMobileMenuOpen(false);
+                    setIsSignInOpen(true);
+                  }}
+                  className="group relative w-full px-4 py-3 rounded-full font-semibold text-sm text-white transition-all duration-300 hover:scale-[1.02] hover:shadow-2xl active:scale-95 flex items-center justify-center gap-2 overflow-hidden"
+                  style={{
+                    background: theme.getAccentGradient(90),
+                    boxShadow: `0 8px 20px -4px ${theme.accentPrimary}40`
+                  }}
+                >
+                  {/* Animated shine effect on hover */}
+                  <div className="absolute inset-0 bg-linear-to-r from-transparent via-white/25 to-transparent translate-x-[-200%] group-hover:translate-x-[200%] transition-transform duration-700 ease-out"></div>
+
+                  {/* Inner glow */}
+                  <div className="absolute inset-0 bg-white/0 group-hover:bg-white/10 transition-colors duration-300 rounded-full"></div>
+
+                  <span className="relative z-10 font-medium">Get Started</span>
+                  <Sparkles className="w-4 h-4 relative z-10 group-hover:rotate-12 group-hover:scale-110 transition-transform duration-300" strokeWidth={2.5} />
+                </button>
+              )}
             </div>
           </div>
         </div>

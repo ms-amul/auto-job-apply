@@ -325,9 +325,10 @@ html {
 }
 
 /* =============================== */
-/* JV Loader Fill Animation        */
+/* JV Loader Animations            */
 /* =============================== */
 
+/* Fill text animation */
 @keyframes fillText {
   0% {
     clip-path: inset(0 100% 0 0);
@@ -342,4 +343,46 @@ html {
 
 .animate-fillText {
   animation: fillText 2s ease-in-out infinite;
+}
+
+/* Shimmer text animation */
+@keyframes shimmerText {
+  0% {
+    background-position: -200% 0;
+  }
+  100% {
+    background-position: 200% 0;
+  }
+}
+
+.animate-shimmer-text {
+  animation: shimmerText 3s linear infinite;
+}
+
+/* Reverse spin animation */
+@keyframes spin-reverse {
+  from {
+    transform: rotate(360deg);
+  }
+  to {
+    transform: rotate(0deg);
+  }
+}
+
+.animate-spin-reverse {
+  animation: spin-reverse 1s linear infinite;
+}
+
+/* Slow pulse animation */
+@keyframes pulse-slow {
+  0%, 100% {
+    opacity: 0.2;
+  }
+  50% {
+    opacity: 0.4;
+  }
+}
+
+.animate-pulse-slow {
+  animation: pulse-slow 3s ease-in-out infinite;
 }

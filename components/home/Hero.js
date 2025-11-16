@@ -1,8 +1,18 @@
+'use client';
+
+import { useRouter } from 'next/navigation';
 import Container from '../Container';
 import { theme } from '../../utils/theme';
 import { Trophy, Rocket, ArrowRight, Play } from 'lucide-react';
 
 export default function Hero() {
+  const router = useRouter();
+  
+  const handleSignupClick = () => {
+    console.log('Button clicked, navigating to /signup');
+    router.push('/signup');
+  };
+  
   return (
     <section className="pb-12 md:pb-16 pt-20 md:pt-24">
       <Container>
@@ -24,9 +34,11 @@ export default function Hero() {
               For <span className="font-medium" style={{ color: theme.accentPrimary }}>job seekers</span>, <span className="font-medium" style={{ color: theme.accentPrimary }}>career changers</span>, and <span className="font-medium" style={{ color: theme.accentPrimary }}>professionals</span> who want to apply to hundreds of jobs effortlessly and land interviews faster.
             </p>
 
-            <div className="flex flex-col sm:flex-row gap-3 justify-center lg:justify-start mb-6 animate-fadeInUp" style={{ animationDuration: '1s', animationDelay: '0.3s' }}>
+            <div className="flex z-10 flex-col sm:flex-row gap-3 justify-center lg:justify-start mb-6 animate-fadeInUp" style={{ animationDuration: '1s', animationDelay: '0.3s' }}>
               <button
-                className="group text-white px-6 py-3 rounded-full text-sm font-semibold transition-all flex items-center justify-center gap-2 shadow-lg hover:shadow-xl hover:scale-105 active:scale-95"
+                type="button"
+                onClick={handleSignupClick}
+                className="group text-white px-6 py-3 rounded-full text-sm font-semibold transition-all flex items-center justify-center gap-2 shadow-lg hover:shadow-xl hover:scale-105 active:scale-95 cursor-pointer"
                 style={{ 
                   background: theme.getAccentGradient(90),
                   boxShadow: `0 15px 30px -8px ${theme.accentPrimary}60`

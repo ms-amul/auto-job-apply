@@ -1,12 +1,14 @@
 'use client';
 
 import { useEffect, useRef, useState } from 'react';
+import { useRouter } from 'next/navigation';
 import Container from '../Container';
 import { ArrowRight, Play, Sparkles, Star, Trophy, Rocket, Send, Mail, Target, PartyPopper, Search, Briefcase, Palette } from 'lucide-react';
 import { useMobile } from '@/hooks/useMobile';
 import { theme } from '../../utils/theme';
 
 export default function HeroParallax() {
+  const router = useRouter();
   const [scrollY, setScrollY] = useState(0);
   const [particles, setParticles] = useState([]);
   const heroRef = useRef(null);
@@ -209,6 +211,8 @@ export default function HeroParallax() {
               }}
             >
               <button 
+                type="button"
+                onClick={() => router.push('/signup')}
                 className="cursor-pointer relative group text-white px-6 py-3 rounded-full text-sm font-semibold flex items-center justify-center gap-2 shadow-lg overflow-hidden hover:shadow-xl transition-shadow"
                 style={{
                   background: theme.getAccentGradient(90),
