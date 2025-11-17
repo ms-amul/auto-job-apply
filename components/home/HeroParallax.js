@@ -445,7 +445,7 @@ export default function HeroParallax() {
       <VideoModal 
         isOpen={isVideoOpen}
         onClose={() => setIsVideoOpen(false)}
-        videoId=""
+        videoId="DWHQl3rTtwo"
         title="JobVeda Demo"
       />
     </section>
