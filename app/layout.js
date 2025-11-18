@@ -1,5 +1,6 @@
 import { Geist, Geist_Mono } from "next/font/google";
 import "./globals.css";
+import { brand } from "@/utils/brand";
 
 const geistSans = Geist({
   variable: "--font-geist-sans",
@@ -12,7 +13,7 @@ const geistMono = Geist_Mono({
 });
 
 export const metadata = {
-  title: "JobVeda - Your Dream Job is One Click Away",
+  title: `${brand.getName()} - Your Dream Job is One Click Away`,
   description: "AI-powered job application assistant that automatically applies to jobs matching your profile. Powered by Nexi.",
 };
 

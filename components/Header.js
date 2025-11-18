@@ -5,6 +5,7 @@ import { Sparkles, Menu, X, LayoutDashboard, User } from 'lucide-react';
 import { useRouter } from 'next/navigation';
 import SignInModal from './auth/SignInModal';
 import { theme } from '../utils/theme';
+import { brand, Logo } from '../utils/brand';
 
 export default function Header() {
   const router = useRouter();
@@ -111,15 +112,13 @@ export default function Header() {
           `}>
             {/* Logo */}
             <div className="flex items-center gap-2 group cursor-pointer">
-              <img src="/logo.png" alt="JobVeda" width={34} height={34} className='rounded-full scale-110' />
+              <Logo size="sm" theme={theme} className="scale-125" />
               <div className="flex flex-col">
                 <span className={`
-                  font-black tracking-tight transition-all duration-700 ease-out
-                  bg-clip-text text-transparent leading-none
+                  tracking-tight transition-all duration-700 ease-out leading-none
                   ${scrolled ? 'text-base' : 'text-lg'}
-                `}
-                  style={{ backgroundImage: theme.getAccentGradient(90) }}>
-                  JobVeda
+                `}>
+                  {brand.getStyledName()}
                 </span>
                 <span className="text-[9px] text-slate-500 font-medium leading-none mt-0.5">
                   Powered by <span className="font-semibold text-slate-700">Nexi</span>

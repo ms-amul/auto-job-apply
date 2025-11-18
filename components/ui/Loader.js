@@ -1,9 +1,9 @@
 /**
  * Loader Component
- * Beautiful animated loader with JV (JobVeda) branding
+ * Beautiful animated loader with brand initials
  * 
  * Features:
- * - Animated JV letters with gradient
+ * - Animated brand initials with gradient
  * - Pulsing glow effect
  * - Rotating ring animation
  * - Smooth fade-in entrance
@@ -13,6 +13,7 @@
 'use client';
 
 import { theme } from '@/utils/theme';
+import { brand } from '@/utils/brand';
 
 export default function Loader({ 
   size = 'md', 
@@ -64,13 +65,13 @@ export default function Loader({
           }}
         />
 
-        {/* JV Logo with enhanced fill animation */}
+        {/* Brand Logo with enhanced fill animation */}
         <div className="relative">
           {/* Background text (outline) */}
           <div 
             className={`${currentSize.logo} font-bold tracking-tight text-slate-200`}
           >
-            JV
+            {brand.logo.initials}
           </div>
           
           {/* Animated fill with gradient */}
@@ -86,7 +87,7 @@ export default function Loader({
                 backgroundClip: 'text',
               }}
             >
-              JV
+              {brand.logo.initials}
             </div>
           </div>
 
@@ -104,7 +105,7 @@ export default function Loader({
                 backgroundSize: '200% 100%',
               }}
             >
-              JV
+              {brand.logo.initials}
             </div>
           </div>
         </div>
@@ -152,7 +153,7 @@ export function InlineLoader({ className = '' }) {
             borderRightColor: 'currentColor',
           }}
         />
-        {/* JV mini */}
+        {/* Brand initials mini */}
         <div 
           className="absolute inset-0 flex items-center justify-center text-[8px] font-bold opacity-60"
           style={{
@@ -162,7 +163,7 @@ export function InlineLoader({ className = '' }) {
             backgroundClip: 'text',
           }}
         >
-          JV
+          {brand.logo.initials}
         </div>
       </div>
     </div>

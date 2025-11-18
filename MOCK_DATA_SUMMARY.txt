@@ -9,7 +9,7 @@
 ━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━
 
 1. data/users.json
-   • Test users: rajgopal@gmail.com (applicant), rajgopal@jobvita.com (recruiter)
+   • Test users: rajgopal@gmail.com (applicant), rajgopal@rangamworks.com (recruiter)
    • Replace with: Prisma User.findUnique()
 
 2. data/jobs.json

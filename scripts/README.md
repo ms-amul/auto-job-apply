@@ -72,6 +72,6 @@ Top 10 Companies by Job Count:
 
 **Jobs not showing in app**
 - Make sure your Next.js app is using the same database
-- Check the database name matches (`jobvita`)
+- Check the database name matches (`rangamworks`)
 - Restart your Next.js dev server after seeding
 

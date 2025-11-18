@@ -5,6 +5,7 @@ import Container from './Container';
 import SignInModal from './auth/SignInModal';
 import { Sparkles, ArrowUpRight, Twitter, Linkedin, Github } from 'lucide-react';
 import { theme } from '@/utils/theme';
+import { brand, Logo } from '@/utils/brand';
 
 export default function Footer() {
   const [isSignInOpen, setIsSignInOpen] = useState(false);
@@ -39,10 +40,10 @@ export default function Footer() {
                   <div className="mt-8">
                     <p className="text-sm text-white/50 mb-2">Contact us at:</p>
                     <a
-                      href="mailto:support@jobveda.com"
+                      href={`mailto:${brand.contact.email}`}
                       className="inline-flex items-center gap-2 text-white text-lg hover:text-white/80 transition-colors group"
                     >
-                      <span>support@jobveda.com</span>
+                      <span>{brand.contact.email}</span>
                       <ArrowUpRight className="w-5 h-5 group-hover:translate-x-0.5 group-hover:-translate-y-0.5 transition-transform" />
                     </a>
                   </div>
@@ -91,9 +92,9 @@ export default function Footer() {
               <div className="flex flex-col items-center md:items-start gap-3">
                 {/* Logo and Copyright */}
                 <div className="flex items-center gap-3">
-                  <img src="/logo.png" alt="JobVeda" width={32} height={32} className="rounded-full" />
+                  <Logo size="sm" theme={theme} />
                   <p className="text-sm text-white/40">
-                    &copy; {new Date().getFullYear()} JobVeda. All rights reserved.
+                    &copy; {new Date().getFullYear()} {brand.getName()}. All rights reserved.
                   </p>
                 </div>
                 

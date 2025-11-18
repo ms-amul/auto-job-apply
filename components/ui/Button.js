@@ -6,6 +6,7 @@
  */
 
 import { theme } from '@/utils/theme';
+import { brand } from '@/utils/brand';
 
 const variants = {
   primary: `text-white btn-shimmer shadow-md hover:shadow-xl`,
@@ -63,7 +64,7 @@ export default function Button({
       <span className="relative z-10 flex items-center justify-center gap-2">
         {loading ? (
           <>
-            {/* JV Loader */}
+            {/* Brand Loader */}
             <div className="relative w-4 h-4">
               <div 
                 className="absolute inset-0 rounded-full border-2 border-transparent animate-spin"
@@ -78,7 +79,7 @@ export default function Button({
                   color: 'currentColor',
                 }}
               >
-                JV
+                {brand.logo.initials}
               </div>
             </div>
             <span>Loading...</span>

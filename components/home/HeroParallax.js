@@ -7,6 +7,7 @@ import VideoModal from '../ui/VideoModal';
 import { ArrowRight, Play, Sparkles, Star, Trophy, Rocket, Send, Mail, Target, PartyPopper, Search, Briefcase, Palette } from 'lucide-react';
 import { useMobile } from '@/hooks/useMobile';
 import { theme } from '../../utils/theme';
+import { brand } from '../../utils/brand';
 
 export default function HeroParallax() {
   const router = useRouter();
@@ -446,7 +447,7 @@ export default function HeroParallax() {
         isOpen={isVideoOpen}
         onClose={() => setIsVideoOpen(false)}
         videoId="DWHQl3rTtwo"
-        title="JobVeda Demo"
+        title={`${brand.getName()} Demo`}
       />
     </section>
   );

@@ -26,6 +26,7 @@ import {
   ChevronRight,
 } from 'lucide-react';
 import { theme } from '@/utils/theme';
+import { brand, Logo } from '@/utils/brand';
 
 export default function CompactSidebar({ isOpen, setIsOpen, user }) {
   const pathname = usePathname();
@@ -98,21 +99,10 @@ export default function CompactSidebar({ isOpen, setIsOpen, user }) {
         <div className="h-20 flex items-center px-5 border-b border-gray-100 relative">          
           {isOpen ? (
             <Link href="/" className="group flex items-center gap-3 transition-all duration-300 hover:scale-105">
-              <div className="relative">
-                <img 
-                  src="/logo.png" 
-                  alt="JobVeda" 
-                  width={40} 
-                  height={40} 
-                  className='rounded-2xl' 
-                />
-                <div className="absolute inset-0 rounded-2xl bg-gradient-to-br from-white/20 to-transparent"></div>
-              </div>
+              <Logo size="md" theme={theme} className="group-hover:scale-105 transition-transform" />
               <div className="flex flex-col">
-                <span className="text-xl font-bold leading-none bg-gradient-to-r bg-clip-text text-transparent" style={{ 
-                  backgroundImage: theme.getAccentGradient(90) 
-                }}>
-                  JobVeda
+                <span className="text-xl leading-none">
+                  {brand.getStyledName()}
                 </span>
                 <span className="text-[10px] text-slate-500 font-medium leading-none mt-1.5">
                   Powered by <span className="font-bold text-slate-700">Nexi</span>
@@ -120,13 +110,7 @@ export default function CompactSidebar({ isOpen, setIsOpen, user }) {
               </div>
             </Link>
           ) : (
-            <div
-              className="w-12 h-12 rounded-2xl flex items-center justify-center shadow-lg relative overflow-hidden group cursor-pointer"
-              style={{ background: theme.getAccentGradient(135) }}
-            >
-              <div className="absolute inset-0 bg-gradient-to-br from-white/20 to-transparent"></div>
-              <span className="text-white font-bold text-lg relative z-10">JV</span>
-            </div>
+            <Logo size="md" theme={theme} className="cursor-pointer group-hover:scale-105 transition-transform" />
           )}
         </div>
 

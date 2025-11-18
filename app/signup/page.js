@@ -2,6 +2,7 @@
 
 import { setCookie } from '@/utils/cookies';
 import { theme } from '@/utils/theme';
+import { brand, Logo } from '@/utils/brand';
 import {
   ArrowRight,
   Lock,
@@ -54,7 +55,7 @@ export default function SignupPage() {
 
       localStorage.setItem('user', JSON.stringify(data.user));
       try {
-        setCookie('jobvita_user_id', data.user.id, 7);
+        setCookie(brand.cookies.userId, data.user.id, 7);
       } catch (err) {
         console.error('Failed to set id cookie', err);
       }
@@ -96,9 +97,11 @@ export default function SignupPage() {
           <div className="space-y-8 order-2 lg:order-1">
             {/* Logo */}
             <div className="flex items-center gap-3">
-              <img src="/logo.png" alt="JobVeda" width={34} height={34} className='rounded-full scale-110' />
+              <Logo size="sm" theme={theme} className="scale-110" />
               <div className="flex flex-col">
-                <span className="text-2xl font-bold text-slate-900 leading-none">JobVeda</span>
+                <span className="text-2xl leading-none">
+                  {brand.getStyledName()}
+                </span>
                 <span className="text-[10px] text-slate-500 font-medium leading-none mt-1">
                   Powered by <span className="font-semibold text-slate-700">Nexi</span>
                 </span>

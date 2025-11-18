@@ -17,6 +17,7 @@ import Input from '@/components/ui/Input';
 import toast from 'react-hot-toast';
 import { theme } from '@/utils/theme';
 import { setCookie } from '@/utils/cookies';
+import { brand } from '@/utils/brand';
 
 export default function SignInModal({ isOpen, onClose }) {
   const router = useRouter();
@@ -79,7 +80,7 @@ export default function SignInModal({ isOpen, onClose }) {
         localStorage.setItem('user', JSON.stringify(data.user));
         // Demo: also store id in a cookie for easy access
         try {
-          setCookie('jobvita_user_id', data.user.id, 7);
+          setCookie(brand.cookies.userId, data.user.id, 7);
         } catch (e) {
           console.error('Failed to set id cookie', e);
         }
