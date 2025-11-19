@@ -101,9 +101,14 @@ export default function CompactSidebar({ isOpen, setIsOpen, user }) {
             <Link href="/" className="group flex items-center gap-3 transition-all duration-300 hover:scale-105">
               <Logo size="md" theme={theme} className="group-hover:scale-105 transition-transform" />
               <div className="flex flex-col">
-                <span className="text-xl leading-none">
-                  {brand.getStyledName()}
-                </span>
+                <img
+                  src="/brand.png"
+                  alt="Brand Logo"
+                  className="transition-all duration-700 ease-out object-contain h-8"
+                  style={{
+                    width: 'auto',
+                  }}
+                />
                 <span className="text-[10px] text-slate-500 font-medium leading-none mt-1.5">
                   Powered by <span className="font-bold text-slate-700">Nexi</span>
                 </span>
