@@ -114,12 +114,18 @@ export default function Header() {
             <div className="flex items-center gap-2 group cursor-pointer">
               <Logo size="sm" theme={theme} className="scale-125" />
               <div className="flex flex-col">
-                <span className={`
-                  tracking-tight transition-all duration-700 ease-out leading-none
-                  ${scrolled ? 'text-base' : 'text-lg'}
-                `}>
-                  {brand.getStyledName()}
-                </span>
+                <img
+                  src="/brand.png"
+                  alt="Brand Logo"
+                  className={`
+                    transition-all duration-700 ease-out
+                    object-contain 
+                    ${scrolled ? 'h-6' : 'h-8'}
+                  `}
+                  style={{
+                    width: 'auto',
+                  }}
+                />
                 <span className="text-[9px] text-slate-500 font-medium leading-none mt-0.5">
                   Powered by <span className="font-semibold text-slate-700">Nexi</span>
                 </span>

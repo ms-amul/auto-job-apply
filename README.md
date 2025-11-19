@@ -2,78 +2,99 @@ This is a [Next.js](https://nextjs.org) project bootstrapped with [`create-next-
 
 ## Database Setup
 
-This project uses PostgreSQL with Supabase. You have **two options**:
+This project uses **MongoDB** (MongoDB Atlas or local MongoDB) for data storage.
 
-### Option 1: Prisma ORM (Recommended)
-Type-safe, great developer experience with autocomplete.
+### Quick Setup
 
-```bash
-# 1. Create .env.local with DATABASE_URL (from Supabase)
-# 2. Install dependencies
-npm install
-
-# 3. Pull existing schema from Supabase
-npx prisma db pull
-
-# 4. Generate Prisma Client
-npx prisma generate
+1. **Create `.env.local` file** in the project root:
+```env
+MONGODB_URI=your-mongodb-connection-string-here
 ```
 
-**Quick test:** http://localhost:3000/api/prisma-test
+2. **Get MongoDB Connection String:**
+   - **MongoDB Atlas (Cloud):**
+     - Go to [MongoDB Atlas](https://www.mongodb.com/cloud/atlas)
+     - Create a cluster (free tier available)
+     - Click "Connect" → "Connect your application"
+     - Copy the connection string
+     - Replace `<password>` with your database password
+     - Example: `mongodb+srv://username:password@cluster0.xxxxx.mongodb.net/?retryWrites=true&w=majority`
+   
+   - **Local MongoDB:**
+     - If running MongoDB locally: `mongodb://localhost:27017`
+     - Database name: `jobvita` (default)
 
-📖 **Full guide:** [PRISMA_SETUP.md](./PRISMA_SETUP.md)
-
-### Option 2: Raw SQL with `pg`
-Maximum flexibility with direct SQL queries.
-
+3. **Install dependencies:**
 ```bash
-# 1. Create .env.local with DATABASE_URL (from Supabase)
-# 2. Install dependencies
 npm install
 ```
 
-**Quick test:** http://localhost:3000/api/db-test
+4. **Seed the database (optional):**
+```bash
+# Seed with 180+ realistic jobs across multiple industries
+node scripts/seed-jobs.js
+```
 
-📖 **Full guide:** [SETUP_DATABASE.md](./SETUP_DATABASE.md)
-
-### Comparison & Migration
-- 📊 [Compare Both Approaches](./COMPARISON_PRISMA_VS_RAW_SQL.md)
-- 🔄 [Hybrid Approach (Use Both)](./lib/db-hybrid.js)
-- ✅ [Setup Complete Guide](./DATABASE_SETUP_COMPLETE.md)
-
-Both approaches are **migration-friendly** - switch databases by just changing `DATABASE_URL`!
-
-## Getting Started
-
-First, run the development server:
-
+5. **Run the development server:**
 ```bash
 npm run dev
-# or
-yarn dev
-# or
-pnpm dev
-# or
-bun dev
 ```
 
 Open [http://localhost:3000](http://localhost:3000) with your browser to see the result.
 
-You can start editing the page by modifying `app/page.js`. The page auto-updates as you edit the file.
+## Database Collections
 
-This project uses [`next/font`](https://nextjs.org/docs/app/building-your-application/optimizing/fonts) to automatically optimize and load [Geist](https://vercel.com/font), a new font family for Vercel.
+The app uses the following MongoDB collections:
+- `users` - User accounts (applicants and recruiters)
+- `jobs` - Job listings
+- `applications` - Job applications
+- `agents` - Auto-apply agent configurations
+
+## Available Scripts
+
+- `npm run dev` - Start development server
+- `npm run build` - Build for production
+- `npm run start` - Start production server
+- `npm run lint` - Run ESLint
+- `node scripts/seed-jobs.js` - Seed database with sample jobs
+
+## Project Structure
+
+- `app/` - Next.js app router (pages and API routes)
+- `components/` - React components
+- `data/` - Mock JSON data (fallback for demo accounts)
+- `lib/mongodb.js` - MongoDB connection client
+- `lib/prisma.js` - Prisma client (for future PostgreSQL migration)
+- `scripts/` - Database seeding scripts
+- `prisma/` - Prisma schema (for future use)
+
+## Features
+
+- ✅ User authentication (sign in/sign up)
+- ✅ Job listings with advanced filtering
+- ✅ Application management
+- ✅ Auto-apply agent system
+- ✅ Dashboard for applicants and recruiters
+- ✅ Profile management
+- ✅ Analytics and statistics
+
+## Migration Notes
+
+This project currently uses MongoDB for temporary storage. The codebase includes:
+- Prisma schema (ready for PostgreSQL migration)
+- Hybrid database utilities in `lib/db-hybrid.js`
+- Both MongoDB and Prisma clients available
+
+See `MOCK_DATA_SUMMARY.txt` for details on migrating from mock data to database.
 
 ## Learn More
 
-To learn more about Next.js, take a look at the following resources:
-
-- [Next.js Documentation](https://nextjs.org/docs) - learn about Next.js features and API.
-- [Learn Next.js](https://nextjs.org/learn) - an interactive Next.js tutorial.
-
-You can check out [the Next.js GitHub repository](https://github.com/vercel/next.js) - your feedback and contributions are welcome!
+- [Next.js Documentation](https://nextjs.org/docs)
+- [MongoDB Documentation](https://docs.mongodb.com/)
+- [Prisma Documentation](https://www.prisma.io/docs)
 
 ## Deploy on Vercel
 
-The easiest way to deploy your Next.js app is to use the [Vercel Platform](https://vercel.com/new?utm_medium=default-template&filter=next.js&utm_source=create-next-app&utm_campaign=create-next-app-readme) from the creators of Next.js.
+The easiest way to deploy your Next.js app is to use the [Vercel Platform](https://vercel.com/new?utm_medium=default-template&filter=next.js&utm_source=create-next-app&utm_campaign=create-next-app-readme).
 
-Check out our [Next.js deployment documentation](https://nextjs.org/docs/app/building-your-application/deploying) for more details.
+Make sure to add your `MONGODB_URI` environment variable in Vercel's project settings.
