@@ -1,16 +1,19 @@
 'use client';
 
-import { useState, useEffect } from 'react';
+import { useState, useEffect, useRef } from 'react';
 import { useRouter } from 'next/navigation';
-import { Search, MapPin, Briefcase, DollarSign, Clock, Building2, Filter, ChevronLeft, ChevronRight, X, SlidersHorizontal } from 'lucide-react';
+import { Search, MapPin, Briefcase, DollarSign, Clock, Building2, Filter, ChevronLeft, ChevronRight, X, SlidersHorizontal, Loader2 } from 'lucide-react';
 import Button from '@/components/ui/Button';
 import Loader from '@/components/ui/Loader';
 import toast from 'react-hot-toast';
+import { theme } from '@/utils/theme';
 
 export default function JobsPage() {
   const [jobs, setJobs] = useState([]);
   const [loading, setLoading] = useState(true);
+  const [searchLoading, setSearchLoading] = useState(false);
   const [searchTerm, setSearchTerm] = useState('');
+  const [debouncedSearchTerm, setDebouncedSearchTerm] = useState('');
   const [locationFilter, setLocationFilter] = useState('');
   const [experienceFilter, setExperienceFilter] = useState('');
   const [remoteFilter, setRemoteFilter] = useState('all');
@@ -19,6 +22,8 @@ export default function JobsPage() {
   const [salaryMinFilter, setSalaryMinFilter] = useState('');
   const [visaSponsorshipFilter, setVisaSponsorshipFilter] = useState('all');
   const [showFilters, setShowFilters] = useState(true);
+  const [isSearchFocused, setIsSearchFocused] = useState(false);
+  const searchInputRef = useRef(null);
   
   // Pagination state
   const [currentPage, setCurrentPage] = useState(1);
@@ -37,25 +42,38 @@ export default function JobsPage() {
     'Education & EdTech',
   ];
 
-  // Debounce search term
+  // Debounce search term - smoother with no flashing
   useEffect(() => {
     const timer = setTimeout(() => {
-      if (currentPage !== 1) {
-        setCurrentPage(1);
-      } else {
-        loadJobs();
-      }
-    }, 500);
+      setDebouncedSearchTerm(searchTerm);
+    }, 600);
 
     return () => clearTimeout(timer);
-  }, [searchTerm, locationFilter, salaryMinFilter]);
+  }, [searchTerm]);
 
+  // Load jobs when debounced search term changes
+  useEffect(() => {
+    if (currentPage !== 1) {
+      setCurrentPage(1);
+    } else {
+      loadJobs();
+    }
+  }, [debouncedSearchTerm]);
+
+  // Load jobs when other filters change
   useEffect(() => {
     loadJobs();
-  }, [currentPage, itemsPerPage, experienceFilter, remoteFilter, categoryFilter, employmentTypeFilter, visaSponsorshipFilter]);
+  }, [currentPage, itemsPerPage, experienceFilter, remoteFilter, categoryFilter, employmentTypeFilter, visaSponsorshipFilter, locationFilter, salaryMinFilter]);
 
   const loadJobs = async () => {
-    setLoading(true);
+    // Only show full loading on initial load or page change
+    const isInitialLoad = jobs.length === 0 && currentPage === 1;
+    if (isInitialLoad) {
+      setLoading(true);
+    } else {
+      setSearchLoading(true);
+    }
+    
     try {
       // Build query parameters
       const params = new URLSearchParams({
@@ -63,7 +81,7 @@ export default function JobsPage() {
         skip: ((currentPage - 1) * itemsPerPage).toString(),
       });
 
-      if (searchTerm) params.append('search', searchTerm);
+      if (debouncedSearchTerm) params.append('search', debouncedSearchTerm);
       if (locationFilter) params.append('location', locationFilter);
       if (experienceFilter) params.append('experienceLevel', experienceFilter);
       if (remoteFilter !== 'all') params.append('remote', remoteFilter);
@@ -87,6 +105,7 @@ export default function JobsPage() {
       toast.error('Failed to load jobs');
     } finally {
       setLoading(false);
+      setSearchLoading(false);
     }
   };
 
@@ -113,10 +132,12 @@ export default function JobsPage() {
     visaSponsorshipFilter !== 'all' && visaSponsorshipFilter,
   ].filter(Boolean).length;
 
-  // Reset to page 1 when filters change
+  // Reset to page 1 when filters change - smooth transition
   const handleFilterChange = (setter) => (value) => {
     setter(value);
-    setCurrentPage(1);
+    if (currentPage !== 1) {
+      setCurrentPage(1);
+    }
   };
 
   const handlePageChange = (newPage) => {
@@ -130,14 +151,6 @@ export default function JobsPage() {
     setItemsPerPage(newItemsPerPage);
     setCurrentPage(1);
   };
-
-  if (loading && currentPage === 1) {
-    return (
-      <div className="min-h-[60vh] flex items-center justify-center">
-        <Loader size="lg" text="Loading jobs..." />
-      </div>
-    );
-  }
 
   const startIndex = (currentPage - 1) * itemsPerPage + 1;
   const endIndex = Math.min(currentPage * itemsPerPage, totalJobs);
@@ -172,32 +185,91 @@ export default function JobsPage() {
         </button>
       </div>
 
-      {/* Search Bar - Always Visible - Premium Style */}
-      <div className="relative group">
-        <div className="absolute inset-0 bg-gradient-to-r from-blue-500 to-purple-500 rounded-2xl opacity-0 group-focus-within:opacity-100 blur-xl transition-opacity duration-500"></div>
-        <div className="relative">
-          <Search className="absolute left-4 top-1/2 -translate-y-1/2 w-5 h-5 text-slate-400 z-10" />
-          <input
-            type="text"
-            placeholder="Search by title, company, or keywords..."
-            value={searchTerm}
-            onChange={(e) => handleFilterChange(setSearchTerm)(e.target.value)}
-            className="w-full pl-12 pr-4 py-3.5 md:py-4 bg-white border border-gray-200 rounded-2xl focus:outline-none focus:ring-2 focus:ring-blue-500 focus:border-blue-500 shadow-lg hover:shadow-xl transition-all duration-300 text-sm md:text-base relative z-10"
-            style={{ boxShadow: '0 4px 20px rgba(0, 0, 0, 0.06)' }}
-          />
+      {/* Premium Search Bar */}
+      <div className="relative">
+        <div 
+          className={`relative bg-white rounded-2xl border transition-all duration-200 overflow-hidden ${
+            isSearchFocused 
+              ? 'border-blue-500/50 shadow-md' 
+              : 'border-gray-200/80 shadow-sm hover:shadow-md'
+          }`}
+          style={{
+            boxShadow: isSearchFocused 
+              ? `0 4px 16px ${theme.accentPrimary}15` 
+              : '0 2px 8px rgba(0, 0, 0, 0.04)',
+          }}
+        >
+          {/* Subtle focus glow */}
+          {isSearchFocused && (
+            <div 
+              className="absolute inset-0 pointer-events-none transition-opacity duration-200"
+              style={{
+                background: `linear-gradient(135deg, ${theme.accentPrimary}05, ${theme.accentSecondary}05)`,
+              }}
+            />
+          )}
+          
+          <div className="relative flex items-center">
+            <Search 
+              className={`absolute left-4 w-5 h-5 transition-colors duration-200 z-10 ${
+                searchTerm || isSearchFocused ? 'text-blue-600' : 'text-slate-400'
+              }`} 
+            />
+            <input
+              ref={searchInputRef}
+              type="text"
+              placeholder="Search by title, company, or keywords..."
+              value={searchTerm}
+              onChange={(e) => setSearchTerm(e.target.value)}
+              onFocus={() => setIsSearchFocused(true)}
+              onBlur={() => setIsSearchFocused(false)}
+              className="w-full pl-12 pr-12 py-4 bg-transparent border-0 focus:outline-none text-sm md:text-base text-slate-900 placeholder:text-slate-400 relative z-10"
+            />
+            {/* Loading indicator */}
+            {searchLoading && (
+              <div className="absolute right-4 z-10">
+                <Loader2 className="w-5 h-5 text-blue-600 animate-spin" />
+              </div>
+            )}
+            {/* Clear button */}
+            {searchTerm && !searchLoading && (
+              <button
+                onClick={() => setSearchTerm('')}
+                className="absolute right-4 z-10 w-6 h-6 rounded-full bg-gray-100 hover:bg-gray-200 flex items-center justify-center transition-colors duration-200 group"
+              >
+                <X className="w-3.5 h-3.5 text-slate-500 group-hover:text-slate-700" />
+              </button>
+            )}
+          </div>
+          
+          {/* Bottom border accent on focus */}
+          {isSearchFocused && (
+            <div 
+              className="absolute bottom-0 left-0 right-0 h-0.5 transition-opacity duration-200"
+              style={{
+                background: theme.getAccentGradient(90),
+              }}
+            />
+          )}
         </div>
       </div>
 
       {/* Filters - Collapsible - Premium */}
       {showFilters && (
         <div 
-          className="bg-white border border-gray-100 rounded-2xl p-2 md:p-6 relative overflow-hidden"
+          className="bg-white border border-gray-100/80 rounded-xl p-4 md:p-6 relative overflow-hidden transition-all duration-200"
           style={{ 
-            boxShadow: '0 8px 32px rgba(0, 0, 0, 0.08)',
+            boxShadow: '0 2px 12px rgba(0, 0, 0, 0.04)',
           }}
         >
-          {/* Subtle gradient overlay */}
-          <div className="absolute top-0 left-0 right-0 h-1 bg-gradient-to-r from-blue-500 via-purple-500 to-pink-500"></div>
+          {/* Subtle accent border */}
+          <div 
+            className="absolute top-0 left-0 right-0 h-0.5"
+            style={{
+              background: theme.getAccentGradient(90),
+              opacity: 0.3
+            }}
+          />
           
           <div className="space-y-5">
             {/* Category Pills - Enhanced */}
@@ -213,14 +285,15 @@ export default function JobsPage() {
                     <button
                       key={cat}
                       onClick={() => handleFilterChange(setCategoryFilter)(cat === 'All Categories' ? '' : cat)}
-                      className={`px-3 md:px-4 py-2 rounded-full text-xs md:text-sm font-medium transition-all duration-300 transform hover:scale-105 active:scale-95 ${
+                      className={`px-3 md:px-4 py-2 rounded-full text-xs md:text-sm font-medium transition-all duration-200 ${
                         isActive
-                          ? 'bg-gradient-to-r from-blue-600 to-blue-500 text-white shadow-lg'
+                          ? 'text-white shadow-md'
                           : 'bg-gray-50 text-slate-700 hover:bg-gray-100 border border-gray-200 hover:border-gray-300'
                       }`}
-                      style={{
-                        boxShadow: isActive ? '0 4px 20px rgba(59, 130, 246, 0.4)' : undefined,
-                      }}
+                      style={isActive ? {
+                        background: theme.getAccentGradient(135),
+                        boxShadow: `0 2px 8px ${theme.accentPrimary}30`
+                      } : {}}
                     >
                       {cat}
                     </button>
@@ -346,17 +419,23 @@ export default function JobsPage() {
       )}
 
       {/* Results Count and Items Per Page - Premium */}
-      <div className="flex flex-col sm:flex-row items-start sm:items-center justify-between gap-3 bg-gradient-to-r from-gray-50 to-white px-4 py-3 rounded-xl border border-gray-100">
+      <div className="flex flex-col sm:flex-row items-start sm:items-center justify-between gap-3 bg-white px-4 py-3 rounded-xl border border-gray-100/80">
         <div className="text-xs md:text-sm text-slate-600 font-medium">
-          {loading ? (
+          {loading && jobs.length === 0 ? (
             <span className="flex items-center gap-2">
-              <div className="w-2 h-2 bg-blue-500 rounded-full animate-pulse"></div>
-              Loading...
+              <Loader2 className="w-4 h-4 text-blue-600 animate-spin" />
+              <span>Loading jobs...</span>
             </span>
           ) : (
             <>
               Showing <span className="font-bold text-slate-900">{startIndex}-{endIndex}</span> of{' '}
-              <span className="font-bold text-blue-600">{totalJobs}</span> jobs
+              <span className="font-bold" style={{ color: theme.accentPrimary }}>{totalJobs}</span> jobs
+              {searchLoading && jobs.length > 0 && (
+                <span className="ml-2 flex items-center gap-1.5 text-blue-600">
+                  <Loader2 className="w-3.5 h-3.5 animate-spin" />
+                  <span className="text-xs">Updating...</span>
+                </span>
+              )}
             </>
           )}
         </div>
@@ -375,127 +454,139 @@ export default function JobsPage() {
         </div>
       </div>
 
-      {/* Jobs List */}
-      {loading ? (
-        <div className="flex items-center justify-center py-12">
-          <Loader size="md" text="Loading jobs..." />
-        </div>
-      ) : (
-        <>
+      {/* Jobs List - Always visible, loading only affects content */}
+      <div className="relative">
+        {/* Subtle loading overlay when searching with existing results */}
+        {searchLoading && jobs.length > 0 && (
+          <div className="absolute inset-0 bg-white/60 backdrop-blur-sm z-10 flex items-center justify-center rounded-xl pointer-events-none">
+            <div className="flex items-center gap-2 px-4 py-2 bg-white rounded-lg shadow-md border border-gray-200">
+              <Loader2 className="w-4 h-4 text-blue-600 animate-spin" />
+              <span className="text-sm text-slate-700 font-medium">Updating results...</span>
+            </div>
+          </div>
+        )}
+        
+        {loading && jobs.length === 0 ? (
+          <div className="flex items-center justify-center py-16 bg-white rounded-xl border border-gray-100">
+            <Loader size="md" text="Loading jobs..." />
+          </div>
+        ) : (
           <div className="space-y-4">
             {jobs.map((job) => (
               <JobCard key={job._id} job={job} />
             ))}
 
-            {jobs.length === 0 && (
-              <div className="text-center py-12">
-                <p className="text-slate-600">No jobs found matching your criteria</p>
+            {jobs.length === 0 && !loading && (
+              <div className="text-center py-16 bg-white rounded-xl border border-gray-100">
+                <p className="text-slate-600 font-medium">No jobs found matching your criteria</p>
+                <p className="text-sm text-slate-400 mt-2">Try adjusting your filters</p>
               </div>
             )}
           </div>
+        )}
+      </div>
 
-          {/* Pagination Controls - Premium */}
-          {totalPages > 1 && (
-            <div 
-              className="mt-6 md:mt-8 bg-white rounded-2xl border border-gray-100 p-2 md:p-6"
-              style={{ boxShadow: '0 4px 20px rgba(0, 0, 0, 0.06)' }}
+      {/* Pagination Controls - Premium */}
+      {totalPages > 1 && (
+        <div 
+          className="mt-6 md:mt-8 bg-white rounded-2xl border border-gray-100 p-2 md:p-6"
+          style={{ boxShadow: '0 4px 20px rgba(0, 0, 0, 0.06)' }}
+        >
+          <div className="flex flex-col md:flex-row items-center justify-between gap-4">
+            {/* Previous Button */}
+            <button
+              onClick={() => handlePageChange(currentPage - 1)}
+              disabled={currentPage === 1}
+              className={`flex items-center gap-2 px-4 md:px-6 py-2.5 md:py-3 rounded-xl font-semibold text-sm transition-all duration-300 ${
+                currentPage === 1
+                  ? 'bg-gray-100 text-gray-400 cursor-not-allowed'
+                  : 'bg-gradient-to-r from-gray-50 to-gray-100 hover:from-gray-100 hover:to-gray-200 text-slate-700 hover:shadow-md transform hover:scale-105 active:scale-95'
+              }`}
             >
-              <div className="flex flex-col md:flex-row items-center justify-between gap-4">
-                {/* Previous Button */}
-                <button
-                  onClick={() => handlePageChange(currentPage - 1)}
-                  disabled={currentPage === 1}
-                  className={`flex items-center gap-2 px-4 md:px-6 py-2.5 md:py-3 rounded-xl font-semibold text-sm transition-all duration-300 ${
-                    currentPage === 1
-                      ? 'bg-gray-100 text-gray-400 cursor-not-allowed'
-                      : 'bg-gradient-to-r from-gray-50 to-gray-100 hover:from-gray-100 hover:to-gray-200 text-slate-700 hover:shadow-md transform hover:scale-105 active:scale-95'
-                  }`}
-                >
-                  <ChevronLeft className="w-4 h-4" />
-                  <span className="hidden sm:inline">Previous</span>
-                </button>
+              <ChevronLeft className="w-4 h-4" />
+              <span className="hidden sm:inline">Previous</span>
+            </button>
 
-                {/* Page Numbers */}
-                <div className="flex items-center gap-1 md:gap-2 flex-wrap justify-center">
-                  {/* First page */}
-                  {currentPage > 3 && (
-                    <>
-                      <button
-                        onClick={() => handlePageChange(1)}
-                        className="w-9 h-9 md:w-10 md:h-10 flex items-center justify-center rounded-xl text-sm font-semibold text-slate-700 hover:bg-gray-100 transition-all duration-300 hover:scale-110"
-                      >
-                        1
-                      </button>
-                      {currentPage > 4 && (
-                        <span className="text-slate-400 px-1">...</span>
-                      )}
-                    </>
+            {/* Page Numbers */}
+            <div className="flex items-center gap-1 md:gap-2 flex-wrap justify-center">
+              {/* First page */}
+              {currentPage > 3 && (
+                <>
+                  <button
+                    onClick={() => handlePageChange(1)}
+                    className="w-9 h-9 md:w-10 md:h-10 flex items-center justify-center rounded-xl text-sm font-semibold text-slate-700 hover:bg-gray-100 transition-all duration-300 hover:scale-110"
+                  >
+                    1
+                  </button>
+                  {currentPage > 4 && (
+                    <span className="text-slate-400 px-1">...</span>
                   )}
+                </>
+              )}
 
-                  {/* Page numbers around current page */}
-                  {Array.from({ length: totalPages }, (_, i) => i + 1)
-                    .filter(page => {
-                      return page === currentPage ||
-                             page === currentPage - 1 ||
-                             page === currentPage - 2 ||
-                             page === currentPage + 1 ||
-                             page === currentPage + 2;
-                    })
-                    .map((page) => (
-                      <button
-                        key={page}
-                        onClick={() => handlePageChange(page)}
-                        className={`w-9 h-9 md:w-10 md:h-10 flex items-center justify-center rounded-xl text-sm font-semibold transition-all duration-300 ${
-                          currentPage === page
-                            ? 'bg-gradient-to-r from-blue-600 to-blue-500 text-white shadow-lg transform scale-110'
-                            : 'text-slate-700 hover:bg-gray-100 hover:scale-110'
-                        }`}
-                        style={{
-                          boxShadow: currentPage === page ? '0 4px 15px rgba(59, 130, 246, 0.4)' : undefined,
-                        }}
-                      >
-                        {page}
-                      </button>
-                    ))}
+              {/* Page numbers around current page */}
+              {Array.from({ length: totalPages }, (_, i) => i + 1)
+                .filter(page => {
+                  return page === currentPage ||
+                         page === currentPage - 1 ||
+                         page === currentPage - 2 ||
+                         page === currentPage + 1 ||
+                         page === currentPage + 2;
+                })
+                .map((page) => (
+                  <button
+                    key={page}
+                    onClick={() => handlePageChange(page)}
+                    className={`w-9 h-9 md:w-10 md:h-10 flex items-center justify-center rounded-lg text-sm font-semibold transition-all duration-200 ${
+                      currentPage === page
+                        ? 'text-white shadow-md'
+                        : 'text-slate-700 hover:bg-gray-100'
+                    }`}
+                    style={currentPage === page ? {
+                      background: theme.getAccentGradient(135),
+                      boxShadow: `0 2px 8px ${theme.accentPrimary}30`
+                    } : {}}
+                  >
+                    {page}
+                  </button>
+                ))}
 
-                  {/* Last page */}
-                  {currentPage < totalPages - 2 && (
-                    <>
-                      {currentPage < totalPages - 3 && (
-                        <span className="text-slate-400 px-1">...</span>
-                      )}
-                      <button
-                        onClick={() => handlePageChange(totalPages)}
-                        className="w-9 h-9 md:w-10 md:h-10 flex items-center justify-center rounded-xl text-sm font-semibold text-slate-700 hover:bg-gray-100 transition-all duration-300 hover:scale-110"
-                      >
-                        {totalPages}
-                      </button>
-                    </>
+              {/* Last page */}
+              {currentPage < totalPages - 2 && (
+                <>
+                  {currentPage < totalPages - 3 && (
+                    <span className="text-slate-400 px-1">...</span>
                   )}
-                </div>
-
-                {/* Next Button */}
-                <button
-                  onClick={() => handlePageChange(currentPage + 1)}
-                  disabled={currentPage === totalPages}
-                  className={`flex items-center gap-2 px-4 md:px-6 py-2.5 md:py-3 rounded-xl font-semibold text-sm transition-all duration-300 ${
-                    currentPage === totalPages
-                      ? 'bg-gray-100 text-gray-400 cursor-not-allowed'
-                      : 'bg-gradient-to-r from-gray-50 to-gray-100 hover:from-gray-100 hover:to-gray-200 text-slate-700 hover:shadow-md transform hover:scale-105 active:scale-95'
-                  }`}
-                >
-                  <span className="hidden sm:inline">Next</span>
-                  <ChevronRight className="w-4 h-4" />
-                </button>
-              </div>
-
-              <div className="text-center mt-4 text-xs md:text-sm text-slate-600 font-medium">
-                Page <span className="font-bold text-slate-900">{currentPage}</span> of{' '}
-                <span className="font-bold text-blue-600">{totalPages}</span>
-              </div>
+                  <button
+                    onClick={() => handlePageChange(totalPages)}
+                    className="w-9 h-9 md:w-10 md:h-10 flex items-center justify-center rounded-xl text-sm font-semibold text-slate-700 hover:bg-gray-100 transition-all duration-300 hover:scale-110"
+                  >
+                    {totalPages}
+                  </button>
+                </>
+              )}
             </div>
-          )}
-        </>
+
+            {/* Next Button */}
+            <button
+              onClick={() => handlePageChange(currentPage + 1)}
+              disabled={currentPage === totalPages}
+              className={`flex items-center gap-2 px-4 md:px-6 py-2.5 md:py-3 rounded-xl font-semibold text-sm transition-all duration-300 ${
+                currentPage === totalPages
+                  ? 'bg-gray-100 text-gray-400 cursor-not-allowed'
+                  : 'bg-gradient-to-r from-gray-50 to-gray-100 hover:from-gray-100 hover:to-gray-200 text-slate-700 hover:shadow-md transform hover:scale-105 active:scale-95'
+              }`}
+            >
+              <span className="hidden sm:inline">Next</span>
+              <ChevronRight className="w-4 h-4" />
+            </button>
+          </div>
+
+          <div className="text-center mt-4 text-xs md:text-sm text-slate-600 font-medium">
+            Page <span className="font-bold text-slate-900">{currentPage}</span> of{' '}
+            <span className="font-bold text-blue-600">{totalPages}</span>
+          </div>
+        </div>
       )}
     </div>
   );
@@ -532,22 +623,27 @@ function JobCard({ job }) {
 
   return (
     <div 
-      className="group relative cursor-pointer bg-white rounded-2xl border border-gray-200 hover:border-gray-300 transition-all duration-300 overflow-hidden"
+      className="group relative cursor-pointer bg-white rounded-xl border border-gray-200/80 hover:border-gray-300 transition-all duration-200 overflow-hidden"
       onClick={() => router.push(`/dashboard/jobs/${job._id}`)}
       style={{
-        boxShadow: '0 2px 8px rgba(0, 0, 0, 0.04)',
+        boxShadow: '0 1px 3px rgba(0, 0, 0, 0.05)',
       }}
       onMouseEnter={(e) => {
-        e.currentTarget.style.boxShadow = '0 12px 40px rgba(0, 0, 0, 0.12)';
-        e.currentTarget.style.transform = 'translateY(-4px)';
+        e.currentTarget.style.boxShadow = '0 4px 16px rgba(0, 0, 0, 0.08)';
+        e.currentTarget.style.borderColor = 'rgba(59, 130, 246, 0.3)';
       }}
       onMouseLeave={(e) => {
-        e.currentTarget.style.boxShadow = '0 2px 8px rgba(0, 0, 0, 0.04)';
-        e.currentTarget.style.transform = 'translateY(0)';
+        e.currentTarget.style.boxShadow = '0 1px 3px rgba(0, 0, 0, 0.05)';
+        e.currentTarget.style.borderColor = 'rgba(226, 232, 240, 0.8)';
       }}
     >
-      {/* Subtle gradient glow on top */}
-      <div className="absolute top-0 left-0 right-0 h-[2px] bg-gradient-to-r from-blue-500 via-purple-500 to-pink-500 opacity-0 group-hover:opacity-100 transition-opacity duration-300"></div>
+      {/* Subtle accent border on hover */}
+      <div 
+        className="absolute top-0 left-0 right-0 h-0.5 opacity-0 group-hover:opacity-100 transition-opacity duration-200"
+        style={{
+          background: theme.getAccentGradient(90),
+        }}
+      />
       
       <div className="p-2 md:p-6">
         <div className="flex gap-4 md:gap-6">

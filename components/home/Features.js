@@ -1,12 +1,18 @@
 'use client';
 
+import { useState, useEffect, useRef } from 'react';
 import Container from '../Container';
-import { Zap, Bot, Target, Sparkles, Rocket, TrendingUp, Clock, Mail, BarChart3, Shield, RefreshCw, Bell } from 'lucide-react';
+import { Zap, Bot, Target, Sparkles, Rocket, TrendingUp, Clock, Mail, BarChart3, Shield, RefreshCw, Bell, ChevronLeft, ChevronRight } from 'lucide-react';
 import { useMobile } from '@/hooks/useMobile';
 import { theme } from '../../utils/theme';
 
 export default function Features() {
   const { isMobile, isReducedMotion } = useMobile();
+  const [currentIndex, setCurrentIndex] = useState(0);
+  const [isAutoPlaying, setIsAutoPlaying] = useState(true);
+  const carouselRef = useRef(null);
+  const touchStartX = useRef(0);
+  const touchEndX = useRef(0);
   const features = [
     {
       icon: Zap,
@@ -53,109 +59,140 @@ export default function Features() {
       title: 'Secure & Private',
       description: 'Your data is encrypted and never shared. Complete control over your job search',
     },
-    {
-      icon: Bell,
-      title: 'Smart Reminders',
-      description: 'Never miss a follow-up or interview with intelligent notification system',
-    },
   ];
 
-  const FeatureCard = ({ feature, keyPrefix }) => {
+  // Calculate items per view based on screen size
+  const getItemsPerView = () => {
+    if (isMobile) return 1;
+    if (typeof window !== 'undefined') {
+      if (window.innerWidth >= 1280) return 3; // xl
+      if (window.innerWidth >= 1024) return 3; // lg
+      if (window.innerWidth >= 768) return 2; // md
+    }
+    return 2;
+  };
+
+  const itemsPerView = getItemsPerView();
+  const totalSlides = Math.ceil(features.length / itemsPerView);
+
+  // Auto-play carousel
+  useEffect(() => {
+    if (!isAutoPlaying || isMobile || isReducedMotion) return;
+
+    const interval = setInterval(() => {
+      setCurrentIndex((prev) => (prev + 1) % totalSlides);
+    }, 5000);
+
+    return () => clearInterval(interval);
+  }, [isAutoPlaying, isMobile, isReducedMotion, totalSlides]);
+
+  const goToSlide = (index) => {
+    setCurrentIndex(index);
+    setIsAutoPlaying(false);
+    setTimeout(() => setIsAutoPlaying(true), 3000);
+  };
+
+  const goToPrevious = () => {
+    goToSlide((currentIndex - 1 + totalSlides) % totalSlides);
+  };
+
+  const goToNext = () => {
+    goToSlide((currentIndex + 1) % totalSlides);
+  };
+
+  // Touch handlers for mobile swipe
+  const handleTouchStart = (e) => {
+    touchStartX.current = e.touches[0].clientX;
+  };
+
+  const handleTouchMove = (e) => {
+    touchEndX.current = e.touches[0].clientX;
+  };
+
+  const handleTouchEnd = () => {
+    if (!touchStartX.current || !touchEndX.current) return;
+
+    const distance = touchStartX.current - touchEndX.current;
+    const minSwipeDistance = 50;
+
+    if (distance > minSwipeDistance) {
+      goToNext();
+    } else if (distance < -minSwipeDistance) {
+      goToPrevious();
+    }
+
+    touchStartX.current = 0;
+    touchEndX.current = 0;
+  };
+
+  const FeatureCard = ({ feature, index }) => {
     const Icon = feature.icon;
 
     return (
       <div
-        key={keyPrefix}
-        className={`group relative shrink-0 ${isMobile ? 'w-[280px]' : 'w-80 md:w-[360px]'}`}
+        key={index}
+        className="group relative h-full"
       >
         <div className={`
-          relative h-full bg-white/5 backdrop-blur-2xl rounded-xl ${isMobile ? 'p-4' : 'p-5 md:p-6'}
+          relative h-full bg-white/5 backdrop-blur-2xl rounded-2xl ${isMobile ? 'p-5' : 'p-6 md:p-7'}
           border border-white/10
-          shadow-lg
-          transition-all duration-700 ease-out
-          transform ${isMobile ? '' : 'hover:-translate-y-1 hover:border-white/20'}
+          transition-all duration-500 ease-out
+          transform ${isMobile ? '' : 'hover:border-white/20'}
           overflow-hidden
         `}
           style={{
-            boxShadow: '0 15px 30px -8px rgba(0, 0, 0, 0.25), inset 0 1px 0 0 rgba(255, 255, 255, 0.1)',
+            boxShadow: '0 20px 40px -12px rgba(0, 0, 0, 0.3), inset 0 1px 0 0 rgba(255, 255, 255, 0.1)',
           }}
         >
-          {/* Premium glass reflection with multiple layers */}
-          <div className="absolute inset-0 bg-linear-to-br from-white/10 via-transparent to-transparent opacity-60 rounded-2xl"></div>
+          {/* Premium glass reflection */}
+          <div className="absolute inset-0 bg-linear-to-br from-white/10 via-transparent to-transparent opacity-50 rounded-2xl"></div>
 
-          {/* Glass shine top edge */}
+          {/* Top glass shine */}
           <div className="absolute top-0 left-0 right-0 h-px bg-linear-to-r from-transparent via-white/30 to-transparent"></div>
-          <div className={`absolute top-0 left-1/4 right-1/4 ${isMobile ? 'h-12' : 'h-16'} bg-linear-to-b from-white/10 to-transparent blur-md`}></div>
 
-          {/* Animated gradient background */}
-          <div className="absolute inset-0 opacity-0 group-hover:opacity-[0.15] transition-opacity duration-700 rounded-2xl"
+          {/* Hover gradient overlay */}
+          <div className="absolute inset-0 opacity-0 group-hover:opacity-10 transition-opacity duration-500 rounded-2xl"
             style={{ background: theme.getAccentGradient(135) }}>
           </div>
 
-          {/* Enhanced shimmer effect */}
-          {!isMobile && (
-            <div className="absolute inset-0 opacity-0 group-hover:opacity-100 transition-opacity duration-1000 rounded-2xl overflow-hidden">
-              <div className="absolute inset-0 bg-linear-to-r from-transparent via-white/20 to-transparent -translate-x-full group-hover:translate-x-full transition-transform duration-1500"></div>
-            </div>
-          )}
-
           {/* Content */}
           <div className="relative z-10">
-            {/* Premium glassmorphic icon container */}
-            <div className={`relative ${isMobile ? 'w-12 h-12 mb-4' : 'w-14 h-14 md:w-16 md:h-16 mb-5'}`}>
-              {/* Icon glow backdrop */}
-              <div className="absolute inset-0 rounded-xl blur-lg opacity-40 transition-all duration-700"
+            {/* Icon container */}
+            <div className={`relative ${isMobile ? 'w-14 h-14 mb-5' : 'w-16 h-16 mb-6'}`}>
+              <div className="absolute inset-0 rounded-xl blur-xl opacity-30 transition-all duration-500"
                 style={{ background: theme.getAccentGradient(135) }}
               ></div>
 
-              {/* Glass icon box */}
               <div className={`
                 relative w-full h-full
                 rounded-xl
                 flex items-center justify-center
-                transform ${isMobile ? '' : 'group-hover:scale-105 group-hover:rotate-3'}
-                transition-all duration-700
+                transform ${isMobile ? '' : 'group-hover:scale-110'}
+                transition-all duration-500
                 overflow-hidden
               `}
                 style={{
                   background: theme.getAccentGradient(135),
-                  boxShadow: `0 8px 20px -4px ${theme.accentPrimary}60, inset 0 1px 0 0 rgba(255, 255, 255, 0.3)`,
+                  boxShadow: `0 10px 25px -5px ${theme.accentPrimary}50, inset 0 1px 0 0 rgba(255, 255, 255, 0.3)`,
                 }}
               >
-                {/* Glass shine overlay */}
-                <div className="absolute inset-0 bg-linear-to-br from-white/30 via-transparent to-transparent rounded-2xl"></div>
-                <div className="absolute top-0 left-0 right-0 h-1/2 bg-linear-to-b from-white/20 to-transparent rounded-t-2xl"></div>
-
-                <Icon className={`relative z-10 text-white drop-shadow-lg ${isMobile ? 'w-6 h-6' : 'w-7 h-7 md:w-8 md:h-8'}`} strokeWidth={2.5} />
+                <div className="absolute inset-0 bg-linear-to-br from-white/30 via-transparent to-transparent rounded-xl"></div>
+                <Icon className={`relative z-10 text-white drop-shadow-lg ${isMobile ? 'w-7 h-7' : 'w-8 h-8'}`} strokeWidth={2.5} />
               </div>
             </div>
 
-            <h3 className={`${isMobile ? 'text-base mb-2' : 'text-lg md:text-xl mb-2.5'} font-black text-white transition-all duration-500 tracking-tight`}>
+            <h3 className={`${isMobile ? 'text-lg mb-3' : 'text-xl md:text-2xl mb-3'} font-black text-white tracking-tight`}>
               {feature.title}
             </h3>
 
-            <p className={`text-gray-300 ${isMobile ? 'text-xs' : 'text-sm md:text-base'} leading-relaxed`}>
+            <p className={`text-gray-300 ${isMobile ? 'text-sm' : 'text-base'} leading-relaxed`}>
               {feature.description}
             </p>
           </div>
 
-          {/* Subtle corner accent glows */}
-          {!isMobile && (
-            <>
-              <div className="absolute -top-12 -right-12 w-24 h-24 rounded-full opacity-0 group-hover:opacity-20 transition-all duration-700 blur-2xl"
-                style={{ background: theme.getAccentGradient(135) }}>
-              </div>
-
-              <div className="absolute -bottom-12 -left-12 w-24 h-24 rounded-full opacity-0 group-hover:opacity-15 transition-all duration-700 blur-2xl"
-                style={{ background: theme.getAccentGradient(45) }}>
-              </div>
-            </>
-          )}
-
-          {/* Subtle border highlight */}
-          <div className="absolute inset-0 rounded-2xl opacity-0 group-hover:opacity-100 transition-opacity duration-700 pointer-events-none">
-            <div className="absolute top-0 left-0 right-0 h-px bg-linear-to-r from-transparent via-sky-400/60 to-transparent"></div>
-            <div className="absolute bottom-0 left-0 right-0 h-px bg-linear-to-r from-transparent via-cyan-400/40 to-transparent"></div>
+          {/* Bottom accent line */}
+          <div className="absolute bottom-0 left-0 right-0 h-0.5 rounded-full opacity-0 group-hover:opacity-60 transition-opacity duration-500"
+            style={{ background: theme.getAccentGradient(90) }}>
           </div>
         </div>
       </div>
@@ -165,10 +202,10 @@ export default function Features() {
   return (
     <section
       id="features"
-      className="relative py-4 md:py-8 overflow-visible"
+      className="relative overflow-visible"
     >
       {/* Outer container for rounded dark section */}
-      <div className={`relative ${isMobile ? 'mx-4' : 'mx-8 md:mx-12 lg:mx-16'} ${isMobile ? 'rounded-3xl' : 'rounded-[3rem]'} overflow-hidden`}
+      <div className={`relative overflow-hidden`}
         style={{
           background: `linear-gradient(135deg, #0f172a 0%, #1e293b 50%, #0f172a 100%)`,
         }}
@@ -235,10 +272,10 @@ export default function Features() {
         </div>
 
         {/* Inner content with padding */}
-        <div className={`relative ${isMobile ? 'py-12' : 'py-12 md:py-16'}`}>
+        <div className={`relative ${isMobile ? 'py-12' : 'py-16 md:py-20'}`}>
 
           <Container>
-            <div className="relative z-10 text-center lg:text-left mb-8 md:mb-12">
+            <div className="relative z-10 text-center lg:text-left mb-12 md:mb-16">
               {/* Premium badge */}
               <div
                 className="inline-flex items-center gap-2 bg-white/10 backdrop-blur-xl border border-white/20 rounded-full px-5 py-2 mb-6 shadow-xl"
@@ -271,52 +308,99 @@ export default function Features() {
             </div>
           </Container>
 
-          {/* Glassmorphic carousel with corner fade accents */}
-          <div className="relative">
-            {/* Subtle left corner fade */}
-            {!isMobile && (
-              <div className="absolute left-0 top-0 bottom-0 w-24 md:w-32 z-10 pointer-events-none">
-                <div className="absolute inset-0 bg-linear-to-r from-slate-900 via-slate-900/60 to-transparent"></div>
-              </div>
-            )}
-
-            {/* Subtle right corner fade */}
-            {!isMobile && (
-              <div className="absolute right-0 top-0 bottom-0 w-24 md:w-32 z-10 pointer-events-none">
-                <div className="absolute inset-0 bg-linear-to-l from-slate-900 via-slate-900/60 to-transparent"></div>
-              </div>
-            )}
-
-            {/* Mobile: Horizontal scroll, Desktop: Marquee animation */}
-            <div className={`py-4 ${isMobile ? 'overflow-x-auto overflow-y-hidden scrollbar-hide px-4' : 'overflow-hidden'}`}
-              style={isMobile ? {
-                WebkitOverflowScrolling: 'touch',
-                scrollbarWidth: 'none',
-                msOverflowStyle: 'none',
-              } : {}}
-            >
+          {/* Premium Carousel */}
+          <Container>
+            <div className="relative">
+              {/* Carousel Container */}
               <div
-                className={`flex ${isMobile ? 'gap-4' : 'gap-6 md:gap-8'} ${isMobile || isReducedMotion ? '' : 'marquee-container'}`}
-                style={isMobile ? {
-                  width: 'max-content',
-                } : {}}
+                className="relative overflow-hidden px-2"
+                onTouchStart={handleTouchStart}
+                onTouchMove={handleTouchMove}
+                onTouchEnd={handleTouchEnd}
               >
-                {/* First set of features */}
-                {features.map((feature, index) => (
-                  <FeatureCard key={`first-${index}`} feature={feature} keyPrefix={`first-${index}`} />
-                ))}
+                {/* Carousel Track */}
+                <div
+                  ref={carouselRef}
+                  className="flex transition-transform duration-700 ease-out"
+                  style={{
+                    transform: `translateX(-${currentIndex * 100}%)`,
+                  }}
+                >
+                  {Array.from({ length: totalSlides }).map((_, slideIndex) => (
+                    <div
+                      key={slideIndex}
+                      className={`min-w-full grid ${isMobile ? 'grid-cols-1' : 'grid-cols-2 lg:grid-cols-3'} ${isMobile ? 'gap-5' : 'gap-6 lg:gap-8'} ${isMobile ? 'px-2' : 'px-4'}`}
+                    >
+                      {features
+                        .slice(slideIndex * itemsPerView, slideIndex * itemsPerView + itemsPerView)
+                        .map((feature, featureIndex) => (
+                          <FeatureCard
+                            key={slideIndex * itemsPerView + featureIndex}
+                            feature={feature}
+                            index={slideIndex * itemsPerView + featureIndex}
+                          />
+                        ))}
+                    </div>
+                  ))}
+                </div>
 
-                {/* Duplicate set for seamless loop - only on desktop */}
-                {!isMobile && features.map((feature, index) => (
-                  <FeatureCard key={`second-${index}`} feature={feature} keyPrefix={`second-${index}`} />
-                ))}
+                {/* Navigation Arrows - Desktop Only */}
+                {!isMobile && totalSlides > 1 && (
+                  <>
+                    <button
+                      onClick={goToPrevious}
+                      className="absolute left-0 top-1/2 -translate-y-1/2 z-20 w-12 h-12 rounded-full bg-white/10 backdrop-blur-xl border border-white/20 flex items-center justify-center text-white hover:bg-white/20 transition-all duration-300 shadow-lg group"
+                      style={{
+                        boxShadow: `0 8px 20px -4px ${theme.accentPrimary}30, inset 0 1px 0 0 rgba(255, 255, 255, 0.2)`,
+                      }}
+                      aria-label="Previous slide"
+                    >
+                      <ChevronLeft className="w-6 h-6 group-hover:-translate-x-0.5 transition-transform" strokeWidth={2.5} />
+                    </button>
+                    <button
+                      onClick={goToNext}
+                      className="absolute right-0 top-1/2 -translate-y-1/2 z-20 w-12 h-12 rounded-full bg-white/10 backdrop-blur-xl border border-white/20 flex items-center justify-center text-white hover:bg-white/20 transition-all duration-300 shadow-lg group"
+                      style={{
+                        boxShadow: `0 8px 20px -4px ${theme.accentPrimary}30, inset 0 1px 0 0 rgba(255, 255, 255, 0.2)`,
+                      }}
+                      aria-label="Next slide"
+                    >
+                      <ChevronRight className="w-6 h-6 group-hover:translate-x-0.5 transition-transform" strokeWidth={2.5} />
+                    </button>
+                  </>
+                )}
+
+                {/* Dot Indicators */}
+                {totalSlides > 1 && (
+                  <div className="flex justify-center items-center gap-2 mt-8">
+                    {Array.from({ length: totalSlides }).map((_, index) => (
+                      <button
+                        key={index}
+                        onClick={() => goToSlide(index)}
+                        className={`transition-all duration-300 rounded-full ${index === currentIndex
+                            ? 'w-8 h-2 bg-white'
+                            : 'w-2 h-2 bg-white/30 hover:bg-white/50'
+                          }`}
+                        style={
+                          index === currentIndex
+                            ? {
+                              background: theme.getAccentGradient(90),
+                              boxShadow: `0 0 12px ${theme.accentPrimary}60`,
+                            }
+                            : {}
+                        }
+                        aria-label={`Go to slide ${index + 1}`}
+                      />
+                    ))}
+                  </div>
+                )}
               </div>
             </div>
-          </div>
+          </Container>
 
           <Container>
-            <div className="relative z-10 mt-12 md:mt-16">
-              <div className={`${isMobile ? 'text-center' : 'text-left'} mb-10 md:mb-12`}>
+            <div className="relative z-10 mt-16 md:mt-20">
+              <div className={`${isMobile ? 'text-center' : 'text-left'} mb-12 md:mb-16`}>
                 <h3 className={`${isMobile ? 'text-2xl' : 'text-3xl md:text-4xl lg:text-5xl'} font-black mb-3 md:mb-4 tracking-tight text-white`}>
                   How It Works
                 </h3>
@@ -325,7 +409,7 @@ export default function Features() {
                 </p>
               </div>
 
-              <div className={`grid ${isMobile ? 'grid-cols-1' : 'md:grid-cols-2 lg:grid-cols-4'} gap-4 md:gap-6`}>
+              <div className={`grid ${isMobile ? 'grid-cols-1' : 'md:grid-cols-2 lg:grid-cols-4'} ${isMobile ? 'gap-5' : 'gap-6 lg:gap-8'}`}>
                 {[
                   {
                     step: '01',
@@ -416,7 +500,7 @@ export default function Features() {
               </div>
 
               {/* Stats highlight */}
-              <div className={`${isMobile ? 'mt-10' : 'mt-12 md:mt-16'} grid grid-cols-2 md:grid-cols-4 ${isMobile ? 'gap-3' : 'gap-4 md:gap-6'}`}>
+              <div className={`${isMobile ? 'mt-12' : 'mt-16 md:mt-20'} grid grid-cols-2 md:grid-cols-4 ${isMobile ? 'gap-4' : 'gap-6 lg:gap-8'}`}>
                 {[
                   { value: '24/7', label: 'Always Active' },
                   { value: '100+', label: 'Jobs/Day' },

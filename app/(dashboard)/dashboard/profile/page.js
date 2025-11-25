@@ -5,24 +5,24 @@
 
 'use client';
 
-import { useState, useEffect } from 'react';
-import {
-  User,
-  Mail,
-  Phone,
-  MapPin,
-  Briefcase,
-  Upload,
-  Globe2,
-  ShieldCheck,
-  Plane,
-  DollarSign,
-  CheckCircle2,
-  X,
-  Plus,
-} from 'lucide-react';
-import Button from '@/components/ui/Button';
 import Input from '@/components/ui/Input';
+import { theme } from '@/utils/theme';
+import {
+  Briefcase,
+  Check,
+  DollarSign,
+  Globe2,
+  Mail,
+  MapPin,
+  Phone,
+  Plane,
+  Plus,
+  ShieldCheck,
+  Upload,
+  User,
+  X
+} from 'lucide-react';
+import { useEffect, useState } from 'react';
 import toast from 'react-hot-toast';
 
 export default function ProfilePage() {
@@ -192,82 +192,117 @@ export default function ProfilePage() {
   }
 
   return (
-    <div className="max-w-6xl mx-auto px-4 md:px-6 pb-16">
-      {/* Premium Profile Header */}
+    <div className="max-w-7xl mx-auto px-4 md:px-6 pb-16">
+      {/* Profile Header Section */}
       <div 
-        className="relative bg-white rounded-3xl border border-gray-100 p-6 md:p-8 mb-6 overflow-hidden"
-        style={{ boxShadow: '0 4px 20px rgba(0, 0, 0, 0.06)' }}
+        className="relative bg-white rounded-2xl border border-gray-200/80 p-6 md:p-8 mb-6 overflow-hidden"
+        style={{ 
+          boxShadow: '0 2px 12px rgba(0, 0, 0, 0.04)',
+        }}
       >
-        {/* Gradient accent */}
-        <div className="absolute top-0 left-0 right-0 h-1.5 bg-gradient-to-r from-blue-500 via-purple-500 to-pink-500"></div>
+        {/* Top accent border */}
+        <div 
+          className="absolute top-0 left-0 right-0 h-1"
+          style={{
+            background: theme.getAccentGradient(90),
+            borderTopLeftRadius: '0.75rem',
+            borderTopRightRadius: '0.75rem',
+          }}
+        />
         
         <div className="flex flex-col md:flex-row md:items-start gap-6 md:gap-8">
-          {/* Avatar with initials */}
+          {/* Avatar Section */}
           <div className="relative">
-            <div className="w-24 h-24 md:w-28 md:h-28 rounded-3xl bg-gradient-to-br from-blue-500 via-blue-600 to-purple-600 flex items-center justify-center shadow-lg">
-              <span className="text-3xl md:text-4xl font-bold text-white tracking-tight">
+            <div 
+              className="w-20 h-20 md:w-24 md:h-24 rounded-2xl flex items-center justify-center shadow-md"
+              style={{
+                background: theme.getAccentGradient(135),
+                boxShadow: `0 4px 12px ${theme.accentPrimary}25`,
+              }}
+            >
+              <span className="text-2xl md:text-3xl font-bold text-white tracking-tight">
                 {getInitials(profile.name)}
               </span>
             </div>
             {profileCompleted && (
-              <div className="absolute -bottom-2 -right-2 w-8 h-8 bg-emerald-500 rounded-full flex items-center justify-center shadow-lg border-2 border-white">
-                <CheckCircle2 className="w-5 h-5 text-white" />
+              <div 
+                className="absolute -bottom-1 -right-1 w-7 h-7 rounded-full flex items-center justify-center shadow-md border-2 border-white"
+                style={{
+                  background: 'linear-gradient(135deg, #10b981, #059669)',
+                }}
+              >
+                <Check className="w-4 h-4 text-white" />
               </div>
             )}
           </div>
           
-          {/* User Info */}
+          {/* User Info Section */}
           <div className="flex-1 min-w-0">
-            <div className="flex flex-col md:flex-row md:items-start md:justify-between gap-4 mb-4">
+            <div className="flex flex-col md:flex-row md:items-start md:justify-between gap-4 mb-5">
               <div>
-                <h1 className="text-2xl md:text-3xl font-bold text-slate-900 mb-1">
+                <h1 className="text-2xl md:text-3xl font-bold text-slate-900 mb-1.5">
                   {profile.name || 'Your Name'}
                 </h1>
-                <p className="text-base md:text-lg text-slate-600">
+                <p className="text-base text-slate-600 font-medium">
                   {profile.title || 'Add your professional title'}
                 </p>
               </div>
               
               {/* Status Badges */}
-              <div className="flex flex-wrap gap-2">
-                <div className={`flex items-center gap-2 px-4 py-2 rounded-full border text-sm font-medium ${
-                  profileCompleted 
-                    ? 'bg-emerald-50 border-emerald-200 text-emerald-700' 
-                    : 'bg-gray-50 border-gray-200 text-gray-600'
-                }`}>
-                  <div className={`w-2 h-2 rounded-full ${profileCompleted ? 'bg-emerald-500' : 'bg-gray-400'}`}></div>
+              <div className="flex flex-wrap gap-2.5">
+                <div 
+                  className={`flex items-center gap-2 px-3.5 py-2 rounded-lg border text-sm font-semibold transition-colors ${
+                    profileCompleted 
+                      ? 'bg-emerald-50 border-emerald-200 text-emerald-700' 
+                      : 'bg-gray-50 border-gray-200 text-gray-600'
+                  }`}
+                >
+                  <div className={`w-2 h-2 rounded-full ${profileCompleted ? 'bg-emerald-500' : 'bg-gray-400'}`} />
                   {profileCompleted ? 'Active' : 'Incomplete'}
                 </div>
                 
-                <div className={`flex items-center gap-2 px-4 py-2 rounded-full border text-sm font-medium ${
-                  agentStatus === 'running' 
-                    ? 'bg-blue-50 border-blue-200 text-blue-700' 
-                    : 'bg-gray-50 border-gray-200 text-gray-600'
-                }`}>
-                  <div className={`w-2 h-2 rounded-full ${
-                    agentStatus === 'running' ? 'bg-blue-500 animate-pulse' : 'bg-gray-400'
-                  }`}></div>
+                <div 
+                  className={`flex items-center gap-2 px-3.5 py-2 rounded-lg border text-sm font-semibold transition-colors ${
+                    agentStatus === 'running' 
+                      ? 'border-blue-200 text-blue-700' 
+                      : 'bg-gray-50 border-gray-200 text-gray-600'
+                  }`}
+                  style={agentStatus === 'running' ? {
+                    background: `${theme.accentPrimary}10`,
+                    borderColor: `${theme.accentPrimary}30`,
+                  } : {}}
+                >
+                  <div 
+                    className={`w-2 h-2 rounded-full ${
+                      agentStatus === 'running' ? 'animate-pulse' : ''
+                    }`}
+                    style={agentStatus === 'running' ? {
+                      background: theme.accentPrimary,
+                    } : {
+                      background: '#9ca3af',
+                    }}
+                  />
                   Agent {agentStatus === 'running' ? 'Running' : 'Paused'}
                 </div>
               </div>
             </div>
             
-            {/* Contact Info Pills */}
-            <div className="flex flex-wrap gap-3 text-sm">
+            {/* Contact Info */}
+            <div className="flex flex-wrap gap-2.5 text-sm">
               {profile.email && (
-                <div className="flex items-center gap-2 px-3 py-1.5 bg-gray-50 rounded-full border border-gray-200">
+                <div className="flex items-center gap-2 px-3 py-1.5 bg-gray-50 rounded-lg border border-gray-200">
                   <Mail className="w-4 h-4 text-slate-500" />
                   <span className="text-slate-700 font-medium">{profile.email}</span>
                 </div>
               )}
               {profile.phone && (
-                <div className="flex items-center gap-2 px-3 py-1.5 bg-gray-50 rounded-full border border-gray-200">
+                <div className="flex items-center gap-2 px-3 py-1.5 bg-gray-50 rounded-lg border border-gray-200">
                   <Phone className="w-4 h-4 text-slate-500" />
                   <span className="text-slate-700 font-medium">{profile.phone}</span>
                 </div>
               )}
               {profile.location && (
-                <div className="flex items-center gap-2 px-3 py-1.5 bg-gray-50 rounded-full border border-gray-200">
+                <div className="flex items-center gap-2 px-3 py-1.5 bg-gray-50 rounded-lg border border-gray-200">
                   <MapPin className="w-4 h-4 text-slate-500" />
                   <span className="text-slate-700 font-medium">{profile.location}</span>
                 </div>
@@ -277,8 +312,10 @@ export default function ProfilePage() {
         </div>
       </div>
 
-      {/* Form Sections */}
-      <form onSubmit={handleSubmit} className="space-y-6">
+      {/* Form Sections - Multi-column Layout */}
+      <form onSubmit={handleSubmit} className="grid grid-cols-1 lg:grid-cols-3 gap-6">
+        {/* Left Column - Main Sections */}
+        <div className="lg:col-span-2 space-y-6">
         {/* Basic Information */}
         <SectionCard title="Basic Information" description="Your core details visible to recruiters">
           <div className="grid grid-cols-1 md:grid-cols-2 gap-4 md:gap-6">
@@ -505,19 +542,22 @@ export default function ProfilePage() {
               <label className="block text-sm font-semibold text-slate-700 mb-3">
                 What is your gender?
               </label>
-              <div className="grid grid-cols-2 md:grid-cols-4 gap-3">
+              <div className="grid grid-cols-2 md:grid-cols-4 gap-2.5">
                 {['male', 'female', 'non-binary', 'decline'].map((g) => (
                   <button
                     key={g}
                     type="button"
-                    className={`rounded-xl px-4 py-3 text-sm font-semibold transition-all border ${
+                    className={`rounded-lg px-4 py-2.5 text-sm font-semibold transition-all border ${
                       profile.gender === g
-                        ? 'bg-blue-500 text-white border-blue-600 shadow-md'
-                        : 'bg-white border-gray-200 text-slate-700 hover:border-gray-300'
+                        ? 'text-white border-transparent shadow-sm'
+                        : 'bg-white border-gray-200 text-slate-700 hover:border-gray-300 hover:bg-gray-50'
                     }`}
+                    style={profile.gender === g ? {
+                      background: theme.getAccentGradient(135),
+                    } : {}}
                     onClick={() => updateField('gender', g)}
                   >
-                    {g === 'male' ? 'Male' : g === 'female' ? 'Female' : g === 'non-binary' ? 'Non-Binary' : 'Decline to state'}
+                    {g === 'male' ? 'Male' : g === 'female' ? 'Female' : g === 'non-binary' ? 'Non-Binary' : 'Decline'}
                   </button>
                 ))}
               </div>
@@ -525,43 +565,111 @@ export default function ProfilePage() {
           </div>
         </SectionCard>
 
-        {/* Resume */}
-        <SectionCard title="Resume" description="Upload your resume or provide a link">
-          <div 
-            className="border-2 border-dashed border-gray-300 rounded-2xl p-8 md:p-12 text-center transition-all cursor-pointer mb-6 bg-gray-50/50 hover:border-blue-400 hover:bg-blue-50/30"
-            onClick={() => toast('File upload coming soon!')}
-          >
-            <div className="inline-flex w-16 h-16 rounded-2xl bg-white border border-gray-200 items-center justify-center mb-4">
-              <Upload className="w-8 h-8 text-gray-400" />
+        </div>
+
+        {/* Right Column - Sidebar Sections */}
+        <div className="space-y-6">
+          {/* Resume Section */}
+          <SectionCard title="Resume" description="Upload your resume or provide a link">
+            <div 
+              className="border-2 border-dashed border-gray-300 rounded-xl p-6 text-center cursor-pointer mb-4 bg-gray-50/50 transition-colors"
+              style={{
+                borderColor: 'rgba(148, 163, 184, 0.3)',
+              }}
+              onClick={() => toast('File upload coming soon!')}
+              onMouseEnter={(e) => {
+                e.currentTarget.style.borderColor = theme.accentPrimary;
+                e.currentTarget.style.backgroundColor = `${theme.accentPrimary}08`;
+              }}
+              onMouseLeave={(e) => {
+                e.currentTarget.style.borderColor = 'rgba(148, 163, 184, 0.3)';
+                e.currentTarget.style.backgroundColor = 'rgba(249, 250, 251, 0.5)';
+              }}
+            >
+              <div className="inline-flex w-12 h-12 rounded-xl bg-white border border-gray-200 items-center justify-center mb-3">
+                <Upload className="w-6 h-6 text-slate-400" />
+              </div>
+              <p className="text-slate-700 mb-1 text-sm font-medium">
+                <span style={{ color: theme.accentPrimary }} className="font-semibold">Click to upload</span> or drag and drop
+              </p>
+              <p className="text-xs text-slate-500">PDF, DOC, DOCX (max. 5MB)</p>
             </div>
-            <p className="text-slate-700 mb-1 font-medium">
-              <span className="text-blue-600 font-semibold">Click to upload</span> or drag and drop
-            </p>
-            <p className="text-sm text-slate-500">PDF, DOC, DOCX (max. 5MB)</p>
+
+            <Input
+              label="Or paste resume URL"
+              placeholder="https://..."
+              value={profile.resumeUrl}
+              onChange={(e) => updateField('resumeUrl', e.target.value)}
+            />
+          </SectionCard>
+
+          {/* Quick Stats Card */}
+          <div 
+            className="bg-white rounded-xl border border-gray-200/80 p-6"
+            style={{ 
+              boxShadow: '0 2px 8px rgba(0, 0, 0, 0.04)',
+            }}
+          >
+            <h3 className="text-sm font-bold text-slate-900 mb-4">Profile Completion</h3>
+            <div className="space-y-3">
+              <div>
+                <div className="flex items-center justify-between mb-2">
+                  <span className="text-xs text-slate-600 font-medium">Overall</span>
+                  <span className="text-xs font-bold" style={{ color: theme.accentPrimary }}>65%</span>
+                </div>
+                <div className="h-2 bg-gray-100 rounded-full overflow-hidden">
+                  <div 
+                    className="h-full rounded-full transition-all duration-300"
+                    style={{
+                      width: '65%',
+                      background: theme.getAccentGradient(90),
+                    }}
+                  />
+                </div>
+              </div>
+              <div className="pt-3 border-t border-gray-100 space-y-2 text-xs">
+                <div className="flex items-center justify-between">
+                  <span className="text-slate-600">Basic Info</span>
+                  <span className="font-semibold text-slate-900">Complete</span>
+                </div>
+                <div className="flex items-center justify-between">
+                  <span className="text-slate-600">Skills</span>
+                  <span className="font-semibold text-slate-900">3/5</span>
+                </div>
+                <div className="flex items-center justify-between">
+                  <span className="text-slate-600">Resume</span>
+                  <span className="font-semibold text-slate-900">Pending</span>
+                </div>
+              </div>
+            </div>
           </div>
+        </div>
 
-          <Input
-            label="Or paste resume URL"
-            placeholder="https://..."
-            value={profile.resumeUrl}
-            onChange={(e) => updateField('resumeUrl', e.target.value)}
-          />
-        </SectionCard>
-
-        {/* Action Buttons */}
-        <div className="flex flex-col sm:flex-row justify-end gap-3 pt-4">
+        {/* Action Buttons - Full Width */}
+        <div className="lg:col-span-3 flex flex-col sm:flex-row justify-end gap-3 pt-4 border-t border-gray-100">
           <button
             type="button"
             onClick={() => window.history.back()}
-            className="px-6 py-3 border border-gray-300 rounded-xl hover:bg-gray-50 transition-all text-sm text-slate-700 font-semibold"
+            className="px-6 py-3 border border-gray-200 rounded-xl text-sm text-slate-700 font-semibold transition-colors hover:bg-gray-50"
           >
             Cancel
           </button>
           <button
             type="submit"
             disabled={saving}
-            className="px-6 py-3 bg-gradient-to-r from-blue-600 to-blue-500 text-white rounded-xl font-semibold text-sm transition-all shadow-lg hover:shadow-xl disabled:opacity-50 disabled:cursor-not-allowed"
-            style={{ boxShadow: '0 4px 20px rgba(59, 130, 246, 0.4)' }}
+            className="px-6 py-3 text-white rounded-xl font-semibold text-sm transition-all disabled:opacity-50 disabled:cursor-not-allowed"
+            style={{
+              background: theme.getAccentGradient(135),
+              boxShadow: `0 4px 12px ${theme.accentPrimary}30`,
+            }}
+            onMouseEnter={(e) => {
+              if (!saving) {
+                e.currentTarget.style.boxShadow = `0 6px 16px ${theme.accentPrimary}40`;
+              }
+            }}
+            onMouseLeave={(e) => {
+              e.currentTarget.style.boxShadow = `0 4px 12px ${theme.accentPrimary}30`;
+            }}
           >
             {saving ? 'Saving...' : 'Save Changes'}
           </button>
@@ -571,38 +679,66 @@ export default function ProfilePage() {
   );
 }
 
-// Section Card Component
+// Section Card Component - Premium & Clean
 function SectionCard({ title, description, children }) {
   return (
     <div 
-      className="bg-white rounded-2xl border border-gray-100 p-5 md:p-6 relative overflow-hidden"
-      style={{ boxShadow: '0 2px 12px rgba(0, 0, 0, 0.04)' }}
+      className="bg-white rounded-xl border border-gray-200/80 p-5 md:p-6 relative overflow-hidden"
+      style={{ 
+        boxShadow: '0 1px 3px rgba(0, 0, 0, 0.05)',
+      }}
     >
-      <div className="mb-6">
-        <h2 className="text-lg md:text-xl font-bold text-slate-900 mb-2 flex items-center gap-2">
-          <span className="w-1.5 h-1.5 bg-blue-500 rounded-full"></span>
-          {title}
+      {/* Left accent border */}
+      <div 
+        className="absolute left-0 top-0 bottom-0 w-1"
+        style={{
+          background: theme.getAccentGradient(180),
+          opacity: 0.6,
+          borderTopLeftRadius: '0.75rem',
+          borderBottomLeftRadius: '0.75rem',
+        }}
+      />
+      
+      <div className="mb-5 pl-2">
+        <h2 className="text-lg font-bold text-slate-900 mb-1.5 flex items-center gap-2">
+          {typeof title === 'string' ? (
+            <>
+              <span 
+                className="w-1.5 h-1.5 rounded-full"
+                style={{ background: theme.accentPrimary }}
+              />
+              {title}
+            </>
+          ) : (
+            title
+          )}
         </h2>
-        {typeof description === 'string' ? (
-          <p className="text-sm text-slate-600">{description}</p>
-        ) : (
-          description
+        {description && (
+          <div className="text-sm text-slate-600">
+            {typeof description === 'string' ? (
+              <p>{description}</p>
+            ) : (
+              description
+            )}
+          </div>
         )}
       </div>
-      {children}
+      <div className="pl-2">
+        {children}
+      </div>
     </div>
   );
 }
 
-// Toggle Card Component
+// Toggle Card Component - Interactive & Clean
 function ToggleCard({ label, icon: Icon, value, onChange }) {
   const yes = value === true;
   const no = value === false;
 
   return (
-    <div className="rounded-xl border border-gray-200 bg-white p-4">
+    <div className="rounded-xl border border-gray-200/80 bg-white p-4 transition-colors">
       <div className="flex items-center gap-2 mb-4">
-        {Icon && <Icon className="w-5 h-5 text-slate-600" />}
+        {Icon && <Icon className="w-4 h-4 text-slate-500" />}
         <span className="text-sm font-semibold text-slate-900">{label}</span>
       </div>
       <div className="flex gap-2">
@@ -610,9 +746,12 @@ function ToggleCard({ label, icon: Icon, value, onChange }) {
           type="button"
           className={`flex-1 rounded-lg px-3 py-2.5 text-sm font-semibold transition-all border ${
             yes
-              ? 'bg-emerald-500 text-white border-emerald-600 shadow-sm'
-              : 'bg-white border-gray-200 text-slate-600 hover:border-gray-300'
+              ? 'text-white border-emerald-600 shadow-sm'
+              : 'bg-white border-gray-200 text-slate-600 hover:border-gray-300 hover:bg-gray-50'
           }`}
+          style={yes ? {
+            background: 'linear-gradient(135deg, #10b981, #059669)',
+          } : {}}
           onClick={() => onChange(true)}
         >
           Yes
@@ -621,9 +760,12 @@ function ToggleCard({ label, icon: Icon, value, onChange }) {
           type="button"
           className={`flex-1 rounded-lg px-3 py-2.5 text-sm font-semibold transition-all border ${
             no
-              ? 'bg-rose-500 text-white border-rose-600 shadow-sm'
-              : 'bg-white border-gray-200 text-slate-600 hover:border-gray-300'
+              ? 'text-white border-rose-600 shadow-sm'
+              : 'bg-white border-gray-200 text-slate-600 hover:border-gray-300 hover:bg-gray-50'
           }`}
+          style={no ? {
+            background: 'linear-gradient(135deg, #ef4444, #dc2626)',
+          } : {}}
           onClick={() => onChange(false)}
         >
           No
@@ -633,38 +775,44 @@ function ToggleCard({ label, icon: Icon, value, onChange }) {
   );
 }
 
-// Yes/No/Decline Component
+// Yes/No/Decline Component - Interactive
 function YesNoDecline({ value, onChange }) {
   return (
-    <div className="flex gap-3">
+    <div className="flex gap-2.5">
       <button
         type="button"
-        className={`flex-1 rounded-xl px-4 py-3 text-sm font-semibold transition-all border ${
+        className={`flex-1 rounded-lg px-4 py-2.5 text-sm font-semibold transition-all border ${
           value === true
-            ? 'bg-blue-500 text-white border-blue-600 shadow-md'
-            : 'bg-white border-gray-200 text-slate-700 hover:border-gray-300'
+            ? 'text-white border-transparent shadow-sm'
+            : 'bg-white border-gray-200 text-slate-700 hover:border-gray-300 hover:bg-gray-50'
         }`}
+        style={value === true ? {
+          background: theme.getAccentGradient(135),
+        } : {}}
         onClick={() => onChange(true)}
       >
         Yes
       </button>
       <button
         type="button"
-        className={`flex-1 rounded-xl px-4 py-3 text-sm font-semibold transition-all border ${
+        className={`flex-1 rounded-lg px-4 py-2.5 text-sm font-semibold transition-all border ${
           value === false
-            ? 'bg-blue-500 text-white border-blue-600 shadow-md'
-            : 'bg-white border-gray-200 text-slate-700 hover:border-gray-300'
+            ? 'text-white border-transparent shadow-sm'
+            : 'bg-white border-gray-200 text-slate-700 hover:border-gray-300 hover:bg-gray-50'
         }`}
+        style={value === false ? {
+          background: theme.getAccentGradient(135),
+        } : {}}
         onClick={() => onChange(false)}
       >
         No
       </button>
       <button
         type="button"
-        className={`flex-1 rounded-xl px-4 py-3 text-sm font-semibold transition-all border ${
+        className={`flex-1 rounded-lg px-4 py-2.5 text-sm font-semibold transition-all border ${
           value === null
-            ? 'bg-gray-200 text-slate-700 border-gray-300 shadow-md'
-            : 'bg-white border-gray-200 text-slate-700 hover:border-gray-300'
+            ? 'bg-gray-100 text-slate-700 border-gray-300'
+            : 'bg-white border-gray-200 text-slate-700 hover:border-gray-300 hover:bg-gray-50'
         }`}
         onClick={() => onChange(null)}
       >
@@ -718,7 +866,17 @@ function SkillInput({ label, placeholder, description, skills, onChange }) {
         <button
           type="button"
           onClick={addSkill}
-          className="px-4 py-2.5 bg-blue-600 text-white rounded-xl hover:bg-blue-700 transition-colors text-sm font-semibold flex items-center gap-2"
+          className="px-4 py-2.5 text-white rounded-lg text-sm font-semibold flex items-center gap-2 transition-all"
+          style={{
+            background: theme.getAccentGradient(135),
+            boxShadow: `0 2px 8px ${theme.accentPrimary}25`,
+          }}
+          onMouseEnter={(e) => {
+            e.currentTarget.style.boxShadow = `0 4px 12px ${theme.accentPrimary}35`;
+          }}
+          onMouseLeave={(e) => {
+            e.currentTarget.style.boxShadow = `0 2px 8px ${theme.accentPrimary}25`;
+          }}
         >
           <Plus className="w-4 h-4" />
           Add
@@ -730,13 +888,27 @@ function SkillInput({ label, placeholder, description, skills, onChange }) {
           {skills.map((skill, index) => (
             <span
               key={index}
-              className="inline-flex items-center gap-2 px-3 py-2 bg-blue-50 text-blue-700 rounded-xl text-sm border border-blue-200 font-medium"
+              className="inline-flex items-center gap-2 px-3 py-1.5 rounded-lg text-sm border font-medium transition-colors"
+              style={{
+                background: `${theme.accentPrimary}08`,
+                color: theme.accentPrimary,
+                borderColor: `${theme.accentPrimary}25`,
+              }}
             >
               {skill}
               <button
                 type="button"
                 onClick={() => removeSkill(skill)}
-                className="hover:bg-blue-200 rounded-full p-0.5 transition-colors"
+                className="rounded-full p-0.5 transition-colors"
+                style={{
+                  color: theme.accentPrimary,
+                }}
+                onMouseEnter={(e) => {
+                  e.currentTarget.style.backgroundColor = `${theme.accentPrimary}20`;
+                }}
+                onMouseLeave={(e) => {
+                  e.currentTarget.style.backgroundColor = 'transparent';
+                }}
               >
                 <X className="w-3.5 h-3.5" />
               </button>
@@ -766,11 +938,15 @@ function EthnicitySelect({ value = '', onChange }) {
       {ethnicities.map((ethnicity) => (
         <label
           key={ethnicity}
-          className={`flex items-center gap-3 p-3.5 rounded-xl border cursor-pointer transition-all ${
+          className={`flex items-center gap-3 p-3.5 rounded-lg border cursor-pointer transition-all ${
             value === ethnicity
-              ? 'border-blue-500 bg-blue-50'
-              : 'border-gray-200 hover:bg-gray-50'
+              ? 'border-transparent shadow-sm'
+              : 'border-gray-200 hover:border-gray-300 hover:bg-gray-50'
           }`}
+          style={value === ethnicity ? {
+            background: `${theme.accentPrimary}08`,
+            borderColor: `${theme.accentPrimary}30`,
+          } : {}}
         >
           <input
             type="radio"

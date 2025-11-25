@@ -289,20 +289,19 @@ html {
   height: fit-content;
   z-index: -1;
   width: 100%;
-  max-width: 540px;
   background-image: radial-gradient(at 27% 37%,
       hsla(215, 98%, 81%, 1) 0px,
       transparent 0%),
-    radial-gradient(at 97% 21%, hsla(125, 98%, 72%, 1) 0px, transparent 50%),
-    radial-gradient(at 52% 99%, hsla(354, 98%, 61%, 1) 0px, transparent 50%),
-    radial-gradient(at 10% 29%, hsla(256, 96%, 67%, 1) 0px, transparent 50%),
+    radial-gradient(at 97% 21%, rgb(191, 255, 196) 0px, transparent 50%),
+    radial-gradient(at 52% 99%, rgb(246, 193, 198) 0px, transparent 50%),
+    radial-gradient(at 10% 29%, rgb(187, 162, 255) 0px, transparent 50%),
     radial-gradient(at 97% 96%, hsla(38, 60%, 74%, 1) 0px, transparent 50%),
-    radial-gradient(at 33% 50%, hsla(222, 67%, 73%, 1) 0px, transparent 50%),
-    radial-gradient(at 79% 53%, hsla(343, 68%, 79%, 1) 0px, transparent 50%);
+    radial-gradient(at 33% 50%, rgb(202, 214, 243) 0px, transparent 50%),
+    radial-gradient(at 79% 53%, rgb(230, 196, 206) 0px, transparent 50%);
   position: fixed;
   content: "";
-  width: 50%;
-  height: 50%;
+  width: 100%;
+  height: 100%;
   filter: blur(100px) saturate(190%);
   bottom: 80px;
   left: 30px;
