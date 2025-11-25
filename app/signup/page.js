@@ -83,26 +83,32 @@ export default function SignupPage() {
   ];
 
   return (
-    <div className="min-h-screen bg-gradient-to-br from-slate-50 via-blue-50/30 to-indigo-50/30 relative overflow-hidden">
-      {/* Animated background elements */}
+    <div className="min-h-screen bg-gradient-to-br from-slate-50 via-white to-slate-50/50 relative">
+      {/* Subtle background pattern */}
       <div className="absolute inset-0 overflow-hidden pointer-events-none">
-        <div className="absolute top-20 left-10 w-72 h-72 bg-blue-400/10 rounded-full blur-3xl animate-float" />
-        <div className="absolute bottom-20 right-10 w-96 h-96 bg-indigo-400/10 rounded-full blur-3xl animate-float" style={{ animationDelay: '2s' }} />
-        <div className="absolute top-1/2 left-1/2 w-80 h-80 bg-purple-400/10 rounded-full blur-3xl animate-float" style={{ animationDelay: '4s' }} />
+        <div
+          className="absolute top-20 left-10 w-96 h-96 rounded-full blur-3xl opacity-30"
+          style={{
+            background: `radial-gradient(circle, ${theme.accentPrimary}15, transparent 70%)`,
+          }}
+        />
+        <div
+          className="absolute bottom-20 right-10 w-96 h-96 rounded-full blur-3xl opacity-30"
+          style={{
+            background: `radial-gradient(circle, ${theme.accentSecondary}15, transparent 70%)`,
+          }}
+        />
       </div>
 
-      <div className="relative z-10 min-h-screen flex items-center justify-center px-4 py-12">
-        <div className="w-full max-w-6xl grid lg:grid-cols-2 gap-8 lg:gap-12 items-center">
+      <div className="relative z-10 min-h-screen flex items-center justify-center px-4 py-8 md:py-12">
+        <div className="w-full max-w-7xl grid lg:grid-cols-2 gap-8 lg:gap-16 items-center">
           {/* Left Side - Hero Content */}
-          <div className="space-y-8 order-2 lg:order-1">
+          <div className="space-y-6 md:space-y-8 order-2 lg:order-1">
             {/* Logo */}
             <div className="flex items-center gap-3">
-              <Logo size="sm" theme={theme} className="scale-110" />
               <div className="flex flex-col">
-                <span className="text-2xl leading-none">
-                  {brand.getStyledName()}
-                </span>
-                <span className="text-[10px] text-slate-500 font-medium leading-none mt-1">
+                <img src="/brand.png" alt="Brand Logo" className="w-52" />
+                <span className="text-base text-slate-500 font-medium leading-none m-0.5">
                   Powered by <span className="font-semibold text-slate-700">Nexi</span>
                 </span>
               </div>
@@ -110,12 +116,20 @@ export default function SignupPage() {
 
             {/* Main Heading */}
             <div className="space-y-4">
-              <div className="inline-flex items-center gap-2 px-4 py-2 rounded-full bg-white/80 backdrop-blur-sm border border-blue-200 shadow-sm">
-                <Sparkles className="w-4 h-4 text-blue-600" />
-                <span className="text-sm font-medium text-blue-900">AI-Powered Job Search</span>
+              <div
+                className="inline-flex items-center gap-2 px-3.5 py-1.5 rounded-lg border"
+                style={{
+                  background: `${theme.accentPrimary}08`,
+                  borderColor: `${theme.accentPrimary}20`,
+                }}
+              >
+                <Sparkles className="w-4 h-4" style={{ color: theme.accentPrimary }} />
+                <span className="text-sm font-semibold" style={{ color: theme.accentPrimary }}>
+                  AI-Powered Job Search
+                </span>
               </div>
 
-              <h1 className="text-4xl lg:text-5xl font-bold tracking-tight text-slate-900 leading-tight">
+              <h1 className="text-3xl md:text-4xl lg:text-5xl font-bold tracking-tight text-slate-900 leading-tight">
                 Land your dream job{' '}
                 <span
                   className="bg-clip-text text-transparent"
@@ -125,31 +139,42 @@ export default function SignupPage() {
                 </span>
               </h1>
 
-              <p className="text-lg text-slate-600 leading-relaxed">
+              <p className="text-base md:text-lg text-slate-600 leading-relaxed max-w-lg">
                 Join thousands of professionals using AI to automate their job applications
                 and get hired faster.
               </p>
             </div>
 
             {/* Features Grid */}
-            <div className="grid gap-4">
+            <div className="grid gap-3 md:gap-4">
               {features.map((feature, index) => (
                 <div
                   key={index}
-                  className="group relative bg-white/60 backdrop-blur-sm rounded-2xl p-5 border border-gray-200 hover:border-blue-300 transition-all duration-300 hover:shadow-lg"
+                  className="group bg-white rounded-xl p-4 md:p-5 border border-gray-200/80 transition-all duration-200"
                   style={{
-                    boxShadow: '8px 8px 16px rgba(0, 0, 0, 0.05), -8px -8px 16px rgba(255, 255, 255, 0.8)',
+                    boxShadow: '0 1px 3px rgba(0, 0, 0, 0.05)',
+                  }}
+                  onMouseEnter={(e) => {
+                    e.currentTarget.style.borderColor = `${theme.accentPrimary}40`;
+                    e.currentTarget.style.boxShadow = `0 4px 12px ${theme.accentPrimary}15`;
+                  }}
+                  onMouseLeave={(e) => {
+                    e.currentTarget.style.borderColor = 'rgba(226, 232, 240, 0.8)';
+                    e.currentTarget.style.boxShadow = '0 1px 3px rgba(0, 0, 0, 0.05)';
                   }}
                 >
                   <div className="flex items-start gap-4">
                     <div
-                      className={`w-12 h-12 rounded-xl flex items-center justify-center bg-gradient-to-br ${feature.color} shadow-lg group-hover:scale-110 transition-transform duration-300`}
+                      className="w-11 h-11 md:w-12 md:h-12 rounded-xl flex items-center justify-center shadow-sm"
+                      style={{
+                        background: theme.getAccentGradient(135),
+                      }}
                     >
-                      <feature.icon className="w-6 h-6 text-white" />
+                      <feature.icon className="w-5 h-5 md:w-6 md:h-6 text-white" />
                     </div>
-                    <div className="flex-1">
-                      <h3 className="font-semibold text-slate-900 mb-1">{feature.title}</h3>
-                      <p className="text-sm text-slate-600">{feature.description}</p>
+                    <div className="flex-1 min-w-0">
+                      <h3 className="font-semibold text-slate-900 mb-1 text-sm md:text-base">{feature.title}</h3>
+                      <p className="text-xs md:text-sm text-slate-600">{feature.description}</p>
                     </div>
                   </div>
                 </div>
@@ -157,13 +182,16 @@ export default function SignupPage() {
             </div>
 
             {/* Social Proof */}
-            <div className="space-y-3 pt-4">
-              <div className="flex items-center gap-2">
+            <div className="pt-2">
+              <div className="flex items-center gap-3">
                 <div className="flex -space-x-2">
                   {[1, 2, 3, 4].map((i) => (
                     <div
                       key={i}
-                      className="w-8 h-8 rounded-full bg-gradient-to-br from-blue-400 to-indigo-500 border-2 border-white flex items-center justify-center text-white text-xs font-bold"
+                      className="w-8 h-8 rounded-full border-2 border-white flex items-center justify-center text-white text-xs font-bold shadow-sm"
+                      style={{
+                        background: theme.getAccentGradient(135),
+                      }}
                     >
                       {String.fromCharCode(64 + i)}
                     </div>
@@ -177,69 +205,103 @@ export default function SignupPage() {
           </div>
 
           {/* Right Side - Signup Form */}
-          <div className="order-1 lg:order-2">
+          <div className="order-1 lg:order-2 w-full">
             <div
-              className="relative bg-white/70 backdrop-blur-xl rounded-3xl p-8 lg:p-10 border border-white/20"
+              className="relative bg-white rounded-2xl p-6 md:p-8 lg:p-10 border border-gray-200/80 overflow-hidden"
               style={{
-                boxShadow: '20px 20px 60px rgba(0, 0, 0, 0.08), -20px -20px 60px rgba(255, 255, 255, 0.9)',
+                boxShadow: '0 4px 20px rgba(0, 0, 0, 0.06)',
               }}
             >
-              {/* Decorative gradient */}
-              <div className="absolute top-0 right-0 w-32 h-32 bg-gradient-to-br from-blue-400/20 to-indigo-400/20 rounded-full blur-3xl" />
+              {/* Top accent border */}
+              <div
+                className="absolute top-0 left-0 right-0 h-1"
+                style={{
+                  background: theme.getAccentGradient(90),
+                  borderTopLeftRadius: '0.75rem',
+                  borderTopRightRadius: '0.75rem',
+                }}
+              />
 
               <div className="relative z-10">
-                <div className="text-center mb-8">
-                  <h2 className="text-3xl font-bold text-slate-900 mb-2">
+                <div className="text-center mb-6 md:mb-8">
+                  <h2 className="text-2xl md:text-3xl font-bold text-slate-900 mb-2">
                     Create Account
                   </h2>
-                  <p className="text-slate-600">
+                  <p className="text-sm md:text-base text-slate-600">
                     Start your AI-powered job search journey
                   </p>
                 </div>
 
                 {error && (
-                  <div className="mb-6 rounded-xl border border-red-200 bg-red-50 px-4 py-3 text-sm text-red-700 animate-fadeIn">
+                  <div
+                    className="mb-5 rounded-lg border px-4 py-3 text-sm animate-fadeIn"
+                    style={{
+                      borderColor: '#fecaca',
+                      background: '#fef2f2',
+                      color: '#991b1b',
+                    }}
+                  >
                     {error}
                   </div>
                 )}
 
-                <form onSubmit={handleSubmit} className="space-y-5">
+                <form onSubmit={handleSubmit} className="space-y-4 md:space-y-5">
                   {/* Name Fields */}
-                  <div className="grid grid-cols-2 gap-4">
+                  <div className="grid grid-cols-2 gap-3 md:gap-4">
                     <div>
-                      <label className="block text-sm font-medium text-slate-700 mb-2">
+                      <label className="block text-sm font-semibold text-slate-700 mb-2">
                         First Name
                       </label>
                       <input
                         type="text"
                         value={form.firstName}
                         onChange={(e) => updateField('firstName', e.target.value)}
-                        className="w-full px-4 py-2.5 bg-white border border-gray-200 rounded-lg focus:outline-none focus:border-gray-300 transition-colors text-slate-900 placeholder-slate-400"
+                        className="w-full px-4 py-2.5 bg-white border border-gray-200 rounded-lg focus:outline-none transition-all text-slate-900 placeholder-slate-400 text-sm md:text-base"
                         placeholder="John"
                         required
-                        style={{ outline: 'none', boxShadow: 'none' }}
+                        style={{
+                          outline: 'none',
+                        }}
+                        onFocus={(e) => {
+                          e.currentTarget.style.borderColor = theme.accentPrimary;
+                          e.currentTarget.style.boxShadow = `0 0 0 3px ${theme.accentPrimary}15`;
+                        }}
+                        onBlur={(e) => {
+                          e.currentTarget.style.borderColor = '#e2e8f0';
+                          e.currentTarget.style.boxShadow = 'none';
+                        }}
                       />
                     </div>
 
                     <div>
-                      <label className="block text-sm font-medium text-slate-700 mb-2">
+                      <label className="block text-sm font-semibold text-slate-700 mb-2">
                         Last Name
                       </label>
                       <input
                         type="text"
                         value={form.lastName}
                         onChange={(e) => updateField('lastName', e.target.value)}
-                        className="w-full px-4 py-2.5 bg-white border border-gray-200 rounded-lg focus:outline-none focus:border-gray-300 transition-colors text-slate-900 placeholder-slate-400"
+                        className="w-full px-4 py-2.5 bg-white border border-gray-200 rounded-lg focus:outline-none transition-all text-slate-900 placeholder-slate-400 text-sm md:text-base"
                         placeholder="Doe"
                         required
-                        style={{ outline: 'none', boxShadow: 'none' }}
+                        style={{
+                          outline: 'none',
+                        }}
+                        onFocus={(e) => {
+                          e.currentTarget.style.borderColor = theme.accentPrimary;
+                          e.currentTarget.style.boxShadow = `0 0 0 3px ${theme.accentPrimary}15`;
+                        }}
+                        onBlur={(e) => {
+                          e.currentTarget.style.borderColor = '#e2e8f0';
+                          e.currentTarget.style.boxShadow = 'none';
+                        }}
                       />
                     </div>
                   </div>
 
                   {/* Email Field */}
                   <div>
-                    <label className="block text-sm font-medium text-slate-700 mb-2">
+                    <label className="block text-sm font-semibold text-slate-700 mb-2">
                       Email Address
                     </label>
                     <div className="relative">
@@ -248,17 +310,27 @@ export default function SignupPage() {
                         type="email"
                         value={form.email}
                         onChange={(e) => updateField('email', e.target.value)}
-                        className="w-full pl-11 pr-4 py-2.5 bg-white border border-gray-200 rounded-lg focus:outline-none focus:border-gray-300 transition-colors text-slate-900 placeholder-slate-400"
+                        className="w-full pl-11 pr-4 py-2.5 bg-white border border-gray-200 rounded-lg focus:outline-none transition-all text-slate-900 placeholder-slate-400 text-sm md:text-base"
                         placeholder="john@example.com"
                         required
-                        style={{ outline: 'none', boxShadow: 'none' }}
+                        style={{
+                          outline: 'none',
+                        }}
+                        onFocus={(e) => {
+                          e.currentTarget.style.borderColor = theme.accentPrimary;
+                          e.currentTarget.style.boxShadow = `0 0 0 3px ${theme.accentPrimary}15`;
+                        }}
+                        onBlur={(e) => {
+                          e.currentTarget.style.borderColor = '#e2e8f0';
+                          e.currentTarget.style.boxShadow = 'none';
+                        }}
                       />
                     </div>
                   </div>
 
                   {/* Password Field */}
                   <div>
-                    <label className="block text-sm font-medium text-slate-700 mb-2">
+                    <label className="block text-sm font-semibold text-slate-700 mb-2">
                       Password
                     </label>
                     <div className="relative">
@@ -267,10 +339,20 @@ export default function SignupPage() {
                         type="password"
                         value={form.password}
                         onChange={(e) => updateField('password', e.target.value)}
-                        className="w-full pl-11 pr-4 py-2.5 bg-white border border-gray-200 rounded-lg focus:outline-none focus:border-gray-300 transition-colors text-slate-900 placeholder-slate-400"
+                        className="w-full pl-11 pr-4 py-2.5 bg-white border border-gray-200 rounded-lg focus:outline-none transition-all text-slate-900 placeholder-slate-400 text-sm md:text-base"
                         placeholder="••••••••"
                         required
-                        style={{ outline: 'none', boxShadow: 'none' }}
+                        style={{
+                          outline: 'none',
+                        }}
+                        onFocus={(e) => {
+                          e.currentTarget.style.borderColor = theme.accentPrimary;
+                          e.currentTarget.style.boxShadow = `0 0 0 3px ${theme.accentPrimary}15`;
+                        }}
+                        onBlur={(e) => {
+                          e.currentTarget.style.borderColor = '#e2e8f0';
+                          e.currentTarget.style.boxShadow = 'none';
+                        }}
                       />
                     </div>
                     <p className="text-xs text-slate-500 mt-2">Demo only - use any password</p>
@@ -279,18 +361,56 @@ export default function SignupPage() {
                   {/* Terms */}
                   <p className="text-xs text-slate-500 leading-relaxed">
                     By signing up you agree to our{' '}
-                    <span className="font-medium text-slate-700 hover:text-blue-600 cursor-pointer">Terms</span> and{' '}
-                    <span className="font-medium text-slate-700 hover:text-blue-600 cursor-pointer">Privacy Policy</span>.
+                    <button
+                      type="button"
+                      className="font-medium text-slate-700 transition-colors"
+                      style={{
+                        color: theme.accentPrimary,
+                      }}
+                      onMouseEnter={(e) => {
+                        e.currentTarget.style.opacity = '0.8';
+                      }}
+                      onMouseLeave={(e) => {
+                        e.currentTarget.style.opacity = '1';
+                      }}
+                    >
+                      Terms
+                    </button>{' '}
+                    and{' '}
+                    <button
+                      type="button"
+                      className="font-medium text-slate-700 transition-colors"
+                      style={{
+                        color: theme.accentPrimary,
+                      }}
+                      onMouseEnter={(e) => {
+                        e.currentTarget.style.opacity = '0.8';
+                      }}
+                      onMouseLeave={(e) => {
+                        e.currentTarget.style.opacity = '1';
+                      }}
+                    >
+                      Privacy Policy
+                    </button>
+                    .
                   </p>
 
                   {/* Submit Button */}
                   <button
                     type="submit"
                     disabled={loading}
-                    className="group relative w-full py-4 rounded-xl font-semibold text-white overflow-hidden transition-all duration-300 hover:scale-[1.02] active:scale-[0.98] disabled:opacity-50 disabled:cursor-not-allowed"
+                    className="group relative w-full py-3 md:py-3.5 rounded-lg font-semibold text-white overflow-hidden transition-all duration-200 disabled:opacity-50 disabled:cursor-not-allowed text-sm md:text-base"
                     style={{
                       background: theme.getAccentGradient(135),
-                      boxShadow: '8px 8px 16px rgba(0, 0, 0, 0.15), -8px -8px 16px rgba(255, 255, 255, 0.7)',
+                      boxShadow: `0 4px 12px ${theme.accentPrimary}25`,
+                    }}
+                    onMouseEnter={(e) => {
+                      if (!loading) {
+                        e.currentTarget.style.boxShadow = `0 6px 16px ${theme.accentPrimary}35`;
+                      }
+                    }}
+                    onMouseLeave={(e) => {
+                      e.currentTarget.style.boxShadow = `0 4px 12px ${theme.accentPrimary}25`;
                     }}
                   >
                     <span className="relative z-10 flex items-center justify-center gap-2">
@@ -302,13 +422,10 @@ export default function SignupPage() {
                       ) : (
                         <>
                           Create Account
-                          <ArrowRight className="w-5 h-5 group-hover:translate-x-1 transition-transform" />
+                          <ArrowRight className="w-5 h-5 transition-transform group-hover:translate-x-0.5" />
                         </>
                       )}
                     </span>
-
-                    {/* Shimmer effect */}
-                    <div className="absolute inset-0 -translate-x-full group-hover:translate-x-full transition-transform duration-1000 bg-gradient-to-r from-transparent via-white/20 to-transparent" />
                   </button>
                 </form>
 
@@ -317,8 +434,18 @@ export default function SignupPage() {
                   <p className="text-sm text-slate-600">
                     Already have an account?{' '}
                     <button
-                      className="font-semibold text-blue-600 hover:text-blue-700 transition-colors"
+                      type="button"
+                      className="font-semibold transition-colors"
+                      style={{
+                        color: theme.accentPrimary,
+                      }}
                       onClick={() => router.push('/')}
+                      onMouseEnter={(e) => {
+                        e.currentTarget.style.opacity = '0.8';
+                      }}
+                      onMouseLeave={(e) => {
+                        e.currentTarget.style.opacity = '1';
+                      }}
                     >
                       Sign in
                     </button>
