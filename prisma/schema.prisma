@@ -1,69 +1,219 @@
-// This is your Prisma schema file
-// Learn more: https://pris.ly/d/prisma-schema
-
 generator client {
   provider = "prisma-client-js"
 }
 
 datasource db {
-  provider = "postgresql"
-  url      = env("DATABASE_URL")
+  provider  = "postgresql"
+  url       = env("DATABASE_URL")
+  directUrl = env("DIRECT_URL")
 }
 
-// Example models - Replace these with your actual Supabase tables
-// Or use: npx prisma db pull
-// to automatically generate models from your existing Supabase database
+/// This table contains check constraints and requires additional setup for migrations. Visit https://pris.ly/d/check-constraints for more info.
+/// This model or at least one of its fields has comments in the database, and requires an additional setup for migrations: Read more: https://pris.ly/d/database-comments
+model auto_apply_cand {
+  cand_id                  Int                        @id
+  first_name               String
+  last_name                String
+  email                    String                     @unique
+  password                 String
+  birth_date               DateTime?                  @db.Date
+  ssn                      String?
+  over_18_age              Boolean?                   @default(true)
+  mobile                   String?
+  home                     String?
+  work                     String?
+  work_ext                 String?
+  country                  String?
+  city                     String?
+  zipcode                  String?
+  address                  String?
+  relocation               Boolean?                   @default(false)
+  experience               Int?                       @default(0)
+  race_id                  Int?
+  ethnicity_id             Int?
+  disability_id            Int?
+  veteran_disclosure_id    Int?
+  resume_storage_path      String?
+  resume_file_name         String?
+  resume_file_type         String?
+  resume_file_size         Int?
+  resume_upload_date       DateTime?                  @db.Timestamptz(6)
+  profile_updated_on       DateTime?                  @default(now()) @db.Timestamptz(6)
+  created_at               DateTime?                  @default(now()) @db.Timestamptz(6)
+  updated_at               DateTime?                  @default(now()) @db.Timestamptz(6)
+  gender_id                Int?
+  notify_email             Boolean                    @default(true)
+  notify_sms               Boolean                    @default(false)
+  cand_job_matching        cand_job_matching[]
+  job_application_tracking job_application_tracking[]
+  parsed_cand_resume       parsed_cand_resume?
 
-model User {
-  id        String   @id @default(uuid())
-  email     String   @unique
-  name      String?
-  createdAt DateTime @default(now()) @map("created_at")
-  updatedAt DateTime @updatedAt @map("updated_at")
-  
-  jobs      Job[]
-  applications Application[]
-
-  @@map("users")
+  @@index([created_at(sort: Desc)], map: "idx_auto_apply_cand_created")
+  @@index([email], map: "idx_auto_apply_cand_email")
+  @@index([experience], map: "idx_auto_apply_cand_experience")
+  @@index([gender_id], map: "idx_auto_apply_cand_gender")
+  @@index([mobile], map: "idx_auto_apply_cand_mobile")
+  @@index([resume_storage_path], map: "idx_auto_apply_cand_resume_path")
+  @@index([zipcode], map: "idx_auto_apply_cand_zipcode")
 }
 
-model Job {
-  id          String   @id @default(uuid())
-  title       String
-  company     String
-  description String?
-  location    String?
-  salary      String?
-  url         String?
-  status      String   @default("active")
-  userId      String?  @map("user_id")
-  createdAt   DateTime @default(now()) @map("created_at")
-  updatedAt   DateTime @updatedAt @map("updated_at")
-  
-  user        User?    @relation(fields: [userId], references: [id], onDelete: Cascade)
-  applications Application[]
+/// This table contains check constraints and requires additional setup for migrations. Visit https://pris.ly/d/check-constraints for more info.
+/// This model or at least one of its fields has comments in the database, and requires an additional setup for migrations: Read more: https://pris.ly/d/database-comments
+model cand_job_matching {
+  matching_id              Int                        @id @default(autoincrement())
+  cand_id                  Int
+  requirement_id           String
+  similarity_score         Decimal?                   @db.Decimal(5, 4)
+  match_reason             String?
+  matched_skills           String[]
+  matched_at               DateTime?                  @default(now()) @db.Timestamptz(6)
+  expires_at               DateTime?                  @default(dbgenerated("(now() + '1 year'::interval)")) @db.Timestamptz(6)
+  is_active                Boolean?                   @default(true)
+  auto_apply_cand          auto_apply_cand            @relation(fields: [cand_id], references: [cand_id], onDelete: Cascade, onUpdate: NoAction)
+  parsed_requirements      parsed_requirements        @relation(fields: [requirement_id], references: [requirement_id], onDelete: Cascade, onUpdate: NoAction)
+  job_application_tracking job_application_tracking[]
 
-  @@map("jobs")
+  @@unique([cand_id, requirement_id], map: "unique_cand_req_match")
+  @@index([is_active], map: "idx_match_active")
+  @@index([cand_id], map: "idx_match_cand_id")
+  @@index([matched_at(sort: Desc)], map: "idx_match_date")
+  @@index([requirement_id], map: "idx_match_req_id")
+  @@index([similarity_score(sort: Desc)], map: "idx_match_score")
 }
 
-model Application {
-  id          String   @id @default(uuid())
-  jobId       String   @map("job_id")
-  userId      String   @map("user_id")
-  status      String   @default("pending")
-  coverLetter String?  @map("cover_letter")
-  resume      String?
-  appliedAt   DateTime @default(now()) @map("applied_at")
-  updatedAt   DateTime @updatedAt @map("updated_at")
-  
-  job         Job      @relation(fields: [jobId], references: [id], onDelete: Cascade)
-  user        User     @relation(fields: [userId], references: [id], onDelete: Cascade)
-
-  @@unique([jobId, userId])
-  @@map("applications")
+model disability_master {
+  disability_id   Int       @id @default(autoincrement())
+  disability_text String
+  company_id      Int?      @default(1)
+  is_active       Boolean?  @default(true)
+  created_at      DateTime? @default(now()) @db.Timestamptz(6)
 }
 
-// Add more models based on your Supabase schema
-// Example: Profile, Company, etc.
+model ethnicity_master {
+  ethnicity_id   Int       @id @default(autoincrement())
+  ethnicity_text String
+  company_id     Int?      @default(1)
+  is_active      Boolean?  @default(true)
+  created_at     DateTime? @default(now()) @db.Timestamptz(6)
+}
 
+model gender_master {
+  gender_id   Int       @id @default(autoincrement())
+  gender_text String
+  company_id  Int?      @default(1)
+  is_active   Boolean?  @default(true)
+  created_at  DateTime? @default(now()) @db.Timestamptz(6)
+}
 
+/// This model or at least one of its fields has comments in the database, and requires an additional setup for migrations: Read more: https://pris.ly/d/database-comments
+model job_application_tracking {
+  application_id      Int                 @id @default(autoincrement())
+  cand_id             Int
+  requirement_id      String
+  matching_id         Int?
+  similarity_score    Decimal?            @db.Decimal(5, 4)
+  application_status  String?             @default("MATCHED")
+  applied_at          DateTime?           @db.Timestamptz(6)
+  reviewed_at         DateTime?           @db.Timestamptz(6)
+  interview_date      DateTime?           @db.Timestamptz(6)
+  cover_letter        String?
+  application_notes   String?
+  recruiter_notes     String?
+  rejection_reason    String?
+  created_at          DateTime?           @default(now()) @db.Timestamptz(6)
+  status_updated_at   DateTime?           @default(now()) @db.Timestamptz(6)
+  email_sent          Boolean?            @default(false)
+  email_sent_at       DateTime?           @db.Timestamptz(6)
+  sms_sent            Boolean?            @default(false)
+  sms_sent_at         DateTime?           @db.Timestamptz(6)
+  auto_apply_cand     auto_apply_cand     @relation(fields: [cand_id], references: [cand_id], onDelete: Cascade, onUpdate: NoAction)
+  cand_job_matching   cand_job_matching?  @relation(fields: [matching_id], references: [matching_id], onUpdate: NoAction)
+  parsed_requirements parsed_requirements @relation(fields: [requirement_id], references: [requirement_id], onDelete: Cascade, onUpdate: NoAction)
+
+  @@unique([cand_id, requirement_id], map: "unique_cand_req_application")
+  @@index([cand_id], map: "idx_app_cand_id")
+  @@index([created_at(sort: Desc)], map: "idx_app_created")
+  @@index([email_sent], map: "idx_app_email_sent")
+  @@index([matching_id], map: "idx_app_matching_id")
+  @@index([requirement_id], map: "idx_app_req_id")
+  @@index([sms_sent], map: "idx_app_sms_sent")
+  @@index([application_status], map: "idx_app_status")
+  @@index([status_updated_at(sort: Desc)], map: "idx_app_status_updated")
+}
+
+/// This table contains check constraints and requires additional setup for migrations. Visit https://pris.ly/d/check-constraints for more info.
+/// This model or at least one of its fields has comments in the database, and requires an additional setup for migrations: Read more: https://pris.ly/d/database-comments
+model parsed_cand_resume {
+  parsed_resume_id       Int             @id @default(autoincrement())
+  cand_id                Int             @unique
+  resume_text            String?
+  resume_json            Json?
+  full_name              String?
+  email                  String?
+  phone                  String?
+  location               String?
+  zipcode                String?
+  total_experience_years Int?            @default(0)
+  professional_summary   String?
+  technical_skills       String[]
+  soft_skills            String[]
+  languages              String[]
+  certifications         Json?
+  education              Json?
+  work_experience        Json?
+  projects               Json?
+  achievements           String[]
+  parsed_at              DateTime?       @default(now()) @db.Timestamptz(6)
+  last_updated           DateTime?       @default(now()) @db.Timestamptz(6)
+  auto_apply_cand        auto_apply_cand @relation(fields: [cand_id], references: [cand_id], onDelete: Cascade, onUpdate: NoAction)
+
+  @@index([cand_id], map: "idx_parsed_resume_cand_id")
+  @@index([email], map: "idx_parsed_resume_email")
+  @@index([total_experience_years], map: "idx_parsed_resume_experience")
+  @@index([technical_skills], map: "idx_parsed_resume_skills", type: Gin)
+  @@index([zipcode], map: "idx_parsed_resume_zipcode")
+}
+
+/// This model or at least one of its fields has comments in the database, and requires an additional setup for migrations: Read more: https://pris.ly/d/database-comments
+model parsed_requirements {
+  requirement_id              String                     @id
+  requirement_open_date       DateTime?                  @db.Date
+  requirement_duration        String?
+  requirement_job_description String?
+  is_remote_location          Boolean?                   @default(false)
+  client_job_title            String
+  req_zipcode                 String?
+  status                      String?                    @default("OPEN")
+  created_at                  DateTime?                  @default(now()) @db.Timestamptz(6)
+  updated_at                  DateTime?                  @default(now()) @db.Timestamptz(6)
+  client_name                 String?
+  min_payrate                 Decimal?                   @db.Decimal(10, 2)
+  address                     String?
+  max_payrate                 Decimal?                   @db.Decimal
+  cand_job_matching           cand_job_matching[]
+  job_application_tracking    job_application_tracking[]
+
+  @@index([client_name], map: "idx_parsed_req_client_name")
+  @@index([requirement_open_date(sort: Desc)], map: "idx_parsed_req_open_date")
+  @@index([min_payrate], map: "idx_parsed_req_payrate")
+  @@index([is_remote_location], map: "idx_parsed_req_remote")
+  @@index([requirement_id], map: "idx_parsed_req_requirement_id")
+  @@index([status], map: "idx_parsed_req_status")
+  @@index([req_zipcode], map: "idx_parsed_req_zipcode")
+}
+
+model race_master {
+  race_id    Int       @id @default(autoincrement())
+  race_text  String
+  company_id Int?      @default(1)
+  is_active  Boolean?  @default(true)
+  created_at DateTime? @default(now()) @db.Timestamptz(6)
+}
+
+model veteran_disclosure_master {
+  veteran_disclosure_id   Int       @id @default(autoincrement())
+  veteran_disclosure_text String
+  company_id              Int?      @default(1)
+  is_active               Boolean?  @default(true)
+  created_at              DateTime? @default(now()) @db.Timestamptz(6)
+}
