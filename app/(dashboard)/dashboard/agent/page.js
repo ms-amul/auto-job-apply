@@ -12,17 +12,17 @@
 
 import { useEffect, useState, useRef } from 'react';
 import { useRouter } from 'next/navigation';
-import { 
-  Bot, Play, Pause, Settings as SettingsIcon, Activity, 
-  TrendingUp, CheckCircle, Calendar, Target, Clock,
-  Search, FileText, Send, Loader2, Check, X, Building2, MapPin, DollarSign
-} from 'lucide-react';
+import { Play, Pause, Settings as SettingsIcon, Search, FileText, Send, Activity } from 'lucide-react';
 import Button from '@/components/ui/Button';
-import GlassPanel from '@/components/ui/GlassPanel';
-import Input from '@/components/ui/Input';
 import Loader from '@/components/ui/Loader';
 import toast from 'react-hot-toast';
-import { theme } from '@/utils/theme';
+import AgentConfigPanel from '@/components/agent/AgentConfigPanel';
+import AgentStatusOverview from '@/components/agent/AgentStatusOverview';
+import LiveWorkflow from '@/components/agent/LiveWorkflow';
+import DailyLimitReached from '@/components/agent/DailyLimitReached';
+import ApplicationHistory from '@/components/agent/ApplicationHistory';
+import CurrentConfiguration from '@/components/agent/CurrentConfiguration';
+import HowItWorks from '@/components/agent/HowItWorks';
 
 export default function AgentPage() {
   const router = useRouter();
@@ -34,10 +34,9 @@ export default function AgentPage() {
   const [configForm, setConfigForm] = useState({
     dailyLimit: 10,
     keywords: '',
-    locations: '',
-    minSalary: '',
-    maxSalary: '',
-    remoteOnly: false,
+    emailNotifications: true,
+    smsNotifications: false,
+    applyRecentFirst: true,
   });
 
   // Live workflow state
@@ -106,10 +105,9 @@ export default function AgentPage() {
         setConfigForm({
           dailyLimit: agentData.agent.dailyLimit || 10,
           keywords: (agentData.agent.keywords || []).join(', '),
-          locations: (agentData.agent.locations || []).join(', '),
-          minSalary: agentData.agent.minSalary || '',
-          maxSalary: agentData.agent.maxSalary || '',
-          remoteOnly: agentData.agent.remoteOnly || false,
+          emailNotifications: agentData.agent.emailNotifications !== undefined ? agentData.agent.emailNotifications : true,
+          smsNotifications: agentData.agent.smsNotifications || false,
+          applyRecentFirst: agentData.agent.applyRecentFirst !== undefined ? agentData.agent.applyRecentFirst : true,
         });
       }
 
@@ -409,10 +407,9 @@ export default function AgentPage() {
         body: JSON.stringify({
           dailyLimit: parseInt(configForm.dailyLimit) || 10,
           keywords: configForm.keywords.split(',').map(k => k.trim()).filter(Boolean),
-          locations: configForm.locations.split(',').map(l => l.trim()).filter(Boolean),
-          minSalary: configForm.minSalary,
-          maxSalary: configForm.maxSalary,
-          remoteOnly: configForm.remoteOnly,
+          emailNotifications: configForm.emailNotifications,
+          smsNotifications: configForm.smsNotifications,
+          applyRecentFirst: configForm.applyRecentFirst,
         }),
       });
 
@@ -470,521 +467,56 @@ export default function AgentPage() {
         </div>
       </div>
 
-      {/* Configuration Panel */}
-      {showConfig && (
-        <GlassPanel>
-          <div className="space-y-6">
-            <div className="flex items-center justify-between">
-              <h2 className="text-xl font-semibold text-slate-900">Agent Configuration</h2>
-              <Button variant="ghost" onClick={() => setShowConfig(false)}>
-                Close
-              </Button>
-            </div>
-
-            <div className="grid grid-cols-1 md:grid-cols-2 gap-6">
-              <Input
-                label="Daily Application Limit"
-                type="number"
-                value={configForm.dailyLimit}
-                onChange={(e) => setConfigForm({ ...configForm, dailyLimit: e.target.value })}
-                placeholder="10"
-              />
-
-              <Input
-                label="Keywords (comma-separated)"
-                value={configForm.keywords}
-                onChange={(e) => setConfigForm({ ...configForm, keywords: e.target.value })}
-                placeholder="React, Node.js, Python"
-              />
-
-              <Input
-                label="Preferred Locations (comma-separated)"
-                value={configForm.locations}
-                onChange={(e) => setConfigForm({ ...configForm, locations: e.target.value })}
-                placeholder="Remote, San Francisco, New York"
-              />
-
-              <Input
-                label="Minimum Salary (USD)"
-                type="number"
-                value={configForm.minSalary}
-                onChange={(e) => setConfigForm({ ...configForm, minSalary: e.target.value })}
-                placeholder="100000"
-              />
-
-              <Input
-                label="Maximum Salary (USD)"
-                type="number"
-                value={configForm.maxSalary}
-                onChange={(e) => setConfigForm({ ...configForm, maxSalary: e.target.value })}
-                placeholder="200000"
-              />
-
-              <div className="flex items-center gap-3">
-                <input
-                  type="checkbox"
-                  id="remoteOnly"
-                  checked={configForm.remoteOnly}
-                  onChange={(e) => setConfigForm({ ...configForm, remoteOnly: e.target.checked })}
-                  className="w-5 h-5 rounded border-gray-300 text-blue-600 focus:ring-blue-500"
-                />
-                <label htmlFor="remoteOnly" className="text-sm font-medium text-slate-700">
-                  Remote positions only
-                </label>
-              </div>
-            </div>
-
-            <div className="flex justify-end gap-3 pt-4 border-t border-gray-200">
-              <Button variant="secondary" onClick={() => setShowConfig(false)}>
-                Cancel
-              </Button>
-              <Button variant="primary" onClick={handleSaveConfig}>
-                Save Configuration
-              </Button>
-            </div>
-          </div>
-        </GlassPanel>
-      )}
+      {/* Premium Configuration Panel */}
+      <AgentConfigPanel
+        isOpen={showConfig}
+        onClose={() => setShowConfig(false)}
+        configForm={configForm}
+        setConfigForm={setConfigForm}
+        onSave={handleSaveConfig}
+      />
 
       {/* Status Overview */}
-      <GlassPanel>
-        <div className="flex items-center justify-between mb-6">
-          <div className="flex items-center gap-4">
-            <div 
-              className="w-16 h-16 rounded-2xl flex items-center justify-center"
-              style={{ background: theme.getAccentGradient(135) }}
-            >
-              <Bot className="w-8 h-8 text-white" />
-            </div>
-            <div>
-              <p className="text-xl font-bold text-slate-900">Agent Status</p>
-              <p className="text-sm text-slate-600 mt-1">
-                {isRunning ? 'Actively searching and applying to jobs' : 'Agent is paused'}
-              </p>
-            </div>
-          </div>
-          <div className="flex flex-col items-end gap-2">
-            <div className="flex items-center gap-2">
-              <div className={`w-2 h-2 rounded-full ${isRunning ? 'bg-emerald-500 animate-pulse' : 'bg-slate-400'}`} />
-              <span className="text-sm font-semibold text-slate-700">
-                {isRunning ? 'Running' : 'Paused'}
-              </span>
-            </div>
-            {isConfigured && (
-              <span className="text-xs text-emerald-600 flex items-center gap-1">
-                <Check className="w-3 h-3" />
-                Configured
-              </span>
-            )}
-          </div>
-        </div>
-
-        {/* Stats Grid */}
-        <div className="grid grid-cols-2 lg:grid-cols-4 gap-4">
-          <StatCard 
-            label="Today" 
-            value={stats?.today || 0}
-            icon={Calendar}
-            color="blue"
-          />
-          <StatCard 
-            label="This Week" 
-            value={stats?.thisWeek || 0}
-            icon={TrendingUp}
-            color="indigo"
-          />
-          <StatCard 
-            label="Total Applied" 
-            value={stats?.total || 0}
-            icon={CheckCircle}
-            color="purple"
-          />
-          <StatCard 
-            label="Success Rate" 
-            value={stats?.successRate || '0%'}
-            icon={Target}
-            color="green"
-          />
-        </div>
-      </GlassPanel>
+      <AgentStatusOverview
+        isRunning={isRunning}
+        isConfigured={isConfigured}
+        stats={stats}
+      />
 
       {/* Live Workflow Animation or Daily Limit Reached */}
       {isRunning && !dailyLimitReached && (
-        <GlassPanel>
-          <div className="space-y-6">
-            <div className="flex items-center justify-between">
-              <h3 className="text-xl font-semibold text-slate-900">Live Workflow</h3>
-              {nextApplicationIn !== null && (
-                <div className="flex items-center gap-2 px-4 py-2 bg-blue-50 border border-blue-200 rounded-lg">
-                  <Clock className="w-4 h-4 text-blue-600" />
-                  <span className="text-sm font-medium text-blue-900">
-                    Next in {nextApplicationIn}s
-                  </span>
-                </div>
-              )}
-            </div>
-
-            {/* Workflow Steps */}
-            <div className="grid grid-cols-1 md:grid-cols-4 gap-4">
-              {workflow.steps.map((step, index) => (
-                <WorkflowStep
-                  key={step.id}
-                  step={step}
-                  index={index}
-                  isLast={index === workflow.steps.length - 1}
-                />
-              ))}
-            </div>
-          </div>
-        </GlassPanel>
+        <LiveWorkflow workflow={workflow} nextApplicationIn={nextApplicationIn} />
       )}
 
       {/* Daily Limit Reached - Premium Status Display */}
       {dailyLimitReached && (
-        <GlassPanel>
-          <div className="relative overflow-hidden">
-            {/* Gradient Background */}
-            <div className="absolute inset-0 bg-gradient-to-br from-amber-50 via-orange-50 to-amber-50 opacity-60" />
-            
-            {/* Content */}
-            <div className="relative space-y-6 py-8">
-              {/* Icon and Title */}
-              <div className="flex flex-col items-center text-center">
-                <div className="w-20 h-20 rounded-full bg-gradient-to-br from-amber-500 to-orange-600 flex items-center justify-center mb-4 shadow-lg">
-                  <CheckCircle className="w-10 h-10 text-white" />
-                </div>
-                <h3 className="text-2xl font-bold text-slate-900 mb-2">
-                  Daily Limit Reached
-                </h3>
-                <p className="text-slate-600 max-w-md">
-                  You've reached your daily application limit of {agent?.dailyLimit || 10} applications. 
-                  The agent has been paused automatically.
-                </p>
-              </div>
-
-              {/* Stats Summary */}
-              <div className="grid grid-cols-1 md:grid-cols-3 gap-4 max-w-2xl mx-auto">
-                <div className="bg-white/80 backdrop-blur-sm border border-amber-200 rounded-xl p-4 text-center">
-                  <div className="text-3xl font-bold text-amber-600 mb-1">
-                    {stats?.today || 0}
-                  </div>
-                  <div className="text-sm text-slate-600">Applied Today</div>
-                </div>
-                <div className="bg-white/80 backdrop-blur-sm border border-emerald-200 rounded-xl p-4 text-center">
-                  <div className="text-3xl font-bold text-emerald-600 mb-1">
-                    {stats?.thisWeek || 0}
-                  </div>
-                  <div className="text-sm text-slate-600">This Week</div>
-                </div>
-                <div className="bg-white/80 backdrop-blur-sm border border-blue-200 rounded-xl p-4 text-center">
-                  <div className="text-3xl font-bold text-blue-600 mb-1">
-                    {stats?.successRate || '0%'}
-                  </div>
-                  <div className="text-sm text-slate-600">Success Rate</div>
-                </div>
-              </div>
-
-              {/* Action Message */}
-              <div className="text-center space-y-4">
-                <div className="inline-flex items-center gap-2 px-6 py-3 bg-gradient-to-r from-amber-100 to-orange-100 border border-amber-300 rounded-full">
-                  <Clock className="w-5 h-5 text-amber-700" />
-                  <span className="text-sm font-medium text-amber-900">
-                    Agent will resume tomorrow or you can restart it manually
-                  </span>
-                </div>
-                
-                <div className="flex justify-center gap-3">
-                  <Button
-                    variant="secondary"
-                    onClick={() => window.location.href = '/dashboard/applications'}
-                  >
-                    <FileText className="w-4 h-4" />
-                    <span>View Applications</span>
-                  </Button>
-                  <Button
-                    variant="primary"
-                    onClick={() => {
-                      setDailyLimitReached(false);
-                      handleToggleAgent();
-                    }}
-                  >
-                    <Play className="w-4 h-4" />
-                    <span>Restart Agent</span>
-                  </Button>
-                </div>
-              </div>
-            </div>
-          </div>
-        </GlassPanel>
+        <DailyLimitReached
+          agent={agent}
+          stats={stats}
+          onRestart={() => {
+            setDailyLimitReached(false);
+            handleToggleAgent();
+          }}
+        />
       )}
 
       {/* Applications History */}
-      {isRunning && applicationHistory.length > 0 && (
-        <GlassPanel>
-          <div className="space-y-4">
-            <div className="flex items-center justify-between">
-              <h3 className="text-xl font-semibold text-slate-900">Recent Applications</h3>
-              <span className="text-sm text-slate-600">
-                {applicationHistory.length} applied in this session
-              </span>
-            </div>
-
-            <div className="space-y-3">
-              {applicationHistory.map((item, index) => (
-                <ApplicationHistoryItem key={item.id} item={item} index={index} />
-              ))}
-            </div>
-          </div>
-        </GlassPanel>
+      {isRunning && (
+        <ApplicationHistory applicationHistory={applicationHistory} />
       )}
 
       <div className="grid grid-cols-1 lg:grid-cols-2 gap-6">
         {/* Current Configuration */}
-        <GlassPanel>
-          <div className="flex items-center gap-3 mb-6">
-            <div className="w-10 h-10 rounded-xl flex items-center justify-center bg-blue-50">
-              <SettingsIcon className="w-5 h-5 text-blue-600" />
-            </div>
-            <h3 className="text-xl font-semibold text-slate-900">Current Configuration</h3>
-          </div>
-          
-          {isConfigured ? (
-            <div className="space-y-4">
-              <ConfigRow label="Daily Limit" value={`${agent.dailyLimit} applications/day`} />
-              <ConfigRow label="Min Salary" value={agent.minSalary ? `$${parseInt(agent.minSalary).toLocaleString()}` : 'Not set'} />
-              <ConfigRow label="Max Salary" value={agent.maxSalary ? `$${parseInt(agent.maxSalary).toLocaleString()}` : 'Not set'} />
-              <ConfigRow label="Remote Only" value={agent.remoteOnly ? 'Yes' : 'No'} />
-              
-              <div className="pt-2">
-                <p className="text-sm font-medium text-slate-700 mb-3">Keywords</p>
-                <div className="flex flex-wrap gap-2">
-                  {agent.keywords?.map((keyword, i) => (
-                    <span 
-                      key={i} 
-                      className="px-3 py-1.5 bg-blue-50 text-blue-700 rounded-lg text-sm font-medium border border-blue-200"
-                    >
-                      {keyword}
-                    </span>
-                  ))}
-                </div>
-              </div>
-              
-              {agent.locations && agent.locations.length > 0 && (
-                <div className="pt-2">
-                  <p className="text-sm font-medium text-slate-700 mb-3">Locations</p>
-                  <div className="flex flex-wrap gap-2">
-                    {agent.locations.map((location, i) => (
-                      <span 
-                        key={i} 
-                        className="px-3 py-1.5 bg-slate-100 text-slate-700 rounded-lg text-sm font-medium"
-                      >
-                        {location}
-                      </span>
-                    ))}
-                  </div>
-                </div>
-              )}
-            </div>
-          ) : (
-            <div className="text-center py-8">
-              <p className="text-slate-600 mb-4">Agent not configured yet</p>
-              <Button variant="primary" onClick={() => setShowConfig(true)}>
-                <SettingsIcon className="w-4 h-4" />
-                <span>Configure Now</span>
-              </Button>
-            </div>
-          )}
-        </GlassPanel>
+        <CurrentConfiguration
+          agent={agent}
+          isConfigured={isConfigured}
+          onConfigure={() => setShowConfig(true)}
+        />
 
         {/* How It Works */}
-        <GlassPanel>
-          <div className="flex items-center gap-3 mb-6">
-            <div className="w-10 h-10 rounded-xl flex items-center justify-center bg-purple-50">
-              <Activity className="w-5 h-5 text-purple-600" />
-            </div>
-            <h3 className="text-xl font-semibold text-slate-900">How It Works</h3>
-          </div>
-          
-          <div className="space-y-4">
-            <TimelineStep 
-              number="1" 
-              title="Configure Preferences" 
-              description="Set job preferences, keywords, and daily limits"
-            />
-            <TimelineStep 
-              number="2" 
-              title="Start Agent" 
-              description="Activate the agent to begin auto-applying"
-            />
-            <TimelineStep 
-              number="3" 
-              title="Timed Applications" 
-              description="Agent applies to 1 job every minute automatically"
-            />
-            <TimelineStep 
-              number="4" 
-              title="Track Progress" 
-              description="Monitor applications in real-time"
-            />
-          </div>
-
-          <div className="mt-6 pt-6 border-t border-gray-200">
-            <div className="bg-blue-50 border border-blue-200 rounded-xl p-4">
-              <div className="flex items-start gap-3">
-                <Clock className="w-5 h-5 text-blue-600 mt-0.5" />
-                <div>
-                  <p className="text-sm font-semibold text-blue-900 mb-1">Timing</p>
-                  <p className="text-sm text-blue-800">
-                    The agent applies to 1 job per minute to simulate natural application patterns and respect rate limits.
-                  </p>
-                </div>
-              </div>
-            </div>
-          </div>
-        </GlassPanel>
+        <HowItWorks />
       </div>
     </div>
   );
 }
 
-// Application History Item Component
-function ApplicationHistoryItem({ item, index }) {
-  return (
-    <div className="flex items-center gap-4 p-4 bg-gradient-to-r from-emerald-50 to-blue-50 border border-emerald-200 rounded-xl animate-fadeIn">
-      <div className="flex items-center justify-center w-8 h-8 rounded-full bg-emerald-500 text-white text-sm font-bold shrink-0">
-        {index + 1}
-      </div>
-      
-      <div className="w-12 h-12 rounded-lg bg-white border border-gray-200 flex items-center justify-center overflow-hidden shrink-0">
-        {item.job.companyLogo ? (
-          <img 
-            src={item.job.companyLogo} 
-            alt={item.job.company}
-            className="w-8 h-8 object-contain"
-          />
-        ) : (
-          <Building2 className="w-6 h-6 text-slate-400" />
-        )}
-      </div>
-
-      <div className="flex-1 min-w-0">
-        <p className="font-semibold text-slate-900 truncate">{item.job.title}</p>
-        <div className="flex items-center gap-3 mt-1 text-sm text-slate-600">
-          <span className="flex items-center gap-1">
-            <Building2 className="w-3.5 h-3.5" />
-            {item.job.company}
-          </span>
-          <span className="flex items-center gap-1">
-            <MapPin className="w-3.5 h-3.5" />
-            {item.job.location}
-          </span>
-        </div>
-      </div>
-
-      <div className="flex flex-col items-end gap-1 shrink-0">
-        <div className="flex items-center gap-1.5 px-3 py-1 bg-emerald-100 border border-emerald-300 rounded-lg">
-          <CheckCircle className="w-3.5 h-3.5 text-emerald-700" />
-          <span className="text-xs font-semibold text-emerald-700">Applied</span>
-        </div>
-        <span className="text-xs text-slate-500">{item.timeTaken}</span>
-      </div>
-    </div>
-  );
-}
-
-// Workflow Step Component
-function WorkflowStep({ step, index }) {
-  const Icon = step.icon;
-  
-  const getStatusColor = () => {
-    switch (step.status) {
-      case 'active': return 'border-blue-500 bg-blue-50';
-      case 'complete': return 'border-emerald-500 bg-emerald-50';
-      default: return 'border-gray-200 bg-white';
-    }
-  };
-
-  const getIconColor = () => {
-    switch (step.status) {
-      case 'active': return 'text-blue-600';
-      case 'complete': return 'text-emerald-600';
-      default: return 'text-slate-400';
-    }
-  };
-
-  return (
-    <div className="relative">
-      <div className={`border-2 rounded-xl p-4 transition-all duration-300 ${getStatusColor()}`}>
-        <div className="flex items-center gap-3 mb-2">
-          {step.status === 'active' ? (
-            <Loader2 className={`w-5 h-5 animate-spin ${getIconColor()}`} />
-          ) : step.status === 'complete' ? (
-            <CheckCircle className={`w-5 h-5 ${getIconColor()}`} />
-          ) : (
-            <Icon className={`w-5 h-5 ${getIconColor()}`} />
-          )}
-          <span className={`text-sm font-semibold ${
-            step.status === 'idle' ? 'text-slate-500' : 'text-slate-900'
-          }`}>
-            Step {index + 1}
-          </span>
-        </div>
-        <p className={`text-sm ${
-          step.status === 'idle' ? 'text-slate-500' : 'text-slate-700'
-        }`}>
-          {step.label}
-        </p>
-      </div>
-    </div>
-  );
-}
-
-// Stat Card Component
-function StatCard({ label, value, icon: Icon, color }) {
-  const colors = {
-    blue: 'bg-blue-500',
-    indigo: 'bg-indigo-500',
-    purple: 'bg-purple-500',
-    green: 'bg-emerald-500',
-  };
-
-  return (
-    <div className="bg-white border border-gray-200 rounded-xl p-5">
-      <div className="flex items-center justify-between mb-3">
-        <p className="text-sm font-medium text-slate-600">{label}</p>
-        <div className={`w-8 h-8 rounded-lg flex items-center justify-center ${colors[color]}`}>
-          <Icon className="w-4 h-4 text-white" />
-        </div>
-      </div>
-      <p className="text-3xl font-bold text-slate-900">{value}</p>
-    </div>
-  );
-}
-
-// Config Row Component
-function ConfigRow({ label, value }) {
-  return (
-    <div className="flex items-center justify-between py-2">
-      <span className="text-sm font-medium text-slate-700">{label}</span>
-      <span className="text-sm font-semibold text-slate-900">{value}</span>
-    </div>
-  );
-}
-
-// Timeline Step Component
-function TimelineStep({ number, title, description }) {
-  return (
-    <div className="flex items-start gap-4">
-      <div 
-        className="w-8 h-8 rounded-full flex items-center justify-center shrink-0 text-white font-bold text-sm"
-        style={{ background: theme.getAccentGradient(135) }}
-      >
-        {number}
-      </div>
-      <div>
-        <p className="font-semibold text-slate-900 mb-1">{title}</p>
-        <p className="text-sm text-slate-600">{description}</p>
-      </div>
-    </div>
-  );
-}

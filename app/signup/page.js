@@ -9,7 +9,11 @@ import {
   Mail,
   Sparkles,
   TrendingUp,
-  Zap
+  Zap,
+  Upload,
+  FileText,
+  X,
+  CheckCircle2
 } from 'lucide-react';
 import { useRouter } from 'next/navigation';
 import { useState } from 'react';
@@ -20,46 +24,220 @@ export default function SignupPage() {
   const [error, setError] = useState('');
 
   const [form, setForm] = useState({
-    firstName: '',
-    lastName: '',
     email: '',
     password: '',
   });
+  const [resume, setResume] = useState(null);
+  const [resumeError, setResumeError] = useState('');
+  const [isDragging, setIsDragging] = useState(false);
+  
+  // Step management: 1 = email/password, 2 = resume upload
+  const [currentStep, setCurrentStep] = useState(1);
 
   const updateField = (field, value) => {
     setForm((prev) => ({ ...prev, [field]: value }));
   };
 
-  const handleSubmit = async (e) => {
-    e.preventDefault();
-    setLoading(true);
-    setError('');
+  const validateResume = (file) => {
+    const allowedTypes = [
+      'application/pdf',
+      'application/vnd.openxmlformats-officedocument.wordprocessingml.document',
+      'application/msword',
+      'text/plain'
+    ];
+    const allowedExtensions = ['.pdf', '.docx', '.doc', '.txt'];
+    const maxSize = 5 * 1024 * 1024; // 5MB
 
+    if (!file) {
+      return 'Resume is required';
+    }
+
+    const fileExtension = '.' + file.name.split('.').pop().toLowerCase();
+    
+    if (!allowedTypes.includes(file.type) && !allowedExtensions.includes(fileExtension)) {
+      return 'Please upload a PDF, DOCX, or TXT file';
+    }
+
+    if (file.size > maxSize) {
+      return 'File size must be less than 5MB';
+    }
+
+    return null;
+  };
+
+  const handleFileSelect = (file) => {
+    setResumeError('');
+    const error = validateResume(file);
+    if (error) {
+      setResumeError(error);
+      return;
+    }
+    setResume(file);
+  };
+
+  const handleDrop = (e) => {
+    e.preventDefault();
+    setIsDragging(false);
+    const file = e.dataTransfer.files[0];
+    if (file) {
+      handleFileSelect(file);
+    }
+  };
+
+  const handleDragOver = (e) => {
+    e.preventDefault();
+    setIsDragging(true);
+  };
+
+  const handleDragLeave = (e) => {
+    e.preventDefault();
+    setIsDragging(false);
+  };
+
+  const handleFileInput = (e) => {
+    const file = e.target.files[0];
+    if (file) {
+      handleFileSelect(file);
+    }
+  };
+
+  const removeResume = () => {
+    setResume(null);
+    setResumeError('');
+  };
+
+  const formatFileSize = (bytes) => {
+    if (bytes === 0) return '0 Bytes';
+    const k = 1024;
+    const sizes = ['Bytes', 'KB', 'MB'];
+    const i = Math.floor(Math.log(bytes) / Math.log(k));
+    return Math.round(bytes / Math.pow(k, i) * 100) / 100 + ' ' + sizes[i];
+  };
+
+  const getFileIcon = (fileName) => {
+    const ext = fileName.split('.').pop().toLowerCase();
+    if (ext === 'pdf') return '📄';
+    if (ext === 'docx' || ext === 'doc') return '📝';
+    if (ext === 'txt') return '📋';
+    return '📎';
+  };
+
+  // Handle Next button click (Step 1 -> Step 2)
+  const handleNext = async () => {
+    setError('');
+    
+    // Validate email and password
+    if (!form.email.trim()) {
+      setError('Email is required');
+      return;
+    }
+    if (!form.password.trim()) {
+      setError('Password is required');
+      return;
+    }
+
+    setLoading(true);
+    
     try {
-      const res = await fetch('/api/auth/signup', {
+      // TODO: Call API to validate/save email and password
+      // This is step 1 API call
+      const res = await fetch('/api/auth/validate-credentials', {
         method: 'POST',
         headers: { 'Content-Type': 'application/json' },
         body: JSON.stringify({
-          name: `${form.firstName} ${form.lastName}`.trim(),
           email: form.email,
           password: form.password,
         }),
       });
 
-      const data = await res.json();
-      if (!data.success) {
-        setError(data.error || 'Failed to sign up');
-        setLoading(false);
-        return;
-      }
+      // For now, just proceed to next step (API endpoint may not exist yet)
+      // TODO: Handle API response properly when endpoint is ready
+      setCurrentStep(2);
+      setLoading(false);
+    } catch (err) {
+      console.error('Error validating credentials:', err);
+      // For now, proceed anyway (API may not exist)
+      setCurrentStep(2);
+      setLoading(false);
+    }
+  };
 
-      localStorage.setItem('user', JSON.stringify(data.user));
-      try {
-        setCookie(brand.cookies.userId, data.user.id, 7);
-      } catch (err) {
-        console.error('Failed to set id cookie', err);
+  // Handle final submit (Step 2 - Resume Upload)
+  const handleSubmit = async (e) => {
+    e.preventDefault();
+    setLoading(true);
+    setError('');
+    setResumeError('');
+
+    // Validate resume
+    if (!resume) {
+      setResumeError('Please upload your resume');
+      setLoading(false);
+      return;
+    }
+
+    const resumeValidationError = validateResume(resume);
+    if (resumeValidationError) {
+      setResumeError(resumeValidationError);
+      setLoading(false);
+      return;
+    }
+
+    try {
+      // TODO: Call API to submit resume and complete signup
+      // This is step 2 API call - submit resume
+      const formData = new FormData();
+      formData.append('resume', resume);
+      formData.append('email', form.email);
+      formData.append('password', form.password);
+
+      const res = await fetch('/api/auth/signup-with-resume', {
+        method: 'POST',
+        body: formData,
+      });
+
+      // For now, try the existing signup endpoint as fallback
+      if (!res.ok) {
+        // Fallback to original signup endpoint
+        const signupRes = await fetch('/api/auth/signup', {
+          method: 'POST',
+          headers: { 'Content-Type': 'application/json' },
+          body: JSON.stringify({
+            email: form.email,
+            password: form.password,
+          }),
+        });
+
+        const data = await signupRes.json();
+        if (!data.success) {
+          setError(data.error || 'Failed to sign up');
+          setLoading(false);
+          return;
+        }
+
+        localStorage.setItem('user', JSON.stringify(data.user));
+        try {
+          setCookie(brand.cookies.userId, data.user.id, 7);
+        } catch (err) {
+          console.error('Failed to set id cookie', err);
+        }
+        router.push('/dashboard/profile');
+      } else {
+        const data = await res.json();
+        if (!data.success) {
+          setError(data.error || 'Failed to sign up');
+          setLoading(false);
+          return;
+        }
+
+        localStorage.setItem('user', JSON.stringify(data.user));
+        try {
+          setCookie(brand.cookies.userId, data.user.id, 7);
+        } catch (err) {
+          console.error('Failed to set id cookie', err);
+        }
+        router.push('/dashboard/profile');
       }
-      router.push('/dashboard/profile');
     } catch (err) {
       console.error(err);
       setError('Failed to sign up');
@@ -223,13 +401,32 @@ export default function SignupPage() {
               />
 
               <div className="relative z-10">
-                <div className="text-center mb-6 md:mb-8">
+                <div className="text-left mb-6 md:mb-8">
                   <h2 className="text-2xl md:text-3xl font-bold text-slate-900 mb-2">
-                    Create Account
+                    {currentStep === 1 && 'Account Details'}
+                    {currentStep === 2 && 'Upload Resume'}
                   </h2>
                   <p className="text-sm md:text-base text-slate-600">
-                    Start your AI-powered job search journey
+                    {currentStep === 1 && 'Enter your email and password'}
+                    {currentStep === 2 && 'Upload your resume to complete signup'}
                   </p>
+                  
+                  {/* Step indicator */}
+                  <div className="flex items-center justify-center gap-2 mt-4">
+                    {[1, 2].map((step) => (
+                      <div
+                        key={step}
+                        className={`h-2 rounded-full transition-all duration-300 ${
+                          step <= currentStep ? 'w-8' : 'w-2'
+                        }`}
+                        style={{
+                          background: step <= currentStep
+                            ? theme.getAccentGradient(90)
+                            : '#e2e8f0',
+                        }}
+                      />
+                    ))}
+                  </div>
                 </div>
 
                 {error && (
@@ -246,119 +443,276 @@ export default function SignupPage() {
                 )}
 
                 <form onSubmit={handleSubmit} className="space-y-4 md:space-y-5">
-                  {/* Name Fields */}
-                  <div className="grid grid-cols-2 gap-3 md:gap-4">
-                    <div>
+                  {/* Step 1: Email and Password */}
+                  {currentStep === 1 && (
+                    <>
+                      <div className="animate-fadeIn">
+                        <label className="block text-sm font-semibold text-slate-700 mb-2">
+                          Email Address <span className="text-red-500">*</span>
+                        </label>
+                        <div className="relative">
+                          <Mail className="absolute left-3 top-1/2 -translate-y-1/2 w-5 h-5 text-slate-400" />
+                          <input
+                            type="email"
+                            value={form.email}
+                            onChange={(e) => updateField('email', e.target.value)}
+                            className="w-full pl-11 pr-4 py-2.5 bg-white border border-gray-200 rounded-lg focus:outline-none transition-all text-slate-900 placeholder-slate-400 text-sm md:text-base"
+                            placeholder="john@example.com"
+                            required
+                            style={{
+                              outline: 'none',
+                            }}
+                            onFocus={(e) => {
+                              e.currentTarget.style.borderColor = theme.accentPrimary;
+                              e.currentTarget.style.boxShadow = `0 0 0 3px ${theme.accentPrimary}15`;
+                            }}
+                            onBlur={(e) => {
+                              e.currentTarget.style.borderColor = '#e2e8f0';
+                              e.currentTarget.style.boxShadow = 'none';
+                            }}
+                          />
+                        </div>
+                      </div>
+
+                      <div className="animate-fadeIn">
+                        <label className="block text-sm font-semibold text-slate-700 mb-2">
+                          Password <span className="text-red-500">*</span>
+                        </label>
+                        <div className="relative">
+                          <Lock className="absolute left-3 top-1/2 -translate-y-1/2 w-5 h-5 text-slate-400" />
+                          <input
+                            type="password"
+                            value={form.password}
+                            onChange={(e) => updateField('password', e.target.value)}
+                            className="w-full pl-11 pr-4 py-2.5 bg-white border border-gray-200 rounded-lg focus:outline-none transition-all text-slate-900 placeholder-slate-400 text-sm md:text-base"
+                            placeholder="••••••••"
+                            required
+                            style={{
+                              outline: 'none',
+                            }}
+                            onFocus={(e) => {
+                              e.currentTarget.style.borderColor = theme.accentPrimary;
+                              e.currentTarget.style.boxShadow = `0 0 0 3px ${theme.accentPrimary}15`;
+                            }}
+                            onBlur={(e) => {
+                              e.currentTarget.style.borderColor = '#e2e8f0';
+                              e.currentTarget.style.boxShadow = 'none';
+                            }}
+                          />
+                        </div>
+                        <p className="text-xs text-slate-500 mt-2">Demo only - use any password</p>
+                      </div>
+                    </>
+                  )}
+
+                  {/* Step 2: Resume Upload Field - Show only when step 2 */}
+                  {currentStep === 2 && (
+                    <div className="animate-fadeIn">
                       <label className="block text-sm font-semibold text-slate-700 mb-2">
-                        First Name
+                        Resume <span className="text-red-500">*</span>
                       </label>
-                      <input
-                        type="text"
-                        value={form.firstName}
-                        onChange={(e) => updateField('firstName', e.target.value)}
-                        className="w-full px-4 py-2.5 bg-white border border-gray-200 rounded-lg focus:outline-none transition-all text-slate-900 placeholder-slate-400 text-sm md:text-base"
-                        placeholder="John"
-                        required
+                    
+                    {!resume ? (
+                      <div
+                        onDrop={handleDrop}
+                        onDragOver={handleDragOver}
+                        onDragLeave={handleDragLeave}
+                        className={`relative border-2 border-dashed rounded-xl p-6 md:p-8 transition-all duration-300 cursor-pointer group ${
+                          isDragging
+                            ? 'border-opacity-100 scale-[1.02]'
+                            : 'border-gray-300 hover:border-gray-400'
+                        } ${
+                          resumeError
+                            ? 'border-red-300 bg-red-50/50'
+                            : 'bg-gradient-to-br from-slate-50 to-white'
+                        }`}
                         style={{
-                          outline: 'none',
+                          borderColor: isDragging
+                            ? theme.accentPrimary
+                            : resumeError
+                            ? '#fca5a5'
+                            : undefined,
+                          background: isDragging
+                            ? `linear-gradient(135deg, ${theme.accentPrimary}08, white)`
+                            : resumeError
+                            ? undefined
+                            : undefined,
                         }}
-                        onFocus={(e) => {
-                          e.currentTarget.style.borderColor = theme.accentPrimary;
-                          e.currentTarget.style.boxShadow = `0 0 0 3px ${theme.accentPrimary}15`;
-                        }}
-                        onBlur={(e) => {
-                          e.currentTarget.style.borderColor = '#e2e8f0';
-                          e.currentTarget.style.boxShadow = 'none';
-                        }}
-                      />
-                    </div>
+                        onClick={() => document.getElementById('resume-upload').click()}
+                      >
+                        {/* Premium glass effect overlay */}
+                        <div className="absolute inset-0 bg-gradient-to-br from-white/60 via-transparent to-transparent rounded-xl opacity-0 group-hover:opacity-100 transition-opacity duration-300"></div>
+                        
+                        {/* Animated gradient border on hover */}
+                        <div
+                          className="absolute inset-0 rounded-xl opacity-0 group-hover:opacity-100 transition-opacity duration-300"
+                          style={{
+                            background: `linear-gradient(135deg, ${theme.accentPrimary}10, ${theme.accentSecondary}10)`,
+                            border: `2px solid ${theme.accentPrimary}30`,
+                            margin: '-2px',
+                          }}
+                        ></div>
 
-                    <div>
-                      <label className="block text-sm font-semibold text-slate-700 mb-2">
-                        Last Name
-                      </label>
-                      <input
-                        type="text"
-                        value={form.lastName}
-                        onChange={(e) => updateField('lastName', e.target.value)}
-                        className="w-full px-4 py-2.5 bg-white border border-gray-200 rounded-lg focus:outline-none transition-all text-slate-900 placeholder-slate-400 text-sm md:text-base"
-                        placeholder="Doe"
-                        required
+                        <div className="relative z-10 flex flex-col items-center justify-center text-center">
+                          {/* Premium icon container */}
+                          <div
+                            className="w-16 h-16 md:w-20 md:h-20 rounded-2xl flex items-center justify-center mb-4 transition-all duration-300 group-hover:scale-110 group-hover:rotate-3"
+                            style={{
+                              background: theme.getAccentGradient(135),
+                              boxShadow: `0 8px 24px ${theme.accentPrimary}25`,
+                            }}
+                          >
+                            <Upload className="w-8 h-8 md:w-10 md:h-10 text-white" strokeWidth={2} />
+                          </div>
+
+                          <h3 className="text-base md:text-lg font-bold text-slate-900 mb-2">
+                            Upload Your Resume
+                          </h3>
+                          <p className="text-sm text-slate-600 mb-1">
+                            Drag and drop your resume here, or{' '}
+                            <span
+                              className="font-semibold"
+                              style={{ color: theme.accentPrimary }}
+                            >
+                              browse
+                            </span>
+                          </p>
+                          <p className="text-xs text-slate-500">
+                            Supports PDF, DOCX, and TXT files (max 5MB)
+                          </p>
+
+                          {/* File type badges */}
+                          <div className="flex items-center gap-2 mt-4">
+                            {['PDF', 'DOCX', 'TXT'].map((type) => (
+                              <span
+                                key={type}
+                                className="px-3 py-1 rounded-full text-xs font-semibold"
+                                style={{
+                                  background: `${theme.accentPrimary}10`,
+                                  color: theme.accentPrimary,
+                                  border: `1px solid ${theme.accentPrimary}20`,
+                                }}
+                              >
+                                {type}
+                              </span>
+                            ))}
+                          </div>
+                        </div>
+
+                        <input
+                          id="resume-upload"
+                          type="file"
+                          accept=".pdf,.docx,.doc,.txt"
+                          onChange={handleFileInput}
+                          className="hidden"
+                        />
+                      </div>
+                    ) : (
+                      <div
+                        className="relative rounded-xl p-4 md:p-5 border-2 transition-all duration-300 group"
                         style={{
-                          outline: 'none',
+                          background: `linear-gradient(135deg, ${theme.accentPrimary}08, white)`,
+                          borderColor: `${theme.accentPrimary}30`,
+                          boxShadow: `0 4px 12px ${theme.accentPrimary}15`,
                         }}
-                        onFocus={(e) => {
-                          e.currentTarget.style.borderColor = theme.accentPrimary;
-                          e.currentTarget.style.boxShadow = `0 0 0 3px ${theme.accentPrimary}15`;
-                        }}
-                        onBlur={(e) => {
-                          e.currentTarget.style.borderColor = '#e2e8f0';
-                          e.currentTarget.style.boxShadow = 'none';
-                        }}
-                      />
-                    </div>
-                  </div>
+                      >
+                        {/* Success indicator */}
+                        <div className="absolute top-3 right-3">
+                          <div
+                            className="w-8 h-8 rounded-full flex items-center justify-center"
+                            style={{
+                              background: `${theme.accentPrimary}15`,
+                            }}
+                          >
+                            <CheckCircle2
+                              className="w-5 h-5"
+                              style={{ color: theme.accentPrimary }}
+                              strokeWidth={2.5}
+                            />
+                          </div>
+                        </div>
 
-                  {/* Email Field */}
-                  <div>
-                    <label className="block text-sm font-semibold text-slate-700 mb-2">
-                      Email Address
-                    </label>
-                    <div className="relative">
-                      <Mail className="absolute left-3 top-1/2 -translate-y-1/2 w-5 h-5 text-slate-400" />
-                      <input
-                        type="email"
-                        value={form.email}
-                        onChange={(e) => updateField('email', e.target.value)}
-                        className="w-full pl-11 pr-4 py-2.5 bg-white border border-gray-200 rounded-lg focus:outline-none transition-all text-slate-900 placeholder-slate-400 text-sm md:text-base"
-                        placeholder="john@example.com"
-                        required
-                        style={{
-                          outline: 'none',
-                        }}
-                        onFocus={(e) => {
-                          e.currentTarget.style.borderColor = theme.accentPrimary;
-                          e.currentTarget.style.boxShadow = `0 0 0 3px ${theme.accentPrimary}15`;
-                        }}
-                        onBlur={(e) => {
-                          e.currentTarget.style.borderColor = '#e2e8f0';
-                          e.currentTarget.style.boxShadow = 'none';
-                        }}
-                      />
-                    </div>
-                  </div>
+                        <div className="flex items-start gap-4 pr-10">
+                          {/* File icon */}
+                          <div
+                            className="w-12 h-12 rounded-xl flex items-center justify-center flex-shrink-0 text-2xl"
+                            style={{
+                              background: theme.getAccentGradient(135),
+                              boxShadow: `0 4px 12px ${theme.accentPrimary}25`,
+                            }}
+                          >
+                            {getFileIcon(resume.name)}
+                          </div>
 
-                  {/* Password Field */}
-                  <div>
-                    <label className="block text-sm font-semibold text-slate-700 mb-2">
-                      Password
-                    </label>
-                    <div className="relative">
-                      <Lock className="absolute left-3 top-1/2 -translate-y-1/2 w-5 h-5 text-slate-400" />
-                      <input
-                        type="password"
-                        value={form.password}
-                        onChange={(e) => updateField('password', e.target.value)}
-                        className="w-full pl-11 pr-4 py-2.5 bg-white border border-gray-200 rounded-lg focus:outline-none transition-all text-slate-900 placeholder-slate-400 text-sm md:text-base"
-                        placeholder="••••••••"
-                        required
-                        style={{
-                          outline: 'none',
-                        }}
-                        onFocus={(e) => {
-                          e.currentTarget.style.borderColor = theme.accentPrimary;
-                          e.currentTarget.style.boxShadow = `0 0 0 3px ${theme.accentPrimary}15`;
-                        }}
-                        onBlur={(e) => {
-                          e.currentTarget.style.borderColor = '#e2e8f0';
-                          e.currentTarget.style.boxShadow = 'none';
-                        }}
-                      />
-                    </div>
-                    <p className="text-xs text-slate-500 mt-2">Demo only - use any password</p>
-                  </div>
+                          {/* File info */}
+                          <div className="flex-1 min-w-0">
+                            <div className="flex items-center gap-2 mb-1">
+                              <FileText className="w-4 h-4 text-slate-600" />
+                              <p className="font-semibold text-slate-900 text-sm md:text-base truncate">
+                                {resume.name}
+                              </p>
+                            </div>
+                            <p className="text-xs text-slate-500">
+                              {formatFileSize(resume.size)}
+                            </p>
+                          </div>
 
-                  {/* Terms */}
+                          {/* Remove button */}
+                          <button
+                            type="button"
+                            onClick={removeResume}
+                            className="flex-shrink-0 w-8 h-8 rounded-lg flex items-center justify-center transition-all duration-200 hover:bg-red-50 group/remove"
+                            style={{
+                              color: '#ef4444',
+                            }}
+                            onMouseEnter={(e) => {
+                              e.currentTarget.style.background = '#fef2f2';
+                            }}
+                            onMouseLeave={(e) => {
+                              e.currentTarget.style.background = 'transparent';
+                            }}
+                          >
+                            <X className="w-4 h-4" strokeWidth={2.5} />
+                          </button>
+                        </div>
+
+                        {/* Change file button */}
+                        <button
+                          type="button"
+                          onClick={() => document.getElementById('resume-upload').click()}
+                          className="mt-3 text-xs font-semibold transition-colors"
+                          style={{ color: theme.accentPrimary }}
+                          onMouseEnter={(e) => {
+                            e.currentTarget.style.opacity = '0.8';
+                          }}
+                          onMouseLeave={(e) => {
+                            e.currentTarget.style.opacity = '1';
+                          }}
+                        >
+                          Change file
+                        </button>
+
+                        <input
+                          id="resume-upload"
+                          type="file"
+                          accept=".pdf,.docx,.doc,.txt"
+                          onChange={handleFileInput}
+                          className="hidden"
+                        />
+                      </div>
+                    )}
+
+                      {resumeError && (
+                        <p className="text-xs text-red-600 mt-2 flex items-center gap-1">
+                          <X className="w-3 h-3" />
+                          {resumeError}
+                        </p>
+                      )}
+                    </div>
+                  )}
+
+                  {/* Terms - Show on step 1 and 2 */}
+                  {(currentStep === 1 || currentStep === 2) && (
                   <p className="text-xs text-slate-500 leading-relaxed">
                     By signing up you agree to our{' '}
                     <button
@@ -394,39 +748,78 @@ export default function SignupPage() {
                     </button>
                     .
                   </p>
+                  )}
 
-                  {/* Submit Button */}
-                  <button
-                    type="submit"
-                    disabled={loading}
-                    className="group relative w-full py-3 md:py-3.5 rounded-lg font-semibold text-white overflow-hidden transition-all duration-200 disabled:opacity-50 disabled:cursor-not-allowed text-sm md:text-base"
-                    style={{
-                      background: theme.getAccentGradient(135),
-                      boxShadow: `0 4px 12px ${theme.accentPrimary}25`,
-                    }}
-                    onMouseEnter={(e) => {
-                      if (!loading) {
-                        e.currentTarget.style.boxShadow = `0 6px 16px ${theme.accentPrimary}35`;
-                      }
-                    }}
-                    onMouseLeave={(e) => {
-                      e.currentTarget.style.boxShadow = `0 4px 12px ${theme.accentPrimary}25`;
-                    }}
-                  >
-                    <span className="relative z-10 flex items-center justify-center gap-2">
-                      {loading ? (
-                        <>
-                          <div className="w-5 h-5 border-2 border-white/30 border-t-white rounded-full animate-spin" />
-                          Creating account...
-                        </>
-                      ) : (
-                        <>
-                          Create Account
-                          <ArrowRight className="w-5 h-5 transition-transform group-hover:translate-x-0.5" />
-                        </>
-                      )}
-                    </span>
-                  </button>
+                  {/* Step 1: Next Button */}
+                  {currentStep === 1 && (
+                    <button
+                      type="button"
+                      onClick={handleNext}
+                      disabled={loading || !form.email.trim() || !form.password.trim()}
+                      className="group relative w-full py-3 md:py-3.5 rounded-lg font-semibold text-white overflow-hidden transition-all duration-200 disabled:opacity-50 disabled:cursor-not-allowed text-sm md:text-base"
+                      style={{
+                        background: theme.getAccentGradient(135),
+                        boxShadow: `0 4px 12px ${theme.accentPrimary}25`,
+                      }}
+                      onMouseEnter={(e) => {
+                        if (!loading && form.email.trim() && form.password.trim()) {
+                          e.currentTarget.style.boxShadow = `0 6px 16px ${theme.accentPrimary}35`;
+                        }
+                      }}
+                      onMouseLeave={(e) => {
+                        e.currentTarget.style.boxShadow = `0 4px 12px ${theme.accentPrimary}25`;
+                      }}
+                    >
+                      <span className="relative z-10 flex items-center justify-center gap-2">
+                        {loading ? (
+                          <>
+                            <div className="w-5 h-5 border-2 border-white/30 border-t-white rounded-full animate-spin" />
+                            Validating...
+                          </>
+                        ) : (
+                          <>
+                            Next
+                            <ArrowRight className="w-5 h-5 transition-transform group-hover:translate-x-0.5" />
+                          </>
+                        )}
+                      </span>
+                    </button>
+                  )}
+
+                  {/* Step 2: Submit Button */}
+                  {currentStep === 2 && (
+                    <button
+                      type="submit"
+                      disabled={loading}
+                      className="group relative w-full py-3 md:py-3.5 rounded-lg font-semibold text-white overflow-hidden transition-all duration-200 disabled:opacity-50 disabled:cursor-not-allowed text-sm md:text-base"
+                      style={{
+                        background: theme.getAccentGradient(135),
+                        boxShadow: `0 4px 12px ${theme.accentPrimary}25`,
+                      }}
+                      onMouseEnter={(e) => {
+                        if (!loading) {
+                          e.currentTarget.style.boxShadow = `0 6px 16px ${theme.accentPrimary}35`;
+                        }
+                      }}
+                      onMouseLeave={(e) => {
+                        e.currentTarget.style.boxShadow = `0 4px 12px ${theme.accentPrimary}25`;
+                      }}
+                    >
+                      <span className="relative z-10 flex items-center justify-center gap-2">
+                        {loading ? (
+                          <>
+                            <div className="w-5 h-5 border-2 border-white/30 border-t-white rounded-full animate-spin" />
+                            Creating account...
+                          </>
+                        ) : (
+                          <>
+                            Create Account
+                            <ArrowRight className="w-5 h-5 transition-transform group-hover:translate-x-0.5" />
+                          </>
+                        )}
+                      </span>
+                    </button>
+                  )}
                 </form>
 
                 {/* Sign In Link */}

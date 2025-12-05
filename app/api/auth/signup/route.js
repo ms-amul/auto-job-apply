@@ -23,7 +23,7 @@ export async function POST(request) {
       resumeUrl,
     } = body;
 
-    if (!name || !email) {
+    if (!email) {
       return NextResponse.json(
         { success: false, error: 'Name and email are required' },
         { status: 400 },

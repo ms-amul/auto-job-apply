@@ -38,10 +38,9 @@ export async function PUT(request, { params }) {
       status: body.status ?? 'paused', // 'paused' | 'running'
       dailyLimit: body.dailyLimit ?? 10, // Default 10 applications per day
       keywords: body.keywords ?? [],
-      locations: body.locations ?? [],
-      minSalary: body.minSalary ?? '',
-      maxSalary: body.maxSalary ?? '',
-      remoteOnly: body.remoteOnly ?? false,
+      emailNotifications: body.emailNotifications !== undefined ? body.emailNotifications : true,
+      smsNotifications: body.smsNotifications ?? false,
+      applyRecentFirst: body.applyRecentFirst !== undefined ? body.applyRecentFirst : true,
       lastApplicationTime: body.lastApplicationTime ?? null, // MOCK: Track last application timestamp
       nextApplicationTime: body.nextApplicationTime ?? null, // MOCK: Track when next application should happen
       updatedAt: now,

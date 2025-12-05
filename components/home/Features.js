@@ -62,17 +62,28 @@ export default function Features() {
   ];
 
   // Calculate items per view based on screen size
-  const getItemsPerView = () => {
-    if (isMobile) return 1;
-    if (typeof window !== 'undefined') {
+  // Initialize with default value to prevent hydration mismatch
+  const [itemsPerView, setItemsPerView] = useState(2);
+
+  useEffect(() => {
+    const calculateItemsPerView = () => {
+      if (isMobile) return 1;
       if (window.innerWidth >= 1280) return 3; // xl
       if (window.innerWidth >= 1024) return 3; // lg
       if (window.innerWidth >= 768) return 2; // md
-    }
-    return 2;
-  };
+      return 2;
+    };
 
-  const itemsPerView = getItemsPerView();
+    setItemsPerView(calculateItemsPerView());
+
+    const handleResize = () => {
+      setItemsPerView(calculateItemsPerView());
+    };
+
+    window.addEventListener('resize', handleResize);
+    return () => window.removeEventListener('resize', handleResize);
+  }, [isMobile]);
+
   const totalSlides = Math.ceil(features.length / itemsPerView);
 
   // Auto-play carousel
