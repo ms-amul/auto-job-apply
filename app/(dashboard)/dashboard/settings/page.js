@@ -35,6 +35,8 @@
 'use client';
 
 import { useState, useEffect } from 'react';
+import { useRouter } from 'next/navigation';
+import { useSession } from 'next-auth/react';
 import { Shield, Bell, Mail, Lock } from 'lucide-react';
 import Button from '@/components/ui/Button';
 import Card from '@/components/ui/Card';
@@ -42,8 +44,9 @@ import { design } from '@/utils/design';
 import toast from 'react-hot-toast';
 
 export default function SettingsPage() {
+  const router = useRouter();
+  const { data: session, status } = useSession();
   const [loading, setLoading] = useState(false);
-  const [user, setUser] = useState(null);
   
   // TODO: Replace with actual settings from API
   const [settings, setSettings] = useState({
@@ -53,18 +56,25 @@ export default function SettingsPage() {
     weeklyDigest: true,
   });
 
-  // Load user from localStorage
+  // Load user from session
   useEffect(() => {
-    const storedUser = localStorage.getItem('user');
-    if (storedUser) {
-      setUser(JSON.parse(storedUser));
+    if (status === 'unauthenticated') {
+      router.push('/');
+      return;
     }
-    
-    // TODO: Load user settings from API
-    // fetch(`/api/users/${user.id}/settings`)
-    //   .then(res => res.json())
-    //   .then(data => setSettings(data.settings));
-  }, []);
+
+    if (status === 'loading') {
+      return;
+    }
+
+    if (session?.user) {
+      // TODO: Load user settings from API
+      // const userId = session.user.id || session.user.candidate_id?.toString();
+      // fetch(`/api/users/${userId}/settings`)
+      //   .then(res => res.json())
+      //   .then(data => setSettings(data.settings));
+    }
+  }, [status, session, router]);
 
   const handleSubmit = async (e) => {
     e.preventDefault();

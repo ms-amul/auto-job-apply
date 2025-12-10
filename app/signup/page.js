@@ -1,6 +1,5 @@
 'use client';
 
-import { setCookie } from '@/utils/cookies';
 import { theme } from '@/utils/theme';
 import { brand, Logo } from '@/utils/brand';
 import {
@@ -17,6 +16,7 @@ import {
 } from 'lucide-react';
 import { useRouter } from 'next/navigation';
 import { useState } from 'react';
+import toast from 'react-hot-toast';
 
 export default function SignupPage() {
   const router = useRouter();
@@ -122,6 +122,9 @@ export default function SignupPage() {
     return '📎';
   };
 
+  // Store candidate_id after successful signup
+  const [candidateId, setCandidateId] = useState(null);
+
   // Handle Next button click (Step 1 -> Step 2)
   const handleNext = async () => {
     setError('');
@@ -139,9 +142,8 @@ export default function SignupPage() {
     setLoading(true);
     
     try {
-      // TODO: Call API to validate/save email and password
-      // This is step 1 API call
-      const res = await fetch('/api/auth/validate-credentials', {
+      // Call signup API to sync candidate and create account
+      const res = await fetch('/api/auth/signup', {
         method: 'POST',
         headers: { 'Content-Type': 'application/json' },
         body: JSON.stringify({
@@ -150,14 +152,27 @@ export default function SignupPage() {
         }),
       });
 
-      // For now, just proceed to next step (API endpoint may not exist yet)
-      // TODO: Handle API response properly when endpoint is ready
+      const data = await res.json();
+
+      if (!res.ok || !data.success) {
+        setError(data.error || 'Failed to create account');
+        setLoading(false);
+        return;
+      }
+
+      // Store candidate_id for resume upload
+      if (data.user?.candidate_id) {
+        setCandidateId(data.user.candidate_id);
+      } else if (data.user?.id) {
+        setCandidateId(parseInt(data.user.id, 10));
+      }
+
+      // Proceed to resume upload step
       setCurrentStep(2);
       setLoading(false);
     } catch (err) {
-      console.error('Error validating credentials:', err);
-      // For now, proceed anyway (API may not exist)
-      setCurrentStep(2);
+      console.error('Error during signup:', err);
+      setError('Failed to create account. Please try again.');
       setLoading(false);
     }
   };
@@ -183,64 +198,39 @@ export default function SignupPage() {
       return;
     }
 
-    try {
-      // TODO: Call API to submit resume and complete signup
-      // This is step 2 API call - submit resume
-      const formData = new FormData();
-      formData.append('resume', resume);
-      formData.append('email', form.email);
-      formData.append('password', form.password);
+    // Ensure we have candidate_id
+    if (!candidateId) {
+      setError('Account information is missing. Please start over.');
+      setLoading(false);
+      return;
+    }
 
-      const res = await fetch('/api/auth/signup-with-resume', {
+    try {
+      // Call resume upload API
+      const formData = new FormData();
+      formData.append('file', resume);
+      formData.append('candidate_id', candidateId.toString());
+
+      const res = await fetch('/api/auth/upload-resume', {
         method: 'POST',
         body: formData,
       });
 
-      // For now, try the existing signup endpoint as fallback
-      if (!res.ok) {
-        // Fallback to original signup endpoint
-        const signupRes = await fetch('/api/auth/signup', {
-          method: 'POST',
-          headers: { 'Content-Type': 'application/json' },
-          body: JSON.stringify({
-            email: form.email,
-            password: form.password,
-          }),
-        });
+      const data = await res.json();
 
-        const data = await signupRes.json();
-        if (!data.success) {
-          setError(data.error || 'Failed to sign up');
-          setLoading(false);
-          return;
-        }
-
-        localStorage.setItem('user', JSON.stringify(data.user));
-        try {
-          setCookie(brand.cookies.userId, data.user.id, 7);
-        } catch (err) {
-          console.error('Failed to set id cookie', err);
-        }
-        router.push('/dashboard/profile');
-      } else {
-        const data = await res.json();
-        if (!data.success) {
-          setError(data.error || 'Failed to sign up');
-          setLoading(false);
-          return;
-        }
-
-        localStorage.setItem('user', JSON.stringify(data.user));
-        try {
-          setCookie(brand.cookies.userId, data.user.id, 7);
-        } catch (err) {
-          console.error('Failed to set id cookie', err);
-        }
-        router.push('/dashboard/profile');
+      if (!res.ok || !data.success) {
+        setResumeError(data.error || 'Failed to upload resume');
+        setLoading(false);
+        return;
       }
+
+      // Resume uploaded successfully - redirect to sign in
+      // User needs to sign in with their credentials to get authenticated session
+      toast.success('Resume uploaded successfully! Please sign in to continue.');
+      router.push('/');
     } catch (err) {
-      console.error(err);
-      setError('Failed to sign up');
+      console.error('Error uploading resume:', err);
+      setResumeError('Failed to upload resume. Please try again.');
       setLoading(false);
     }
   };

@@ -16,10 +16,12 @@
   "dependencies": {
     "@prisma/client": "^6.1.0",
     "antd": "^5.22.5",
+    "bcryptjs": "^2.4.3",
     "framer-motion": "^11.15.0",
     "lucide-react": "^0.460.0",
     "mongodb": "^6.21.0",
     "next": "16.0.1",
+    "next-auth": "^4.24.7",
     "react": "19.2.0",
     "react-dom": "19.2.0",
     "react-hot-toast": "^2.4.1"

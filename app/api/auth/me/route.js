@@ -1,24 +1,45 @@
 /**
  * Get Current User API Route
  * 
- * TODO: Implement actual session/JWT verification
- * TODO: Get user from database based on session
+ * Uses NextAuth session to get the current authenticated user
  */
 
 import { NextResponse } from 'next/server';
+import { getServerSession } from 'next-auth/next';
+import { authOptions } from '@/lib/auth-config';
+import { getUserById } from '@/lib/auth';
 
 export async function GET(request) {
   try {
-    // TODO: Get user ID from session/JWT token
-    // const session = await getServerSession(request);
-    // const userId = session?.user?.id;
+    // Get session from NextAuth
+    const session = await getServerSession(authOptions);
 
-    // For now, return null (not authenticated)
+    if (!session || !session.user) {
+      return NextResponse.json({
+        success: true,
+        user: null,
+      });
+    }
+
+    // Get user from database using candidate_id
+    const candidateId = session.user.candidate_id || parseInt(session.user.id, 10);
+    const user = await getUserById(candidateId);
+
+    if (!user) {
+      return NextResponse.json({
+        success: true,
+        user: null,
+      });
+    }
+
     return NextResponse.json({
       success: true,
-      user: null,
+      user: {
+        id: user.id,
+        candidate_id: user.candidate_id,
+        email: user.email,
+      },
     });
-
   } catch (error) {
     console.error('Get user error:', error);
     return NextResponse.json(

@@ -23,9 +23,13 @@ import {
   X
 } from 'lucide-react';
 import { useEffect, useState } from 'react';
+import { useSession } from 'next-auth/react';
+import { useRouter } from 'next/navigation';
 import toast from 'react-hot-toast';
 
 export default function ProfilePage() {
+  const { data: session, status } = useSession();
+  const router = useRouter();
   const [initialLoading, setInitialLoading] = useState(true);
   const [saving, setSaving] = useState(false);
   const [userId, setUserId] = useState(null);
@@ -72,26 +76,36 @@ export default function ProfilePage() {
 
   useEffect(() => {
     const load = async () => {
+      if (status === 'unauthenticated') {
+        toast.error('Please sign in first');
+        router.push('/');
+        setInitialLoading(false);
+        return;
+      }
+
+      if (status === 'loading') {
+        return;
+      }
+
+      if (!session?.user) {
+        toast.error('Please sign in first');
+        setInitialLoading(false);
+        return;
+      }
+
       try {
-        const stored = typeof window !== 'undefined' ? localStorage.getItem('user') : null;
-        if (!stored) {
-          toast.error('Please sign in first');
-          setInitialLoading(false);
-          return;
-        }
-        
-        const user = JSON.parse(stored);
-        if (!user?.id) {
+        const userId = session.user.id || session.user.candidate_id?.toString();
+        if (!userId) {
           toast.error('Invalid user data. Please sign in again.');
           setInitialLoading(false);
           return;
         }
         
-        setUserId(user.id);
+        setUserId(userId);
 
         const [userRes, agentRes] = await Promise.all([
-          fetch(`/api/users/${user.id}`),
-          fetch(`/api/agent/${user.id}`),
+          fetch(`/api/users/${userId}`),
+          fetch(`/api/agent/${userId}`),
         ]);
 
         const data = await userRes.json();
@@ -146,7 +160,7 @@ export default function ProfilePage() {
     };
 
     load();
-  }, []);
+  }, [status, session, router]);
 
   const handleSubmit = async (e) => {
     e.preventDefault();

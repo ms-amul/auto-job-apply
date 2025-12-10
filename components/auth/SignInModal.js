@@ -10,14 +10,13 @@
 
 import { useState, useEffect } from 'react';
 import { useRouter } from 'next/navigation';
+import { signIn } from 'next-auth/react';
 import { Mail, Lock, Eye, EyeOff } from 'lucide-react';
 import Modal from '@/components/ui/Modal';
 import Button from '@/components/ui/Button';
 import Input from '@/components/ui/Input';
 import toast from 'react-hot-toast';
 import { theme } from '@/utils/theme';
-import { setCookie } from '@/utils/cookies';
-import { brand } from '@/utils/brand';
 
 export default function SignInModal({ isOpen, onClose }) {
   const router = useRouter();
@@ -63,40 +62,33 @@ export default function SignInModal({ isOpen, onClose }) {
     }
 
     setLoading(true);
+    setErrors({});
 
     try {
-      const response = await fetch('/api/auth/signin', {
-        method: 'POST',
-        headers: {
-          'Content-Type': 'application/json',
-        },
-        body: JSON.stringify({ email, password }),
+      // Use NextAuth signIn function
+      const result = await signIn('credentials', {
+        email,
+        password,
+        redirect: false,
       });
 
-      const data = await response.json();
+      if (result?.error) {
+        toast.error('Invalid email or password');
+        setErrors({ general: 'Invalid email or password' });
+        setLoading(false);
+        return;
+      }
 
-      if (data.success) {
-        // Store user in localStorage (Mongo-backed id)
-        localStorage.setItem('user', JSON.stringify(data.user));
-        // Demo: also store id in a cookie for easy access
-        try {
-          setCookie(brand.cookies.userId, data.user.id, 7);
-        } catch (e) {
-          console.error('Failed to set id cookie', e);
-        }
-
+      if (result?.ok) {
         // Show success toast
-        toast.success(`Welcome back, ${data.user.name}!`);
+        toast.success('Welcome back!');
 
         // Close modal
         onClose();
 
-        // Redirect to profile so they can complete details first
+        // Redirect to dashboard
         router.push('/dashboard/profile');
-      } else {
-        // Show error toast
-        toast.error(data.error || 'Sign in failed');
-        setErrors({ general: data.error });
+        router.refresh(); // Refresh to update session
       }
     } catch (error) {
       console.error('Sign in error:', error);
@@ -107,16 +99,6 @@ export default function SignInModal({ isOpen, onClose }) {
     }
   };
 
-  // Quick sign-in for testing
-  const quickSignIn = async (testEmail) => {
-    setEmail(testEmail);
-    setPassword('test123'); // Any password works in test mode
-    
-    // Wait a bit for state to update
-    setTimeout(() => {
-      handleSubmit({ preventDefault: () => {} });
-    }, 100);
-  };
 
   return (
     <Modal 

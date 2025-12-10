@@ -9,34 +9,21 @@
 
 import { useState, useEffect } from 'react';
 import { useRouter } from 'next/navigation';
+import { useSession } from 'next-auth/react';
 import CompactSidebar from '@/components/dashboard/CompactSidebar';
 import { PageLoader } from '@/components/ui/Loader';
 import { Toaster } from 'react-hot-toast';
 
 export default function DashboardLayout({ children }) {
   const router = useRouter();
+  const { data: session, status } = useSession();
   const [sidebarOpen, setSidebarOpen] = useState(true);
-  const [user, setUser] = useState(null);
-  const [loading, setLoading] = useState(true);
 
   useEffect(() => {
-    const storedUser = localStorage.getItem('user');
-    
-    if (!storedUser) {
+    if (status === 'unauthenticated') {
       router.push('/');
       return;
     }
-
-    try {
-      const userData = JSON.parse(storedUser);
-      setUser(userData);
-    } catch (error) {
-      console.error('Failed to parse user data:', error);
-      router.push('/');
-      return;
-    }
-
-    setLoading(false);
 
     // Auto-collapse sidebar on mobile
     const handleResize = () => {
@@ -50,15 +37,23 @@ export default function DashboardLayout({ children }) {
     handleResize();
     window.addEventListener('resize', handleResize);
     return () => window.removeEventListener('resize', handleResize);
-  }, [router]);
+  }, [status, router]);
 
-  if (loading) {
+  if (status === 'loading') {
     return <PageLoader />;
   }
 
-  if (!user) {
+  if (!session?.user) {
     return null;
   }
+
+  // Format user data for sidebar
+  const user = {
+    id: session.user.id,
+    candidate_id: session.user.candidate_id,
+    email: session.user.email,
+    name: session.user.name || session.user.email,
+  };
 
   return (
     <div className="min-h-screen">

@@ -9,6 +9,8 @@
 'use client';
 
 import { useEffect, useState } from 'react';
+import { useRouter } from 'next/navigation';
+import { useSession } from 'next-auth/react';
 import { Bot, Zap, Play, Pause, Settings as SettingsIcon, Activity, TrendingUp, CheckCircle } from 'lucide-react';
 import Button from '@/components/ui/Button';
 import Loader from '@/components/ui/Loader';
@@ -17,37 +19,45 @@ import botData from '@/data/bot-data.json';
 import { theme } from '@/utils/theme';
 
 export default function BotPage() {
-  const [user, setUser] = useState(null);
+  const router = useRouter();
+  const { data: session, status } = useSession();
   const [bot, setBot] = useState(null);
   const [loading, setLoading] = useState(true);
 
   useEffect(() => {
-    const storedUser = localStorage.getItem('user');
-    if (storedUser) {
-      const userData = JSON.parse(storedUser);
-      setUser(userData);
+    if (status === 'unauthenticated') {
+      router.push('/');
+      return;
+    }
+
+    if (status === 'loading') {
+      return;
+    }
+
+    if (session?.user) {
+      const userId = session.user.id || session.user.candidate_id?.toString();
       
       // Load bot data from mock
-      if (userData.role === 'recruiter') {
-        setBot(botData.recruiterBot[userData.id]);
-      } else {
-        setBot(botData.applicantBot[userData.id]);
-      }
+      setBot(botData.applicantBot[userId] || botData.applicantBot['default']);
     }
     setLoading(false);
-  }, []);
+  }, [status, session, router]);
 
   const toggleBot = () => {
     setBot({ ...bot, enabled: !bot.enabled });
     toast.success(bot.enabled ? 'Bot paused' : 'Bot activated');
   };
 
-  if (loading) {
+  if (status === 'loading' || loading) {
     return (
       <div className="min-h-[60vh] flex items-center justify-center">
         <Loader size="lg" text="Loading bot..." />
       </div>
     );
+  }
+
+  if (status === 'unauthenticated') {
+    return null;
   }
 
   if (user?.role === 'recruiter') {

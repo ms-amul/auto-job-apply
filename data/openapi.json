@@ -1,1 +1,1004 @@
-{"openapi":"3.1.0","info":{"title":"AutoApply Candidate Sync API","description":"Unified FastAPI application for candidate synchronization, job application webhooks, resume processing, job recommendations, requirement details, and outreach notifications","version":"6.0.0"},"paths":{"/webhook/cand-job-matching":{"post":{"tags":["webhook"],"summary":"Webhook Listener","description":"Webhook endpoint to listen for Supabase events on cand_job_matching table\n\nThis endpoint:\n1. Receives webhook events from Supabase\n2. Validates the event (INSERT on cand_job_matching table)\n3. Checks if similarity_score >= 0.7\n4. Fetches candidate data from auto_apply_cand table\n5. Executes Usp_SC_JobSeeker_IU_ApplyJob stored procedure","operationId":"webhook_listener_webhook_cand_job_matching_post","requestBody":{"content":{"application/json":{"schema":{"$ref":"#/components/schemas/app__api__apply_webhook__models__WebhookPayload"}}},"required":true},"responses":{"200":{"description":"Successful Response","content":{"application/json":{"schema":{}}}},"422":{"description":"Validation Error","content":{"application/json":{"schema":{"$ref":"#/components/schemas/HTTPValidationError"}}}}}}},"/candidate-sync":{"post":{"tags":["candidate-sync"],"summary":"Sync Candidate","operationId":"sync_candidate_candidate_sync_post","requestBody":{"content":{"application/json":{"schema":{"$ref":"#/components/schemas/CandidateSyncRequest"}}},"required":true},"responses":{"200":{"description":"Successful Response","content":{"application/json":{"schema":{"$ref":"#/components/schemas/CandidateSyncResponse"}}}},"422":{"description":"Validation Error","content":{"application/json":{"schema":{"$ref":"#/components/schemas/HTTPValidationError"}}}}}}},"/resume-intake/process-resume":{"post":{"tags":["resume-intake"],"summary":"Process Resume Endpoint","description":"Process a resume file and update database records.\n\nAccepts PDF, DOCX, or TXT files and processes them through the pipeline:\n1. Extract text from resume\n2. Structure data using GPT-4o\n3. Update records in Supabase database (auto_apply_cand and parsed_cand_resume)\n4. Generate and store embeddings in Qdrant\n\nNote: Rate limiting is configured at the application level (10 requests per minute per IP).\n\nArgs:\n    request: FastAPI request object (for caching)\n    file: Uploaded resume file (PDF, DOCX, or TXT)\n    candidate_id: Candidate ID from logged-in user (required)\n    \nReturns:\n    JSON response with success status and candidate_id\n    \nRaises:\n    HTTPException: If file type is unsupported, candidate_id is invalid, or processing fails","operationId":"process_resume_endpoint_resume_intake_process_resume_post","parameters":[{"name":"candidate_id","in":"query","required":true,"schema":{"type":"integer","description":"Candidate ID from logged-in user (required)","title":"Candidate Id"},"description":"Candidate ID from logged-in user (required)"}],"requestBody":{"required":true,"content":{"multipart/form-data":{"schema":{"$ref":"#/components/schemas/Body_process_resume_endpoint_resume_intake_process_resume_post"}}}},"responses":{"200":{"description":"Successful Response","content":{"application/json":{"schema":{}}}},"422":{"description":"Validation Error","content":{"application/json":{"schema":{"$ref":"#/components/schemas/HTTPValidationError"}}}}}}},"/resume-intake/cache/stats":{"get":{"tags":["resume-intake"],"summary":"Cache Stats","description":"Get cache statistics for resume processing.\n\nReturns:\n    Dictionary with cache configuration information","operationId":"cache_stats_resume_intake_cache_stats_get","responses":{"200":{"description":"Successful Response","content":{"application/json":{"schema":{}}}}}}},"/api/recommendations":{"get":{"tags":["recommendations"],"summary":"Get Job Recommendations","description":"Get job recommendations for a candidate.\n\nThis endpoint executes the USP_SC_Get_JobSeekerRecommenededJobList stored procedure\nwith the provided candidate_id and returns job recommendations in JSON format.\n\nThe stored procedure is called with the following constant parameters:\n- PageNo: 1\n- PageSize: 10\n- JobActivityTypeID: 0\n\nArgs:\n    request: FastAPI request object (for rate limiting)\n    candidate_id: The candidate ID (required, must be > 0)\n    use_cache: Whether to use cache. Defaults to True.\n    \nReturns:\n    JSONResponse: JSON response containing:\n        - candidate_id: The candidate ID\n        - recommendations: List of job recommendations with clean key names\n        - total_count: Total number of recommendations available\n        - page_no: Current page number (always 1)\n        - page_size: Page size (always 10)\n        \nRaises:\n    HTTPException: \n        - 400: If candidate_id is invalid\n        - 500: If database operation fails\n        - 503: If service is unavailable\n        - 504: If request times out","operationId":"get_job_recommendations_api_recommendations_get","parameters":[{"name":"candidate_id","in":"query","required":true,"schema":{"type":"integer","exclusiveMinimum":0,"description":"The candidate ID to get recommendations for","title":"Candidate Id"},"description":"The candidate ID to get recommendations for"},{"name":"use_cache","in":"query","required":false,"schema":{"anyOf":[{"type":"boolean"},{"type":"null"}],"description":"Whether to use cache for this request","default":true,"title":"Use Cache"},"description":"Whether to use cache for this request"}],"responses":{"200":{"description":"Successful Response","content":{"application/json":{"schema":{}}}},"422":{"description":"Validation Error","content":{"application/json":{"schema":{"$ref":"#/components/schemas/HTTPValidationError"}}}}}}},"/api/recommendations/cache/stats":{"get":{"tags":["recommendations"],"summary":"Get Cache Stats","description":"Get cache statistics.\n\nReturns:\n    Dict[str, Any]: Cache statistics including entry counts and TTL","operationId":"get_cache_stats_api_recommendations_cache_stats_get","responses":{"200":{"description":"Successful Response","content":{"application/json":{"schema":{}}}}}}},"/api/recommendations/cache/clear":{"delete":{"tags":["recommendations"],"summary":"Clear Cache","description":"Clear all cached entries.\n\nReturns:\n    Dict[str, str]: Confirmation message","operationId":"clear_cache_api_recommendations_cache_clear_delete","responses":{"200":{"description":"Successful Response","content":{"application/json":{"schema":{}}}}}}},"/api/requirement/{requirement_id}":{"get":{"tags":["requirement-details"],"summary":"Get Requirement Details","description":"Get requirement details by ID.\n\nThis endpoint executes the Beta_usp_Get_Requirement_Details stored procedure\nwith the provided requirement_id and company_id, and returns requirement\ndetails with user-friendly field names.\n\nRate limiting is applied via the limiter from app state.\n\nArgs:\n    request: FastAPI request object (for rate limiting)\n    requirement_id: The requirement ID to fetch (required, must be > 0)\n    company_id: Company ID (default: 1, must be > 0)\n    \nReturns:\n    RequirementDetailsResponse: Requirement details with mapped field names\n    \nRaises:\n    HTTPException:\n        - 404: If requirement is not found\n        - 500: If database operation fails","operationId":"get_requirement_details_api_requirement__requirement_id__get","parameters":[{"name":"requirement_id","in":"path","required":true,"schema":{"type":"integer","title":"Requirement Id"}},{"name":"company_id","in":"query","required":false,"schema":{"type":"integer","exclusiveMinimum":0,"description":"Company ID (default: 1)","default":1,"title":"Company Id"},"description":"Company ID (default: 1)"}],"responses":{"200":{"description":"Successful Response","content":{"application/json":{"schema":{"$ref":"#/components/schemas/RequirementDetailsResponse"}}}},"422":{"description":"Validation Error","content":{"application/json":{"schema":{"$ref":"#/components/schemas/HTTPValidationError"}}}}}}},"/webhook/outreach/job-match":{"post":{"tags":["outreach-agent"],"summary":"Webhook Handler","description":"Handle webhook events from Supabase for job match notifications.\n\nThis endpoint receives webhook events when a new job application is created\nin the `job_application_tracking` table. It validates the webhook secret,\nextracts candidate and requirement IDs, and queues notification processing.\n\nArgs:\n    payload: Webhook payload from Supabase (JSON body)\n    request: FastAPI request object (for accessing app state)\n    x_webhook_secret: Webhook secret header for authentication\n    \nReturns:\n    WebhookResponse with status and queued task information\n    \nRaises:\n    HTTPException: If webhook secret is invalid or payload is malformed","operationId":"webhook_handler_webhook_outreach_job_match_post","parameters":[{"name":"X-Webhook-Secret","in":"header","required":false,"schema":{"anyOf":[{"type":"string"},{"type":"null"}],"title":"X-Webhook-Secret"}}],"requestBody":{"required":true,"content":{"application/json":{"schema":{"$ref":"#/components/schemas/app__api__outreach_agent__schemas__WebhookPayload"}}}},"responses":{"202":{"description":"Successful Response","content":{"application/json":{"schema":{"$ref":"#/components/schemas/WebhookResponse"}}}},"422":{"description":"Validation Error","content":{"application/json":{"schema":{"$ref":"#/components/schemas/HTTPValidationError"}}}}}}},"/webhook/outreach/health":{"get":{"tags":["outreach-agent"],"summary":"Health Check","description":"Health check endpoint for Outreach Agent API.\n\nReturns:\n    dict: Health status and concurrency information","operationId":"health_check_webhook_outreach_health_get","responses":{"200":{"description":"Successful Response","content":{"application/json":{"schema":{}}}}}}},"/":{"get":{"summary":"Root","description":"Health check endpoint","operationId":"root__get","responses":{"200":{"description":"Successful Response","content":{"application/json":{"schema":{}}}}}}},"/health":{"get":{"summary":"Health Check","description":"Detailed health check endpoint","operationId":"health_check_health_get","responses":{"200":{"description":"Successful Response","content":{"application/json":{"schema":{}}}}}}}},"components":{"schemas":{"Body_process_resume_endpoint_resume_intake_process_resume_post":{"properties":{"file":{"type":"string","format":"binary","title":"File"}},"type":"object","required":["file"],"title":"Body_process_resume_endpoint_resume_intake_process_resume_post"},"CandidateContact":{"properties":{"candidate_id":{"type":"integer","title":"Candidate Id"},"first_name":{"anyOf":[{"type":"string"},{"type":"null"}],"title":"First Name"},"last_name":{"anyOf":[{"type":"string"},{"type":"null"}],"title":"Last Name"},"email":{"type":"string","format":"email","title":"Email"},"password":{"anyOf":[{"type":"string"},{"type":"null"}],"title":"Password"},"birth_date":{"anyOf":[{"type":"string","format":"date"},{"type":"null"}],"title":"Birth Date"},"ssn":{"anyOf":[{"type":"string"},{"type":"null"}],"title":"Ssn"},"over_18_age":{"anyOf":[{"type":"boolean"},{"type":"null"}],"title":"Over 18 Age"},"mobile":{"anyOf":[{"type":"string"},{"type":"null"}],"title":"Mobile"},"home":{"anyOf":[{"type":"string"},{"type":"null"}],"title":"Home"},"work":{"anyOf":[{"type":"string"},{"type":"null"}],"title":"Work"},"work_ext":{"anyOf":[{"type":"string"},{"type":"null"}],"title":"Work Ext"},"relocation":{"anyOf":[{"type":"boolean"},{"type":"null"}],"title":"Relocation"}},"type":"object","required":["candidate_id","first_name","last_name","email","password","birth_date","ssn","over_18_age","mobile","home","work","work_ext","relocation"],"title":"CandidateContact","description":"Subset of candidate information persisted to Supabase."},"CandidateSyncRequest":{"properties":{"email":{"type":"string","format":"email","title":"Email"}},"type":"object","required":["email"],"title":"CandidateSyncRequest","description":"Incoming payload for candidate sync."},"CandidateSyncResponse":{"properties":{"success":{"type":"boolean","title":"Success"},"message":{"type":"string","title":"Message"},"data":{"anyOf":[{"$ref":"#/components/schemas/CandidateContact"},{"type":"null"}]}},"type":"object","required":["success","message"],"title":"CandidateSyncResponse","description":"API response for candidate sync attempts."},"HTTPValidationError":{"properties":{"detail":{"items":{"$ref":"#/components/schemas/ValidationError"},"type":"array","title":"Detail"}},"type":"object","title":"HTTPValidationError"},"RequirementDetailsResponse":{"properties":{"JobTitleText":{"anyOf":[{"type":"string"},{"type":"null"}],"title":"Jobtitletext","description":"Job title"},"CityName":{"anyOf":[{"type":"string"},{"type":"null"}],"title":"Cityname","description":"City name"},"ZIPCode":{"anyOf":[{"type":"string"},{"type":"integer"},{"type":"null"}],"title":"Zipcode","description":"ZIP code"},"RequirementDuration":{"anyOf":[{"type":"string"},{"type":"null"}],"title":"Requirementduration","description":"Job duration"},"RequirementShiftTimingFrom":{"anyOf":[{"type":"string"},{"type":"null"}],"title":"Requirementshifttimingfrom","description":"Shift start time"},"RequirementShiftTimingTo":{"anyOf":[{"type":"string"},{"type":"null"}],"title":"Requirementshifttimingto","description":"Shift end time"},"RequirementHoursPerWeek":{"anyOf":[{"type":"string","pattern":"^(?!^[-+.]*$)[+-]?0*\\d*\\.?\\d*$"},{"type":"number"},{"type":"string"},{"type":"null"}],"title":"Requirementhoursperweek","description":"Hours per week"},"MinPayRate":{"anyOf":[{"type":"string","pattern":"^(?!^[-+.]*$)[+-]?0*\\d*\\.?\\d*$"},{"type":"number"},{"type":"null"}],"title":"Minpayrate","description":"Minimum pay rate"},"MaxPayRate":{"anyOf":[{"type":"string","pattern":"^(?!^[-+.]*$)[+-]?0*\\d*\\.?\\d*$"},{"type":"number"},{"type":"null"}],"title":"Maxpayrate","description":"Maximum pay rate"},"RequirementJobDescription":{"anyOf":[{"type":"string"},{"type":"null"}],"title":"Requirementjobdescription","description":"Job description"}},"type":"object","title":"RequirementDetailsResponse","description":"Response model for requirement details.\n\nMaps database column names to user-friendly field names.","example":{"City":"New York","Duration":"12 months","HoursPerWeek":37.5,"JobDescription":"Job description here...","JobTitle":"Software Engineer","MaxPayRate":80000.0,"MinPayRate":50000.0,"ShiftTimingFrom":"09:00","ShiftTimingTo":"18:00","ZIPCode":"10001"}},"ValidationError":{"properties":{"loc":{"items":{"anyOf":[{"type":"string"},{"type":"integer"}]},"type":"array","title":"Location"},"msg":{"type":"string","title":"Message"},"type":{"type":"string","title":"Error Type"}},"type":"object","required":["loc","msg","type"],"title":"ValidationError"},"WebhookResponse":{"properties":{"status":{"type":"string","title":"Status"},"message":{"type":"string","title":"Message"},"cand_id":{"anyOf":[{"type":"integer"},{"type":"null"}],"title":"Cand Id"},"requirement_id":{"anyOf":[{"type":"string"},{"type":"null"}],"title":"Requirement Id"},"timestamp":{"type":"string","title":"Timestamp"},"concurrency":{"additionalProperties":{"type":"integer"},"type":"object","title":"Concurrency"}},"type":"object","required":["status","message","timestamp","concurrency"],"title":"WebhookResponse","description":"Response model for webhook endpoint."},"app__api__apply_webhook__models__WebhookPayload":{"properties":{"type":{"type":"string","title":"Type"},"table":{"type":"string","title":"Table"},"record":{"anyOf":[{"additionalProperties":true,"type":"object"},{"type":"null"}],"title":"Record"},"old_record":{"anyOf":[{"additionalProperties":true,"type":"object"},{"type":"null"}],"title":"Old Record"}},"type":"object","required":["type","table"],"title":"WebhookPayload","description":"Supabase webhook payload structure"},"app__api__outreach_agent__schemas__WebhookPayload":{"properties":{"type":{"type":"string","title":"Type"},"table":{"type":"string","title":"Table"},"record":{"additionalProperties":true,"type":"object","title":"Record"},"schema":{"type":"string","title":"Schema","description":"Database schema name"},"old_record":{"anyOf":[{"additionalProperties":true,"type":"object"},{"type":"null"}],"title":"Old Record"}},"type":"object","required":["type","table","record","schema"],"title":"WebhookPayload","description":"Webhook payload model from Supabase.","example":{"record":{"cand_id":2928,"requirement_id":130174},"schema":"public","table":"job_application_tracking","type":"INSERT"}}}}}
+{
+    "openapi": "3.1.0",
+    "info": {
+        "title": "AutoApply Candidate Sync API",
+        "description": "Unified FastAPI application for candidate synchronization, job application webhooks, resume processing, job recommendations, requirement details, and outreach notifications",
+        "version": "6.0.0"
+    },
+    "paths": {
+        "/webhook/cand-job-matching": {
+            "post": {
+                "tags": [
+                    "webhook"
+                ],
+                "summary": "Webhook Listener",
+                "description": "Webhook endpoint to listen for Supabase events on cand_job_matching table\n\nThis endpoint:\n1. Receives webhook events from Supabase\n2. Validates the event (INSERT on cand_job_matching table)\n3. Checks if similarity_score >= 0.7\n4. Fetches candidate data from auto_apply_cand table\n5. Executes Usp_SC_JobSeeker_IU_ApplyJob stored procedure",
+                "operationId": "webhook_listener_webhook_cand_job_matching_post",
+                "requestBody": {
+                    "content": {
+                        "application/json": {
+                            "schema": {
+                                "$ref": "#/components/schemas/app__api__apply_webhook__models__WebhookPayload"
+                            }
+                        }
+                    },
+                    "required": true
+                },
+                "responses": {
+                    "200": {
+                        "description": "Successful Response",
+                        "content": {
+                            "application/json": {
+                                "schema": {}
+                            }
+                        }
+                    },
+                    "422": {
+                        "description": "Validation Error",
+                        "content": {
+                            "application/json": {
+                                "schema": {
+                                    "$ref": "#/components/schemas/HTTPValidationError"
+                                }
+                            }
+                        }
+                    }
+                }
+            }
+        },
+        "/candidate-sync": {
+            "post": {
+                "tags": [
+                    "candidate-sync"
+                ],
+                "summary": "Sync Candidate",
+                "operationId": "sync_candidate_candidate_sync_post",
+                "requestBody": {
+                    "content": {
+                        "application/json": {
+                            "schema": {
+                                "$ref": "#/components/schemas/CandidateSyncRequest"
+                            }
+                        }
+                    },
+                    "required": true
+                },
+                "responses": {
+                    "200": {
+                        "description": "Successful Response",
+                        "content": {
+                            "application/json": {
+                                "schema": {
+                                    "$ref": "#/components/schemas/CandidateSyncResponse"
+                                }
+                            }
+                        }
+                    },
+                    "422": {
+                        "description": "Validation Error",
+                        "content": {
+                            "application/json": {
+                                "schema": {
+                                    "$ref": "#/components/schemas/HTTPValidationError"
+                                }
+                            }
+                        }
+                    }
+                }
+            }
+        },
+        "/resume-intake/process-resume": {
+            "post": {
+                "tags": [
+                    "resume-intake"
+                ],
+                "summary": "Process Resume Endpoint",
+                "description": "Process a resume file and update database records.\n\nAccepts PDF, DOCX, or TXT files and processes them through the pipeline:\n1. Extract text from resume\n2. Structure data using GPT-4o\n3. Update records in Supabase database (auto_apply_cand and parsed_cand_resume)\n4. Generate and store embeddings in Qdrant\n\nNote: Rate limiting is configured at the application level (10 requests per minute per IP).\n\nArgs:\n    request: FastAPI request object (for caching)\n    file: Uploaded resume file (PDF, DOCX, or TXT)\n    candidate_id: Candidate ID from logged-in user (required)\n    \nReturns:\n    JSON response with success status and candidate_id\n    \nRaises:\n    HTTPException: If file type is unsupported, candidate_id is invalid, or processing fails",
+                "operationId": "process_resume_endpoint_resume_intake_process_resume_post",
+                "parameters": [
+                    {
+                        "name": "candidate_id",
+                        "in": "query",
+                        "required": true,
+                        "schema": {
+                            "type": "integer",
+                            "description": "Candidate ID from logged-in user (required)",
+                            "title": "Candidate Id"
+                        },
+                        "description": "Candidate ID from logged-in user (required)"
+                    }
+                ],
+                "requestBody": {
+                    "required": true,
+                    "content": {
+                        "multipart/form-data": {
+                            "schema": {
+                                "$ref": "#/components/schemas/Body_process_resume_endpoint_resume_intake_process_resume_post"
+                            }
+                        }
+                    }
+                },
+                "responses": {
+                    "200": {
+                        "description": "Successful Response",
+                        "content": {
+                            "application/json": {
+                                "schema": {}
+                            }
+                        }
+                    },
+                    "422": {
+                        "description": "Validation Error",
+                        "content": {
+                            "application/json": {
+                                "schema": {
+                                    "$ref": "#/components/schemas/HTTPValidationError"
+                                }
+                            }
+                        }
+                    }
+                }
+            }
+        },
+        "/resume-intake/cache/stats": {
+            "get": {
+                "tags": [
+                    "resume-intake"
+                ],
+                "summary": "Cache Stats",
+                "description": "Get cache statistics for resume processing.\n\nReturns:\n    Dictionary with cache configuration information",
+                "operationId": "cache_stats_resume_intake_cache_stats_get",
+                "responses": {
+                    "200": {
+                        "description": "Successful Response",
+                        "content": {
+                            "application/json": {
+                                "schema": {}
+                            }
+                        }
+                    }
+                }
+            }
+        },
+        "/api/recommendations": {
+            "get": {
+                "tags": [
+                    "recommendations"
+                ],
+                "summary": "Get Job Recommendations",
+                "description": "Get job recommendations for a candidate.\n\nThis endpoint executes the USP_SC_Get_JobSeekerRecommenededJobList stored procedure\nwith the provided candidate_id and returns job recommendations in JSON format.\n\nThe stored procedure is called with the following constant parameters:\n- PageNo: 1\n- PageSize: 10\n- JobActivityTypeID: 0\n\nArgs:\n    request: FastAPI request object (for rate limiting)\n    candidate_id: The candidate ID (required, must be > 0)\n    use_cache: Whether to use cache. Defaults to True.\n    \nReturns:\n    JSONResponse: JSON response containing:\n        - candidate_id: The candidate ID\n        - recommendations: List of job recommendations with clean key names\n        - total_count: Total number of recommendations available\n        - page_no: Current page number (always 1)\n        - page_size: Page size (always 10)\n        \nRaises:\n    HTTPException: \n        - 400: If candidate_id is invalid\n        - 500: If database operation fails\n        - 503: If service is unavailable\n        - 504: If request times out",
+                "operationId": "get_job_recommendations_api_recommendations_get",
+                "parameters": [
+                    {
+                        "name": "candidate_id",
+                        "in": "query",
+                        "required": true,
+                        "schema": {
+                            "type": "integer",
+                            "exclusiveMinimum": 0,
+                            "description": "The candidate ID to get recommendations for",
+                            "title": "Candidate Id"
+                        },
+                        "description": "The candidate ID to get recommendations for"
+                    },
+                    {
+                        "name": "use_cache",
+                        "in": "query",
+                        "required": false,
+                        "schema": {
+                            "anyOf": [
+                                {
+                                    "type": "boolean"
+                                },
+                                {
+                                    "type": "null"
+                                }
+                            ],
+                            "description": "Whether to use cache for this request",
+                            "default": true,
+                            "title": "Use Cache"
+                        },
+                        "description": "Whether to use cache for this request"
+                    }
+                ],
+                "responses": {
+                    "200": {
+                        "description": "Successful Response",
+                        "content": {
+                            "application/json": {
+                                "schema": {}
+                            }
+                        }
+                    },
+                    "422": {
+                        "description": "Validation Error",
+                        "content": {
+                            "application/json": {
+                                "schema": {
+                                    "$ref": "#/components/schemas/HTTPValidationError"
+                                }
+                            }
+                        }
+                    }
+                }
+            }
+        },
+        "/api/recommendations/cache/stats": {
+            "get": {
+                "tags": [
+                    "recommendations"
+                ],
+                "summary": "Get Cache Stats",
+                "description": "Get cache statistics.\n\nReturns:\n    Dict[str, Any]: Cache statistics including entry counts and TTL",
+                "operationId": "get_cache_stats_api_recommendations_cache_stats_get",
+                "responses": {
+                    "200": {
+                        "description": "Successful Response",
+                        "content": {
+                            "application/json": {
+                                "schema": {}
+                            }
+                        }
+                    }
+                }
+            }
+        },
+        "/api/recommendations/cache/clear": {
+            "delete": {
+                "tags": [
+                    "recommendations"
+                ],
+                "summary": "Clear Cache",
+                "description": "Clear all cached entries.\n\nReturns:\n    Dict[str, str]: Confirmation message",
+                "operationId": "clear_cache_api_recommendations_cache_clear_delete",
+                "responses": {
+                    "200": {
+                        "description": "Successful Response",
+                        "content": {
+                            "application/json": {
+                                "schema": {}
+                            }
+                        }
+                    }
+                }
+            }
+        },
+        "/api/requirement/{requirement_id}": {
+            "get": {
+                "tags": [
+                    "requirement-details"
+                ],
+                "summary": "Get Requirement Details",
+                "description": "Get requirement details by ID.\n\nThis endpoint executes the Beta_usp_Get_Requirement_Details stored procedure\nwith the provided requirement_id and company_id, and returns requirement\ndetails with user-friendly field names.\n\nRate limiting is applied via the limiter from app state.\n\nArgs:\n    request: FastAPI request object (for rate limiting)\n    requirement_id: The requirement ID to fetch (required, must be > 0)\n    company_id: Company ID (default: 1, must be > 0)\n    \nReturns:\n    RequirementDetailsResponse: Requirement details with mapped field names\n    \nRaises:\n    HTTPException:\n        - 404: If requirement is not found\n        - 500: If database operation fails",
+                "operationId": "get_requirement_details_api_requirement__requirement_id__get",
+                "parameters": [
+                    {
+                        "name": "requirement_id",
+                        "in": "path",
+                        "required": true,
+                        "schema": {
+                            "type": "integer",
+                            "title": "Requirement Id"
+                        }
+                    },
+                    {
+                        "name": "company_id",
+                        "in": "query",
+                        "required": false,
+                        "schema": {
+                            "type": "integer",
+                            "exclusiveMinimum": 0,
+                            "description": "Company ID (default: 1)",
+                            "default": 1,
+                            "title": "Company Id"
+                        },
+                        "description": "Company ID (default: 1)"
+                    }
+                ],
+                "responses": {
+                    "200": {
+                        "description": "Successful Response",
+                        "content": {
+                            "application/json": {
+                                "schema": {
+                                    "$ref": "#/components/schemas/RequirementDetailsResponse"
+                                }
+                            }
+                        }
+                    },
+                    "422": {
+                        "description": "Validation Error",
+                        "content": {
+                            "application/json": {
+                                "schema": {
+                                    "$ref": "#/components/schemas/HTTPValidationError"
+                                }
+                            }
+                        }
+                    }
+                }
+            }
+        },
+        "/webhook/outreach/job-match": {
+            "post": {
+                "tags": [
+                    "outreach-agent"
+                ],
+                "summary": "Webhook Handler",
+                "description": "Handle webhook events from Supabase for job match notifications.\n\nThis endpoint receives webhook events when a new job application is created\nin the `job_application_tracking` table. It validates the webhook secret,\nextracts candidate and requirement IDs, and queues notification processing.\n\nArgs:\n    payload: Webhook payload from Supabase (JSON body)\n    request: FastAPI request object (for accessing app state)\n    x_webhook_secret: Webhook secret header for authentication\n    \nReturns:\n    WebhookResponse with status and queued task information\n    \nRaises:\n    HTTPException: If webhook secret is invalid or payload is malformed",
+                "operationId": "webhook_handler_webhook_outreach_job_match_post",
+                "parameters": [
+                    {
+                        "name": "X-Webhook-Secret",
+                        "in": "header",
+                        "required": false,
+                        "schema": {
+                            "anyOf": [
+                                {
+                                    "type": "string"
+                                },
+                                {
+                                    "type": "null"
+                                }
+                            ],
+                            "title": "X-Webhook-Secret"
+                        }
+                    }
+                ],
+                "requestBody": {
+                    "required": true,
+                    "content": {
+                        "application/json": {
+                            "schema": {
+                                "$ref": "#/components/schemas/app__api__outreach_agent__schemas__WebhookPayload"
+                            }
+                        }
+                    }
+                },
+                "responses": {
+                    "202": {
+                        "description": "Successful Response",
+                        "content": {
+                            "application/json": {
+                                "schema": {
+                                    "$ref": "#/components/schemas/WebhookResponse"
+                                }
+                            }
+                        }
+                    },
+                    "422": {
+                        "description": "Validation Error",
+                        "content": {
+                            "application/json": {
+                                "schema": {
+                                    "$ref": "#/components/schemas/HTTPValidationError"
+                                }
+                            }
+                        }
+                    }
+                }
+            }
+        },
+        "/webhook/outreach/health": {
+            "get": {
+                "tags": [
+                    "outreach-agent"
+                ],
+                "summary": "Health Check",
+                "description": "Health check endpoint for Outreach Agent API.\n\nReturns:\n    dict: Health status and concurrency information",
+                "operationId": "health_check_webhook_outreach_health_get",
+                "responses": {
+                    "200": {
+                        "description": "Successful Response",
+                        "content": {
+                            "application/json": {
+                                "schema": {}
+                            }
+                        }
+                    }
+                }
+            }
+        },
+        "/": {
+            "get": {
+                "summary": "Root",
+                "description": "Health check endpoint",
+                "operationId": "root__get",
+                "responses": {
+                    "200": {
+                        "description": "Successful Response",
+                        "content": {
+                            "application/json": {
+                                "schema": {}
+                            }
+                        }
+                    }
+                }
+            }
+        },
+        "/health": {
+            "get": {
+                "summary": "Health Check",
+                "description": "Detailed health check endpoint",
+                "operationId": "health_check_health_get",
+                "responses": {
+                    "200": {
+                        "description": "Successful Response",
+                        "content": {
+                            "application/json": {
+                                "schema": {}
+                            }
+                        }
+                    }
+                }
+            }
+        }
+    },
+    "components": {
+        "schemas": {
+            "Body_process_resume_endpoint_resume_intake_process_resume_post": {
+                "properties": {
+                    "file": {
+                        "type": "string",
+                        "format": "binary",
+                        "title": "File"
+                    }
+                },
+                "type": "object",
+                "required": [
+                    "file"
+                ],
+                "title": "Body_process_resume_endpoint_resume_intake_process_resume_post"
+            },
+            "CandidateContact": {
+                "properties": {
+                    "candidate_id": {
+                        "type": "integer",
+                        "title": "Candidate Id"
+                    },
+                    "first_name": {
+                        "anyOf": [
+                            {
+                                "type": "string"
+                            },
+                            {
+                                "type": "null"
+                            }
+                        ],
+                        "title": "First Name"
+                    },
+                    "last_name": {
+                        "anyOf": [
+                            {
+                                "type": "string"
+                            },
+                            {
+                                "type": "null"
+                            }
+                        ],
+                        "title": "Last Name"
+                    },
+                    "email": {
+                        "type": "string",
+                        "format": "email",
+                        "title": "Email"
+                    },
+                    "password": {
+                        "anyOf": [
+                            {
+                                "type": "string"
+                            },
+                            {
+                                "type": "null"
+                            }
+                        ],
+                        "title": "Password"
+                    },
+                    "birth_date": {
+                        "anyOf": [
+                            {
+                                "type": "string",
+                                "format": "date"
+                            },
+                            {
+                                "type": "null"
+                            }
+                        ],
+                        "title": "Birth Date"
+                    },
+                    "ssn": {
+                        "anyOf": [
+                            {
+                                "type": "string"
+                            },
+                            {
+                                "type": "null"
+                            }
+                        ],
+                        "title": "Ssn"
+                    },
+                    "over_18_age": {
+                        "anyOf": [
+                            {
+                                "type": "boolean"
+                            },
+                            {
+                                "type": "null"
+                            }
+                        ],
+                        "title": "Over 18 Age"
+                    },
+                    "mobile": {
+                        "anyOf": [
+                            {
+                                "type": "string"
+                            },
+                            {
+                                "type": "null"
+                            }
+                        ],
+                        "title": "Mobile"
+                    },
+                    "home": {
+                        "anyOf": [
+                            {
+                                "type": "string"
+                            },
+                            {
+                                "type": "null"
+                            }
+                        ],
+                        "title": "Home"
+                    },
+                    "work": {
+                        "anyOf": [
+                            {
+                                "type": "string"
+                            },
+                            {
+                                "type": "null"
+                            }
+                        ],
+                        "title": "Work"
+                    },
+                    "work_ext": {
+                        "anyOf": [
+                            {
+                                "type": "string"
+                            },
+                            {
+                                "type": "null"
+                            }
+                        ],
+                        "title": "Work Ext"
+                    },
+                    "relocation": {
+                        "anyOf": [
+                            {
+                                "type": "boolean"
+                            },
+                            {
+                                "type": "null"
+                            }
+                        ],
+                        "title": "Relocation"
+                    }
+                },
+                "type": "object",
+                "required": [
+                    "candidate_id",
+                    "first_name",
+                    "last_name",
+                    "email",
+                    "password",
+                    "birth_date",
+                    "ssn",
+                    "over_18_age",
+                    "mobile",
+                    "home",
+                    "work",
+                    "work_ext",
+                    "relocation"
+                ],
+                "title": "CandidateContact",
+                "description": "Subset of candidate information persisted to Supabase."
+            },
+            "CandidateSyncRequest": {
+                "properties": {
+                    "email": {
+                        "type": "string",
+                        "format": "email",
+                        "title": "Email"
+                    }
+                },
+                "type": "object",
+                "required": [
+                    "email"
+                ],
+                "title": "CandidateSyncRequest",
+                "description": "Incoming payload for candidate sync."
+            },
+            "CandidateSyncResponse": {
+                "properties": {
+                    "success": {
+                        "type": "boolean",
+                        "title": "Success"
+                    },
+                    "message": {
+                        "type": "string",
+                        "title": "Message"
+                    },
+                    "data": {
+                        "anyOf": [
+                            {
+                                "$ref": "#/components/schemas/CandidateContact"
+                            },
+                            {
+                                "type": "null"
+                            }
+                        ]
+                    }
+                },
+                "type": "object",
+                "required": [
+                    "success",
+                    "message"
+                ],
+                "title": "CandidateSyncResponse",
+                "description": "API response for candidate sync attempts."
+            },
+            "HTTPValidationError": {
+                "properties": {
+                    "detail": {
+                        "items": {
+                            "$ref": "#/components/schemas/ValidationError"
+                        },
+                        "type": "array",
+                        "title": "Detail"
+                    }
+                },
+                "type": "object",
+                "title": "HTTPValidationError"
+            },
+            "RequirementDetailsResponse": {
+                "properties": {
+                    "JobTitleText": {
+                        "anyOf": [
+                            {
+                                "type": "string"
+                            },
+                            {
+                                "type": "null"
+                            }
+                        ],
+                        "title": "Jobtitletext",
+                        "description": "Job title"
+                    },
+                    "CityName": {
+                        "anyOf": [
+                            {
+                                "type": "string"
+                            },
+                            {
+                                "type": "null"
+                            }
+                        ],
+                        "title": "Cityname",
+                        "description": "City name"
+                    },
+                    "ZIPCode": {
+                        "anyOf": [
+                            {
+                                "type": "string"
+                            },
+                            {
+                                "type": "integer"
+                            },
+                            {
+                                "type": "null"
+                            }
+                        ],
+                        "title": "Zipcode",
+                        "description": "ZIP code"
+                    },
+                    "RequirementDuration": {
+                        "anyOf": [
+                            {
+                                "type": "string"
+                            },
+                            {
+                                "type": "null"
+                            }
+                        ],
+                        "title": "Requirementduration",
+                        "description": "Job duration"
+                    },
+                    "RequirementShiftTimingFrom": {
+                        "anyOf": [
+                            {
+                                "type": "string"
+                            },
+                            {
+                                "type": "null"
+                            }
+                        ],
+                        "title": "Requirementshifttimingfrom",
+                        "description": "Shift start time"
+                    },
+                    "RequirementShiftTimingTo": {
+                        "anyOf": [
+                            {
+                                "type": "string"
+                            },
+                            {
+                                "type": "null"
+                            }
+                        ],
+                        "title": "Requirementshifttimingto",
+                        "description": "Shift end time"
+                    },
+                    "RequirementHoursPerWeek": {
+                        "anyOf": [
+                            {
+                                "type": "string",
+                                "pattern": "^(?!^[-+.]*$)[+-]?0*\\d*\\.?\\d*$"
+                            },
+                            {
+                                "type": "number"
+                            },
+                            {
+                                "type": "string"
+                            },
+                            {
+                                "type": "null"
+                            }
+                        ],
+                        "title": "Requirementhoursperweek",
+                        "description": "Hours per week"
+                    },
+                    "MinPayRate": {
+                        "anyOf": [
+                            {
+                                "type": "string",
+                                "pattern": "^(?!^[-+.]*$)[+-]?0*\\d*\\.?\\d*$"
+                            },
+                            {
+                                "type": "number"
+                            },
+                            {
+                                "type": "null"
+                            }
+                        ],
+                        "title": "Minpayrate",
+                        "description": "Minimum pay rate"
+                    },
+                    "MaxPayRate": {
+                        "anyOf": [
+                            {
+                                "type": "string",
+                                "pattern": "^(?!^[-+.]*$)[+-]?0*\\d*\\.?\\d*$"
+                            },
+                            {
+                                "type": "number"
+                            },
+                            {
+                                "type": "null"
+                            }
+                        ],
+                        "title": "Maxpayrate",
+                        "description": "Maximum pay rate"
+                    },
+                    "RequirementJobDescription": {
+                        "anyOf": [
+                            {
+                                "type": "string"
+                            },
+                            {
+                                "type": "null"
+                            }
+                        ],
+                        "title": "Requirementjobdescription",
+                        "description": "Job description"
+                    }
+                },
+                "type": "object",
+                "title": "RequirementDetailsResponse",
+                "description": "Response model for requirement details.\n\nMaps database column names to user-friendly field names.",
+                "example": {
+                    "City": "New York",
+                    "Duration": "12 months",
+                    "HoursPerWeek": 37.5,
+                    "JobDescription": "Job description here...",
+                    "JobTitle": "Software Engineer",
+                    "MaxPayRate": 80000.0,
+                    "MinPayRate": 50000.0,
+                    "ShiftTimingFrom": "09:00",
+                    "ShiftTimingTo": "18:00",
+                    "ZIPCode": "10001"
+                }
+            },
+            "ValidationError": {
+                "properties": {
+                    "loc": {
+                        "items": {
+                            "anyOf": [
+                                {
+                                    "type": "string"
+                                },
+                                {
+                                    "type": "integer"
+                                }
+                            ]
+                        },
+                        "type": "array",
+                        "title": "Location"
+                    },
+                    "msg": {
+                        "type": "string",
+                        "title": "Message"
+                    },
+                    "type": {
+                        "type": "string",
+                        "title": "Error Type"
+                    }
+                },
+                "type": "object",
+                "required": [
+                    "loc",
+                    "msg",
+                    "type"
+                ],
+                "title": "ValidationError"
+            },
+            "WebhookResponse": {
+                "properties": {
+                    "status": {
+                        "type": "string",
+                        "title": "Status"
+                    },
+                    "message": {
+                        "type": "string",
+                        "title": "Message"
+                    },
+                    "cand_id": {
+                        "anyOf": [
+                            {
+                                "type": "integer"
+                            },
+                            {
+                                "type": "null"
+                            }
+                        ],
+                        "title": "Cand Id"
+                    },
+                    "requirement_id": {
+                        "anyOf": [
+                            {
+                                "type": "string"
+                            },
+                            {
+                                "type": "null"
+                            }
+                        ],
+                        "title": "Requirement Id"
+                    },
+                    "timestamp": {
+                        "type": "string",
+                        "title": "Timestamp"
+                    },
+                    "concurrency": {
+                        "additionalProperties": {
+                            "type": "integer"
+                        },
+                        "type": "object",
+                        "title": "Concurrency"
+                    }
+                },
+                "type": "object",
+                "required": [
+                    "status",
+                    "message",
+                    "timestamp",
+                    "concurrency"
+                ],
+                "title": "WebhookResponse",
+                "description": "Response model for webhook endpoint."
+            },
+            "app__api__apply_webhook__models__WebhookPayload": {
+                "properties": {
+                    "type": {
+                        "type": "string",
+                        "title": "Type"
+                    },
+                    "table": {
+                        "type": "string",
+                        "title": "Table"
+                    },
+                    "record": {
+                        "anyOf": [
+                            {
+                                "additionalProperties": true,
+                                "type": "object"
+                            },
+                            {
+                                "type": "null"
+                            }
+                        ],
+                        "title": "Record"
+                    },
+                    "old_record": {
+                        "anyOf": [
+                            {
+                                "additionalProperties": true,
+                                "type": "object"
+                            },
+                            {
+                                "type": "null"
+                            }
+                        ],
+                        "title": "Old Record"
+                    }
+                },
+                "type": "object",
+                "required": [
+                    "type",
+                    "table"
+                ],
+                "title": "WebhookPayload",
+                "description": "Supabase webhook payload structure"
+            },
+            "app__api__outreach_agent__schemas__WebhookPayload": {
+                "properties": {
+                    "type": {
+                        "type": "string",
+                        "title": "Type"
+                    },
+                    "table": {
+                        "type": "string",
+                        "title": "Table"
+                    },
+                    "record": {
+                        "additionalProperties": true,
+                        "type": "object",
+                        "title": "Record"
+                    },
+                    "schema": {
+                        "type": "string",
+                        "title": "Schema",
+                        "description": "Database schema name"
+                    },
+                    "old_record": {
+                        "anyOf": [
+                            {
+                                "additionalProperties": true,
+                                "type": "object"
+                            },
+                            {
+                                "type": "null"
+                            }
+                        ],
+                        "title": "Old Record"
+                    }
+                },
+                "type": "object",
+                "required": [
+                    "type",
+                    "table",
+                    "record",
+                    "schema"
+                ],
+                "title": "WebhookPayload",
+                "description": "Webhook payload model from Supabase.",
+                "example": {
+                    "record": {
+                        "cand_id": 2928,
+                        "requirement_id": 130174
+                    },
+                    "schema": "public",
+                    "table": "job_application_tracking",
+                    "type": "INSERT"
+                }
+            }
+        }
+    }
+}

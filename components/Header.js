@@ -3,28 +3,24 @@
 import { useState, useEffect } from 'react';
 import { Sparkles, Menu, X, LayoutDashboard, User } from 'lucide-react';
 import { useRouter } from 'next/navigation';
+import { useSession } from 'next-auth/react';
 import SignInModal from './auth/SignInModal';
 import { theme } from '../utils/theme';
 import { brand, Logo } from '../utils/brand';
 
 export default function Header() {
   const router = useRouter();
+  const { data: session } = useSession();
   const [scrolled, setScrolled] = useState(false);
   const [isMobileMenuOpen, setIsMobileMenuOpen] = useState(false);
   const [isSignInOpen, setIsSignInOpen] = useState(false);
-  const [user, setUser] = useState(null);
 
-  // Check if user is logged in
-  useEffect(() => {
-    const storedUser = localStorage.getItem('user');
-    if (storedUser) {
-      try {
-        setUser(JSON.parse(storedUser));
-      } catch (error) {
-        console.error('Error parsing user data:', error);
-      }
-    }
-  }, []);
+  // Check if user is logged in from session
+  const user = session?.user ? {
+    id: session.user.id,
+    email: session.user.email,
+    name: session.user.name,
+  } : null;
 
   useEffect(() => {
     const handleScroll = () => {

@@ -9,6 +9,8 @@
 'use client';
 
 import { useEffect, useState } from 'react';
+import { useRouter } from 'next/navigation';
+import { useSession } from 'next-auth/react';
 import { FileText, Calendar, ExternalLink, Trash2, Briefcase, MapPin, Building2 } from 'lucide-react';
 import Button from '@/components/ui/Button';
 import Loader from '@/components/ui/Loader';
@@ -16,27 +18,34 @@ import { theme } from '@/utils/theme';
 import toast from 'react-hot-toast';
 
 export default function ApplicationsPage() {
+  const router = useRouter();
+  const { data: session, status } = useSession();
   const [applications, setApplications] = useState([]);
   const [loading, setLoading] = useState(true);
   const [filter, setFilter] = useState('all');
 
   useEffect(() => {
-    loadApplications();
-
-    // Auto-refresh every 30 seconds to show status updates
-    const refreshInterval = setInterval(() => {
+    if (status === 'authenticated') {
       loadApplications();
-    }, 30000); // 30 seconds
 
-    return () => clearInterval(refreshInterval);
-  }, []);
+      // Auto-refresh every 30 seconds to show status updates
+      const refreshInterval = setInterval(() => {
+        loadApplications();
+      }, 30000); // 30 seconds
+
+      return () => clearInterval(refreshInterval);
+    } else if (status === 'unauthenticated') {
+      router.push('/');
+    }
+  }, [status, session, router]);
 
   const loadApplications = async () => {
+    if (!session?.user) return;
+
     setLoading(true);
     try {
-      const user = JSON.parse(localStorage.getItem('user'));
-      
-      const response = await fetch(`/api/applications/user/${user.id}`);
+      const userId = session.user.id || session.user.candidate_id?.toString();
+      const response = await fetch(`/api/applications/user/${userId}`);
       const data = await response.json();
       
       if (data.success) {
@@ -104,7 +113,7 @@ export default function ApplicationsPage() {
       </div>
 
       {/* Loading State */}
-      {loading && (
+      {(status === 'loading' || loading) && (
         <div className="flex items-center justify-center py-20">
           <Loader size="lg" text="Loading applications..." />
         </div>

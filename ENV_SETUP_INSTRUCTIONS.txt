@@ -21,6 +21,8 @@ STEP 3: Add to .env.local
 Paste this into your .env.local file (replace with your actual values):
 
 DATABASE_URL=postgresql://postgres.[project-ref]:[YOUR-PASSWORD]@aws-0-[region].pooler.supabase.com:6543/postgres
+DIRECT_URL=postgresql://postgres.[project-ref]:[YOUR-PASSWORD]@aws-0-[region].pooler.supabase.com:6543/postgres
+AGENT_API_BASE_URL=http://localhost:8000
 
 IMPORTANT NOTES:
 - Replace [YOUR-PASSWORD] with your actual Supabase password
@@ -28,9 +30,19 @@ IMPORTANT NOTES:
 - Replace [region] with your region (e.g., us-east-1)
 - Use PORT 6543 (connection pooling) for Next.js - NOT port 5432
 - The password is URL-encoded (Supabase provides this automatically)
+- AGENT_API_BASE_URL should point to your agent API service (FastAPI backend)
 
 EXAMPLE:
 DATABASE_URL=postgresql://postgres.abcdefghijklmnop:MyP%40ssw0rd@aws-0-us-east-1.pooler.supabase.com:6543/postgres
+DIRECT_URL=postgresql://postgres.abcdefghijklmnop:MyP%40ssw0rd@aws-0-us-east-1.pooler.supabase.com:6543/postgres
+AGENT_API_BASE_URL=http://localhost:8000
+NEXTAUTH_SECRET=your-secret-key-here-generate-a-random-string-min-32-chars
+NEXTAUTH_URL=http://localhost:3000
+
+IMPORTANT: Generate NEXTAUTH_SECRET
+- You can generate a random secret using: openssl rand -base64 32
+- Or use any random string generator (minimum 32 characters)
+- This is used to encrypt JWT tokens
 
 STEP 4: Install Dependencies
 -----------------------------

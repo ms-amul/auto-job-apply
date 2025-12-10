@@ -1,21 +1,17 @@
 /**
  * Sign In API Route
- *
- * - First checks MongoDB for real users (from signup)
- * - Falls back to mock users.json for demo accounts
- * - Returns the user with MongoDB _id
+ * 
+ * This route uses NextAuth for authentication.
+ * For direct API usage, you can call this endpoint, but it's recommended
+ * to use NextAuth's signIn function from the client side.
  */
 
 import { NextResponse } from 'next/server';
-import users from '@/data/users.json';
-import { getDb } from '@/lib/mongodb';
+import { verifyCredentials } from '@/lib/auth';
 
 export async function POST(request) {
   try {
     const { email, password } = await request.json();
-
-    // Simulate network delay
-    await new Promise((resolve) => setTimeout(resolve, 800));
 
     // Basic validation
     if (!email || !password) {
@@ -28,38 +24,10 @@ export async function POST(request) {
       );
     }
 
-    const db = await getDb();
-    const mongoUsers = db.collection('users');
-    const now = new Date();
+    // Verify credentials using Prisma and bcrypt
+    const user = await verifyCredentials(email, password);
 
-    // First, check if user exists in MongoDB (real signup)
-    const mongoUser = await mongoUsers.findOne({ email });
-
-    if (mongoUser) {
-      // Real user from signup - validate password
-      // Note: In production, use bcrypt to compare hashed passwords
-      // For demo, we're storing plain text (NOT SECURE - demo only!)
-      if (mongoUser.password && mongoUser.password === password) {
-        // Update last login
-        await mongoUsers.updateOne(
-          { _id: mongoUser._id },
-          { $set: { updatedAt: now } },
-        );
-
-        return NextResponse.json({
-          success: true,
-          message: 'Sign in successful',
-          user: {
-            id: mongoUser._id.toString(),
-            name: mongoUser.name,
-            email: mongoUser.email,
-            role: mongoUser.role,
-            profileCompleted: mongoUser.profileCompleted ?? false,
-          },
-        });
-      }
-      
-      // If password doesn't match
+    if (!user) {
       return NextResponse.json(
         {
           success: false,
@@ -69,49 +37,14 @@ export async function POST(request) {
       );
     }
 
-    // Fall back to mock users for demo accounts
-    const mockUser = users.users.find((u) => u.email === email);
-
-    if (!mockUser) {
-      return NextResponse.json(
-        {
-          success: false,
-          error: 'Invalid credentials',
-        },
-        { status: 401 },
-      );
-    }
-
-    // Create MongoDB user from mock data (first-time demo login)
-    const insertResult = await mongoUsers.insertOne({
-      name: mockUser.name,
-      email: mockUser.email,
-      role: mockUser.role,
-      phone: '',
-      location: '',
-      title: '',
-      bio: '',
-      willingToMoveToUS: null,
-      hasVisa: null,
-      needsVisaSponsorship: null,
-      yearsOfExperience: '',
-      preferredLocations: [],
-      salaryExpectation: '',
-      resumeUrl: '',
-      createdAt: now,
-      updatedAt: now,
-      profileCompleted: false,
-    });
-
+    // Return user data (email as requested)
     return NextResponse.json({
       success: true,
       message: 'Sign in successful',
       user: {
-        id: insertResult.insertedId.toString(),
-        name: mockUser.name,
-        email: mockUser.email,
-        role: mockUser.role,
-        profileCompleted: false,
+        id: user.id,
+        candidate_id: user.candidate_id,
+        email: user.email,
       },
     });
   } catch (error) {

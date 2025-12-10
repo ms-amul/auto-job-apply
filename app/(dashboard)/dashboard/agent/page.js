@@ -12,6 +12,7 @@
 
 import { useEffect, useState, useRef } from 'react';
 import { useRouter } from 'next/navigation';
+import { useSession } from 'next-auth/react';
 import { Play, Pause, Settings as SettingsIcon, Search, FileText, Send, Activity } from 'lucide-react';
 import Button from '@/components/ui/Button';
 import Loader from '@/components/ui/Loader';
@@ -26,7 +27,7 @@ import HowItWorks from '@/components/agent/HowItWorks';
 
 export default function AgentPage() {
   const router = useRouter();
-  const [user, setUser] = useState(null);
+  const { data: session, status } = useSession();
   const [agent, setAgent] = useState(null);
   const [stats, setStats] = useState(null);
   const [loading, setLoading] = useState(true);
@@ -62,12 +63,14 @@ export default function AgentPage() {
   const statusUpdateRef = useRef(null);
 
   useEffect(() => {
-    loadAgentData();
-  }, []);
+    if (status === 'authenticated') {
+      loadAgentData();
+    }
+  }, [status, session]);
 
   // Auto-apply timer when agent is running
   useEffect(() => {
-    if (agent?.status === 'running' && user) {
+    if (agent?.status === 'running' && session?.user) {
       startAutoApply();
       startStatusUpdates();
     } else {
@@ -79,22 +82,24 @@ export default function AgentPage() {
       stopAutoApply();
       stopStatusUpdates();
     };
-  }, [agent?.status, user]);
+  }, [agent?.status, session]);
 
   const loadAgentData = async () => {
-    try {
-      const storedUser = localStorage.getItem('user');
-      if (!storedUser) {
-        router.push('/');
-        return;
-      }
+    if (status === 'unauthenticated' || !session?.user) {
+      router.push('/');
+      return;
+    }
 
-      const userData = JSON.parse(storedUser);
-      setUser(userData);
+    if (status === 'loading') {
+      return;
+    }
+
+    try {
+      const userId = session.user.id || session.user.candidate_id?.toString();
 
       const [agentRes, statsRes] = await Promise.all([
-        fetch(`/api/agent/${userData.id}`),
-        fetch(`/api/agent/${userData.id}/stats`),
+        fetch(`/api/agent/${userId}`),
+        fetch(`/api/agent/${userId}/stats`),
       ]);
 
       const agentData = await agentRes.json();
@@ -205,20 +210,22 @@ export default function AgentPage() {
   };
 
   const updateApplicationStatuses = async () => {
-    if (!user) return;
+    if (!session?.user) return;
 
     try {
+      const userId = session.user.id || session.user.candidate_id?.toString();
       const response = await fetch('/api/applications/update-statuses', {
         method: 'POST',
         headers: { 'Content-Type': 'application/json' },
-        body: JSON.stringify({ userId: user.id }),
+        body: JSON.stringify({ userId }),
       });
 
       const data = await response.json();
 
       if (data.success && data.updatedCount > 0) {
         // Refresh stats when statuses change
-        const statsRes = await fetch(`/api/agent/${user.id}/stats`);
+        const userId = session.user.id || session.user.candidate_id?.toString();
+        const statsRes = await fetch(`/api/agent/${userId}/stats`);
         const statsData = await statsRes.json();
         if (statsData.success) {
           setStats(statsData.stats);
@@ -252,7 +259,7 @@ export default function AgentPage() {
   };
 
   const applyToOneJob = async () => {
-    if (!user || isApplying) return;
+    if (!session?.user || isApplying) return;
 
     setIsApplying(true);
     const startTime = Date.now();
@@ -262,7 +269,8 @@ export default function AgentPage() {
       await animateWorkflow();
 
       // Call API to apply to one job
-      const response = await fetch(`/api/agent/${user.id}/apply`, {
+      const userId = session.user.id || session.user.candidate_id?.toString();
+      const response = await fetch(`/api/agent/${userId}/apply`, {
         method: 'POST',
       });
 
@@ -283,7 +291,8 @@ export default function AgentPage() {
         setApplicationHistory(prev => [historyItem, ...prev].slice(0, 10)); // Keep last 10
 
         // Refresh stats
-        const statsRes = await fetch(`/api/agent/${user.id}/stats`);
+        const userId = session.user.id || session.user.candidate_id?.toString();
+        const statsRes = await fetch(`/api/agent/${userId}/stats`);
         const statsData = await statsRes.json();
         if (statsData.success) {
           setStats(statsData.stats);
@@ -297,7 +306,8 @@ export default function AgentPage() {
           stopAutoApply(); // Stop the agent gracefully
           
           // Update agent status to paused
-          await fetch(`/api/agent/${user.id}`, {
+          const userId = session.user.id || session.user.candidate_id?.toString();
+          await fetch(`/api/agent/${userId}`, {
             method: 'PUT',
             headers: { 'Content-Type': 'application/json' },
             body: JSON.stringify({ status: 'paused' }),
@@ -370,8 +380,9 @@ export default function AgentPage() {
 
     try {
       const newStatus = agent.status === 'running' ? 'paused' : 'running';
+      const userId = session?.user?.id || session?.user?.candidate_id?.toString();
       
-      const response = await fetch(`/api/agent/${user.id}`, {
+      const response = await fetch(`/api/agent/${userId}`, {
         method: 'PUT',
         headers: { 'Content-Type': 'application/json' },
         body: JSON.stringify({
@@ -401,7 +412,8 @@ export default function AgentPage() {
 
   const handleSaveConfig = async () => {
     try {
-      const response = await fetch(`/api/agent/${user.id}`, {
+      const userId = session?.user?.id || session?.user?.candidate_id?.toString();
+      const response = await fetch(`/api/agent/${userId}`, {
         method: 'PUT',
         headers: { 'Content-Type': 'application/json' },
         body: JSON.stringify({
@@ -428,12 +440,17 @@ export default function AgentPage() {
     }
   };
 
-  if (loading) {
+  if (status === 'loading' || loading) {
     return (
       <div className="min-h-[60vh] flex items-center justify-center">
         <Loader size="lg" text="Loading agent..." />
       </div>
     );
+  }
+
+  if (status === 'unauthenticated') {
+    router.push('/');
+    return null;
   }
 
   const isConfigured = agent && agent.keywords && agent.keywords.length > 0;

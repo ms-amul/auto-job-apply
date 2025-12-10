@@ -9,9 +9,10 @@
 
 import { useEffect, useState } from 'react';
 import { useRouter } from 'next/navigation';
+import { useSession } from 'next-auth/react';
 import { 
   Briefcase, Send, CheckCircle2, Clock, TrendingUp, Users, Eye, FileText,
-  Building2, MapPin, DollarSign
+  Building2, MapPin, DollarSign, Calendar, Target, Bot
 } from 'lucide-react';
 import GlassPanel from '@/components/ui/GlassPanel';
 import Badge from '@/components/ui/Badge';
@@ -20,37 +21,36 @@ import { theme } from '@/utils/theme';
 
 export default function DashboardPage() {
   const router = useRouter();
-  const [user, setUser] = useState(null);
+  const { data: session, status } = useSession();
   const [stats, setStats] = useState(null);
   const [recentApplications, setRecentApplications] = useState([]);
   const [loading, setLoading] = useState(true);
 
   useEffect(() => {
-    loadDashboardData();
-
-    // Auto-refresh every 30 seconds to show status updates
-    const refreshInterval = setInterval(() => {
+    if (status === 'authenticated') {
       loadDashboardData();
-    }, 30000); // 30 seconds
 
-    return () => clearInterval(refreshInterval);
-  }, []);
+      // Auto-refresh every 30 seconds to show status updates
+      const refreshInterval = setInterval(() => {
+        loadDashboardData();
+      }, 30000); // 30 seconds
+
+      return () => clearInterval(refreshInterval);
+    }
+  }, [status, session]);
 
   const loadDashboardData = async () => {
-    try {
-      const storedUser = localStorage.getItem('user');
-      if (!storedUser) {
-        router.push('/');
-        return;
-      }
+    if (status !== 'authenticated' || !session?.user) {
+      return;
+    }
 
-      const userData = JSON.parse(storedUser);
-      setUser(userData);
+    try {
+      const userId = session.user.id || session.user.candidate_id?.toString();
 
       // Fetch real data from backend
       const [statsRes, appsRes] = await Promise.all([
-        fetch(`/api/agent/${userData.id}/stats`),
-        fetch(`/api/applications/user/${userData.id}`),
+        fetch(`/api/agent/${userId}/stats`),
+        fetch(`/api/applications/user/${userId}`),
       ]);
 
       const statsData = await statsRes.json();
@@ -128,7 +128,7 @@ export default function DashboardPage() {
     }
   };
 
-  if (loading) {
+  if (status === 'loading' || loading) {
     return (
       <div className="min-h-[60vh] flex items-center justify-center">
         <Loader size="lg" text="Loading dashboard..." />
@@ -136,9 +136,17 @@ export default function DashboardPage() {
     );
   }
 
-  if (user?.role === 'recruiter') {
-    return <RecruiterDashboard user={user} stats={stats} />;
+  if (status === 'unauthenticated') {
+    router.push('/');
+    return null;
   }
+
+  const user = {
+    id: session?.user?.id,
+    candidate_id: session?.user?.candidate_id,
+    email: session?.user?.email,
+    name: session?.user?.name || session?.user?.email,
+  };
 
   return <ApplicantDashboard user={user} stats={stats} recentApplications={recentApplications} />;
 }
@@ -459,5 +467,3 @@ function RecruiterDashboard({ user, stats }) {
 }
 
 
-// Import missing icons
-import { Calendar, Target, Bot } from 'lucide-react';

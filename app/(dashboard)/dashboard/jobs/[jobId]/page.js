@@ -2,6 +2,7 @@
 
 import { useState, useEffect } from 'react';
 import { useRouter } from 'next/navigation';
+import { useSession } from 'next-auth/react';
 import { 
   ArrowLeft, MapPin, Briefcase, DollarSign, Clock, Building2, 
   Users, Eye, CheckCircle, Globe, Award, Heart 
@@ -11,6 +12,7 @@ import toast from 'react-hot-toast';
 
 export default function JobDetailsPage({ params }) {
   const router = useRouter();
+  const { data: session, status } = useSession();
   const [job, setJob] = useState(null);
   const [loading, setLoading] = useState(true);
   const [applying, setApplying] = useState(false);
@@ -51,24 +53,22 @@ export default function JobDetailsPage({ params }) {
   };
 
   const handleApply = async () => {
+    if (status === 'unauthenticated' || !session?.user) {
+      toast.error('Please sign in to apply');
+      router.push('/');
+      return;
+    }
+
     setApplying(true);
     try {
-      // Get user from localStorage
-      const stored = localStorage.getItem('user');
-      if (!stored) {
-        toast.error('Please sign in to apply');
-        router.push('/');
-        return;
-      }
-
-      const user = JSON.parse(stored);
+      const userId = session.user.id || session.user.candidate_id?.toString();
 
       const response = await fetch('/api/applications/create', {
         method: 'POST',
         headers: { 'Content-Type': 'application/json' },
         body: JSON.stringify({
           jobId: job._id,
-          applicantId: user.id,
+          applicantId: userId,
           coverLetter: `I am interested in the ${job.title} position at ${job.company}.`,
         }),
       });
