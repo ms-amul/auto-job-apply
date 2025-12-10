@@ -1,17 +1,15 @@
 'use client';
 
-import { useState, useEffect } from 'react';
-import SectionCard from '../SectionCard';
-import ToggleCard from '../ToggleCard';
+import { theme } from '@/utils/theme';
+import { Plane, Home } from 'lucide-react';
+import { useEffect, useState } from 'react';
+import toast from 'react-hot-toast';
+import DisabilitySelect from '../DisabilitySelect';
+import EthnicitySelect from '../EthnicitySelect';
 import GenderSelect from '../GenderSelect';
 import RaceSelect from '../RaceSelect';
-import EthnicitySelect from '../EthnicitySelect';
-import DisabilitySelect from '../DisabilitySelect';
+import SectionCard from '../SectionCard';
 import VeteranSelect from '../VeteranSelect';
-import Input from '@/components/ui/Input';
-import { Plane } from 'lucide-react';
-import { theme } from '@/utils/theme';
-import toast from 'react-hot-toast';
 
 export default function PreferencesTab({ userId }) {
   const [loading, setLoading] = useState(true);
@@ -37,12 +35,12 @@ export default function PreferencesTab({ userId }) {
 
   const loadData = async () => {
     if (!userId) return;
-    
+
     setLoading(true);
     try {
       const response = await fetch(`/api/users/${userId}/profile/preferences`);
       const result = await response.json();
-      
+
       if (result.success) {
         setData(result.data);
       } else {
@@ -63,16 +61,16 @@ export default function PreferencesTab({ userId }) {
   const handleSubmit = async (e) => {
     e.preventDefault();
     if (!userId) return;
-    
+
     setSaving(true);
     try {
       // Always fetch IDs for gender, ethnicity, race from master tables based on text values
       // This ensures we get the correct ID even when the user changes the selection
       // Handle "Decline to state" as null
       const isDeclineToState = (value) => !value || value === '' || value.toLowerCase() === 'decline to state';
-      
+
       const lookupPromises = [];
-      
+
       if (data.gender && !isDeclineToState(data.gender)) {
         lookupPromises.push(
           fetch(`/api/master-tables/gender?text=${encodeURIComponent(data.gender)}`)
@@ -83,7 +81,7 @@ export default function PreferencesTab({ userId }) {
       } else {
         lookupPromises.push(Promise.resolve({ type: 'gender', result: { success: false, id: null } }));
       }
-      
+
       if (data.ethnicity && !isDeclineToState(data.ethnicity)) {
         lookupPromises.push(
           fetch(`/api/master-tables/ethnicity?text=${encodeURIComponent(data.ethnicity)}`)
@@ -94,7 +92,7 @@ export default function PreferencesTab({ userId }) {
       } else {
         lookupPromises.push(Promise.resolve({ type: 'ethnicity', result: { success: false, id: null } }));
       }
-      
+
       if (data.race && !isDeclineToState(data.race)) {
         lookupPromises.push(
           fetch(`/api/master-tables/race?text=${encodeURIComponent(data.race)}`)
@@ -107,21 +105,21 @@ export default function PreferencesTab({ userId }) {
       }
 
       const lookupResults = await Promise.all(lookupPromises);
-      
+
       // Extract IDs from lookup results
       const genderLookup = lookupResults.find(r => r.type === 'gender');
       const ethnicityLookup = lookupResults.find(r => r.type === 'ethnicity');
       const raceLookup = lookupResults.find(r => r.type === 'race');
 
       // If lookup succeeded, use the ID; if "Decline to state" or empty, use null; otherwise fallback to existing ID
-      const genderId = genderLookup?.result?.success 
-        ? genderLookup.result.id 
+      const genderId = genderLookup?.result?.success
+        ? genderLookup.result.id
         : (isDeclineToState(data.gender) ? null : (data.gender_id || null));
-      const ethnicityId = ethnicityLookup?.result?.success 
-        ? ethnicityLookup.result.id 
+      const ethnicityId = ethnicityLookup?.result?.success
+        ? ethnicityLookup.result.id
         : (isDeclineToState(data.ethnicity) ? null : (data.ethnicity_id || null));
-      const raceId = raceLookup?.result?.success 
-        ? raceLookup.result.id 
+      const raceId = raceLookup?.result?.success
+        ? raceLookup.result.id
         : (isDeclineToState(data.race) ? null : (data.race_id || null));
 
       const response = await fetch(`/api/users/${userId}/profile/preferences`, {
@@ -137,9 +135,9 @@ export default function PreferencesTab({ userId }) {
           veteran_disclosure_id: data.veteran_disclosure_id,
         }),
       });
-      
+
       const result = await response.json();
-      
+
       if (result.success) {
         toast.success('Preferences updated successfully!');
         // Reload data to get updated values
@@ -168,25 +166,98 @@ export default function PreferencesTab({ userId }) {
       {/* Career Preferences */}
       <SectionCard title="Career Preferences" description="Help us match you with the right opportunities">
         <div className="grid grid-cols-1 md:grid-cols-2 gap-4 md:gap-6">
-          <Input
-            label="Years of Experience"
-            type="number"
-            value={data.experience}
-            onChange={(e) => updateField('experience', parseInt(e.target.value) || 0)}
-            placeholder="e.g., 5"
-          />
-          <ToggleCard
-            label="Willing to relocate"
-            icon={Plane}
-            value={data.relocation}
-            onChange={(v) => updateField('relocation', v)}
-          />
+          {/* Years of Experience */}
+          <div className="space-y-2">
+            <label className="block text-sm font-semibold text-slate-700">
+              Years of Experience
+            </label>
+            <div className="relative">
+              <input
+                type="number"
+                value={data.experience}
+                onChange={(e) => updateField('experience', parseInt(e.target.value) || 0)}
+                placeholder="e.g., 5"
+                min="0"
+                className="w-full px-4 py-3 rounded-xl border border-gray-200 bg-white text-slate-900 placeholder:text-slate-400 focus:outline-none focus:ring-2 focus:ring-blue-500 focus:border-transparent transition-all duration-200"
+                style={{
+                  boxShadow: '0 1px 2px rgba(0, 0, 0, 0.05)',
+                }}
+              />
+            </div>
+          </div>
+
+          {/* Relocation Toggle */}
+          <div className="space-y-2">
+            <label className="block text-sm font-semibold text-slate-700">
+              Willing to relocate
+            </label>
+            <div className="flex items-center gap-3">
+              <div
+                className={`relative flex items-center justify-center w-11 h-11 rounded-xl transition-all duration-500 ease-out ${
+                  data.relocation
+                    ? 'bg-gradient-to-br from-emerald-50 to-emerald-100'
+                    : 'bg-gradient-to-br from-red-50 to-red-100'
+                }`}
+              >
+                {/* Animated icon container with smooth transitions */}
+                <div className="relative w-full h-full flex items-center justify-center overflow-hidden">
+                  {/* Plane icon for Yes - slides in from top */}
+                  <div
+                    className={`absolute inset-0 flex items-center justify-center transition-all duration-500 ease-out ${
+                      data.relocation
+                        ? 'opacity-100 translate-y-0 scale-100'
+                        : 'opacity-0 -translate-y-8 scale-75'
+                    }`}
+                  >
+                    <Plane className="w-7 h-7 text-emerald-600" />
+                  </div>
+                  
+                  {/* Home icon for No - slides in from bottom */}
+                  <div
+                    className={`absolute inset-0 flex items-center justify-center transition-all duration-500 ease-out ${
+                      !data.relocation
+                        ? 'opacity-100 translate-y-0 scale-100'
+                        : 'opacity-0 translate-y-8 scale-75'
+                    }`}
+                  >
+                    <Home className="w-7 h-7 text-red-600" />
+                  </div>
+                </div>
+              </div>
+              <div className="flex-1">
+                <div className="flex gap-2">
+                  <button
+                    type="button"
+                    onClick={() => updateField('relocation', true)}
+                    className={`flex-1 rounded-lg px-4 py-3 text-sm font-semibold transition-all duration-300 border transform active:scale-95 ${
+                      data.relocation
+                        ? 'text-white bg-emerald-600 border-emerald-600'
+                        : 'bg-white border-gray-200 text-slate-600 hover:border-emerald-300 hover:bg-emerald-50'
+                    }`}
+                  >
+                    Yes
+                  </button>
+                  <button
+                    type="button"
+                    onClick={() => updateField('relocation', false)}
+                    className={`flex-1 rounded-lg px-4 py-3 text-sm font-semibold transition-all duration-300 border transform active:scale-95 ${
+                      !data.relocation
+                        ? 'text-white bg-red-600 border-rose-600'
+                        : 'bg-white border-gray-200 text-slate-600 hover:border-rose-300 hover:bg-rose-50'
+                    }`}
+                  >
+                    No
+                  </button>
+                </div>
+              </div>
+            </div>
+          </div>
         </div>
       </SectionCard>
 
       {/* Diversity & Inclusion */}
-      <SectionCard 
-        title="Diversity & Inclusion" 
+      <SectionCard
+        title="Diversity & Inclusion"
         description={
           <div>
             <p className="text-sm text-slate-600 mb-1">Optional information to help employers meet diversity goals</p>
