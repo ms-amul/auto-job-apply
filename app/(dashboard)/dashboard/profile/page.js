@@ -15,6 +15,7 @@ import { theme } from '@/utils/theme';
 import ProfileHeader from '@/components/profile/ProfileHeader';
 import ProfileTabs from '@/components/profile/ProfileTabs';
 import ResumeUploadSection from '@/components/profile/ResumeUploadSection';
+import ProfileCompletion from '@/components/profile/ProfileCompletion';
 
 // Tab Components
 import GeneralTab from '@/components/profile/tabs/GeneralTab';
@@ -183,46 +184,8 @@ export default function ProfilePage() {
             onUploadSuccess={handleUploadSuccess}
           />
 
-          {/* Quick Stats Card */}
-          <div 
-            className="bg-white rounded-xl border border-gray-200/80 p-6"
-            style={{ 
-              boxShadow: '0 2px 8px rgba(0, 0, 0, 0.04)',
-            }}
-          >
-            <h3 className="text-sm font-bold text-slate-900 mb-4">Profile Completion</h3>
-            <div className="space-y-3">
-              <div>
-                <div className="flex items-center justify-between mb-2">
-                  <span className="text-xs text-slate-600 font-medium">Overall</span>
-                  <span className="text-xs font-bold" style={{ color: theme.accentPrimary }}>65%</span>
-                </div>
-                <div className="h-2 bg-gray-100 rounded-full overflow-hidden">
-                  <div 
-                    className="h-full rounded-full transition-all duration-300"
-                    style={{
-                      width: '65%',
-                      background: theme.getAccentGradient(90),
-                    }}
-                  />
-                </div>
-              </div>
-              <div className="pt-3 border-t border-gray-100 space-y-2 text-xs">
-                <div className="flex items-center justify-between">
-                  <span className="text-slate-600">General Info</span>
-                  <span className="font-semibold text-slate-900">Complete</span>
-                </div>
-                <div className="flex items-center justify-between">
-                  <span className="text-slate-600">Skills</span>
-                  <span className="font-semibold text-slate-900">3/5</span>
-                </div>
-                <div className="flex items-center justify-between">
-                  <span className="text-slate-600">Resume</span>
-                  <span className="font-semibold text-slate-900">Pending</span>
-                </div>
-              </div>
-            </div>
-          </div>
+          {/* Profile Completion Card */}
+          <ProfileCompletion userId={userId} />
         </div>
       </div>
     </div>
