@@ -8,23 +8,23 @@
 
 'use client';
 
-import Link from 'next/link';
-import { usePathname } from 'next/navigation';
+import { Logo } from '@/utils/brand';
+import { theme } from '@/utils/theme';
 import {
-  LayoutDashboard,
+  BarChart3,
+  Bot,
   Briefcase,
   FileText,
-  BarChart3,
-  Settings,
+  LayoutDashboard,
   LogOut,
   Menu,
-  X,
+  Settings,
   Users,
-  Bot,
+  X,
   Zap,
 } from 'lucide-react';
-import { theme } from '@/utils/theme';
-import { brand, Logo } from '@/utils/brand';
+import Link from 'next/link';
+import { usePathname } from 'next/navigation';
 
 export default function CompactSidebar({ isOpen, setIsOpen, user }) {
   const pathname = usePathname();

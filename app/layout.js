@@ -2,6 +2,7 @@ import { Geist, Geist_Mono } from "next/font/google";
 import "./globals.css";
 import { brand } from "@/utils/brand";
 import SessionProvider from "@/components/providers/SessionProvider";
+import DevelopmentBadge from "@/components/ui/DevelopmentBadge";
 
 const geistSans = Geist({
   variable: "--font-geist-sans",
@@ -26,6 +27,7 @@ export default function RootLayout({ children }) {
         className={`${geistSans.variable} ${geistMono.variable} antialiased`}
       >
         <SessionProvider>
+          <DevelopmentBadge/>
           {children}
         </SessionProvider>
       </body>

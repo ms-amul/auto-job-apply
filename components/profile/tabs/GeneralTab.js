@@ -226,6 +226,7 @@ function LocationSection({ data, updateField }) {
         <Input
           label="ZIP Code"
           type="text"
+          required
           value={data.zipcode}
           onChange={(e) => updateField('zipcode', e.target.value)}
           icon={<MapPin className="w-5 h-5" />}
