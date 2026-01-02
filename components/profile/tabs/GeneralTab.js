@@ -3,7 +3,7 @@
 import { useState, useEffect } from 'react';
 import Input from '@/components/ui/Input';
 import SectionCard from '../SectionCard';
-import { User, Mail, Phone, MapPin } from 'lucide-react';
+import { User, Mail, Phone, MapPin, UserCircle, FileText } from 'lucide-react';
 import { theme } from '@/utils/theme';
 import toast from 'react-hot-toast';
 
@@ -33,12 +33,12 @@ export default function GeneralTab({ userId }) {
 
   const loadData = async () => {
     if (!userId) return;
-    
+
     setLoading(true);
     try {
       const response = await fetch(`/api/users/${userId}/profile/general`);
       const result = await response.json();
-      
+
       if (result.success) {
         setData(result.data);
       } else {
@@ -59,7 +59,7 @@ export default function GeneralTab({ userId }) {
   const handleSubmit = async (e) => {
     e.preventDefault();
     if (!userId) return;
-    
+
     setSaving(true);
     try {
       const response = await fetch(`/api/users/${userId}/profile/general`, {
@@ -67,9 +67,9 @@ export default function GeneralTab({ userId }) {
         headers: { 'Content-Type': 'application/json' },
         body: JSON.stringify(data),
       });
-      
+
       const result = await response.json();
-      
+
       if (result.success) {
         toast.success('General profile updated successfully!');
       } else {
@@ -96,7 +96,7 @@ export default function GeneralTab({ userId }) {
       <BasicInfoSection data={data} updateField={updateField} />
       <LocationSection data={data} updateField={updateField} />
       <ProfessionalSummarySection data={data} updateField={updateField} />
-      
+
       <div className="flex justify-end gap-3 pt-4 border-t border-gray-100">
         <button
           type="button"
@@ -123,7 +123,7 @@ export default function GeneralTab({ userId }) {
 
 function BasicInfoSection({ data, updateField }) {
   return (
-    <SectionCard title="Basic Information" description="Your core details visible to recruiters">
+    <SectionCard title="Basic Information" description="Your core details visible to recruiters" icon={UserCircle}>
       <div className="grid grid-cols-1 md:grid-cols-2 gap-4 md:gap-6">
         <Input
           label="First Name"
@@ -195,7 +195,7 @@ function BasicInfoSection({ data, updateField }) {
 
 function LocationSection({ data, updateField }) {
   return (
-    <SectionCard title="Location Information" description="Your address and location details">
+    <SectionCard title="Location Information" description="Your address and location details" icon={MapPin}>
       <div className="grid grid-cols-1 md:grid-cols-2 gap-4 md:gap-6">
         <div className="md:col-span-2">
           <Input
@@ -239,7 +239,7 @@ function LocationSection({ data, updateField }) {
 
 function ProfessionalSummarySection({ data, updateField }) {
   return (
-    <SectionCard title="Professional Summary" description="Tell us about your experience and goals">
+    <SectionCard title="Professional Summary" description="Tell us about your experience and goals" icon={FileText}>
       <textarea
         value={data.professional_summary}
         onChange={(e) => updateField('professional_summary', e.target.value)}

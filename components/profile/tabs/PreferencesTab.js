@@ -1,7 +1,7 @@
 'use client';
 
 import { theme } from '@/utils/theme';
-import { Plane, Home } from 'lucide-react';
+import { Plane, Home, Briefcase, Globe } from 'lucide-react';
 import { useEffect, useState } from 'react';
 import toast from 'react-hot-toast';
 import DisabilitySelect from '../DisabilitySelect';
@@ -164,7 +164,7 @@ export default function PreferencesTab({ userId }) {
   return (
     <form onSubmit={handleSubmit} className="space-y-6">
       {/* Career Preferences */}
-      <SectionCard title="Career Preferences" description="Help us match you with the right opportunities">
+      <SectionCard title="Career Preferences" description="Help us match you with the right opportunities" icon={Briefcase}>
         <div className="grid grid-cols-1 md:grid-cols-2 gap-4 md:gap-6">
           {/* Years of Experience */}
           <div className="space-y-2">
@@ -193,32 +193,29 @@ export default function PreferencesTab({ userId }) {
             </label>
             <div className="flex items-center gap-3">
               <div
-                className={`relative flex items-center justify-center w-11 h-11 rounded-xl transition-all duration-500 ease-out ${
-                  data.relocation
-                    ? 'bg-gradient-to-br from-emerald-50 to-emerald-100'
-                    : 'bg-gradient-to-br from-red-50 to-red-100'
-                }`}
+                className={`relative flex items-center justify-center w-11 h-11 rounded-xl transition-all duration-500 ease-out ${data.relocation
+                  ? 'bg-gradient-to-br from-emerald-50 to-emerald-100'
+                  : 'bg-gradient-to-br from-red-50 to-red-100'
+                  }`}
               >
                 {/* Animated icon container with smooth transitions */}
                 <div className="relative w-full h-full flex items-center justify-center overflow-hidden">
                   {/* Plane icon for Yes - slides in from top */}
                   <div
-                    className={`absolute inset-0 flex items-center justify-center transition-all duration-500 ease-out ${
-                      data.relocation
-                        ? 'opacity-100 translate-y-0 scale-100'
-                        : 'opacity-0 -translate-y-8 scale-75'
-                    }`}
+                    className={`absolute inset-0 flex items-center justify-center transition-all duration-500 ease-out ${data.relocation
+                      ? 'opacity-100 translate-y-0 scale-100'
+                      : 'opacity-0 -translate-y-8 scale-75'
+                      }`}
                   >
                     <Plane className="w-7 h-7 text-emerald-600" />
                   </div>
-                  
+
                   {/* Home icon for No - slides in from bottom */}
                   <div
-                    className={`absolute inset-0 flex items-center justify-center transition-all duration-500 ease-out ${
-                      !data.relocation
-                        ? 'opacity-100 translate-y-0 scale-100'
-                        : 'opacity-0 translate-y-8 scale-75'
-                    }`}
+                    className={`absolute inset-0 flex items-center justify-center transition-all duration-500 ease-out ${!data.relocation
+                      ? 'opacity-100 translate-y-0 scale-100'
+                      : 'opacity-0 translate-y-8 scale-75'
+                      }`}
                   >
                     <Home className="w-7 h-7 text-red-600" />
                   </div>
@@ -229,22 +226,20 @@ export default function PreferencesTab({ userId }) {
                   <button
                     type="button"
                     onClick={() => updateField('relocation', true)}
-                    className={`flex-1 rounded-lg px-4 py-3 text-sm font-semibold transition-all duration-300 border transform active:scale-95 ${
-                      data.relocation
-                        ? 'text-white bg-emerald-600 border-emerald-600'
-                        : 'bg-white border-gray-200 text-slate-600 hover:border-emerald-300 hover:bg-emerald-50'
-                    }`}
+                    className={`flex-1 rounded-lg px-4 py-3 text-sm font-semibold transition-all duration-300 border transform active:scale-95 ${data.relocation
+                      ? 'text-white bg-emerald-600 border-emerald-600'
+                      : 'bg-white border-gray-200 text-slate-600 hover:border-emerald-300 hover:bg-emerald-50'
+                      }`}
                   >
                     Yes
                   </button>
                   <button
                     type="button"
                     onClick={() => updateField('relocation', false)}
-                    className={`flex-1 rounded-lg px-4 py-3 text-sm font-semibold transition-all duration-300 border transform active:scale-95 ${
-                      !data.relocation
-                        ? 'text-white bg-red-600 border-rose-600'
-                        : 'bg-white border-gray-200 text-slate-600 hover:border-rose-300 hover:bg-rose-50'
-                    }`}
+                    className={`flex-1 rounded-lg px-4 py-3 text-sm font-semibold transition-all duration-300 border transform active:scale-95 ${!data.relocation
+                      ? 'text-white bg-red-600 border-rose-600'
+                      : 'bg-white border-gray-200 text-slate-600 hover:border-rose-300 hover:bg-rose-50'
+                      }`}
                   >
                     No
                   </button>
@@ -258,6 +253,7 @@ export default function PreferencesTab({ userId }) {
       {/* Diversity & Inclusion */}
       <SectionCard
         title="Diversity & Inclusion"
+        icon={Globe}
         description={
           <div>
             <p className="text-sm text-slate-600 mb-1">Optional information to help employers meet diversity goals</p>

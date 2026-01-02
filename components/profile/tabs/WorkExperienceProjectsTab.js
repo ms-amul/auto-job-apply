@@ -18,7 +18,7 @@ export default function WorkExperienceProjectsTab({ userId }) {
 
   const loadData = async () => {
     if (!userId) return;
-    
+
     setLoading(true);
     try {
       const response = await fetch(`/api/users/${userId}/profile/work-projects`);
@@ -99,7 +99,7 @@ export default function WorkExperienceProjectsTab({ userId }) {
   const handleSubmit = async (e) => {
     e.preventDefault();
     if (!userId) return;
-    
+
     setSaving(true);
     try {
       const response = await fetch(`/api/users/${userId}/profile/work-projects`, {
@@ -110,9 +110,9 @@ export default function WorkExperienceProjectsTab({ userId }) {
           projects: projects,
         }),
       });
-      
+
       const result = await response.json();
-      
+
       if (result.success) {
         toast.success('Work experience and projects updated successfully!');
       } else {
@@ -137,9 +137,10 @@ export default function WorkExperienceProjectsTab({ userId }) {
   return (
     <form onSubmit={handleSubmit} className="space-y-6">
       {/* Work Experience Section */}
-      <SectionCard 
-        title="Work Experience" 
+      <SectionCard
+        title="Work Experience"
         description="Add your professional work experience"
+        icon={Briefcase}
       >
         <div className="space-y-4">
           {workExperience.map((exp, index) => (
@@ -159,7 +160,7 @@ export default function WorkExperienceProjectsTab({ userId }) {
                   </button>
                 )}
               </div>
-              
+
               <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
                 <input
                   type="text"
@@ -218,7 +219,7 @@ export default function WorkExperienceProjectsTab({ userId }) {
               </div>
             </div>
           ))}
-          
+
           <button
             type="button"
             onClick={addExperience}
@@ -231,9 +232,10 @@ export default function WorkExperienceProjectsTab({ userId }) {
       </SectionCard>
 
       {/* Projects Section */}
-      <SectionCard 
-        title="Projects" 
+      <SectionCard
+        title="Projects"
         description="Showcase your projects and achievements"
+        icon={FolderKanban}
       >
         <div className="space-y-4">
           {projects.map((project, index) => (
@@ -253,7 +255,7 @@ export default function WorkExperienceProjectsTab({ userId }) {
                   </button>
                 )}
               </div>
-              
+
               <div className="space-y-4">
                 <input
                   type="text"
@@ -338,7 +340,7 @@ export default function WorkExperienceProjectsTab({ userId }) {
               </div>
             </div>
           ))}
-          
+
           <button
             type="button"
             onClick={addProject}

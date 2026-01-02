@@ -3,7 +3,7 @@
 import { useState, useEffect } from 'react';
 import SectionCard from '../SectionCard';
 import SkillInput from '../SkillInput';
-import { Plus, X, GraduationCap, Award } from 'lucide-react';
+import { Plus, X, GraduationCap, Award, Sparkles } from 'lucide-react';
 import { theme } from '@/utils/theme';
 import toast from 'react-hot-toast';
 
@@ -25,7 +25,7 @@ export default function SkillsExperienceTab({ userId }) {
 
   const loadData = async () => {
     if (!userId) return;
-    
+
     setLoading(true);
     try {
       const response = await fetch(`/api/users/${userId}/profile/skills-experience`);
@@ -104,7 +104,7 @@ export default function SkillsExperienceTab({ userId }) {
   const handleSubmit = async (e) => {
     e.preventDefault();
     if (!userId) return;
-    
+
     setSaving(true);
     try {
       const response = await fetch(`/api/users/${userId}/profile/skills-experience`, {
@@ -112,9 +112,9 @@ export default function SkillsExperienceTab({ userId }) {
         headers: { 'Content-Type': 'application/json' },
         body: JSON.stringify(data),
       });
-      
+
       const result = await response.json();
-      
+
       if (result.success) {
         toast.success('Skills, education, and certifications updated successfully!');
       } else {
@@ -139,7 +139,7 @@ export default function SkillsExperienceTab({ userId }) {
   return (
     <form onSubmit={handleSubmit} className="space-y-6">
       {/* Skills Section */}
-      <SectionCard title="Skills & Expertise" description="Add your skills to match with relevant opportunities">
+      <SectionCard title="Skills & Expertise" description="Add your skills to match with relevant opportunities" icon={Sparkles}>
         <div className="space-y-6">
           <div>
             <label className="block text-sm font-semibold text-slate-700 mb-2">
@@ -181,7 +181,7 @@ export default function SkillsExperienceTab({ userId }) {
       </SectionCard>
 
       {/* Education Section */}
-      <SectionCard title="Education" description="Add your educational background">
+      <SectionCard title="Education" description="Add your educational background" icon={GraduationCap}>
         <div className="space-y-4">
           {data.education.map((edu, index) => (
             <div key={index} className="p-5 border border-gray-200 rounded-xl bg-gray-50/50">
@@ -200,7 +200,7 @@ export default function SkillsExperienceTab({ userId }) {
                   </button>
                 )}
               </div>
-              
+
               <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
                 <input
                   type="text"
@@ -242,7 +242,7 @@ export default function SkillsExperienceTab({ userId }) {
               </div>
             </div>
           ))}
-          
+
           <button
             type="button"
             onClick={addEducation}
@@ -255,7 +255,7 @@ export default function SkillsExperienceTab({ userId }) {
       </SectionCard>
 
       {/* Certifications Section */}
-      <SectionCard title="Certifications" description="Add your professional certifications and credentials">
+      <SectionCard title="Certifications" description="Add your professional certifications and credentials" icon={Award}>
         <div className="space-y-4">
           {data.certifications.map((cert, index) => (
             <div key={index} className="p-5 border border-gray-200 rounded-xl bg-gray-50/50">
@@ -274,7 +274,7 @@ export default function SkillsExperienceTab({ userId }) {
                   </button>
                 )}
               </div>
-              
+
               <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
                 <input
                   type="text"
@@ -321,7 +321,7 @@ export default function SkillsExperienceTab({ userId }) {
               </div>
             </div>
           ))}
-          
+
           <button
             type="button"
             onClick={addCertification}

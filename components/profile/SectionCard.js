@@ -1,51 +1,40 @@
 'use client';
 
 import { theme } from '@/utils/theme';
+import { Star, Layout, Hash } from 'lucide-react';
 
-export default function SectionCard({ title, description, children }) {
+export default function SectionCard({ title, description, icon: Icon, children }) {
+  // Default icon if none provided
+  const DisplayIcon = Icon || Star;
   return (
-    <div 
-      className="bg-white rounded-xl border border-gray-200/80 p-5 md:p-6 relative overflow-hidden"
-      style={{ 
-        boxShadow: '0 1px 3px rgba(0, 0, 0, 0.05)',
+    <div
+      className="bg-white rounded-3xl p-6 md:p-8 mb-6 relative overflow-hidden transition-all duration-200 hover:shadow-md"
+      style={{
+        boxShadow: '0 2px 20px rgba(0,0,0,0.02)',
+        border: '1px solid rgba(241, 245, 249, 1)' // slate-100
       }}
     >
-      {/* Left accent border */}
-      <div 
-        className="absolute left-0 top-0 bottom-0 w-1"
-        style={{
-          background: theme.getAccentGradient(180),
-          opacity: 0.6,
-          borderTopLeftRadius: '0.75rem',
-          borderBottomLeftRadius: '0.75rem',
-        }}
-      />
-      
-      <div className="mb-5 pl-2">
-        <h2 className="text-lg font-bold text-slate-900 mb-1.5 flex items-center gap-2">
-          {typeof title === 'string' ? (
-            <>
-              <span 
-                className="w-1.5 h-1.5 rounded-full"
-                style={{ background: theme.accentPrimary }}
-              />
-              {title}
-            </>
-          ) : (
-            title
+      <div className="flex items-start gap-5 mb-8">
+        <div
+          className="w-12 h-12 rounded-2xl flex items-center justify-center shrink-0 shadow-lg"
+          style={{
+            background: `linear-gradient(135deg, ${theme.accentPrimary}, ${theme.accentSecondary})`,
+            boxShadow: `0 8px 20px -6px ${theme.accentPrimary}50`,
+          }}
+        >
+          <DisplayIcon className="w-6 h-6 text-white" />
+        </div>
+        <div>
+          <h2 className="text-xl font-bold text-slate-900 tracking-tight">
+            {title}
+          </h2>
+          {description && (
+            <div className="text-slate-500 text-sm mt-1">{description}</div>
           )}
-        </h2>
-        {description && (
-          <div className="text-sm text-slate-600">
-            {typeof description === 'string' ? (
-              <p>{description}</p>
-            ) : (
-              description
-            )}
-          </div>
-        )}
+        </div>
       </div>
-      <div className="pl-2">
+
+      <div className="">
         {children}
       </div>
     </div>

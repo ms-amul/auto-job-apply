@@ -16,7 +16,7 @@ export default function VeteranSelect({ value = null, onChange }) {
     try {
       const response = await fetch('/api/master-tables/list?type=veteran');
       const result = await response.json();
-      
+
       if (result.success) {
         setOptions(result.data);
       } else {
@@ -39,44 +39,34 @@ export default function VeteranSelect({ value = null, onChange }) {
   }
 
   // Add "Decline to state" option
-  const allOptions = [
-    ...options,
-    { veteran_disclosure_id: null, veteran_disclosure_text: 'Decline to state' }
-  ];
-
   return (
-    <div className="space-y-2">
-      {allOptions.map((option) => {
-        const isSelected = value === option.veteran_disclosure_id || 
-          (value === null && option.veteran_disclosure_id === null);
-        
-        return (
-          <label
-            key={option.veteran_disclosure_id || 'decline'}
-            className={`flex items-center gap-3 p-3.5 rounded-lg border cursor-pointer transition-all ${
-              isSelected
-                ? 'border-transparent shadow-sm'
-                : 'border-gray-200 hover:border-gray-300 hover:bg-gray-50'
-            }`}
-            style={isSelected ? {
-              background: `${theme.accentPrimary}08`,
-              borderColor: `${theme.accentPrimary}30`,
-            } : {}}
-          >
-            <input
-              type="radio"
-              name="veteran"
-              checked={isSelected}
-              onChange={() => onChange(option.veteran_disclosure_id)}
-              className="w-4 h-4 border-gray-300 text-blue-600 focus:ring-blue-500"
-            />
-            <span className="text-sm text-slate-700 font-medium">
-              {option.veteran_disclosure_text}
-            </span>
-          </label>
-        );
-      })}
+    <div className="relative">
+      <select
+        value={value === null ? 'Decline to state' : options.find(o => o.veteran_disclosure_id === value)?.veteran_disclosure_text || ''}
+        onChange={(e) => {
+          const selectedText = e.target.value;
+          if (selectedText === 'Decline to state') {
+            onChange(null);
+          } else {
+            const selectedOption = options.find(o => o.veteran_disclosure_text === selectedText);
+            if (selectedOption) onChange(selectedOption.veteran_disclosure_id);
+          }
+        }}
+        className="w-full px-4 py-3 rounded-xl border border-gray-200 bg-white text-slate-900 focus:outline-none focus:ring-2 focus:ring-blue-500 focus:border-transparent appearance-none cursor-pointer hover:border-blue-300 transition-colors"
+        style={{
+          boxShadow: '0 2px 10px rgba(0,0,0,0.02)'
+        }}
+      >
+        <option value="Decline to state">Decline to state</option>
+        {options.map((option) => (
+          <option key={option.veteran_disclosure_id} value={option.veteran_disclosure_text}>
+            {option.veteran_disclosure_text}
+          </option>
+        ))}
+      </select>
+      <div className="absolute right-4 top-1/2 -translate-y-1/2 pointer-events-none text-slate-400">
+        <svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round"><path d="m6 9 6 6 6-6" /></svg>
+      </div>
     </div>
   );
 }
-
