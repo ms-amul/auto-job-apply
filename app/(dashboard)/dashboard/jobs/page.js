@@ -5,10 +5,12 @@ import { useRouter } from 'next/navigation';
 import { Search, MapPin, Briefcase, DollarSign, Clock, Building2, Filter, ChevronLeft, ChevronRight, X, SlidersHorizontal, Loader2 } from 'lucide-react';
 import Button from '@/components/ui/Button';
 import Loader from '@/components/ui/Loader';
+import JobCard from '@/components/jobs/JobCard';
 import toast from 'react-hot-toast';
 import { theme } from '@/utils/theme';
 
 export default function JobsPage() {
+  const router = useRouter();
   const [jobs, setJobs] = useState([]);
   const [loading, setLoading] = useState(true);
   const [searchLoading, setSearchLoading] = useState(false);
@@ -24,7 +26,7 @@ export default function JobsPage() {
   const [showFilters, setShowFilters] = useState(true);
   const [isSearchFocused, setIsSearchFocused] = useState(false);
   const searchInputRef = useRef(null);
-  
+
   // Pagination state
   const [currentPage, setCurrentPage] = useState(1);
   const [itemsPerPage, setItemsPerPage] = useState(20);
@@ -73,7 +75,7 @@ export default function JobsPage() {
     } else {
       setSearchLoading(true);
     }
-    
+
     try {
       // Build query parameters
       const params = new URLSearchParams({
@@ -92,7 +94,7 @@ export default function JobsPage() {
 
       const response = await fetch(`/api/jobs?${params.toString()}`);
       const data = await response.json();
-      
+
       if (data.success) {
         setJobs(data.jobs);
         setTotalJobs(data.total);
@@ -187,33 +189,31 @@ export default function JobsPage() {
 
       {/* Premium Search Bar */}
       <div className="relative">
-        <div 
-          className={`relative bg-white rounded-2xl border transition-all duration-200 overflow-hidden ${
-            isSearchFocused 
-              ? 'border-blue-500/50 shadow-md' 
-              : 'border-gray-200/80 shadow-sm hover:shadow-md'
-          }`}
+        <div
+          className={`relative bg-white rounded-2xl border transition-all duration-200 overflow-hidden ${isSearchFocused
+            ? 'border-blue-500/50 shadow-md'
+            : 'border-gray-200/80 shadow-sm hover:shadow-md'
+            }`}
           style={{
-            boxShadow: isSearchFocused 
-              ? `0 4px 16px ${theme.accentPrimary}15` 
+            boxShadow: isSearchFocused
+              ? `0 4px 16px ${theme.accentPrimary}15`
               : '0 2px 8px rgba(0, 0, 0, 0.04)',
           }}
         >
           {/* Subtle focus glow */}
           {isSearchFocused && (
-            <div 
+            <div
               className="absolute inset-0 pointer-events-none transition-opacity duration-200"
               style={{
                 background: `linear-gradient(135deg, ${theme.accentPrimary}05, ${theme.accentSecondary}05)`,
               }}
             />
           )}
-          
+
           <div className="relative flex items-center">
-            <Search 
-              className={`absolute left-4 w-5 h-5 transition-colors duration-200 z-10 ${
-                searchTerm || isSearchFocused ? 'text-blue-600' : 'text-slate-400'
-              }`} 
+            <Search
+              className={`absolute left-4 w-5 h-5 transition-colors duration-200 z-10 ${searchTerm || isSearchFocused ? 'text-blue-600' : 'text-slate-400'
+                }`}
             />
             <input
               ref={searchInputRef}
@@ -241,10 +241,10 @@ export default function JobsPage() {
               </button>
             )}
           </div>
-          
+
           {/* Bottom border accent on focus */}
           {isSearchFocused && (
-            <div 
+            <div
               className="absolute bottom-0 left-0 right-0 h-0.5 transition-opacity duration-200"
               style={{
                 background: theme.getAccentGradient(90),
@@ -256,21 +256,21 @@ export default function JobsPage() {
 
       {/* Filters - Collapsible - Premium */}
       {showFilters && (
-        <div 
+        <div
           className="bg-white border border-gray-100/80 rounded-xl p-4 md:p-6 relative overflow-hidden transition-all duration-200"
-          style={{ 
+          style={{
             boxShadow: '0 2px 12px rgba(0, 0, 0, 0.04)',
           }}
         >
           {/* Subtle accent border */}
-          <div 
+          <div
             className="absolute top-0 left-0 right-0 h-0.5"
             style={{
               background: theme.getAccentGradient(90),
               opacity: 0.3
             }}
           />
-          
+
           <div className="space-y-5">
             {/* Category Pills - Enhanced */}
             <div>
@@ -285,11 +285,10 @@ export default function JobsPage() {
                     <button
                       key={cat}
                       onClick={() => handleFilterChange(setCategoryFilter)(cat === 'All Categories' ? '' : cat)}
-                      className={`px-3 md:px-4 py-2 rounded-full text-xs md:text-sm font-medium transition-all duration-200 ${
-                        isActive
-                          ? 'text-white shadow-md'
-                          : 'bg-gray-50 text-slate-700 hover:bg-gray-100 border border-gray-200 hover:border-gray-300'
-                      }`}
+                      className={`px-3 md:px-4 py-2 rounded-full text-xs md:text-sm font-medium transition-all duration-200 ${isActive
+                        ? 'text-white shadow-md'
+                        : 'bg-gray-50 text-slate-700 hover:bg-gray-100 border border-gray-200 hover:border-gray-300'
+                        }`}
                       style={isActive ? {
                         background: theme.getAccentGradient(135),
                         boxShadow: `0 2px 8px ${theme.accentPrimary}30`
@@ -465,7 +464,7 @@ export default function JobsPage() {
             </div>
           </div>
         )}
-        
+
         {loading && jobs.length === 0 ? (
           <div className="flex items-center justify-center py-16 bg-white rounded-xl border border-gray-100">
             <Loader size="md" text="Loading jobs..." />
@@ -473,7 +472,19 @@ export default function JobsPage() {
         ) : (
           <div className="space-y-4">
             {jobs.map((job) => (
-              <JobCard key={job._id} job={job} />
+              <JobCard
+                key={job._id}
+                job={job}
+                onClick={() => {
+                  if (typeof router !== 'undefined' && router.push) {
+                    router.push(`/dashboard/jobs/${job._id}`);
+                  } else {
+                    console.error('Router is missing', router);
+                    // Fallback using window location if router fails (last resort)
+                    window.location.href = `/dashboard/jobs/${job._id}`;
+                  }
+                }}
+              />
             ))}
 
             {jobs.length === 0 && !loading && (
@@ -488,7 +499,7 @@ export default function JobsPage() {
 
       {/* Pagination Controls - Premium */}
       {totalPages > 1 && (
-        <div 
+        <div
           className="mt-6 md:mt-8 bg-white rounded-2xl border border-gray-100 p-2 md:p-6"
           style={{ boxShadow: '0 4px 20px rgba(0, 0, 0, 0.06)' }}
         >
@@ -497,11 +508,10 @@ export default function JobsPage() {
             <button
               onClick={() => handlePageChange(currentPage - 1)}
               disabled={currentPage === 1}
-              className={`flex items-center gap-2 px-4 md:px-6 py-2.5 md:py-3 rounded-xl font-semibold text-sm transition-all duration-300 ${
-                currentPage === 1
-                  ? 'bg-gray-100 text-gray-400 cursor-not-allowed'
-                  : 'bg-gradient-to-r from-gray-50 to-gray-100 hover:from-gray-100 hover:to-gray-200 text-slate-700 hover:shadow-md transform hover:scale-105 active:scale-95'
-              }`}
+              className={`flex items-center gap-2 px-4 md:px-6 py-2.5 md:py-3 rounded-xl font-semibold text-sm transition-all duration-300 ${currentPage === 1
+                ? 'bg-gray-100 text-gray-400 cursor-not-allowed'
+                : 'bg-gradient-to-r from-gray-50 to-gray-100 hover:from-gray-100 hover:to-gray-200 text-slate-700 hover:shadow-md transform hover:scale-105 active:scale-95'
+                }`}
             >
               <ChevronLeft className="w-4 h-4" />
               <span className="hidden sm:inline">Previous</span>
@@ -528,20 +538,19 @@ export default function JobsPage() {
               {Array.from({ length: totalPages }, (_, i) => i + 1)
                 .filter(page => {
                   return page === currentPage ||
-                         page === currentPage - 1 ||
-                         page === currentPage - 2 ||
-                         page === currentPage + 1 ||
-                         page === currentPage + 2;
+                    page === currentPage - 1 ||
+                    page === currentPage - 2 ||
+                    page === currentPage + 1 ||
+                    page === currentPage + 2;
                 })
                 .map((page) => (
                   <button
                     key={page}
                     onClick={() => handlePageChange(page)}
-                    className={`w-9 h-9 md:w-10 md:h-10 flex items-center justify-center rounded-lg text-sm font-semibold transition-all duration-200 ${
-                      currentPage === page
-                        ? 'text-white shadow-md'
-                        : 'text-slate-700 hover:bg-gray-100'
-                    }`}
+                    className={`w-9 h-9 md:w-10 md:h-10 flex items-center justify-center rounded-lg text-sm font-semibold transition-all duration-200 ${currentPage === page
+                      ? 'text-white shadow-md'
+                      : 'text-slate-700 hover:bg-gray-100'
+                      }`}
                     style={currentPage === page ? {
                       background: theme.getAccentGradient(135),
                       boxShadow: `0 2px 8px ${theme.accentPrimary}30`
@@ -571,11 +580,10 @@ export default function JobsPage() {
             <button
               onClick={() => handlePageChange(currentPage + 1)}
               disabled={currentPage === totalPages}
-              className={`flex items-center gap-2 px-4 md:px-6 py-2.5 md:py-3 rounded-xl font-semibold text-sm transition-all duration-300 ${
-                currentPage === totalPages
-                  ? 'bg-gray-100 text-gray-400 cursor-not-allowed'
-                  : 'bg-gradient-to-r from-gray-50 to-gray-100 hover:from-gray-100 hover:to-gray-200 text-slate-700 hover:shadow-md transform hover:scale-105 active:scale-95'
-              }`}
+              className={`flex items-center gap-2 px-4 md:px-6 py-2.5 md:py-3 rounded-xl font-semibold text-sm transition-all duration-300 ${currentPage === totalPages
+                ? 'bg-gray-100 text-gray-400 cursor-not-allowed'
+                : 'bg-gradient-to-r from-gray-50 to-gray-100 hover:from-gray-100 hover:to-gray-200 text-slate-700 hover:shadow-md transform hover:scale-105 active:scale-95'
+                }`}
             >
               <span className="hidden sm:inline">Next</span>
               <ChevronRight className="w-4 h-4" />
@@ -592,166 +600,4 @@ export default function JobsPage() {
   );
 }
 
-function JobCard({ job }) {
-  const router = useRouter();
-  
-  const formatSalary = (salary) => {
-    if (!salary) return null;
-    return `$${(salary.min / 1000).toFixed(0)}k - $${(salary.max / 1000).toFixed(0)}k`;
-  };
 
-  const getTimeAgo = (date) => {
-    const days = Math.floor((new Date() - new Date(date)) / (1000 * 60 * 60 * 24));
-    if (days === 0) return 'Today';
-    if (days === 1) return 'Yesterday';
-    if (days < 7) return `${days} days ago`;
-    if (days < 30) return `${Math.floor(days / 7)} weeks ago`;
-    return `${Math.floor(days / 30)} months ago`;
-  };
-
-  const getCategoryColor = (category) => {
-    const colors = {
-      'Technology': 'bg-blue-50 text-blue-700 border-blue-200',
-      'Medical & Healthcare': 'bg-green-50 text-green-700 border-green-200',
-      'Automotive & Transportation': 'bg-orange-50 text-orange-700 border-orange-200',
-      'Finance & Fintech': 'bg-purple-50 text-purple-700 border-purple-200',
-      'Retail & E-commerce': 'bg-pink-50 text-pink-700 border-pink-200',
-      'Education & EdTech': 'bg-cyan-50 text-cyan-700 border-cyan-200',
-    };
-    return colors[category] || 'bg-gray-50 text-gray-700 border-gray-200';
-  };
-
-  return (
-    <div 
-      className="group relative cursor-pointer bg-white rounded-xl border border-gray-200/80 hover:border-gray-300 transition-all duration-200 overflow-hidden"
-      onClick={() => router.push(`/dashboard/jobs/${job._id}`)}
-      style={{
-        boxShadow: '0 1px 3px rgba(0, 0, 0, 0.05)',
-      }}
-      onMouseEnter={(e) => {
-        e.currentTarget.style.boxShadow = '0 4px 16px rgba(0, 0, 0, 0.08)';
-        e.currentTarget.style.borderColor = 'rgba(59, 130, 246, 0.3)';
-      }}
-      onMouseLeave={(e) => {
-        e.currentTarget.style.boxShadow = '0 1px 3px rgba(0, 0, 0, 0.05)';
-        e.currentTarget.style.borderColor = 'rgba(226, 232, 240, 0.8)';
-      }}
-    >
-      {/* Subtle accent border on hover */}
-      <div 
-        className="absolute top-0 left-0 right-0 h-0.5 opacity-0 group-hover:opacity-100 transition-opacity duration-200"
-        style={{
-          background: theme.getAccentGradient(90),
-        }}
-      />
-      
-      <div className="p-2 md:p-6">
-        <div className="flex gap-4 md:gap-6">
-          {/* Company Logo */}
-          <div className="shrink-0">
-            <div className="w-12 h-12 md:w-16 md:h-16 rounded-xl bg-gradient-to-br from-gray-50 to-gray-100 border border-gray-200 flex items-center justify-center overflow-hidden shadow-sm group-hover:shadow-md transition-shadow duration-300">
-              {job.companyLogo ? (
-                <img src={job.companyLogo} alt={job.company} className="w-8 h-8 md:w-12 md:h-12 object-contain" />
-              ) : (
-                <Building2 className="w-6 h-6 md:w-8 md:h-8 text-slate-400" />
-              )}
-            </div>
-          </div>
-
-          {/* Job Details */}
-          <div className="flex-1 min-w-0">
-            <div className="flex flex-col md:flex-row md:items-start md:justify-between gap-2 md:gap-4 mb-2">
-              <div className="flex-1 min-w-0">
-                <div className="flex flex-col sm:flex-row sm:items-center gap-2 mb-1">
-                  <h3 className="text-base md:text-lg font-semibold text-slate-900 truncate group-hover:text-blue-600 transition-colors">
-                    {job.title}
-                  </h3>
-                  {job.category && (
-                    <span className={`px-2 py-0.5 rounded-md text-xs font-medium border ${getCategoryColor(job.category)} whitespace-nowrap self-start sm:self-auto`}>
-                      {job.category}
-                    </span>
-                  )}
-                </div>
-                <p className="text-xs md:text-sm text-slate-600 font-medium">{job.company}</p>
-              </div>
-              <button
-                onClick={(e) => {
-                  e.stopPropagation();
-                  router.push(`/dashboard/jobs/${job._id}`);
-                }}
-                className="hidden md:flex items-center gap-2 px-4 py-2 bg-gradient-to-r from-blue-600 to-blue-500 text-white rounded-xl font-medium text-sm hover:from-blue-700 hover:to-blue-600 transition-all duration-300 shadow-md hover:shadow-lg transform hover:scale-105 active:scale-95 whitespace-nowrap"
-              >
-                View Details
-              </button>
-            </div>
-
-            {/* Meta Info */}
-            <div className="flex flex-wrap gap-3 md:gap-4 text-xs md:text-sm text-slate-600 mb-3">
-              <div className="flex items-center gap-1.5">
-                <MapPin className="w-3.5 h-3.5 md:w-4 md:h-4 text-slate-400" />
-                <span className="font-medium">{job.location}</span>
-              </div>
-              <div className="flex items-center gap-1.5">
-                <Briefcase className="w-3.5 h-3.5 md:w-4 md:h-4 text-slate-400" />
-                <span className="font-medium">{job.employmentType}</span>
-              </div>
-              <div className="flex items-center gap-1.5">
-                <DollarSign className="w-3.5 h-3.5 md:w-4 md:h-4 text-green-500" />
-                <span className="font-semibold text-green-600">{formatSalary(job.salary)}</span>
-              </div>
-              <div className="flex items-center gap-1.5">
-                <Clock className="w-3.5 h-3.5 md:w-4 md:h-4 text-slate-400" />
-                <span className="font-medium">{getTimeAgo(job.postedDate)}</span>
-              </div>
-            </div>
-
-            {/* Skills */}
-            <div className="flex flex-wrap gap-2 mb-3">
-              {job.skills.slice(0, 4).map((skill, index) => (
-                <span
-                  key={index}
-                  className="px-2.5 py-1 bg-gradient-to-r from-blue-50 to-blue-100 text-blue-700 rounded-lg text-xs font-medium border border-blue-200 hover:border-blue-300 transition-colors"
-                >
-                  {skill}
-                </span>
-              ))}
-              {job.skills.length > 4 && (
-                <span className="px-2.5 py-1 bg-gradient-to-r from-slate-50 to-slate-100 text-slate-600 rounded-lg text-xs font-semibold border border-slate-200">
-                  +{job.skills.length - 4}
-                </span>
-              )}
-            </div>
-
-            {/* Badges */}
-            <div className="flex flex-wrap gap-2 items-center">
-              <span className="px-2.5 py-1 bg-gradient-to-r from-emerald-50 to-emerald-100 text-emerald-700 rounded-lg text-xs font-semibold border border-emerald-200">
-                {job.experienceLevel}
-              </span>
-              {job.visaSponsorship && (
-                <span className="px-2.5 py-1 bg-gradient-to-r from-purple-50 to-purple-100 text-purple-700 rounded-lg text-xs font-semibold border border-purple-200">
-                  Visa Sponsorship
-                </span>
-              )}
-              {job.isRemote && (
-                <span className="px-2.5 py-1 bg-gradient-to-r from-sky-50 to-sky-100 text-sky-700 rounded-lg text-xs font-semibold border border-sky-200">
-                  Remote
-                </span>
-              )}
-            </div>
-
-            {/* Mobile View Details Button */}
-            <button
-              onClick={(e) => {
-                e.stopPropagation();
-                router.push(`/dashboard/jobs/${job._id}`);
-              }}
-              className="md:hidden mt-3 w-full flex items-center justify-center gap-2 px-4 py-2.5 bg-gradient-to-r from-blue-600 to-blue-500 text-white rounded-xl font-semibold text-sm hover:from-blue-700 hover:to-blue-600 transition-all duration-300 shadow-md active:scale-95"
-            >
-              View Details
-            </button>
-          </div>
-        </div>
-      </div>
-    </div>
-  );
-}

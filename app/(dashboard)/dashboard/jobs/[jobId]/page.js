@@ -3,12 +3,13 @@
 import { useState, useEffect } from 'react';
 import { useRouter } from 'next/navigation';
 import { useSession } from 'next-auth/react';
-import { 
-  ArrowLeft, MapPin, Briefcase, DollarSign, Clock, Building2, 
-  Users, Eye, CheckCircle, Globe, Award, Heart 
+import {
+  ArrowLeft, MapPin, Briefcase, DollarSign, Clock, Building2,
+  Users, Eye, CheckCircle, Globe, Award, Heart
 } from 'lucide-react';
 import Loader from '@/components/ui/Loader';
 import toast from 'react-hot-toast';
+import { JobTags } from '@/components/jobs/JobTags';
 
 export default function JobDetailsPage({ params }) {
   const router = useRouter();
@@ -127,17 +128,17 @@ export default function JobDetailsPage({ params }) {
       </button>
 
       {/* Job Header - Premium */}
-      <div 
+      <div
         className="bg-white rounded-2xl border border-gray-100 p-6 md:p-8 relative overflow-hidden"
         style={{ boxShadow: '0 8px 32px rgba(0, 0, 0, 0.08)' }}
       >
         {/* Gradient accent bar */}
         <div className="absolute top-0 left-0 right-0 h-1 bg-gradient-to-r from-blue-500 via-purple-500 to-pink-500"></div>
-        
+
         <div className="flex flex-col md:flex-row gap-6">
           {/* Company Logo */}
           <div className="shrink-0">
-            <div 
+            <div
               className="w-20 h-20 md:w-24 md:h-24 rounded-2xl bg-gradient-to-br from-gray-50 to-gray-100 border border-gray-200 flex items-center justify-center overflow-hidden shadow-md"
               style={{ boxShadow: '0 4px 20px rgba(0, 0, 0, 0.06)' }}
             >
@@ -159,7 +160,7 @@ export default function JobDetailsPage({ params }) {
             {/* Meta Info - Clean Pills with Glow */}
             <div className="flex flex-wrap gap-2 md:gap-3 mb-4">
               {/* Location Pill */}
-              <div 
+              <div
                 className="group flex items-center gap-2 px-4 py-2.5 bg-white rounded-full border border-gray-200 hover:border-blue-300 transition-all duration-300 shadow-sm hover:shadow-md"
                 style={{ boxShadow: '0 2px 8px rgba(0, 0, 0, 0.04)' }}
                 onMouseEnter={(e) => {
@@ -174,7 +175,7 @@ export default function JobDetailsPage({ params }) {
               </div>
 
               {/* Employment Type Pill */}
-              <div 
+              <div
                 className="group flex items-center gap-2 px-4 py-2.5 bg-white rounded-full border border-gray-200 hover:border-purple-300 transition-all duration-300 shadow-sm hover:shadow-md"
                 style={{ boxShadow: '0 2px 8px rgba(0, 0, 0, 0.04)' }}
                 onMouseEnter={(e) => {
@@ -189,7 +190,7 @@ export default function JobDetailsPage({ params }) {
               </div>
 
               {/* Salary Pill - Special Green Glow */}
-              <div 
+              <div
                 className="group flex items-center gap-2 px-4 py-2.5 bg-gradient-to-r from-green-50 to-emerald-50 rounded-full border border-green-200 hover:border-green-300 transition-all duration-300 shadow-sm hover:shadow-md"
                 style={{ boxShadow: '0 2px 8px rgba(16, 185, 129, 0.1)' }}
                 onMouseEnter={(e) => {
@@ -204,7 +205,7 @@ export default function JobDetailsPage({ params }) {
               </div>
 
               {/* Posted Time Pill */}
-              <div 
+              <div
                 className="group flex items-center gap-2 px-4 py-2.5 bg-white rounded-full border border-gray-200 hover:border-orange-300 transition-all duration-300 shadow-sm hover:shadow-md"
                 style={{ boxShadow: '0 2px 8px rgba(0, 0, 0, 0.04)' }}
                 onMouseEnter={(e) => {
@@ -219,7 +220,7 @@ export default function JobDetailsPage({ params }) {
               </div>
 
               {/* Applicants Pill */}
-              <div 
+              <div
                 className="group flex items-center gap-2 px-4 py-2.5 bg-white rounded-full border border-gray-200 hover:border-indigo-300 transition-all duration-300 shadow-sm hover:shadow-md"
                 style={{ boxShadow: '0 2px 8px rgba(0, 0, 0, 0.04)' }}
                 onMouseEnter={(e) => {
@@ -234,7 +235,7 @@ export default function JobDetailsPage({ params }) {
               </div>
 
               {/* Views Pill */}
-              <div 
+              <div
                 className="group flex items-center gap-2 px-4 py-2.5 bg-white rounded-full border border-gray-200 hover:border-pink-300 transition-all duration-300 shadow-sm hover:shadow-md"
                 style={{ boxShadow: '0 2px 8px rgba(0, 0, 0, 0.04)' }}
                 onMouseEnter={(e) => {
@@ -295,7 +296,7 @@ export default function JobDetailsPage({ params }) {
         {/* Main Content */}
         <div className="lg:col-span-2 space-y-4 md:space-y-6">
           {/* Job Summary - Premium */}
-          <div 
+          <div
             className="bg-white rounded-2xl border border-gray-100 p-5 md:p-6 relative overflow-hidden group hover:shadow-xl transition-shadow duration-300"
             style={{ boxShadow: '0 4px 20px rgba(0, 0, 0, 0.06)' }}
           >
@@ -308,7 +309,7 @@ export default function JobDetailsPage({ params }) {
           </div>
 
           {/* About the Role - Premium */}
-          <div 
+          <div
             className="bg-white rounded-2xl border border-gray-100 p-5 md:p-6 relative overflow-hidden group hover:shadow-xl transition-shadow duration-300"
             style={{ boxShadow: '0 4px 20px rgba(0, 0, 0, 0.06)' }}
           >
@@ -321,7 +322,7 @@ export default function JobDetailsPage({ params }) {
           </div>
 
           {/* Responsibilities - Premium */}
-          <div 
+          <div
             className="bg-white rounded-2xl border border-gray-100 p-5 md:p-6 relative overflow-hidden group hover:shadow-xl transition-shadow duration-300"
             style={{ boxShadow: '0 4px 20px rgba(0, 0, 0, 0.06)' }}
           >
@@ -341,7 +342,7 @@ export default function JobDetailsPage({ params }) {
           </div>
 
           {/* Requirements - Premium */}
-          <div 
+          <div
             className="bg-white rounded-2xl border border-gray-100 p-5 md:p-6 relative overflow-hidden group hover:shadow-xl transition-shadow duration-300"
             style={{ boxShadow: '0 4px 20px rgba(0, 0, 0, 0.06)' }}
           >
@@ -361,7 +362,7 @@ export default function JobDetailsPage({ params }) {
           </div>
 
           {/* About Company - Premium */}
-          <div 
+          <div
             className="bg-white rounded-2xl border border-gray-100 p-5 md:p-6 relative overflow-hidden group hover:shadow-xl transition-shadow duration-300"
             style={{ boxShadow: '0 4px 20px rgba(0, 0, 0, 0.06)' }}
           >
@@ -384,7 +385,7 @@ export default function JobDetailsPage({ params }) {
         {/* Sidebar - Premium */}
         <div className="space-y-4 md:space-y-6">
           {/* Skills Required - Premium */}
-          <div 
+          <div
             className="bg-white rounded-2xl border border-gray-100 p-5 md:p-6 relative overflow-hidden sticky top-4"
             style={{ boxShadow: '0 4px 20px rgba(0, 0, 0, 0.06)' }}
           >
@@ -394,19 +395,12 @@ export default function JobDetailsPage({ params }) {
               Skills Required
             </h3>
             <div className="flex flex-wrap gap-2">
-              {job.skills.map((skill, index) => (
-                <span
-                  key={index}
-                  className="px-3 py-1.5 bg-gradient-to-r from-blue-50 to-blue-100 text-blue-700 rounded-xl text-xs md:text-sm font-semibold border border-blue-200 hover:border-blue-300 transition-colors shadow-sm"
-                >
-                  {skill}
-                </span>
-              ))}
+              <JobTags tags={job.skills} className="flex flex-wrap gap-2" />
             </div>
           </div>
 
           {/* Benefits - Premium */}
-          <div 
+          <div
             className="bg-white rounded-2xl border border-gray-100 p-5 md:p-6 relative overflow-hidden"
             style={{ boxShadow: '0 4px 20px rgba(0, 0, 0, 0.06)' }}
           >
@@ -423,7 +417,7 @@ export default function JobDetailsPage({ params }) {
           </div>
 
           {/* Job Details - Premium */}
-          <div 
+          <div
             className="bg-white rounded-2xl border border-gray-100 p-5 md:p-6 relative overflow-hidden"
             style={{ boxShadow: '0 4px 20px rgba(0, 0, 0, 0.06)' }}
           >

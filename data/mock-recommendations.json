@@ -1,0 +1,163 @@
+{
+    "recommendations_list": {
+        "candidate_id": 101,
+        "total_count": 8,
+        "recommendations": [
+            {
+                "requirement_id": 1001,
+                "source_id": 1,
+                "job_title": "Senior React Developer",
+                "company": "TechFlow Solutions",
+                "location": "San Francisco, CA",
+                "match_score": 96,
+                "posted_date": "2 days ago",
+                "type": "Contract",
+                "salary_range": "$75 - $95/hr"
+            },
+            {
+                "requirement_id": 1002,
+                "source_id": 1,
+                "job_title": "Full Stack Engineer",
+                "company": "Innovate Corp",
+                "location": "Remote",
+                "match_score": 92,
+                "posted_date": "5 hours ago",
+                "type": "Full-time",
+                "salary_range": "$140k - $160k"
+            },
+            {
+                "requirement_id": 1003,
+                "source_id": 2,
+                "job_title": "UI/UX Designer",
+                "company": "Creative Minds Studio",
+                "location": "New York, NY",
+                "match_score": 88,
+                "posted_date": "1 day ago",
+                "type": "Contract",
+                "salary_range": "$60 - $80/hr"
+            },
+            {
+                "requirement_id": 1004,
+                "source_id": 1,
+                "job_title": "Frontend Architect",
+                "company": "NextGen Systems",
+                "location": "Austin, TX",
+                "match_score": 85,
+                "posted_date": "3 days ago",
+                "type": "Full-time",
+                "salary_range": "$160k - $190k"
+            },
+            {
+                "requirement_id": 1005,
+                "source_id": 2,
+                "job_title": "Product Designer",
+                "company": "Spotify",
+                "location": "Remote",
+                "match_score": 94,
+                "posted_date": "12 hours ago",
+                "type": "Full-time",
+                "salary_range": "$130k - $170k"
+            },
+            {
+                "requirement_id": 1006,
+                "source_id": 1,
+                "job_title": "Lead Software Engineer",
+                "company": "Netflix",
+                "location": "Los Gatos, CA",
+                "match_score": 98,
+                "posted_date": "Just now",
+                "type": "Full-time",
+                "salary_range": "$220k - $350k"
+            }
+        ]
+    },
+    "job_details": {
+        "1001": {
+            "JobTitleText": "Senior React Developer",
+            "Company": "TechFlow Solutions",
+            "CityName": "San Francisco",
+            "StateCode": "CA",
+            "ZIPCode": "94105",
+            "RequirementDuration": "12 Months",
+            "RequirementShiftTimingFrom": "09:00 AM",
+            "RequirementShiftTimingTo": "05:00 PM",
+            "RequirementHoursPerWeek": 40,
+            "MinPayRate": 75000,
+            "MaxPayRate": 95000,
+            "RequirementJobDescription": "<p>We are seeking a <strong>Senior React Developer</strong> to join our high-performing team. You will be responsible for building scalable web applications using React, Redux, and Next.js.</p><h3>Key Responsibilities:</h3><ul><li>Develop modern, responsive web interfaces.</li><li>Collaborate with UX/UI designers to implement premium designs.</li><li>Optimize application performance for maximum speed and scalability.</li><li>Participate in code reviews and mentor junior developers.</li></ul><h3>Requirements:</h3><ul><li>5+ years of experience with JavaScript/TypeScript.</li><li>Expertise in React.js and modern state management (Redux, Context, Zustand).</li><li>Experience with Server-Side Rendering (Next.js) is a plus.</li><li>Strong understanding of CSS/SASS and responsive design principles.</li></ul>",
+            "Skills": [
+                "React",
+                "TypeScript",
+                "Redux",
+                "Next.js",
+                "Tailwind CSS",
+                "Node.js"
+            ]
+        },
+        "1002": {
+            "JobTitleText": "Full Stack Engineer",
+            "Company": "Innovate Corp",
+            "CityName": "Remote",
+            "StateCode": "USA",
+            "ZIPCode": "00000",
+            "RequirementDuration": "Permanent",
+            "RequirementShiftTimingFrom": "08:00 AM",
+            "RequirementShiftTimingTo": "04:00 PM",
+            "RequirementHoursPerWeek": 40,
+            "MinPayRate": 140000,
+            "MaxPayRate": 160000,
+            "RequirementJobDescription": "<p>Join Innovate Corp as a <strong>Full Stack Engineer</strong>. We are a startup focused on disrupting the fin-tech space.</p><p>You will work across the entire stack, from database design to frontend implementation.</p><h3>What you'll do:</h3><ul><li>Design and build robust APIs using Node.js and Express.</li><li>Create intuitive frontend interfaces with React and TailwindCSS.</li><li>Manage database migrations and optimization (PostgreSQL).</li><li>Deploy and maintain applications on AWS.</li></ul>",
+            "Skills": [
+                "Full Stack",
+                "Node.js",
+                "PostgreSQL",
+                "React",
+                "AWS",
+                "Docker"
+            ]
+        },
+        "1003": {
+            "JobTitleText": "UI/UX Designer",
+            "Company": "Creative Minds Studio",
+            "CityName": "New York",
+            "StateCode": "NY",
+            "ZIPCode": "10001",
+            "RequirementDuration": "6 Months",
+            "RequirementShiftTimingFrom": "10:00 AM",
+            "RequirementShiftTimingTo": "06:00 PM",
+            "RequirementHoursPerWeek": 35,
+            "MinPayRate": 60000,
+            "MaxPayRate": 80000,
+            "RequirementJobDescription": "<p>Creative Minds Studio is looking for a talented <strong>UI/UX Designer</strong> to craft beautiful digital experiences.</p><p>If you have a passion for pixel-perfect design and user-centric flows, we want to hear from you.</p><h3>Responsibilities:</h3><ul><li>Create wireframes, prototypes, and high-fidelity mockups.</li><li>Conduct user research and usability testing.</li><li>Collaborate with developers to ensure design fidelity.</li></ul>",
+            "Skills": [
+                "Figma",
+                "Sketch",
+                "Prototyping",
+                "User Research",
+                "Adobe CS"
+            ]
+        },
+        "1006": {
+            "JobTitleText": "Lead Software Engineer",
+            "Company": "Netflix",
+            "CityName": "Los Gatos",
+            "StateCode": "CA",
+            "ZIPCode": "95032",
+            "RequirementDuration": "Permanent",
+            "RequirementShiftTimingFrom": "Flexible",
+            "RequirementShiftTimingTo": "Flexible",
+            "RequirementHoursPerWeek": 40,
+            "MinPayRate": 220000,
+            "MaxPayRate": 350000,
+            "RequirementJobDescription": "<p>Netflix is reinventing entertainment. We are looking for a <strong>Lead Software Engineer</strong> to drive technical innovation within our core engineering teams.</p><h3>The Role:</h3><p>You will lead the design and implementation of high-scale, fault-tolerant distributed systems that power the Netflix experience globally.</p><h3>We are looking for:</h3><ul><li>Deep expertise in distributed systems architecture.</li><li>Proficiency in Java, Scala, or Go.</li><li>Experience with cloud platforms (AWS, Azure, GCP).</li><li>A high bar for code quality and system reliability.</li><li>Ability to lead and inspire technical teams.</li></ul>",
+            "Skills": [
+                "Distributed Systems",
+                "Java",
+                "Microservices",
+                "System Design",
+                "Leadership",
+                "High Scale"
+            ]
+        }
+    }
+}

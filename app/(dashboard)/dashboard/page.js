@@ -10,9 +10,9 @@
 import { useEffect, useState } from 'react';
 import { useRouter } from 'next/navigation';
 import { useSession } from 'next-auth/react';
-import { 
+import {
   Briefcase, Send, CheckCircle2, Clock, TrendingUp, Users, Eye, FileText,
-  Building2, MapPin, DollarSign, Calendar, Target, Bot
+  Building2, MapPin, DollarSign, Calendar, Target, Bot, Sparkles
 } from 'lucide-react';
 import GlassPanel from '@/components/ui/GlassPanel';
 import Badge from '@/components/ui/Badge';
@@ -60,7 +60,7 @@ export default function DashboardPage() {
         // Combine agent stats with actual applications count
         const totalApplications = appsData.data?.length || 0;
         const agentStats = statsData.stats || {};
-        
+
         // Count applications by status from actual applications
         const statusCounts = {
           pending: 0,
@@ -106,8 +106,8 @@ export default function DashboardPage() {
           rejected: statusCounts.rejected,
           today: statusCounts.today,
           thisWeek: statusCounts.thisWeek,
-          successRate: totalApplications > 0 
-            ? `${Math.round((statusCounts.accepted / totalApplications) * 100)}%` 
+          successRate: totalApplications > 0
+            ? `${Math.round((statusCounts.accepted / totalApplications) * 100)}%`
             : '0%',
         };
 
@@ -154,7 +154,7 @@ export default function DashboardPage() {
 // Applicant Dashboard
 function ApplicantDashboard({ user, stats, recentApplications }) {
   const StatCard = ({ icon: Icon, label, value, gradient, trend, glowColor }) => (
-    <div 
+    <div
       className="group relative bg-white rounded-2xl border border-gray-100 p-6 transition-all duration-300 overflow-hidden"
       style={{ boxShadow: '0 4px 20px rgba(0, 0, 0, 0.06)' }}
       onMouseEnter={(e) => {
@@ -168,7 +168,7 @@ function ApplicantDashboard({ user, stats, recentApplications }) {
     >
       {/* Gradient accent line */}
       <div className="absolute top-0 left-0 right-0 h-1" style={{ background: gradient }}></div>
-      
+
       <div className="flex items-center justify-between">
         <div className="flex-1">
           <p className="text-xs md:text-sm text-slate-600 mb-2 font-medium uppercase tracking-wide">{label}</p>
@@ -180,7 +180,7 @@ function ApplicantDashboard({ user, stats, recentApplications }) {
             </div>
           )}
         </div>
-        <div 
+        <div
           className="w-12 h-12 md:w-14 md:h-14 rounded-2xl flex items-center justify-center shadow-lg group-hover:scale-110 transition-transform duration-300"
           style={{ background: gradient }}
         >
@@ -193,11 +193,21 @@ function ApplicantDashboard({ user, stats, recentApplications }) {
   return (
     <div className="space-y-6 md:space-y-8 max-w-7xl mx-auto px-4 md:px-6">
       {/* Header - Premium */}
-      <div className="mb-6 md:mb-8">
-        <h1 className="text-2xl md:text-3xl lg:text-4xl font-bold bg-gradient-to-r from-slate-900 via-slate-500 to-slate-900 bg-clip-text text-transparent mb-2">
-          Welcome back, {user?.name?.split(' ')[0]} 👋
-        </h1>
-        <p className="text-slate-600 text-sm md:text-base">Here's your job search overview</p>
+      <div className="mb-6 md:mb-8 flex flex-col md:flex-row md:items-end justify-between gap-4">
+        <div>
+          <h1 className="text-2xl md:text-3xl lg:text-4xl font-bold bg-gradient-to-r from-slate-900 via-slate-500 to-slate-900 bg-clip-text text-transparent mb-2">
+            Welcome back, {user?.name?.split(' ')[0]} 👋
+          </h1>
+          <p className="text-slate-600 text-sm md:text-base">Here's your job search overview</p>
+        </div>
+        {/* Added Recommended Jobs Button for Quick Access */}
+        <button
+          onClick={() => window.location.href = '/browse-jobs'}
+          className="inline-flex items-center justify-center gap-2 px-5 py-2.5 bg-white border border-gray-200 text-slate-700 rounded-xl font-semibold text-sm hover:bg-gray-50 hover:text-blue-600 hover:border-blue-200 transition-all duration-300 shadow-sm hover:shadow-md transform hover:scale-105 active:scale-95"
+        >
+          <Sparkles className="w-4 h-4 text-purple-500" />
+          <span>Recommended Jobs</span>
+        </button>
       </div>
 
       {/* Stats Grid - Premium with Glows */}
@@ -236,7 +246,7 @@ function ApplicantDashboard({ user, stats, recentApplications }) {
 
       {/* Quick Stats - Premium Pills */}
       <div className="grid grid-cols-1 sm:grid-cols-2 md:grid-cols-3 gap-4 md:gap-6">
-        <div 
+        <div
           className="group relative bg-white rounded-2xl border border-gray-100 p-5 md:p-6 transition-all duration-300 overflow-hidden"
           style={{ boxShadow: '0 4px 20px rgba(0, 0, 0, 0.06)' }}
           onMouseEnter={(e) => {
@@ -258,8 +268,8 @@ function ApplicantDashboard({ user, stats, recentApplications }) {
             <Calendar className="w-7 h-7 md:w-8 md:h-8 text-blue-600 group-hover:scale-110 transition-transform" />
           </div>
         </div>
-        
-        <div 
+
+        <div
           className="group relative bg-white rounded-2xl border border-gray-100 p-5 md:p-6 transition-all duration-300 overflow-hidden"
           style={{ boxShadow: '0 4px 20px rgba(0, 0, 0, 0.06)' }}
           onMouseEnter={(e) => {
@@ -282,7 +292,7 @@ function ApplicantDashboard({ user, stats, recentApplications }) {
           </div>
         </div>
 
-        <div 
+        <div
           className="group relative bg-white rounded-2xl border border-gray-100 p-5 md:p-6 transition-all duration-300 overflow-hidden"
           style={{ boxShadow: '0 4px 20px rgba(0, 0, 0, 0.06)' }}
           onMouseEnter={(e) => {
@@ -308,7 +318,7 @@ function ApplicantDashboard({ user, stats, recentApplications }) {
 
       {/* Recent Applications - Premium */}
       {recentApplications.length > 0 && (
-        <div 
+        <div
           className="bg-white rounded-2xl border border-gray-100 p-5 md:p-6 relative overflow-hidden"
           style={{ boxShadow: '0 4px 20px rgba(0, 0, 0, 0.06)' }}
         >
@@ -326,7 +336,7 @@ function ApplicantDashboard({ user, stats, recentApplications }) {
       )}
 
       {recentApplications.length === 0 && (
-        <div 
+        <div
           className="bg-white rounded-2xl border border-gray-100 p-8 md:p-12 text-center relative overflow-hidden"
           style={{ boxShadow: '0 4px 20px rgba(0, 0, 0, 0.06)' }}
         >
@@ -337,7 +347,7 @@ function ApplicantDashboard({ user, stats, recentApplications }) {
           <h3 className="text-lg md:text-xl font-bold text-slate-900 mb-2">No applications yet</h3>
           <p className="text-slate-600 text-sm md:text-base mb-6 max-w-md mx-auto">Start applying to jobs or configure the AI agent to automate applications</p>
           <div className="flex flex-col sm:flex-row justify-center gap-3">
-            <button 
+            <button
               onClick={() => window.location.href = '/dashboard/jobs'}
               className="inline-flex items-center justify-center gap-2 px-6 py-3 bg-gradient-to-r from-blue-600 to-blue-500 text-white rounded-xl font-semibold text-sm hover:from-blue-700 hover:to-blue-600 transition-all duration-300 shadow-lg hover:shadow-xl transform hover:scale-105 active:scale-95"
               style={{ boxShadow: '0 4px 20px rgba(59, 130, 246, 0.4)' }}
@@ -345,7 +355,14 @@ function ApplicantDashboard({ user, stats, recentApplications }) {
               <Briefcase className="w-4 h-4" />
               <span>Browse Jobs</span>
             </button>
-            <button 
+            <button
+              onClick={() => window.location.href = '/browse-jobs'}
+              className="inline-flex items-center justify-center gap-2 px-6 py-3 bg-white border border-gray-200 text-slate-700 rounded-xl font-semibold text-sm hover:bg-gray-50 hover:text-blue-600 hover:border-blue-200 transition-all duration-300 shadow-sm hover:shadow-md transform hover:scale-105 active:scale-95"
+            >
+              <Sparkles className="w-4 h-4 text-purple-500" />
+              <span>Recommended</span>
+            </button>
+            <button
               onClick={() => window.location.href = '/dashboard/agent'}
               className="inline-flex items-center justify-center gap-2 px-6 py-3 border border-gray-300 rounded-xl hover:bg-gray-50 transition-all duration-300 text-sm text-slate-700 font-semibold shadow-sm hover:shadow-md transform hover:scale-105 active:scale-95"
             >
@@ -362,7 +379,7 @@ function ApplicantDashboard({ user, stats, recentApplications }) {
 // Application Card Component
 function ApplicationCard({ application }) {
   const job = application.job;
-  
+
   if (!job) return null;
 
   const getStatusColor = (status) => {
@@ -386,7 +403,7 @@ function ApplicationCard({ application }) {
   };
 
   return (
-    <div 
+    <div
       className="group flex flex-col sm:flex-row items-start sm:items-center gap-3 sm:gap-4 p-4 bg-white border border-gray-200 rounded-xl hover:border-gray-300 transition-all duration-300 cursor-pointer"
       style={{ boxShadow: '0 2px 8px rgba(0, 0, 0, 0.04)' }}
       onMouseEnter={(e) => {
@@ -401,8 +418,8 @@ function ApplicationCard({ application }) {
       {/* Company Logo */}
       <div className="w-12 h-12 rounded-xl bg-gradient-to-br from-gray-50 to-gray-100 border border-gray-200 flex items-center justify-center overflow-hidden shrink-0 group-hover:shadow-md transition-shadow">
         {job.companyLogo ? (
-          <img 
-            src={job.companyLogo} 
+          <img
+            src={job.companyLogo}
             alt={job.company}
             className="w-8 h-8 object-contain"
           />
@@ -427,7 +444,7 @@ function ApplicationCard({ application }) {
               </span>
             </div>
           </div>
-          
+
           <div className="flex sm:flex-col items-center sm:items-end gap-2 shrink-0">
             <span className={`px-3 py-1 rounded-xl text-xs font-semibold border shadow-sm ${getStatusColor(application.status)}`}>
               {application.status.charAt(0).toUpperCase() + application.status.slice(1)}
@@ -451,7 +468,7 @@ function RecruiterDashboard({ user, stats }) {
         <p className="text-slate-600 text-sm md:text-base">Manage your recruitment pipeline</p>
       </div>
 
-      <div 
+      <div
         className="bg-white rounded-2xl border border-gray-100 p-8 md:p-12 text-center relative overflow-hidden"
         style={{ boxShadow: '0 4px 20px rgba(0, 0, 0, 0.06)' }}
       >

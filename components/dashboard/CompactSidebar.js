@@ -40,6 +40,7 @@ export default function CompactSidebar({ isOpen, setIsOpen, user }) {
   const applicantMenuItems = [
     { href: '/dashboard', icon: LayoutDashboard, label: 'Dashboard' },
     { href: '/dashboard/jobs', icon: Briefcase, label: 'Browse Jobs' },
+    { href: '/dashboard/browse-jobs', icon: Zap, label: 'Recommended' },
     { href: '/dashboard/applications', icon: FileText, label: 'Applications' },
     { href: '/dashboard/agent', icon: Bot, label: 'AI Agent' },
     { href: '/dashboard/analytics', icon: BarChart3, label: 'Analytics' },
