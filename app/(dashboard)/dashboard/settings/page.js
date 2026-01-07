@@ -19,7 +19,7 @@ export default function SettingsPage() {
   const [saving, setSaving] = useState(false);
   const [userId, setUserId] = useState(null);
   const [userEmail, setUserEmail] = useState('');
-  
+
   const [settings, setSettings] = useState({
     emailNotifications: true,
     pushNotifications: false,
@@ -68,13 +68,13 @@ export default function SettingsPage() {
           setInitialLoading(false);
           return;
         }
-        
+
         setUserId(userId);
         setUserEmail(session.user.email || '');
 
         const response = await fetch(`/api/users/${userId}/settings`);
         const data = await response.json();
-        
+
         if (data.success && data.settings) {
           setSettings(data.settings);
         }
@@ -93,14 +93,14 @@ export default function SettingsPage() {
   const debouncedSave = useCallback(
     debounce(async (newSettings, userId) => {
       if (!userId) return;
-      
+
       try {
         const response = await fetch(`/api/users/${userId}/settings`, {
           method: 'PUT',
           headers: { 'Content-Type': 'application/json' },
           body: JSON.stringify(newSettings),
         });
-        
+
         const data = await response.json();
         if (data.success) {
           toast.success('Settings saved');
@@ -125,7 +125,7 @@ export default function SettingsPage() {
 
   const handleChangePassword = async (e) => {
     e.preventDefault();
-    
+
     if (passwordData.newPassword !== passwordData.confirmPassword) {
       toast.error('New passwords do not match');
       return;
@@ -147,10 +147,10 @@ export default function SettingsPage() {
       //     newPassword: passwordData.newPassword,
       //   }),
       // });
-      
+
       // Simulate API call
       await new Promise(resolve => setTimeout(resolve, 1000));
-      
+
       toast.success('Password changed successfully!');
       setShowChangePasswordModal(false);
       setPasswordData({ currentPassword: '', newPassword: '', confirmPassword: '' });
@@ -169,10 +169,10 @@ export default function SettingsPage() {
       // const response = await fetch(`/api/users/${userId}`, {
       //   method: 'DELETE',
       // });
-      
+
       // Simulate API call
       await new Promise(resolve => setTimeout(resolve, 1000));
-      
+
       toast.success('Account deleted successfully');
       router.push('/');
     } catch (error) {
@@ -193,10 +193,10 @@ export default function SettingsPage() {
   }
 
   return (
-    <div className="max-w-4xl mx-auto px-4 md:px-6 pb-16">
+    <div className="space-y-8">
       {/* Header */}
       <div className="mb-8">
-        <h1 
+        <h1
           className="text-3xl md:text-4xl font-bold mb-2"
           style={{
             background: theme.getAccentGradient(90),
@@ -212,7 +212,7 @@ export default function SettingsPage() {
 
       <div className="space-y-6">
         {/* Notification Preferences */}
-        <SectionCard 
+        <SectionCard
           title="Notification Preferences"
           description="Choose how you want to receive updates"
           icon={<Bell className="w-5 h-5" />}
@@ -257,7 +257,7 @@ export default function SettingsPage() {
         </SectionCard>
 
         {/* Security Settings */}
-        <SectionCard 
+        <SectionCard
           title="Security"
           description="Manage your account security settings"
           icon={<Shield className="w-5 h-5" />}
@@ -282,7 +282,7 @@ export default function SettingsPage() {
         </SectionCard>
 
         {/* Danger Zone */}
-        <SectionCard 
+        <SectionCard
           title="Danger Zone"
           description="Irreversible and destructive actions"
           icon={<Trash2 className="w-5 h-5" />}
@@ -334,26 +334,25 @@ export default function SettingsPage() {
 // Section Card Component
 function SectionCard({ title, description, icon, children, danger = false }) {
   return (
-    <div 
-      className={`bg-white rounded-xl border p-6 relative overflow-hidden ${
-        danger ? 'border-red-200' : 'border-gray-200/80'
-      }`}
-      style={{ 
+    <div
+      className={`bg-white rounded-xl border p-6 relative overflow-hidden ${danger ? 'border-red-200' : 'border-gray-200/80'
+        }`}
+      style={{
         boxShadow: '0 2px 12px rgba(0, 0, 0, 0.04)',
       }}
     >
       {/* Top accent border */}
-      <div 
+      <div
         className="absolute top-0 left-0 right-0 h-1"
         style={{
-          background: danger 
-            ? 'linear-gradient(90deg, #ef4444, #dc2626)' 
+          background: danger
+            ? 'linear-gradient(90deg, #ef4444, #dc2626)'
             : theme.getAccentGradient(90),
           borderTopLeftRadius: '0.75rem',
           borderTopRightRadius: '0.75rem',
         }}
       />
-      
+
       <div className="mb-6 mt-2">
         <h2 className="text-xl font-bold text-slate-900 mb-2 flex items-center gap-3">
           {icon}
@@ -371,9 +370,8 @@ function SectionCard({ title, description, icon, children, danger = false }) {
 // Toggle Option Component
 function ToggleOption({ label, description, checked, onChange, disabled = false }) {
   return (
-    <div className={`flex items-center justify-between p-4 rounded-xl transition-colors ${
-      disabled ? 'opacity-50 cursor-not-allowed' : 'hover:bg-gray-50'
-    }`}>
+    <div className={`flex items-center justify-between p-4 rounded-xl transition-colors ${disabled ? 'opacity-50 cursor-not-allowed' : 'hover:bg-gray-50'
+      }`}>
       <div className="flex-1">
         <p className="text-base font-semibold text-slate-900">{label}</p>
         <p className="text-sm text-slate-600 mt-0.5">{description}</p>
@@ -409,7 +407,7 @@ function SecurityOption({ icon, title, description, action, onClick }) {
           <p className="text-sm text-slate-600 mt-0.5">{description}</p>
         </div>
       </div>
-      <span 
+      <span
         className="text-sm font-semibold"
         style={{ color: theme.accentPrimary }}
       >
@@ -423,7 +421,7 @@ function SecurityOption({ icon, title, description, action, onClick }) {
 function ChangePasswordModal({ passwordData, setPasswordData, showPasswords, setShowPasswords, saving, onSubmit, onClose }) {
   return (
     <div className="fixed inset-0 z-50 flex items-center justify-center p-4 bg-black/50 backdrop-blur-sm">
-      <div 
+      <div
         className="bg-white rounded-2xl border border-gray-200 w-full max-w-md p-6 relative"
         style={{ boxShadow: '0 20px 25px -5px rgba(0, 0, 0, 0.1)' }}
       >
@@ -537,7 +535,7 @@ function ChangePasswordModal({ passwordData, setPasswordData, showPasswords, set
 function DeleteAccountModal({ saving, onConfirm, onClose }) {
   return (
     <div className="fixed inset-0 z-50 flex items-center justify-center p-4 bg-black/50 backdrop-blur-sm">
-      <div 
+      <div
         className="bg-white rounded-2xl border-2 border-red-200 w-full max-w-md p-6 relative"
         style={{ boxShadow: '0 20px 25px -5px rgba(0, 0, 0, 0.1)' }}
       >

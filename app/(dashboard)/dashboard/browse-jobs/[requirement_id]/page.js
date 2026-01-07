@@ -3,22 +3,27 @@
 
 import { useState, useEffect } from 'react';
 import { useRouter, useParams, useSearchParams } from 'next/navigation';
-import { Briefcase, MapPin, DollarSign, Clock, Calendar, ChevronLeft, Share2, Bookmark, CheckCircle2, Building2, Trophy, Target, Zap } from 'lucide-react';
+import { useSession } from 'next-auth/react';
+import {
+    Briefcase, MapPin, DollarSign, Clock, Calendar,
+    ChevronLeft, Share2, Bookmark, Building2, Trophy,
+    Target, Zap, Globe, Loader2
+} from 'lucide-react';
 import Loader from '@/components/ui/Loader';
-import { MatchScoreBadge } from '@/components/jobs/MatchScoreBadge';
-import { JobTags } from '@/components/jobs/JobTags';
-import { JobMetaItem } from '@/components/jobs/JobMeta';
+import toast from 'react-hot-toast';
 
 export default function JobDetailsPage() {
     const router = useRouter();
     const params = useParams();
     const searchParams = useSearchParams();
+    const { data: session } = useSession();
     const { requirement_id } = params;
     const source_id = searchParams.get('source_id');
 
     const [job, setJob] = useState(null);
     const [loading, setLoading] = useState(true);
     const [error, setError] = useState(null);
+    const [applying, setApplying] = useState(false);
 
     useEffect(() => {
         if (requirement_id && source_id) {
@@ -28,20 +33,64 @@ export default function JobDetailsPage() {
 
     const fetchJobDetails = async () => {
         try {
-            // Fetch details from API
             const res = await fetch(`/api/recommendations/${requirement_id}?source_id=${source_id}`);
 
             if (!res.ok) throw new Error("Failed to fetch job details");
 
             const data = await res.json();
+
+            if (data.error) {
+                throw new Error(data.error);
+            }
+
             setJob(data);
         } catch (err) {
             console.error(err);
             setError("Job not found or unavailable.");
         } finally {
-            // Simulate a slight delay for smooth aesthetic
-            setTimeout(() => setLoading(false), 600);
+            setTimeout(() => setLoading(false), 400);
         }
+    };
+
+    const handleApply = async () => {
+        if (!session?.user) {
+            toast.error('Please sign in to apply');
+            router.push('/');
+            return;
+        }
+
+        setApplying(true);
+        try {
+            const candidateId = session.user.candidate_id || session.user.id;
+
+            const response = await fetch('/api/apply-job', {
+                method: 'POST',
+                headers: { 'Content-Type': 'application/json' },
+                body: JSON.stringify({
+                    cand_id: parseInt(candidateId),
+                    requirement_id: parseInt(requirement_id),
+                }),
+            });
+
+            const data = await response.json();
+
+            if (data.success) {
+                toast.success('Application submitted successfully!');
+                router.push('/dashboard/applications');
+            } else {
+                toast.error(data.message || 'Failed to submit application');
+            }
+        } catch (error) {
+            console.error('Error applying:', error);
+            toast.error('Failed to submit application');
+        } finally {
+            setApplying(false);
+        }
+    };
+
+    const formatPayRate = (rate) => {
+        if (!rate && rate !== 0) return null;
+        return `$${parseFloat(rate).toFixed(2)}`;
     };
 
     if (loading) {
@@ -112,50 +161,65 @@ export default function JobDetailsPage() {
 
                         <div className="flex-1">
                             <div className="flex flex-wrap items-center gap-3 mb-3">
-                                <h1 className="text-3xl md:text-4xl font-bold tracking-tight">{job.JobTitleText}</h1>
-                                {job.match_score && (
-                                    <MatchScoreBadge score={job.match_score} size="lg" className="backdrop-blur-sm" />
-                                )}
+                                <h1 className="text-3xl md:text-4xl font-bold tracking-tight">{job.job_title}</h1>
                             </div>
 
                             <div className="flex flex-col md:flex-row md:items-center gap-2 md:gap-6 text-slate-300 text-sm md:text-base mb-8">
-                                <JobMetaItem icon={Briefcase} text={job.Company || 'Tech Company'} color="text-slate-300" iconColor="text-blue-400" />
-                                <span className="hidden md:inline w-1 h-1 bg-slate-600 rounded-full"></span>
-                                <JobMetaItem icon={MapPin} text={`${job.CityName}, ${job.StateCode}`} color="text-slate-300" iconColor="text-purple-400" />
-                                <span className="hidden md:inline w-1 h-1 bg-slate-600 rounded-full"></span>
-                                <JobMetaItem icon={Clock} text="Posted Recently" color="text-slate-300" iconColor="text-emerald-400" />
+                                {job.client_name && (
+                                    <div className="flex items-center gap-2">
+                                        <Briefcase className="w-4 h-4 text-blue-400" />
+                                        <span>{job.client_name}</span>
+                                    </div>
+                                )}
+                                {job.location && (
+                                    <>
+                                        <span className="hidden md:inline w-1 h-1 bg-slate-600 rounded-full"></span>
+                                        <div className="flex items-center gap-2">
+                                            <MapPin className="w-4 h-4 text-purple-400" />
+                                            <span>{job.location}</span>
+                                        </div>
+                                    </>
+                                )}
                             </div>
 
                             {/* Quick Stats Banner */}
                             <div className="grid grid-cols-2 md:grid-cols-4 gap-4 max-w-3xl">
-                                <div className="bg-white/5 backdrop-blur-sm border border-white/10 rounded-xl p-4">
-                                    <p className="text-slate-400 text-xs uppercase font-semibold mb-1">Salary Range</p>
-                                    <p className="text-white font-bold flex items-center gap-1">
-                                        <DollarSign className="w-4 h-4 text-green-400" />
-                                        ${(job.MinPayRate / 1000).toFixed(0)}k - ${(job.MaxPayRate / 1000).toFixed(0)}k
-                                    </p>
-                                </div>
-                                <div className="bg-white/5 backdrop-blur-sm border border-white/10 rounded-xl p-4">
-                                    <p className="text-slate-400 text-xs uppercase font-semibold mb-1">Duration</p>
-                                    <p className="text-white font-bold flex items-center gap-1">
-                                        <Calendar className="w-4 h-4 text-blue-400" />
-                                        {job.RequirementDuration || 'Permanent'}
-                                    </p>
-                                </div>
-                                <div className="bg-white/5 backdrop-blur-sm border border-white/10 rounded-xl p-4">
-                                    <p className="text-slate-400 text-xs uppercase font-semibold mb-1">Experience</p>
-                                    <p className="text-white font-bold flex items-center gap-1">
-                                        <Trophy className="w-4 h-4 text-yellow-400" />
-                                        Senior Level
-                                    </p>
-                                </div>
-                                <div className="bg-white/5 backdrop-blur-sm border border-white/10 rounded-xl p-4">
-                                    <p className="text-slate-400 text-xs uppercase font-semibold mb-1">Work Type</p>
-                                    <p className="text-white font-bold flex items-center gap-1">
-                                        <Zap className="w-4 h-4 text-orange-400" />
-                                        Full-time
-                                    </p>
-                                </div>
+                                {job.pay_rate_to_candidate && (
+                                    <div className="bg-white/5 backdrop-blur-sm border border-white/10 rounded-xl p-4">
+                                        <p className="text-slate-400 text-xs uppercase font-semibold mb-1">Pay Rate</p>
+                                        <p className="text-white font-bold flex items-center gap-1">
+                                            <DollarSign className="w-4 h-4 text-green-400" />
+                                            {formatPayRate(job.pay_rate_to_candidate)}/hr
+                                        </p>
+                                    </div>
+                                )}
+                                {job.job_type && (
+                                    <div className="bg-white/5 backdrop-blur-sm border border-white/10 rounded-xl p-4">
+                                        <p className="text-slate-400 text-xs uppercase font-semibold mb-1">Job Type</p>
+                                        <p className="text-white font-bold flex items-center gap-1">
+                                            <Briefcase className="w-4 h-4 text-blue-400" />
+                                            {job.job_type}
+                                        </p>
+                                    </div>
+                                )}
+                                {job.remote_option && (
+                                    <div className="bg-white/5 backdrop-blur-sm border border-white/10 rounded-xl p-4">
+                                        <p className="text-slate-400 text-xs uppercase font-semibold mb-1">Work Type</p>
+                                        <p className="text-white font-bold flex items-center gap-1">
+                                            <Globe className="w-4 h-4 text-orange-400" />
+                                            {job.remote_option}
+                                        </p>
+                                    </div>
+                                )}
+                                {job.department && (
+                                    <div className="bg-white/5 backdrop-blur-sm border border-white/10 rounded-xl p-4">
+                                        <p className="text-slate-400 text-xs uppercase font-semibold mb-1">Department</p>
+                                        <p className="text-white font-bold flex items-center gap-1">
+                                            <Target className="w-4 h-4 text-purple-400" />
+                                            {job.department}
+                                        </p>
+                                    </div>
+                                )}
                             </div>
                         </div>
                     </div>
@@ -167,32 +231,32 @@ export default function JobDetailsPage() {
                 <div className="flex flex-col lg:flex-row gap-8">
 
                     {/* Main Column */}
-                    <div className="flex-1 bg-white rounded-2xl shadow-xl border border-gray-100 p-8">
+                    <div className="flex-1 bg-white rounded-2xl shadow-xl border border-gray-100 p-6 md:p-8">
 
-                        <section className="mb-10">
-                            <h3 className="text-xl font-bold text-slate-900 mb-6 flex items-center gap-2">
-                                <div className="w-1.5 h-6 bg-blue-600 rounded-full"></div>
-                                Role Description
-                            </h3>
-                            <div
-                                className="prose prose-slate prose-lg max-w-none text-slate-600 leading-relaxed marker:text-blue-500"
-                                dangerouslySetInnerHTML={{ __html: job.RequirementJobDescription }}
-                            />
-                        </section>
+                        {job.job_description && (
+                            <section className="mb-10">
+                                <h3 className="text-xl font-bold text-slate-900 mb-6 flex items-center gap-2">
+                                    <div className="w-1.5 h-6 bg-blue-600 rounded-full"></div>
+                                    Role Description
+                                </h3>
+                                <div
+                                    className="prose prose-slate prose-lg max-w-none text-slate-600 leading-relaxed marker:text-blue-500"
+                                    dangerouslySetInnerHTML={{ __html: job.job_description }}
+                                />
+                            </section>
+                        )}
 
-                        <section>
-                            <h3 className="text-xl font-bold text-slate-900 mb-6 flex items-center gap-2">
-                                <div className="w-1.5 h-6 bg-purple-600 rounded-full"></div>
-                                Required Skills
-                            </h3>
-                            <div className="flex flex-wrap gap-3">
-                                {job.Skills && job.Skills.length > 0 ? (
-                                    <JobTags tags={job.Skills} className="flex flex-wrap gap-2" />
-                                ) : (
-                                    <p className="text-slate-500 italic">No specific skills listed.</p>
-                                )}
-                            </div>
-                        </section>
+                        {job.category && (
+                            <section>
+                                <h3 className="text-xl font-bold text-slate-900 mb-6 flex items-center gap-2">
+                                    <div className="w-1.5 h-6 bg-purple-600 rounded-full"></div>
+                                    Category
+                                </h3>
+                                <span className="px-4 py-2 bg-purple-50 text-purple-700 rounded-lg font-medium">
+                                    {job.category}
+                                </span>
+                            </section>
+                        )}
 
                     </div>
 
@@ -202,9 +266,22 @@ export default function JobDetailsPage() {
                         {/* Apply Card */}
                         <div className="bg-white rounded-2xl shadow-xl border border-gray-100 p-6 sticky top-24">
                             <h3 className="font-bold text-slate-900 mb-4">Interested?</h3>
-                            <button className="w-full bg-slate-900 text-white font-bold text-lg py-4 rounded-xl shadow-lg shadow-slate-900/20 hover:scale-[1.02] active:scale-[0.98] transition-all relative overflow-hidden group mb-3">
+                            <button
+                                onClick={handleApply}
+                                disabled={applying}
+                                className="w-full bg-slate-900 text-white font-bold text-lg py-4 rounded-xl shadow-lg shadow-slate-900/20 hover:bg-slate-800 transition-all relative overflow-hidden group mb-3 disabled:opacity-50"
+                            >
                                 <span className="relative z-10 flex items-center justify-center gap-2">
-                                    Apply Now <ChevronLeft className="w-5 h-5 rotate-180" />
+                                    {applying ? (
+                                        <>
+                                            <Loader2 className="w-5 h-5 animate-spin" />
+                                            Applying...
+                                        </>
+                                    ) : (
+                                        <>
+                                            Apply Now <ChevronLeft className="w-5 h-5 rotate-180" />
+                                        </>
+                                    )}
                                 </span>
                                 <div className="absolute inset-0 bg-gradient-to-r from-blue-600 via-indigo-600 to-purple-600 opacity-0 group-hover:opacity-100 transition-opacity"></div>
                             </button>

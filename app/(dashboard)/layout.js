@@ -89,13 +89,13 @@ export default function DashboardLayout({ children }) {
 
       {/* Sidebar */}
       <CompactSidebar isOpen={sidebarOpen} setIsOpen={setSidebarOpen} user={user} />
-      
+
       {/* Main Content Area */}
-      <div 
-        className={`${sidebarOpen ? 'lg:ml-64' : 'lg:ml-20'} transition-all duration-200 ease-in-out`}
+      <div
+        className={`min-h-screen transition-all duration-200 ease-in-out ${sidebarOpen ? 'lg:ml-64' : 'lg:ml-20'}`}
       >
         {/* Page Content */}
-        <main className="p-3 lg:p-8 max-w-7xl mx-auto">
+        <main className="px-4 py-4 md:px-8 md:py-6 lg:px-12 lg:py-8">
           {children}
         </main>
       </div>

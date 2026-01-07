@@ -137,12 +137,12 @@ export default function AgentPage() {
       const nextTime = new Date(agent.nextApplicationTime);
       const now = new Date();
       const timeUntilNext = Math.max(0, nextTime.getTime() - now.getTime());
-      
+
       if (timeUntilNext > 0) {
         // Wait until the scheduled time
         console.log(`Resuming in ${Math.ceil(timeUntilNext / 1000)}s`);
         setNextApplicationIn(Math.ceil(timeUntilNext / 1000));
-        
+
         setTimeout(() => {
           applyToOneJob();
           // Then continue with regular 30-second intervals
@@ -150,7 +150,7 @@ export default function AgentPage() {
             applyToOneJob();
           }, 30000); // 30 seconds
         }, timeUntilNext);
-        
+
         // Start countdown from remaining time
         startCountdownFrom(Math.ceil(timeUntilNext / 1000));
         return;
@@ -304,7 +304,7 @@ export default function AgentPage() {
         if (data.message === 'Daily limit reached') {
           setDailyLimitReached(true);
           stopAutoApply(); // Stop the agent gracefully
-          
+
           // Update agent status to paused
           const userId = session.user.id || session.user.candidate_id?.toString();
           await fetch(`/api/agent/${userId}`, {
@@ -312,7 +312,7 @@ export default function AgentPage() {
             headers: { 'Content-Type': 'application/json' },
             body: JSON.stringify({ status: 'paused' }),
           });
-          
+
           setAgent(prev => ({ ...prev, status: 'paused' }));
         } else if (data.message === 'No matching jobs found') {
           console.log('No matching jobs found');
@@ -335,11 +335,11 @@ export default function AgentPage() {
           // Mark last step as complete
           setWorkflow(prev => ({
             ...prev,
-            steps: prev.steps.map((s, i) => 
+            steps: prev.steps.map((s, i) =>
               i === steps.length - 1 ? { ...s, status: 'complete' } : s
             ),
           }));
-          
+
           // Reset after 1 second
           workflowRef.current = setTimeout(() => {
             setWorkflow(prev => ({
@@ -381,7 +381,7 @@ export default function AgentPage() {
     try {
       const newStatus = agent.status === 'running' ? 'paused' : 'running';
       const userId = session?.user?.id || session?.user?.candidate_id?.toString();
-      
+
       const response = await fetch(`/api/agent/${userId}`, {
         method: 'PUT',
         headers: { 'Content-Type': 'application/json' },
@@ -457,7 +457,7 @@ export default function AgentPage() {
   const isRunning = agent?.status === 'running';
 
   return (
-    <div className="space-y-8 max-w-7xl mx-auto pb-16">
+    <div className="space-y-8">
       {/* Header */}
       <div className="flex flex-col sm:flex-row sm:items-center sm:justify-between gap-4">
         <div>

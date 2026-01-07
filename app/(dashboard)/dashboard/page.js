@@ -191,7 +191,7 @@ function ApplicantDashboard({ user, stats, recentApplications }) {
   );
 
   return (
-    <div className="space-y-6 md:space-y-8 max-w-7xl mx-auto px-4 md:px-6">
+    <div className="space-y-6 md:space-y-8">
       {/* Header - Premium */}
       <div className="mb-6 md:mb-8 flex flex-col md:flex-row md:items-end justify-between gap-4">
         <div>
@@ -460,7 +460,7 @@ function ApplicationCard({ application }) {
 // Recruiter Dashboard (placeholder for now)
 function RecruiterDashboard({ user, stats }) {
   return (
-    <div className="space-y-6 md:space-y-8 max-w-7xl mx-auto px-4 md:px-6">
+    <div className="space-y-6 md:space-y-8">
       <div className="mb-6 md:mb-8">
         <h1 className="text-2xl md:text-3xl lg:text-4xl font-bold bg-gradient-to-r from-slate-900 via-slate-800 to-slate-900 bg-clip-text text-transparent mb-2">
           Welcome, {user?.name?.split(' ')[0]} 👋

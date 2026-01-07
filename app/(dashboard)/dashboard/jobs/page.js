@@ -158,7 +158,7 @@ export default function JobsPage() {
   const endIndex = Math.min(currentPage * itemsPerPage, totalJobs);
 
   return (
-    <div className="space-y-4 md:space-y-6 max-w-7xl mx-auto pb-16 px-4 md:px-6">
+    <div className="space-y-4 md:space-y-6">
       {/* Header */}
       <div className="flex flex-col md:flex-row md:items-center md:justify-between gap-4 mb-4 md:mb-6">
         <div>

@@ -1,28 +1,35 @@
 'use client';
 
 import React from 'react';
-import { Building2, ChevronRight, Heart } from 'lucide-react';
-import { JobMetaGrid } from './JobMeta';
+import { Building2, ChevronRight, Heart, MapPin, Briefcase } from 'lucide-react';
 import { MatchScoreBadge } from './MatchScoreBadge';
-import { JobTags } from './JobTags';
 
 const JobCard = ({ job, onClick }) => {
     // Normalize job data to handle both "recommendations API" (snake_case) and "jobs API" (camelCase)
     const title = job.job_title || job.title;
-    const loc = job.location || job.locationType;
+    const loc = job.location || job.locationType || '';
     const score = job.match_score || null;
-    const posted = job.posted_date || new Date(job.postedDate).toLocaleDateString();
 
-    // Handle salary formatting
-    let salary = job.salary_range;
-    if (!salary && job.salary) {
-        salary = `$${(job.salary.min / 1000).toFixed(0)}k - $${(job.salary.max / 1000).toFixed(0)}k`;
+    // Handle company name - recommendations API uses client_name
+    const comp = job.client_name || job.company || job.client || '';
+
+    // Handle job type
+    const jobType = job.job_type || job.type || job.employmentType || '';
+
+    // Handle remote option
+    const remoteOption = job.remote_option || '';
+
+    // Handle pay rate - recommendations API uses pay_rate_to_candidate
+    let payRate = null;
+    if (job.pay_rate_to_candidate) {
+        payRate = `$${parseFloat(job.pay_rate_to_candidate).toFixed(2)}/hr`;
+    } else if (job.salary_range) {
+        payRate = job.salary_range;
+    } else if (job.salary) {
+        payRate = `$${(job.salary.min / 1000).toFixed(0)}k - $${(job.salary.max / 1000).toFixed(0)}k`;
     }
 
-    const jobType = job.type || job.employmentType;
-    const comp = job.company || "Company Name";
-    const jobSkills = job.skills || [];
-    const badgeText = job.match_score ? "Recommended" : (job.experienceLevel || "New");
+    const badgeText = score ? "Recommended" : (job.experienceLevel || jobType || "New");
 
     return (
         <div
@@ -53,30 +60,49 @@ const JobCard = ({ job, onClick }) => {
                             {title}
                         </h3>
                         <div className="flex items-center gap-2 mt-1">
-                            <span className="text-sm text-slate-600 font-medium">{comp}</span>
-                            <span className="text-slate-300">•</span>
+                            {comp && <span className="text-sm text-slate-600 font-medium">{comp}</span>}
+                            {comp && score && <span className="text-slate-300">•</span>}
                             <MatchScoreBadge score={score} />
                         </div>
                     </div>
                 </div>
-                <button className="p-2 rounded-full hover:bg-slate-50 text-slate-400 hover:text-red-500 transition-colors">
+                <button
+                    className="p-2 rounded-full hover:bg-slate-50 text-slate-400 hover:text-red-500 transition-colors"
+                    onClick={(e) => e.stopPropagation()}
+                >
                     <Heart className="w-5 h-5" />
                 </button>
             </div>
 
-            <JobMetaGrid
-                location={loc}
-                salary={salary}
-                type={jobType}
-                posted={posted}
-                className="grid grid-cols-2 gap-y-2 gap-x-4 mb-5"
-            />
-
-            {jobSkills.length > 0 && <JobTags tags={jobSkills} limit={3} className="mb-4 flex flex-wrap gap-2" />}
+            {/* Meta Info */}
+            <div className="grid grid-cols-2 gap-y-2 gap-x-4 mb-5">
+                {loc && (
+                    <div className="flex items-center gap-2 text-sm text-slate-500">
+                        <MapPin className="w-4 h-4 text-slate-400" />
+                        <span className="truncate">{loc}</span>
+                    </div>
+                )}
+                {jobType && (
+                    <div className="flex items-center gap-2 text-sm text-slate-500">
+                        <Briefcase className="w-4 h-4 text-slate-400" />
+                        <span>{jobType}</span>
+                    </div>
+                )}
+                {remoteOption && (
+                    <div className="flex items-center gap-2 text-sm text-blue-600 font-medium">
+                        <span className="w-2 h-2 bg-blue-500 rounded-full"></span>
+                        <span>{remoteOption}</span>
+                    </div>
+                )}
+                {payRate && (
+                    <div className="flex items-center gap-2 text-sm text-green-600 font-semibold">
+                        <span>{payRate}</span>
+                    </div>
+                )}
+            </div>
 
             <div className="flex items-center justify-between pt-4 border-t border-gray-50">
                 <div className="flex -space-x-2">
-                    {/* Placeholder for future tags or avatars */}
                     <span className="px-2 py-1 bg-blue-50 text-xs text-blue-600 rounded-md font-medium border border-blue-100">{badgeText}</span>
                 </div>
 

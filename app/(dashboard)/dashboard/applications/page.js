@@ -47,7 +47,7 @@ export default function ApplicationsPage() {
       const userId = session.user.id || session.user.candidate_id?.toString();
       const response = await fetch(`/api/applications/user/${userId}`);
       const data = await response.json();
-      
+
       if (data.success) {
         setApplications(data.data);
       } else {
@@ -71,8 +71,8 @@ export default function ApplicationsPage() {
     return colors[status] || 'bg-gray-100 text-gray-700';
   };
 
-  const filteredApplications = filter === 'all' 
-    ? applications 
+  const filteredApplications = filter === 'all'
+    ? applications
     : applications.filter(app => app.status === filter);
 
   return (
@@ -89,20 +89,19 @@ export default function ApplicationsPage() {
       <div className="bg-white border border-gray-200 rounded-2xl p-6">
         <div className="flex flex-wrap gap-2">
           {['all', 'pending', 'interview', 'accepted', 'rejected'].map((status) => {
-            const count = status === 'all' 
-              ? applications.length 
+            const count = status === 'all'
+              ? applications.length
               : applications.filter(a => a.status === status).length;
-            
+
             return (
               <button
                 key={status}
                 onClick={() => setFilter(status)}
                 style={filter === status ? { background: theme.getAccentGradient(135) } : {}}
-                className={`px-4 py-2.5 rounded-xl text-sm font-medium transition-all ${
-                  filter === status
-                    ? 'text-white'
-                    : 'bg-white text-gray-700 border border-gray-300'
-                }`}
+                className={`px-4 py-2.5 rounded-xl text-sm font-medium transition-all ${filter === status
+                  ? 'text-white'
+                  : 'bg-white text-gray-700 border border-gray-300'
+                  }`}
               >
                 {status.charAt(0).toUpperCase() + status.slice(1)}
                 <span className="ml-1.5 opacity-75">({count})</span>
@@ -128,12 +127,12 @@ export default function ApplicationsPage() {
             </div>
             <h3 className="text-2xl font-bold text-gray-900 mb-3">No applications found</h3>
             <p className="text-base text-gray-600 mb-6">
-              {filter === 'all' 
-                ? "Start applying to jobs to see them here" 
+              {filter === 'all'
+                ? "Start applying to jobs to see them here"
                 : `No ${filter} applications yet`}
             </p>
-            <Button 
-              variant="primary" 
+            <Button
+              variant="primary"
               onClick={() => window.location.href = '/dashboard/jobs'}
               className="px-8 py-3"
             >
@@ -147,8 +146,8 @@ export default function ApplicationsPage() {
       {!loading && filteredApplications.length > 0 && (
         <div className="space-y-5">
           {filteredApplications.map((application) => (
-            <ApplicationCard 
-              key={application.id} 
+            <ApplicationCard
+              key={application.id}
               application={application}
               getStatusColor={getStatusColor}
             />
@@ -212,7 +211,7 @@ function ApplicationCard({ application, getStatusColor }) {
             <Calendar className="w-4 h-4 shrink-0" />
             <span>Applied {new Date(application.appliedDate).toLocaleDateString()}</span>
           </div>
-          
+
           {application.interviewDate && (
             <div className="flex items-center gap-2 text-blue-600">
               <Calendar className="w-4 h-4 shrink-0" />
@@ -232,16 +231,16 @@ function ApplicationCard({ application, getStatusColor }) {
 
         {/* Action Buttons */}
         <div className="flex flex-wrap items-center gap-3 pt-3 border-t border-gray-200/60">
-          <Button 
-            variant="outline" 
+          <Button
+            variant="outline"
             className="px-5 py-2.5 flex items-center gap-2 flex-1 sm:flex-none justify-center"
             onClick={() => toast('View details coming soon!')}
           >
             <ExternalLink className="w-4 h-4" />
             <span>View Details</span>
           </Button>
-          <Button 
-            variant="ghost" 
+          <Button
+            variant="ghost"
             className="px-4 py-2.5 flex items-center"
             onClick={() => toast.error('Delete application?')}
           >
