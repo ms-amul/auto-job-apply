@@ -7,24 +7,40 @@
                 "requirement_id": 129430,
                 "job_title": "Data & Information Architect",
                 "location": "Schenectady, NY 12345",
+                "client_name": "amolempcmpone",
+                "job_type": "Full Time",
+                "pay_rate_to_candidate": 64.52,
+                "created_date": "2026-01-07T05:46:31.090000",
                 "source_id": 1
             },
             {
                 "requirement_id": 129305,
                 "job_title": "Software Application Developer",
                 "location": "Schenectady, NY 12345",
+                "client_name": "TechCorp",
+                "job_type": "Full Time",
+                "pay_rate_to_candidate": 58.00,
+                "created_date": "2026-01-06T10:30:00.000000",
                 "source_id": 1
             },
             {
                 "requirement_id": 129118,
                 "job_title": "Software Application Programmer",
                 "location": "Schenectady, NY 12345",
+                "client_name": "GlobalTech",
+                "job_type": "Contract",
+                "pay_rate_to_candidate": 52.00,
+                "created_date": "2026-01-05T14:00:00.000000",
                 "source_id": 1
             },
             {
                 "requirement_id": 129299,
                 "job_title": "Tester",
                 "location": "Schenectady, NY 12345",
+                "client_name": "QualitySoft",
+                "job_type": "Full Time",
+                "pay_rate_to_candidate": 42.00,
+                "created_date": "2026-01-04T08:00:00.000000",
                 "source_id": 1
             }
         ]
