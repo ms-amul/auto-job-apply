@@ -92,7 +92,7 @@ export default function DashboardLayout({ children }) {
 
       {/* Main Content Area */}
       <div
-        className={`min-h-screen transition-all duration-200 ease-in-out ${sidebarOpen ? 'lg:ml-64' : 'lg:ml-20'}`}
+        className={`min-h-screen transition-all duration-200 ease-in-out ${sidebarOpen ? 'lg:ml-72' : 'lg:ml-24'}`}
       >
         {/* Page Content */}
         <main className="px-4 py-4 md:px-8 md:py-6 lg:px-12 lg:py-8">
