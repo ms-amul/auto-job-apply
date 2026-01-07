@@ -7,7 +7,7 @@ import { User, Mail, Phone, MapPin, UserCircle, FileText } from 'lucide-react';
 import { theme } from '@/utils/theme';
 import toast from 'react-hot-toast';
 
-export default function GeneralTab({ userId }) {
+export default function GeneralTab({ userId, onUpdate }) {
   const [loading, setLoading] = useState(true);
   const [saving, setSaving] = useState(false);
   const [data, setData] = useState({
@@ -72,6 +72,7 @@ export default function GeneralTab({ userId }) {
 
       if (result.success) {
         toast.success('General profile updated successfully!');
+        if (onUpdate) onUpdate();
       } else {
         toast.error(result.error || 'Failed to update profile');
       }

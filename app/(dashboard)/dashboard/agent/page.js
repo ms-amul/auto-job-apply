@@ -24,6 +24,7 @@ import DailyLimitReached from '@/components/agent/DailyLimitReached';
 import ApplicationHistory from '@/components/agent/ApplicationHistory';
 import CurrentConfiguration from '@/components/agent/CurrentConfiguration';
 import HowItWorks from '@/components/agent/HowItWorks';
+import PageHeader from '@/components/dashboard/PageHeader';
 
 export default function AgentPage() {
   const router = useRouter();
@@ -459,30 +460,28 @@ export default function AgentPage() {
   return (
     <div className="space-y-8">
       {/* Header */}
-      <div className="flex flex-col sm:flex-row sm:items-center sm:justify-between gap-4">
-        <div>
-          <h1 className="text-3xl font-bold text-slate-900">AI Job Agent</h1>
-          <p className="text-slate-600 mt-2">Intelligent automated job applications</p>
-        </div>
-        <div className="flex gap-3">
-          <Button
-            variant="secondary"
-            onClick={() => setShowConfig(!showConfig)}
-          >
-            <SettingsIcon className="w-5 h-5" />
-            <span>Configure</span>
-          </Button>
-          <Button
-            onClick={handleToggleAgent}
-            variant={isRunning ? 'danger' : 'primary'}
-            disabled={!isConfigured}
-            size="lg"
-          >
-            {isRunning ? <Pause className="w-5 h-5" /> : <Play className="w-5 h-5" />}
-            <span>{isRunning ? 'Pause Agent' : 'Start Agent'}</span>
-          </Button>
-        </div>
-      </div>
+      <PageHeader
+        title="AI Job"
+        highlight="Agent"
+        description="Intelligent automated job applications"
+      >
+        <Button
+          variant="secondary"
+          onClick={() => setShowConfig(!showConfig)}
+        >
+          <SettingsIcon className="w-5 h-5" />
+          <span>Configure</span>
+        </Button>
+        <Button
+          onClick={handleToggleAgent}
+          variant={isRunning ? 'danger' : 'primary'}
+          disabled={!isConfigured}
+          size="lg"
+        >
+          {isRunning ? <Pause className="w-5 h-5" /> : <Play className="w-5 h-5" />}
+          <span>{isRunning ? 'Pause Agent' : 'Start Agent'}</span>
+        </Button>
+      </PageHeader>
 
       {/* Premium Configuration Panel */}
       <AgentConfigPanel

@@ -24,7 +24,7 @@ export default function SidebarLogo({ isOpen }) {
             ) : (
                 <Link href="/" className="w-full flex justify-center group">
                     <div
-                        className="w-12 h-12 rounded-xl flex items-center justify-center transition-all duration-300 group-hover:scale-105 shadow-lg"
+                        className="w-12 h-12 rounded-xl flex items-center justify-center transition-all duration-300 shadow-lg"
                         style={{
                             background: theme.getAccentGradient(135),
                             boxShadow: `0 4px 16px ${theme.accentPrimary}30`,

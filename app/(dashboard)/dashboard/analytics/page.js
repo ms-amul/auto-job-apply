@@ -6,11 +6,12 @@
 'use client';
 
 import { useState, useEffect } from 'react';
-import { 
-  BarChart3, TrendingUp, TrendingDown, Calendar, Clock, Target, 
+import {
+  BarChart3, TrendingUp, TrendingDown, Calendar, Clock, Target,
   CheckCircle2, XCircle, MessageSquare, Zap, Award, Activity
 } from 'lucide-react';
 import { theme } from '@/utils/theme';
+import PageHeader from '@/components/dashboard/PageHeader';
 
 export default function AnalyticsPage() {
   const [timeRange, setTimeRange] = useState('30d');
@@ -31,14 +32,13 @@ export default function AnalyticsPage() {
   }, [timeRange]);
 
   return (
-    <div className="max-w-7xl mx-auto px-4 md:px-6 space-y-6 pb-16">
+    <div className="space-y-4 md:space-y-6">
       {/* Premium Header */}
-      <div className="mb-6">
-        <h1 className="text-2xl md:text-3xl lg:text-4xl font-bold bg-gradient-to-r from-slate-900 via-slate-800 to-slate-900 bg-clip-text text-transparent mb-2">
-          Analytics Dashboard
-        </h1>
-        <p className="text-slate-600 text-sm md:text-base">Advanced insights into your job search performance</p>
-      </div>
+      <PageHeader
+        title="Analytics"
+        highlight="Dashboard"
+        description="Advanced insights into your job search performance"
+      />
 
       {/* Time Range Selector */}
       <div className="flex flex-wrap gap-2 mb-6">
@@ -46,11 +46,10 @@ export default function AnalyticsPage() {
           <button
             key={range}
             onClick={() => setTimeRange(range)}
-            className={`px-4 py-2 rounded-xl text-sm font-semibold transition-all duration-300 ${
-              timeRange === range
-                ? 'text-white shadow-lg'
-                : 'bg-white border border-gray-200 text-slate-700 hover:border-gray-300'
-            }`}
+            className={`px-4 py-2 rounded-xl text-sm font-semibold transition-all duration-300 ${timeRange === range
+              ? 'text-white shadow-lg'
+              : 'bg-white border border-gray-200 text-slate-700 hover:border-gray-300'
+              }`}
             style={timeRange === range ? {
               background: theme.getAccentGradient(135),
               boxShadow: `0 4px 20px ${theme.accentPrimary}40`
@@ -146,7 +145,7 @@ function MetricCard({ icon: Icon, label, value, change, trend, color }) {
   };
 
   return (
-    <div 
+    <div
       className="group relative bg-white rounded-2xl border border-gray-100 p-5 transition-all duration-300 overflow-hidden"
       style={{ boxShadow: '0 4px 20px rgba(0, 0, 0, 0.06)' }}
       onMouseEnter={(e) => {
@@ -159,21 +158,20 @@ function MetricCard({ icon: Icon, label, value, change, trend, color }) {
       }}
     >
       <div className="absolute top-0 left-0 right-0 h-1" style={{ background: `linear-gradient(to right, ${colors[color].bg})` }}></div>
-      
+
       <div className="flex items-start justify-between mb-3">
-        <div 
+        <div
           className={`w-12 h-12 rounded-xl flex items-center justify-center shadow-lg bg-gradient-to-br ${colors[color].bg} group-hover:scale-110 transition-transform`}
         >
           <Icon className="w-6 h-6 text-white" strokeWidth={2.5} />
         </div>
-        <div className={`flex items-center gap-1 px-2 py-1 rounded-lg text-xs font-bold ${
-          trend === 'up' ? 'bg-emerald-50 text-emerald-700' : 'bg-red-50 text-red-700'
-        }`}>
+        <div className={`flex items-center gap-1 px-2 py-1 rounded-lg text-xs font-bold ${trend === 'up' ? 'bg-emerald-50 text-emerald-700' : 'bg-red-50 text-red-700'
+          }`}>
           {trend === 'up' ? <TrendingUp className="w-3 h-3" /> : <TrendingDown className="w-3 h-3" />}
           {change}
         </div>
       </div>
-      
+
       <div>
         <p className="text-xs text-slate-600 font-medium mb-1">{label}</p>
         <p className="text-2xl font-bold text-slate-900">{value}</p>
@@ -185,7 +183,7 @@ function MetricCard({ icon: Icon, label, value, change, trend, color }) {
 // Chart Card Wrapper
 function ChartCard({ title, subtitle, children }) {
   return (
-    <div 
+    <div
       className="bg-white rounded-2xl border border-gray-100 p-6 relative overflow-hidden"
       style={{ boxShadow: '0 2px 12px rgba(0, 0, 0, 0.04)' }}
     >
@@ -204,7 +202,7 @@ function ChartCard({ title, subtitle, children }) {
 // Application Timeline Chart
 function ApplicationTimelineChart({ data, progress }) {
   const maxValue = Math.max(...data.map(d => d.value));
-  
+
   return (
     <div className="h-64 flex items-end justify-between gap-2">
       {data.map((item, index) => {
@@ -212,9 +210,9 @@ function ApplicationTimelineChart({ data, progress }) {
         return (
           <div key={index} className="flex-1 flex flex-col items-center gap-2">
             <div className="w-full flex items-end justify-center h-48">
-              <div 
+              <div
                 className="w-full rounded-t-lg relative overflow-hidden transition-all duration-500 group cursor-pointer"
-                style={{ 
+                style={{
                   height: `${height}%`,
                   background: theme.getAccentGradient(135),
                   boxShadow: `0 -4px 20px ${theme.accentPrimary}20`,
@@ -247,15 +245,15 @@ function StatusDonutChart({ data, progress }) {
             const percentage = (item.value / total) * 100;
             const angle = (percentage / 100) * 360 * (progress / 100);
             const largeArc = angle > 180 ? 1 : 0;
-            
+
             const startX = 100 + 70 * Math.cos((currentAngle * Math.PI) / 180);
             const startY = 100 + 70 * Math.sin((currentAngle * Math.PI) / 180);
             const endX = 100 + 70 * Math.cos(((currentAngle + angle) * Math.PI) / 180);
             const endY = 100 + 70 * Math.sin(((currentAngle + angle) * Math.PI) / 180);
-            
+
             const pathData = `M 100 100 L ${startX} ${startY} A 70 70 0 ${largeArc} 1 ${endX} ${endY} Z`;
             currentAngle += angle;
-            
+
             return (
               <path
                 key={index}
@@ -275,7 +273,7 @@ function StatusDonutChart({ data, progress }) {
           </div>
         </div>
       </div>
-      
+
       <div className="flex-1 space-y-3">
         {data.map((item, index) => (
           <div key={index} className="flex items-center justify-between p-3 rounded-xl hover:bg-gray-50 transition-colors">
@@ -298,7 +296,7 @@ function StatusDonutChart({ data, progress }) {
 function ActivityHeatmap({ data, progress }) {
   const days = ['Mon', 'Tue', 'Wed', 'Thu', 'Fri', 'Sat', 'Sun'];
   const hours = ['12am', '4am', '8am', '12pm', '4pm', '8pm'];
-  
+
   return (
     <div className="overflow-x-auto">
       <div className="min-w-[600px]">
@@ -318,7 +316,7 @@ function ActivityHeatmap({ data, progress }) {
                 <div
                   key={hourIndex}
                   className="flex-1 aspect-square rounded-lg transition-all duration-300 hover:scale-110 cursor-pointer relative group"
-                  style={{ 
+                  style={{
                     background: theme.getAccentGradient(135),
                     opacity: opacity * 0.8 + 0.1,
                   }}
@@ -339,7 +337,7 @@ function ActivityHeatmap({ data, progress }) {
 // Response Time Chart
 function ResponseTimeChart({ data, progress }) {
   const maxValue = Math.max(...data.map(d => d.value));
-  
+
   return (
     <div className="space-y-4">
       {data.map((item, index) => {
@@ -351,9 +349,9 @@ function ResponseTimeChart({ data, progress }) {
               <span className="font-bold text-slate-900">{item.value} days</span>
             </div>
             <div className="h-8 bg-gray-100 rounded-full overflow-hidden">
-              <div 
+              <div
                 className="h-full rounded-full transition-all duration-500 relative overflow-hidden"
-                style={{ 
+                style={{
                   width: `${width}%`,
                   background: theme.getAccentGradient(90),
                 }}
@@ -375,14 +373,14 @@ function FunnelChart({ data, progress }) {
       {data.map((item, index) => {
         const width = (item.value / data[0].value) * 100 * (progress / 100);
         return (
-          <div 
-            key={index} 
+          <div
+            key={index}
             className="relative"
             style={{ paddingLeft: `${index * 10}px`, paddingRight: `${index * 10}px` }}
           >
-            <div 
+            <div
               className="rounded-2xl p-4 transition-all duration-500 hover:scale-105 cursor-pointer"
-              style={{ 
+              style={{
                 background: theme.getAccentGradient(135),
                 opacity: 1 - (index * 0.15),
                 boxShadow: `0 4px 20px ${theme.accentPrimary}30`,
@@ -410,7 +408,7 @@ function IndustryPerformanceChart({ data, progress }) {
       {data.map((item, index) => {
         const percentage = item.successRate * (progress / 100);
         return (
-          <div 
+          <div
             key={index}
             className="group relative bg-gradient-to-br from-white to-gray-50 rounded-2xl border border-gray-100 p-5 hover:border-gray-200 transition-all duration-300"
             style={{ boxShadow: '0 2px 12px rgba(0, 0, 0, 0.04)' }}
@@ -437,11 +435,11 @@ function IndustryPerformanceChart({ data, progress }) {
                 <div className="text-xs text-slate-600">success</div>
               </div>
             </div>
-            
+
             <div className="relative h-2 bg-gray-200 rounded-full overflow-hidden">
-              <div 
+              <div
                 className="absolute inset-y-0 left-0 rounded-full transition-all duration-500"
-                style={{ 
+                style={{
                   width: `${percentage}%`,
                   background: theme.getAccentGradient(90),
                 }}
@@ -463,7 +461,7 @@ function generateMockAnalytics() {
     successRate: '28%',
     avgResponseTime: '5 days',
     interviewRate: '18%',
-    
+
     timeline: [
       { label: 'Mon', value: 12 },
       { label: 'Tue', value: 19 },
@@ -473,14 +471,14 @@ function generateMockAnalytics() {
       { label: 'Sat', value: 8 },
       { label: 'Sun', value: 5 },
     ],
-    
+
     statusDistribution: [
       { label: 'Pending', value: 45, color: '#f59e0b' },
       { label: 'Interview', value: 18, color: '#8b5cf6' },
       { label: 'Accepted', value: 12, color: '#10b981' },
       { label: 'Rejected', value: 30, color: '#ef4444' },
     ],
-    
+
     activityHeatmap: [
       [2, 3, 5, 8, 6, 3],
       [3, 5, 7, 10, 8, 4],
@@ -490,7 +488,7 @@ function generateMockAnalytics() {
       [2, 2, 3, 4, 3, 2],
       [1, 1, 2, 2, 2, 1],
     ],
-    
+
     responseTime: [
       { label: 'Technology', value: 4 },
       { label: 'Healthcare', value: 7 },
@@ -498,14 +496,14 @@ function generateMockAnalytics() {
       { label: 'Retail', value: 3 },
       { label: 'Education', value: 8 },
     ],
-    
+
     funnel: [
       { label: 'Applications Sent', value: 127, percentage: 100 },
       { label: 'Profile Viewed', value: 89, percentage: 70 },
       { label: 'Interviews Scheduled', value: 23, percentage: 18 },
       { label: 'Offers Received', value: 8, percentage: 6 },
     ],
-    
+
     industryPerformance: [
       { category: 'Technology', applications: 45, successRate: 32 },
       { category: 'Healthcare', applications: 28, successRate: 25 },

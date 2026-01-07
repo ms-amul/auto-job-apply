@@ -23,19 +23,19 @@ export default function Input({
   return (
     <div className={`${fullWidth ? 'w-full' : ''} ${className}`}>
       {label && (
-        <label className="block text-sm font-medium text-gray-700 mb-2">
+        <label className="block text-sm font-semibold text-slate-700 mb-2 ml-1">
           {label}
-          {required && <span className="text-red-500 ml-1">*</span>}
+          {required && <span className="text-red-500 ml-0.5">*</span>}
         </label>
       )}
-      
-      <div className="relative">
+
+      <div className="relative group">
         {icon && (
-          <div className="absolute left-3 top-1/2 transform -translate-y-1/2 text-gray-400">
+          <div className="absolute left-3.5 top-1/2 transform -translate-y-1/2 text-slate-400 group-focus-within:text-blue-500 transition-colors duration-200">
             {icon}
           </div>
         )}
-        
+
         <input
           type={type}
           value={value}
@@ -43,25 +43,23 @@ export default function Input({
           placeholder={placeholder}
           disabled={disabled}
           className={`
-            w-full px-4 py-2.5 rounded-lg
-            ${icon ? 'pl-10' : ''}
-            ${error ? 'border border-red-300 bg-red-50' : 'border border-gray-200 bg-white'}
-            ${disabled ? 'bg-gray-100 cursor-not-allowed opacity-60' : ''}
-            focus:outline-none focus:ring-0 focus:border-gray-300
-            transition-colors duration-200
+            w-full px-4 py-3 rounded-xl text-sm font-medium
+            ${icon ? 'pl-11' : ''}
+            ${error ? 'border-red-300 bg-red-50/50' : 'border-slate-200 bg-white/50 focus:bg-white'}
+            ${disabled ? 'bg-slate-50 cursor-not-allowed opacity-70' : ''}
+            border focus:border-blue-500/50 focus:ring-4 focus:ring-blue-500/10
+            outline-none transition-all duration-200
             text-slate-900 placeholder:text-slate-400
           `}
-          style={{ outline: 'none', boxShadow: 'none' }}
           {...props}
         />
       </div>
 
       {(error || helperText) && (
-        <p className={`mt-1 text-sm ${error ? 'text-red-500' : 'text-gray-500'}`}>
+        <p className={`mt-1.5 ml-1 text-xs font-medium ${error ? 'text-red-500' : 'text-slate-500'}`}>
           {error || helperText}
         </p>
       )}
     </div>
   );
 }
-

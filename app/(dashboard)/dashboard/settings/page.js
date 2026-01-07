@@ -10,6 +10,7 @@ import { useRouter } from 'next/navigation';
 import { useSession } from 'next-auth/react';
 import { Shield, Bell, Mail, Lock, Trash2, Check, X, Eye, EyeOff } from 'lucide-react';
 import { theme } from '@/utils/theme';
+import PageHeader from '@/components/dashboard/PageHeader';
 import toast from 'react-hot-toast';
 
 export default function SettingsPage() {
@@ -195,20 +196,10 @@ export default function SettingsPage() {
   return (
     <div className="space-y-8">
       {/* Header */}
-      <div className="mb-8">
-        <h1
-          className="text-3xl md:text-4xl font-bold mb-2"
-          style={{
-            background: theme.getAccentGradient(90),
-            WebkitBackgroundClip: 'text',
-            WebkitTextFillColor: 'transparent',
-            backgroundClip: 'text',
-          }}
-        >
-          Settings
-        </h1>
-        <p className="text-slate-600 text-base">Manage your account settings and preferences</p>
-      </div>
+      <PageHeader
+        title="Settings"
+        description="Manage your account settings and preferences"
+      />
 
       <div className="space-y-6">
         {/* Notification Preferences */}

@@ -16,6 +16,7 @@ import Button from '@/components/ui/Button';
 import Loader from '@/components/ui/Loader';
 import { theme } from '@/utils/theme';
 import toast from 'react-hot-toast';
+import PageHeader from '@/components/dashboard/PageHeader';
 
 export default function ApplicationsPage() {
   const router = useRouter();
@@ -78,12 +79,11 @@ export default function ApplicationsPage() {
   return (
     <div className="space-y-8">
       {/* Header */}
-      <div>
-        <h1 className="text-3xl sm:text-4xl font-bold bg-linear-to-r from-blue-600 to-indigo-600 text-transparent bg-clip-text">
-          My Applications
-        </h1>
-        <p className="text-base text-gray-600 mt-2">Track and manage your job applications</p>
-      </div>
+      <PageHeader
+        title="My"
+        highlight="Applications"
+        description="Track and manage your job applications"
+      />
 
       {/* Filter Tabs */}
       <div className="bg-white border border-gray-200 rounded-2xl p-6">

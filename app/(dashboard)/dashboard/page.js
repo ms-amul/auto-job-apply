@@ -15,6 +15,7 @@ import {
   Building2, MapPin, DollarSign, Calendar, Target, Bot, Sparkles
 } from 'lucide-react';
 import GlassPanel from '@/components/ui/GlassPanel';
+import PageHeader from '@/components/dashboard/PageHeader';
 import Badge from '@/components/ui/Badge';
 import Loader from '@/components/ui/Loader';
 import { theme } from '@/utils/theme';
@@ -193,22 +194,11 @@ function ApplicantDashboard({ user, stats, recentApplications }) {
   return (
     <div className="space-y-6 md:space-y-8">
       {/* Header - Premium */}
-      <div className="mb-6 md:mb-8 flex flex-col md:flex-row md:items-end justify-between gap-4">
-        <div>
-          <h1 className="text-2xl md:text-3xl lg:text-4xl font-bold bg-gradient-to-r from-slate-900 via-slate-500 to-slate-900 bg-clip-text text-transparent mb-2">
-            Welcome back, {user?.name?.split(' ')[0]} 👋
-          </h1>
-          <p className="text-slate-600 text-sm md:text-base">Here's your job search overview</p>
-        </div>
-        {/* Added Recommended Jobs Button for Quick Access */}
-        <button
-          onClick={() => window.location.href = '/browse-jobs'}
-          className="inline-flex items-center justify-center gap-2 px-5 py-2.5 bg-white border border-gray-200 text-slate-700 rounded-xl font-semibold text-sm hover:bg-gray-50 hover:text-blue-600 hover:border-blue-200 transition-all duration-300 shadow-sm hover:shadow-md transform hover:scale-105 active:scale-95"
-        >
-          <Sparkles className="w-4 h-4 text-purple-500" />
-          <span>Recommended Jobs</span>
-        </button>
-      </div>
+      <PageHeader
+        title="Welcome back,"
+        highlight={`${user?.name?.split(' ')[0]} 👋`}
+        description="Here's your job search overview"
+      />
 
       {/* Stats Grid - Premium with Glows */}
       <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-4 md:gap-6">

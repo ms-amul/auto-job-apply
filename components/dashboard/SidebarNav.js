@@ -62,7 +62,7 @@ export default function SidebarNav({ menuItems, isOpen, setIsOpen }) {
 
                         {/* Icon */}
                         <Icon
-                            className={`relative z-10 shrink-0 ${isOpen ? 'w-5 h-5' : 'w-6 h-6'} transition-all duration-200 ${active ? '' : 'group-hover:scale-110'}`}
+                            className={`relative z-10 shrink-0 ${isOpen ? 'w-5 h-5' : 'w-6 h-6'} transition-all duration-200`}
                             strokeWidth={active ? 2.5 : 2}
                         />
 

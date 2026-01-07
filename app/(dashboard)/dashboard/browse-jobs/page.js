@@ -8,6 +8,7 @@ import { Sparkles } from 'lucide-react';
 import JobCard from '@/components/jobs/JobCard';
 import Loader from '@/components/ui/Loader';
 import toast from 'react-hot-toast';
+import PageHeader from '@/components/dashboard/PageHeader';
 
 export default function BrowseJobsPage() {
     const router = useRouter();
@@ -44,25 +45,17 @@ export default function BrowseJobsPage() {
             {/* Decorative Background Elements */}
             <div className="fixed top-0 left-0 right-0 h-96 bg-gradient-to-b from-blue-50 to-transparent pointer-events-none -z-10" />
 
-            <div className="py-4">
+            <div className="">
 
                 {/* Premium Header */}
-                <div className="mb-10 animate-fadeIn">
-                    <div className="flex flex-col md:flex-row md:items-end justify-between gap-6">
-                        <div>
-                            <div className="inline-flex items-center gap-2 px-3 py-1 rounded-full bg-purple-100 text-purple-700 text-xs font-bold uppercase tracking-wider mb-3">
-                                <Sparkles className="w-3 h-3" />
-                                AI Powered Matches
-                            </div>
-                            <h1 className="text-4xl md:text-5xl font-extrabold text-slate-900 tracking-tight">
-                                Recommended <span className="text-transparent bg-clip-text bg-gradient-to-r from-blue-600 to-purple-600">Opportunities</span>
-                            </h1>
-                            <p className="text-lg text-slate-500 mt-3 max-w-2xl leading-relaxed">
-                                We've analyzed your profile and found these roles that perfectly match your skills and career goals.
-                            </p>
-                        </div>
-                    </div>
-                </div>
+                <PageHeader
+                    badge="AI Powered Matches"
+                    badgeIcon={Sparkles}
+                    badgeClassName="bg-purple-100 text-purple-700"
+                    title="Recommended"
+                    highlight="Opportunities"
+                    description="We've analyzed your profile and found these roles that perfectly match your skills and career goals."
+                />
 
                 {/* Job Grid */}
                 {loading ? (

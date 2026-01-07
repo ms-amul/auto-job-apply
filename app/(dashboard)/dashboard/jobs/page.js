@@ -1,13 +1,13 @@
 'use client';
 
-import { useState, useEffect, useRef } from 'react';
-import { useRouter } from 'next/navigation';
-import { Search, MapPin, Briefcase, DollarSign, Clock, Building2, Filter, ChevronLeft, ChevronRight, X, SlidersHorizontal, Loader2 } from 'lucide-react';
-import Button from '@/components/ui/Button';
-import Loader from '@/components/ui/Loader';
+import PageHeader from '@/components/dashboard/PageHeader';
 import JobCard from '@/components/jobs/JobCard';
-import toast from 'react-hot-toast';
+import Loader from '@/components/ui/Loader';
 import { theme } from '@/utils/theme';
+import { ChevronLeft, ChevronRight, DollarSign, Loader2, MapPin, Search, SlidersHorizontal, X } from 'lucide-react';
+import { useRouter } from 'next/navigation';
+import { useEffect, useRef, useState } from 'react';
+import toast from 'react-hot-toast';
 
 export default function JobsPage() {
   const router = useRouter();
@@ -160,15 +160,15 @@ export default function JobsPage() {
   return (
     <div className="space-y-4 md:space-y-6">
       {/* Header */}
-      <div className="flex flex-col md:flex-row md:items-center md:justify-between gap-4 mb-4 md:mb-6">
-        <div>
-          <h1 className="text-2xl md:text-3xl font-bold bg-gradient-to-r from-slate-900 via-slate-800 to-slate-900 bg-clip-text text-transparent mb-1">
-            Browse Jobs
-          </h1>
-          <p className="text-slate-600 text-xs md:text-sm">
+      <PageHeader
+        title="Browse"
+        highlight="Jobs"
+        description={
+          <span>
             Discover <span className="font-semibold text-blue-600">{totalJobs.toLocaleString()}</span> opportunities from top companies
-          </p>
-        </div>
+          </span>
+        }
+      >
         <button
           onClick={() => setShowFilters(!showFilters)}
           className="flex items-center justify-center gap-2 px-4 py-2.5 bg-white border border-gray-200 rounded-xl hover:bg-gray-50 hover:shadow-md transition-all duration-300 text-sm font-medium text-slate-700 shadow-sm hover:scale-[1.02] active:scale-[0.98]"
@@ -185,7 +185,7 @@ export default function JobsPage() {
             </span>
           )}
         </button>
-      </div>
+      </PageHeader>
 
       {/* Premium Search Bar */}
       <div className="relative">

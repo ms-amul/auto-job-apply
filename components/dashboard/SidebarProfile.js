@@ -103,11 +103,7 @@ export default function SidebarProfile({ user, isOpen, setIsOpen }) {
                     {isOpen && (
                         <button
                             onClick={handleLogoutClick}
-                            className="
-                    w-8 h-8 flex items-center justify-center rounded-lg
-                    text-slate-400 hover:text-red-500 hover:bg-red-50
-                    transition-all duration-200 shrink-0
-                "
+                            className="w-8 h-8 flex items-center justify-center rounded-lg text-slate-400 hover:text-red-500 hover:bg-red-50 transition-all duration-200 shrink-0"
                             title="Sign Out"
                         >
                             <LogOut className="w-4 h-4" />
