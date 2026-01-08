@@ -23,7 +23,7 @@ export default function JobsPage() {
   const [employmentTypeFilter, setEmploymentTypeFilter] = useState('');
   const [salaryMinFilter, setSalaryMinFilter] = useState('');
   const [visaSponsorshipFilter, setVisaSponsorshipFilter] = useState('all');
-  const [showFilters, setShowFilters] = useState(true);
+  const [showFilters, setShowFilters] = useState(false);
   const [isSearchFocused, setIsSearchFocused] = useState(false);
   const searchInputRef = useRef(null);
 

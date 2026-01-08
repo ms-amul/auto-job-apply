@@ -12,6 +12,7 @@ import { Shield, Bell, Mail, Lock, Trash2, Check, X, Eye, EyeOff } from 'lucide-
 import { theme } from '@/utils/theme';
 import PageHeader from '@/components/dashboard/PageHeader';
 import toast from 'react-hot-toast';
+import Loader from '@/components/ui/Loader';
 
 export default function SettingsPage() {
   const router = useRouter();
@@ -188,7 +189,7 @@ export default function SettingsPage() {
   if (initialLoading) {
     return (
       <div className="min-h-[60vh] flex items-center justify-center">
-        <div className="w-8 h-8 border-2 border-slate-300 border-t-blue-500 rounded-full animate-spin" />
+        <Loader />
       </div>
     );
   }

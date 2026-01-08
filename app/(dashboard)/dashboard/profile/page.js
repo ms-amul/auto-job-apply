@@ -10,6 +10,7 @@ import { useSession } from 'next-auth/react';
 import { useRouter } from 'next/navigation';
 import toast from 'react-hot-toast';
 import { theme } from '@/utils/theme';
+import Loader from '@/components/ui/Loader';
 
 // Profile Components
 import ProfileHeader from '@/components/profile/ProfileHeader';
@@ -173,7 +174,7 @@ export default function ProfilePage() {
   if (initialLoading) {
     return (
       <div className="min-h-[60vh] flex items-center justify-center">
-        <div className="w-8 h-8 border-2 border-slate-300 border-t-blue-500 rounded-full animate-spin" />
+        <Loader />
       </div>
     );
   }
