@@ -1,25 +1,37 @@
 @import "tailwindcss";
 
+@theme {
+  --font-sans: var(--font-jakarta), ui-sans-serif, system-ui, -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, "Helvetica Neue", Arial, sans-serif;
+  --font-heading: var(--font-outfit), ui-sans-serif, system-ui, sans-serif;
+}
+
 body,
 html {
-  /* Premium Background Gradient */
   background:
     radial-gradient(circle at 0% 0%, var(--background-end) 0%, transparent 60%),
     radial-gradient(circle at 100% 100%, var(--background-end) 0%, transparent 60%),
     var(--background-start);
   background-attachment: fixed;
-  /* Ensures gradient stays while scrolling */
-
   color: #0f172a;
-  /* Slate-900 default text */
-  /* user-select: none;
+  font-family: var(--font-jakarta), ui-sans-serif, system-ui, -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, "Helvetica Neue", Arial, sans-serif;
+  user-select: none;
   -webkit-user-select: none;
   -ms-user-select: none;
   -webkit-touch-callout: none;
   -webkit-tap-highlight-color: transparent;
   touch-action: pan-x pan-y;
   overscroll-behavior: none;
-  -ms-content-zooming: none; */
+  -ms-content-zooming: none;
+}
+
+h1,
+h2,
+h3,
+h4,
+h5,
+h6 {
+  font-family: var(--font-outfit), ui-sans-serif, system-ui, sans-serif;
+  font-weight: 600;
 }
 
 :root {

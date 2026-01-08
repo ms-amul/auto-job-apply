@@ -91,7 +91,7 @@ export default function CompactSidebar({ isOpen, setIsOpen, user }) {
       {/* Mobile Overlay */}
       {isOpen && (
         <div
-          className="fixed inset-0 bg-slate-900/40 backdrop-blur-sm z-30 lg:hidden transition-opacity duration-300"
+          className="fixed inset-0 bg-slate-900/20 backdrop-blur-sm z-30 lg:hidden transition-opacity duration-300"
           onClick={() => setIsOpen(false)}
         />
       )}
@@ -108,7 +108,7 @@ export default function CompactSidebar({ isOpen, setIsOpen, user }) {
         <div
           className={`
                 h-full w-full 
-                backdrop-blur-2xl bg-white/80
+                backdrop-blur-2xl bg-white/20
                 rounded-3xl border border-white/60
                 flex flex-col relative overflow-hidden
                 shadow-[8px_0_32px_rgba(0,0,0,0.08)]

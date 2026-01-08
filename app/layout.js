@@ -1,17 +1,19 @@
-import { Geist, Geist_Mono } from "next/font/google";
+import { Outfit, Plus_Jakarta_Sans } from "next/font/google";
 import "./globals.css";
 import { brand } from "@/utils/brand";
 import SessionProvider from "@/components/providers/SessionProvider";
 import DevelopmentBadge from "@/components/ui/DevelopmentBadge";
 
-const geistSans = Geist({
-  variable: "--font-geist-sans",
+const outfit = Outfit({
+  variable: "--font-outfit",
   subsets: ["latin"],
+  display: "swap",
 });
 
-const geistMono = Geist_Mono({
-  variable: "--font-geist-mono",
+const jakarta = Plus_Jakarta_Sans({
+  variable: "--font-jakarta",
   subsets: ["latin"],
+  display: "swap",
 });
 
 export const metadata = {
@@ -24,10 +26,10 @@ export default function RootLayout({ children }) {
   return (
     <html lang="en">
       <body
-        className={`${geistSans.variable} ${geistMono.variable} antialiased`}
+        className={`${jakarta.variable} ${outfit.variable} antialiased`}
       >
         <SessionProvider>
-          <DevelopmentBadge/>
+          <DevelopmentBadge />
           {children}
         </SessionProvider>
       </body>

@@ -24,7 +24,7 @@ export default function PageHeader({
                         </div>
                     )}
 
-                    <h1 className="text-2xl md:text-3xl lg:text-4xl font-extrabold text-slate-900 tracking-tight">
+                    <h1 className="text-2xl md:text-3xl lg:text-4xl font-bold text-slate-900 tracking-tight">
                         {title} {highlight && <span className={`text-transparent bg-clip-text bg-gradient-to-br ${gradient}`}>{highlight}</span>}
                     </h1>
 
