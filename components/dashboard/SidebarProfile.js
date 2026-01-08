@@ -70,12 +70,7 @@ export default function SidebarProfile({ user, isOpen, setIsOpen }) {
                     >
                         {/* Avatar */}
                         <div
-                            className={`
-                ${isOpen ? 'w-10 h-10' : 'w-10 h-10'} 
-                rounded-xl flex items-center justify-center shrink-0 
-                relative overflow-hidden transition-transform duration-300 
-                shadow-sm
-              `}
+                            className="w-10 h-10 rounded-xl flex items-center justify-center shrink-0 relative overflow-hidden transition-transform duration-300 shadow-sm"
                             style={{
                                 background: theme.getAccentGradient(135),
                             }}

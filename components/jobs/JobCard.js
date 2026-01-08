@@ -54,18 +54,7 @@ const JobCard = ({ job, onClick }) => {
     return (
         <div
             onClick={onClick}
-            className="group relative bg-white rounded-2xl p-2 md:p-4 transition-all duration-300 border border-gray-100 hover:border-blue-200 cursor-pointer overflow-hidden"
-            style={{
-                boxShadow: '0 4px 20px rgba(0, 0, 0, 0.03)'
-            }}
-            onMouseEnter={(e) => {
-                e.currentTarget.style.boxShadow = '0 12px 40px rgba(0, 0, 0, 0.08)';
-                e.currentTarget.style.transform = 'translateY(-4px)';
-            }}
-            onMouseLeave={(e) => {
-                e.currentTarget.style.boxShadow = '0 4px 20px rgba(0, 0, 0, 0.03)';
-                e.currentTarget.style.transform = 'translateY(0)';
-            }}
+            className="neu-card group relative p-4 md:p-6 cursor-pointer overflow-hidden"
         >
             {/* Accent Top Line */}
             <div className="absolute top-0 left-0 right-0 h-1 bg-gradient-to-r from-blue-500 via-purple-500 to-pink-500 opacity-0 group-hover:opacity-100 transition-opacity duration-300" />

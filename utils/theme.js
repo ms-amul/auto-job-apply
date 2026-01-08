@@ -53,15 +53,25 @@
 // };
 
 // 🌙 MIDNIGHT - Deep blue/indigo (ACTIVE)
+// 🔵 GLOBAL THEME - Uses CSS Variables (Blue/Cyan)
 export const theme = {
-	accentPrimary: '#1e40af',
-	accentSecondary: '#4f46e5',
+	accentPrimary: 'var(--primary)',
+	accentSecondary: 'var(--secondary)', // Using cyan-900 as secondary
+	accentTertiary: 'var(--accent)',     // Using cyan-600 as accent
+
+	backgroundStart: 'var(--background-start)',
+	backgroundEnd: 'var(--background-end)',
+
 	getAccentGradient(angle = 90) {
-		return `linear-gradient(${angle}deg, ${this.accentPrimary}, ${this.accentSecondary})`;
+		return `linear-gradient(${angle}deg, ${this.accentPrimary}, ${this.accentTertiary})`; // Primary to Accent(Cyan) for brighter gradients
 	},
 	getAccentFromTo() {
-		return { from: this.accentPrimary, to: this.accentSecondary };
+		return { from: this.accentPrimary, to: this.accentTertiary };
 	},
+	// Helper for dark backgrounds (Primary to Secondary)
+	getDarkGradient(angle = 90) {
+		return `linear-gradient(${angle}deg, ${this.accentSecondary}, ${this.accentPrimary})`;
+	}
 };
 
 // 🌹 ROSE - Romantic red/pink

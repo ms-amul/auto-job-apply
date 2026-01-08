@@ -2,6 +2,9 @@
 
 body,
 html {
+  background-color: var(--background-start);
+  color: #0f172a;
+  /* Slate-900 default text */
   /* user-select: none;
   -webkit-user-select: none;
   -ms-user-select: none;
@@ -10,6 +13,25 @@ html {
   touch-action: pan-x pan-y;
   overscroll-behavior: none;
   -ms-content-zooming: none; */
+}
+
+:root {
+  /* Professional Blue/Cyan Palette */
+  --primary: #0d368f;
+  /* blue-600 */
+  --primary-foreground: #ffffff;
+  --secondary: #104457;
+  /* cyan-900 */
+  --secondary-foreground: #ffffff;
+  --accent: #0891b2;
+  /* cyan-600 */
+  --muted: #64748b;
+  /* slate-500 */
+
+  --background-start: #f8fafc;
+  /* slate-50 */
+  --background-end: #eff6ff;
+  /* blue-50 */
 }
 
 /* Premium Button Shimmer Effect - Subtle & Elegant */
@@ -56,6 +78,26 @@ html {
   box-shadow: 0 20px 40px -12px rgba(0, 0, 0, 0.12);
 }
 
+/* Neumorphic Card */
+.neu-card {
+  background: #f8fafc;
+  /* Matches slate-50 background */
+  box-shadow:
+    -8px -8px 20px 0px rgba(255, 255, 255, 1),
+    8px 8px 20px 0px rgba(13, 54, 143, 0.08);
+  /* slight blue tint in shadow */
+  border-radius: 1rem;
+  border: 1px solid rgba(255, 255, 255, 0.6);
+  transition: all 0.3s cubic-bezier(0.4, 0, 0.2, 1);
+}
+
+.neu-card:hover {
+  transform: translateY(-2px);
+  box-shadow:
+    -12px -12px 24px 0px rgba(255, 255, 255, 1),
+    12px 12px 24px 0px rgba(13, 54, 143, 0.12);
+}
+
 /* Smooth Scrollbar */
 ::-webkit-scrollbar {
   width: 8px;
@@ -83,7 +125,7 @@ html {
 
 /* Gradient Text */
 .gradient-text {
-  background: linear-gradient(135deg, #1e40af, #4f46e5);
+  background: linear-gradient(135deg, var(--primary), var(--accent));
   -webkit-background-clip: text;
   -webkit-text-fill-color: transparent;
   background-clip: text;
@@ -301,29 +343,6 @@ html {
   }
 }
 
-.gradient {
-  height: fit-content;
-  z-index: -1;
-  width: 100%;
-  background-image: radial-gradient(at 27% 37%,
-      hsla(215, 98%, 81%, 1) 0px,
-      transparent 0%),
-    radial-gradient(at 97% 21%, rgb(191, 255, 196) 0px, transparent 50%),
-    radial-gradient(at 52% 99%, rgb(246, 193, 198) 0px, transparent 50%),
-    radial-gradient(at 10% 29%, rgb(187, 162, 255) 0px, transparent 50%),
-    radial-gradient(at 97% 96%, hsla(38, 60%, 74%, 1) 0px, transparent 50%),
-    radial-gradient(at 33% 50%, rgb(202, 214, 243) 0px, transparent 50%),
-    radial-gradient(at 79% 53%, rgb(230, 196, 206) 0px, transparent 50%);
-  position: fixed;
-  content: "";
-  width: 100%;
-  height: 100%;
-  filter: blur(100px) saturate(190%);
-  bottom: 80px;
-  left: 30px;
-  opacity: 0.15;
-}
-
 @keyframes fadeIn {
   from {
     opacity: 0;
@@ -345,9 +364,9 @@ html {
 /* =============================== */
 
 .loader {
-  --background: linear-gradient(135deg, #23C4F8, #275EFE);
-  --shadow: rgba(39, 94, 254, 0.28);
-  --text: #6C7486;
+  --background: linear-gradient(135deg, var(--accent), var(--primary));
+  --shadow: rgba(37, 99, 235, 0.28);
+  --text: var(--muted);
   --page: rgba(255, 255, 255, 0.36);
   --page-fold: rgba(255, 255, 255, 0.52);
   --duration: 3s;

@@ -121,7 +121,7 @@ export default function CompactSidebar({ isOpen, setIsOpen, user }) {
           {/* Logo Section with Classy Separation */}
           <div className="relative">
             <SidebarLogo isOpen={isOpen} />
-            <div className="mx-5 h-px bg-gradient-to-r from-transparent via-blue-700/30 to-transparent" />
+            <div className="mx-5 h-px bg-gradient-to-r from-transparent via-[var(--primary)]/30 to-transparent" />
             <div className="mx-5 h-px bg-gradient-to-r from-transparent via-white to-transparent opacity-50" />
           </div>
 
@@ -132,7 +132,7 @@ export default function CompactSidebar({ isOpen, setIsOpen, user }) {
 
           {/* Footer Section - Merged Profile & Logout */}
           <div className="relative mt-auto">
-            <div className="mx-5 h-px bg-gradient-to-r from-transparent via-blue-700/30 to-transparent mb-2" />
+            <div className="mx-5 h-px bg-gradient-to-r from-transparent via-[var(--primary)]/30 to-transparent mb-2" />
             <SidebarProfile user={user} isOpen={isOpen} setIsOpen={setIsOpen} />
           </div>
         </div>

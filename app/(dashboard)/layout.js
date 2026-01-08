@@ -84,9 +84,6 @@ export default function DashboardLayout({ children }) {
           },
         }}
       />
-
-      <div className="gradient"></div>
-
       {/* Sidebar */}
       <CompactSidebar isOpen={sidebarOpen} setIsOpen={setSidebarOpen} user={user} />
 

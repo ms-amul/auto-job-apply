@@ -2,16 +2,19 @@
 
 import { Sparkles } from 'lucide-react';
 
+import { theme } from '@/utils/theme';
+
 export default function PageHeader({
     title,
     highlight,
     description,
     badge,
     badgeIcon: Icon,
-    badgeClassName = "bg-blue-50 text-blue-700",
+    badgeClassName = "bg-[var(--primary)]/10 text-[var(--primary)]",
     children
 }) {
-    const gradient = "from-blue-600 to-cyan-900";
+    // Gradient matching the global theme
+    const gradient = "from-[var(--primary)] to-[var(--secondary)]";
     return (
         <div className="mb-6 md:mb-10 animate-fadeIn">
             <div className="flex flex-col lg:flex-row lg:items-end justify-between gap-6">

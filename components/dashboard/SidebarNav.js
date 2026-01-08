@@ -16,7 +16,7 @@ export default function SidebarNav({ menuItems, isOpen, setIsOpen }) {
     const isActive = (href) => pathname === href;
 
     return (
-        <nav className={`flex-1 ${isOpen ? 'px-3 py-4' : 'px-2 py-4'} space-y-1 overflow-y-auto scrollbar-thin scrollbar-thumb-gray-300/50 scrollbar-track-transparent relative z-10`}>
+        <nav className={`flex-1 px-3 py-4 space-y-1 overflow-y-auto scrollbar-thin scrollbar-thumb-gray-300/50 scrollbar-track-transparent relative z-10`}>
             {menuItems.map((item) => {
                 const Icon = item.icon;
                 const active = isActive(item.href);
@@ -36,7 +36,7 @@ export default function SidebarNav({ menuItems, isOpen, setIsOpen }) {
               transition-all duration-200 overflow-hidden
               ${active
                                 ? 'text-white'
-                                : 'text-slate-600 hover:text-slate-900 hover:bg-white/60'
+                                : 'text-slate-600 hover:text-[var(--primary)] hover:bg-white/60'
                             }
             `}
                         title={!isOpen ? item.label : ''}
@@ -78,8 +78,8 @@ export default function SidebarNav({ menuItems, isOpen, setIsOpen }) {
                             <span
                                 className="relative z-10 px-2 py-0.5 text-[10px] font-bold uppercase tracking-wider rounded-full text-white"
                                 style={{
-                                    background: 'linear-gradient(135deg, #8b5cf6, #6366f1)',
-                                    boxShadow: '0 2px 8px rgba(139, 92, 246, 0.4)',
+                                    background: theme.getAccentGradient(135),
+                                    boxShadow: `0 2px 8px ${theme.accentPrimary}40`,
                                 }}
                             >
                                 {item.badge}
