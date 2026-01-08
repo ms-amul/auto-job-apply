@@ -138,15 +138,8 @@ export default function JobDetailsPage({ params }) {
         <div className="flex flex-col md:flex-row gap-6">
           {/* Company Logo */}
           <div className="shrink-0">
-            <div
-              className="w-20 h-20 md:w-24 md:h-24 rounded-2xl bg-gradient-to-br from-gray-50 to-gray-100 border border-gray-200 flex items-center justify-center overflow-hidden shadow-md"
-              style={{ boxShadow: '0 4px 20px rgba(0, 0, 0, 0.06)' }}
-            >
-              {job.companyLogo ? (
-                <img src={job.companyLogo} alt={job.company} className="w-16 h-16 md:w-20 md:h-20 object-contain" />
-              ) : (
-                <Building2 className="w-10 h-10 md:w-12 md:h-12 text-slate-400" />
-              )}
+            <div className="neu-icon w-20 h-20 md:w-24 md:h-24 rounded-2xl flex items-center justify-center shrink-0">
+              <Building2 className="w-10 h-10 md:w-12 md:h-12 text-blue-500" />
             </div>
           </div>
 
@@ -386,7 +379,7 @@ export default function JobDetailsPage({ params }) {
         <div className="space-y-4 md:space-y-6">
           {/* Skills Required - Premium */}
           <div
-            className="bg-white rounded-2xl border border-gray-100 p-5 md:p-6 relative overflow-hidden sticky top-4"
+            className="bg-white rounded-2xl border border-gray-100 p-5 md:p-6 relative overflow-hidden sticky top-4 z-10"
             style={{ boxShadow: '0 4px 20px rgba(0, 0, 0, 0.06)' }}
           >
             <div className="absolute top-0 left-0 right-0 h-1 bg-gradient-to-r from-blue-500 to-purple-500"></div>

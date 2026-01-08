@@ -78,7 +78,7 @@ export default function SidebarNav({ menuItems, isOpen, setIsOpen }) {
                             <span
                                 className="relative z-10 px-2 py-0.5 text-[10px] font-bold uppercase tracking-wider rounded-full text-white"
                                 style={{
-                                    background: theme.getAccentGradient(135),
+                                    background: 'var(--accent)',
                                     boxShadow: `0 2px 8px ${theme.accentPrimary}40`,
                                 }}
                             >

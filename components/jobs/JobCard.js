@@ -56,89 +56,89 @@ const JobCard = ({ job, onClick }) => {
             onClick={onClick}
             className="neu-card group relative p-4 md:p-6 cursor-pointer overflow-hidden"
         >
-            {/* Accent Top Line */}
-            <div className="absolute top-0 left-0 right-0 h-1 bg-gradient-to-r from-blue-500 via-purple-500 to-pink-500 opacity-0 group-hover:opacity-100 transition-opacity duration-300" />
+            {/* Accent Top Line - Animated Center Expand with Glow */}
+            <div className="absolute top-0 left-0 right-0 h-1 bg-gradient-to-r from-blue-500 via-purple-500 to-pink-500 transform scale-x-0 group-hover:scale-x-100 transition-transform duration-500 ease-out origin-center shadow-[0_0_20px_rgba(168,85,247,0.6)]" />
 
             {/* Header Section */}
             <div className="flex justify-between items-start gap-4 mb-5">
                 <div className="flex gap-4">
-                    <div className="w-12 h-12 md:w-14 md:h-14 rounded-xl bg-gradient-to-br from-gray-50 to-gray-100 border border-gray-200 flex items-center justify-center shrink-0 shadow-sm group-hover:shadow-md transition-shadow">
-                        <Building2 className="w-6 h-6 md:w-7 md:h-7 text-slate-400 group-hover:text-blue-500 transition-colors" />
+                    <div className="w-12 h-12 md:w-14 md:h-14 shrink-0 neu-icon">
+                        <Building2 className="w-6 h-6 md:w-7 md:h-7 text-blue-500" />
                     </div>
                     <div>
-                        <h3 className="font-bold text-lg text-slate-900 group-hover:text-blue-600 transition-colors line-clamp-1 break-all">
+                        <h3 className="font-bold text-lg text-slate-800 group-hover:text-blue-700 transition-colors line-clamp-1 break-all">
                             {title}
                         </h3>
                         <div className="flex flex-wrap items-center gap-2 mt-1">
-                            {comp && <span className="text-sm text-slate-700 font-semibold">{comp}</span>}
-                            {comp && score && <span className="text-slate-300">•</span>}
+                            {comp && <span className="text-sm text-slate-600 font-medium">{comp}</span>}
+                            {comp && score && <span className="text-slate-400">•</span>}
                             <MatchScoreBadge score={score} />
                         </div>
                     </div>
                 </div>
                 <button
-                    className="p-2 rounded-full hover:bg-slate-50 text-slate-400 hover:text-red-500 transition-colors shrink-0"
+                    className="w-10 h-10 neu-icon-btn text-slate-400 shrink-0"
                     onClick={(e) => e.stopPropagation()}
                 >
                     <Heart className="w-5 h-5" />
                 </button>
             </div>
 
-            {/* Meta Detailed Info - Premium Glass Pills */}
-            <div className="flex flex-wrap items-center gap-2 mb-1">
+            {/* Meta Detailed Info - Neumorphic Badges */}
+            <div className="flex flex-wrap items-center gap-2 mb-4">
                 {/* Location Pill */}
                 {loc && (
-                    <div className="inline-flex items-center gap-1.5 px-3 py-1.5 rounded-full text-xs font-medium bg-slate-50 text-slate-600 border border-slate-100 hover:bg-slate-100 transition-colors">
-                        <MapPin className="w-3.5 h-3.5 text-slate-400" />
+                    <div className="neu-badge inline-flex items-center gap-1.5 px-3 py-1.5 text-xs">
+                        <MapPin className="w-3.5 h-3.5 text-blue-500" />
                         <span className="truncate max-w-[150px]">{loc}</span>
                     </div>
                 )}
 
-                {/* Pay Rate Pill (Glassy Emerald) */}
+                {/* Pay Rate Pill */}
                 {payRate && (
-                    <div className="inline-flex items-center gap-1.5 px-3 py-1.5 rounded-full text-xs font-medium bg-emerald-50/80 text-emerald-700 border border-emerald-100/50 hover:bg-emerald-100/80 backdrop-blur-sm transition-colors">
-                        <DollarSign className="w-3.5 h-3.5" />
-                        <span>{payRate}</span>
+                    <div className="neu-badge inline-flex items-center gap-1.5 px-3 py-1.5 text-xs">
+                        <DollarSign className="w-3.5 h-3.5 text-emerald-600" />
+                        <span className="text-emerald-700">{payRate}</span>
                     </div>
                 )}
 
-                {/* Job Type Pill (Glassy Blue) */}
+                {/* Job Type Pill */}
                 {jobType && (
-                    <div className="inline-flex items-center gap-1.5 px-3 py-1.5 rounded-full text-xs font-medium bg-blue-50/50 text-blue-700 border border-blue-100/50 hover:bg-blue-50 transition-colors">
-                        <Briefcase className="w-3.5 h-3.5" />
-                        <span>{jobType}</span>
+                    <div className="neu-badge inline-flex items-center gap-1.5 px-3 py-1.5 text-xs">
+                        <Briefcase className="w-3.5 h-3.5 text-purple-500" />
+                        <span className="text-purple-700">{jobType}</span>
                     </div>
                 )}
 
-                {/* Remote Option Pill (Glassy Purple) */}
+                {/* Remote Option Pill */}
                 {remoteOption && (
-                    <div className="inline-flex items-center gap-1.5 px-3 py-1.5 rounded-full text-xs font-medium bg-purple-50/50 text-purple-700 border border-purple-100/50 hover:bg-purple-50 transition-colors">
+                    <div className="neu-badge inline-flex items-center gap-1.5 px-3 py-1.5 text-xs">
                         <span className="w-2 h-2 bg-purple-500 rounded-full"></span>
-                        <span>{remoteOption}</span>
+                        <span className="text-purple-700">{remoteOption}</span>
                     </div>
                 )}
 
-                {/* Posted Date Pill (Simple Grey) */}
+                {/* Posted Date Pill */}
                 {postedAt && (
-                    <div className="inline-flex items-center gap-1.5 px-3 py-1.5 rounded-full text-xs font-medium bg-gray-50 text-slate-500 border border-gray-100">
+                    <div className="neu-badge inline-flex items-center gap-1.5 px-3 py-1.5 text-xs">
                         <Clock className="w-3.5 h-3.5 text-slate-400" />
-                        <span>{postedAt}</span>
+                        <span className="text-slate-500">{postedAt}</span>
                     </div>
                 )}
             </div>
 
             {/* Footer */}
-            <div className="flex items-center justify-between pt-4 border-t border-gray-50">
+            <div className="flex items-center justify-between pt-4 border-t border-slate-100">
                 <div className="flex -space-x-2">
-                    <span className="px-2.5 py-1 bg-slate-100 text-xs text-slate-600 rounded-lg font-medium border border-slate-200">
+                    <span className="neu-badge px-3 py-1 text-xs text-slate-500 uppercase tracking-wider">
                         {badgeText}
                     </span>
                 </div>
 
-                <button className="text-sm font-semibold text-blue-600 group-hover:underline flex items-center gap-1 group/btn transition-all">
+                <div className="neu-btn px-4 py-2 text-sm flex items-center gap-2">
                     View Details
-                    <ChevronRight className="w-4 h-4 group-hover/btn:translate-x-0.5 transition-transform" />
-                </button>
+                    <ChevronRight className="w-4 h-4" />
+                </div>
             </div>
         </div>
     );

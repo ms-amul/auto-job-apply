@@ -1,8 +1,6 @@
 'use client';
 
-import { Sparkles } from 'lucide-react';
 
-import { theme } from '@/utils/theme';
 
 export default function PageHeader({
     title,

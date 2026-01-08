@@ -51,7 +51,6 @@ export default function BrowseJobsPage() {
                 <PageHeader
                     badge="AI Powered Matches"
                     badgeIcon={Sparkles}
-                    badgeClassName="bg-purple-100 text-purple-700"
                     title="Recommended"
                     highlight="Opportunities"
                     description="We've analyzed your profile and found these roles that perfectly match your skills and career goals."

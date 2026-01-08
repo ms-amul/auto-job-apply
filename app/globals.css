@@ -2,7 +2,14 @@
 
 body,
 html {
-  background-color: var(--background-start);
+  /* Premium Background Gradient */
+  background:
+    radial-gradient(circle at 0% 0%, var(--background-end) 0%, transparent 60%),
+    radial-gradient(circle at 100% 100%, var(--background-end) 0%, transparent 60%),
+    var(--background-start);
+  background-attachment: fixed;
+  /* Ensures gradient stays while scrolling */
+
   color: #0f172a;
   /* Slate-900 default text */
   /* user-select: none;
@@ -79,23 +86,139 @@ html {
 }
 
 /* Neumorphic Card */
+/* Neumorphic Card - Premium Popped Look */
 .neu-card {
-  background: #f8fafc;
-  /* Matches slate-50 background */
+  background: linear-gradient(145deg, #ffffff, #eff6ff);
+  /* Subtle light direction */
   box-shadow:
-    -8px -8px 20px 0px rgba(255, 255, 255, 1),
-    8px 8px 20px 0px rgba(13, 54, 143, 0.08);
-  /* slight blue tint in shadow */
+    8px 8px 16px rgba(13, 54, 143, 0.08),
+    /* Deep shadow with tint */
+    -8px -8px 16px rgba(255, 255, 255, 1);
+  /* White highlight */
   border-radius: 1rem;
+  border: 1px solid rgba(255, 255, 255, 0.8);
+  /* Sharp edge highlight */
+  transition: all 0.4s cubic-bezier(0.175, 0.885, 0.32, 1.275);
+  /* Bouncy pop effect */
+}
+
+.neu-card:hover {
+  /* Removed scale/pop effect as per request */
+  box-shadow:
+    16px 16px 32px rgba(13, 54, 143, 0.12),
+    -16px -16px 32px rgba(255, 255, 255, 1);
+  border-color: rgba(255, 255, 255, 1);
+  z-index: 10;
+}
+
+/* Neumorphic Elements - Soft & Blended */
+.neu-icon {
+  background: #ecf0f3;
+  /* Slightly darker than white to show depth */
+  border-radius: 12px;
+  box-shadow: inset 3px 3px 6px #d1d9e6, inset -3px -3px 6px #ffffff;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  border: 1px solid rgba(255, 255, 255, 0.4);
+}
+
+.neu-badge {
+  background: linear-gradient(135deg, #f0f4f8, #ffffff);
+  /* Stronger, cleaner pop like the reference screenshot */
+  box-shadow:
+    6px 6px 12px rgba(166, 175, 194, 0.2),
+    inset -6px -6px 12px rgba(255, 255, 255, 1);
+  border-radius: 9999px;
+  /* Subtle border to define the shape */
+  border: 1px solid rgba(255, 255, 255, 0.8);
+  color: #475569;
+  font-weight: 600;
+  padding: 0.5rem 1rem;
+  /* More breathing room */
+}
+
+.neu-btn {
+  background: linear-gradient(145deg, #ffffff, #eff6ff);
+  cursor: pointer;
+  /* Softer button shadow */
+  box-shadow: 3px 3px 7px rgba(13, 54, 143, 0.08), -3px -3px 7px #ffffff;
+  border-radius: 12px;
+  color: #2563eb;
+  font-weight: 600;
   border: 1px solid rgba(255, 255, 255, 0.6);
   transition: all 0.3s cubic-bezier(0.4, 0, 0.2, 1);
 }
 
-.neu-card:hover {
-  transform: translateY(-2px);
-  box-shadow:
-    -12px -12px 24px 0px rgba(255, 255, 255, 1),
-    12px 12px 24px 0px rgba(13, 54, 143, 0.12);
+/* Card Hover triggers Button Animation */
+.neu-card:hover .neu-btn {
+  background: linear-gradient(145deg, #eff6ff, #ffffff);
+  box-shadow: 5px 5px 10px rgba(13, 54, 143, 0.1), -5px -5px 10px #ffffff;
+  color: #1d4ed8;
+  /* Darker blue */
+  border-color: rgba(37, 99, 235, 0.2);
+}
+
+/* Button Internal Hover */
+.neu-btn:hover {
+  box-shadow: 5px 5px 10px rgba(13, 54, 143, 0.15), -5px -5px 10px #ffffff;
+}
+
+.neu-btn:active {
+  transform: translateY(0);
+  box-shadow: inset 2px 2px 4px rgba(13, 54, 143, 0.1), inset -2px -2px 4px #ffffff;
+}
+
+/* Neumorphic IconButton (Circular) */
+.neu-icon-btn {
+  background: linear-gradient(145deg, #ffffff, #eff6ff);
+  box-shadow: 3px 3px 6px rgba(13, 54, 143, 0.06), -3px -3px 6px #ffffff;
+  border-radius: 50%;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  border: 1px solid rgba(255, 255, 255, 0.6);
+  transition: all 0.2s ease;
+}
+
+.neu-card:hover .neu-icon-btn {
+  color: #ef4444;
+  /* Heart turns red on card hover */
+}
+
+.neu-icon-btn:hover {
+  transform: scale(1.05);
+  box-shadow: 4px 4px 8px rgba(13, 54, 143, 0.1), -4px -4px 8px #ffffff;
+  color: #dc2626;
+  /* Darker red */
+}
+
+.neu-icon-btn:active {
+  transform: scale(0.95);
+  box-shadow: inset 2px 2px 4px rgba(13, 54, 143, 0.1), inset -2px -2px 4px #ffffff;
+}
+
+/* Neumorphic Input (Inset) */
+.neu-input {
+  background: #ecf0f3;
+  box-shadow: inset 5px 5px 10px #d1d9e6, inset -5px -5px 10px #ffffff;
+  border-radius: 12px;
+  border: 1px solid rgba(255, 255, 255, 0.4);
+  color: #334155;
+  transition: all 0.2s ease;
+}
+
+.neu-input:focus {
+  box-shadow: inset 3px 3px 6px #d1d9e6, inset -3px -3px 6px #ffffff;
+  border-color: rgba(37, 99, 235, 0.5);
+  /* Blue highlight */
+  outline: none;
+}
+
+.neu-pressed {
+  background: #ecf0f3;
+  box-shadow: inset 5px 5px 10px #d1d9e6, inset -5px -5px 10px #ffffff;
+  border-radius: 12px;
 }
 
 /* Smooth Scrollbar */

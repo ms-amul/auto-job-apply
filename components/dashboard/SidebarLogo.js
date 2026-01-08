@@ -30,7 +30,7 @@ export default function SidebarLogo({ isOpen }) {
                             boxShadow: `0 4px 16px ${theme.accentPrimary}30`,
                         }}
                     >
-                        <span className="text-white font-bold text-lg">R</span>
+                        <span className="text-white font-bold text-lg">RW</span>
                     </div>
                 </Link>
             )}
