@@ -181,7 +181,7 @@ function ApplicantDashboard({ user, stats, recentApplications }) {
     <div className="space-y-4">
       {/* Header */}
       <PageHeader
-        title="Overview"
+        title="Welcome back,"
         highlight={user?.name?.split(' ')[0]}
         description="Your job search activity at a glance"
       />
