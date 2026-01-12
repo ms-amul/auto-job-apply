@@ -78,98 +78,13 @@ export const brand = {
  * @param {Function} options.theme - Theme object with getAccentGradient method
  * @returns {JSX.Element} - Styled logo component
  */
-export function Logo({ 
-  size = 'md', 
-  initials = brand.logo.initials,
-  className = '',
-  style = {},
-  theme = null 
+export function Logo({
+  size = 'md',
 } = {}) {
   const sizeConfig = brand.logo.sizes[size] || brand.logo.sizes.md;
-  
-  // Premium two-toned gradient - combines theme colors with sophisticated tones
-  // First tone: Deep rich color (primary)
-  // Second tone: Elegant complementary color (secondary)
-  const primaryColor = theme?.accentPrimary || '#1e40af';
-  const secondaryColor = theme?.accentSecondary || '#4f46e5';
-  
-  // Create premium two-toned gradient with depth
-  const premiumGradient = `linear-gradient(135deg, 
-    ${primaryColor} 0%, 
-    ${secondaryColor} 50%, 
-    ${primaryColor} 100%
-  )`;
-  
-  // Secondary gradient layer for depth
-  const depthGradient = `radial-gradient(circle at 30% 30%, 
-    rgba(255, 255, 255, 0.15) 0%, 
-    transparent 50%
-  )`;
 
   return (
-    <div
-      className={`
-        ${sizeConfig.container}
-        rounded-2xl
-        flex items-center justify-center
-        relative overflow-hidden
-        border border-white/20
-        ${className}
-      `}
-      style={{
-        background: premiumGradient,
-        boxShadow: `
-          0 8px 32px -4px ${primaryColor}40,
-          0 4px 16px -2px rgba(0, 0, 0, 0.2),
-          inset 0 1px 0 0 rgba(255, 255, 255, 0.4),
-          inset 0 -1px 0 0 rgba(0, 0, 0, 0.1)
-        `,
-        ...style,
-      }}
-    >
-      {/* Depth gradient layer */}
-      <div 
-        className="absolute inset-0 pointer-events-none"
-        style={{
-          background: depthGradient,
-        }}
-      />
-      
-      {/* Premium glass reflection - top left shine */}
-      <div className="absolute inset-0 bg-linear-to-br from-white/30 via-white/10 to-transparent pointer-events-none" />
-      
-      {/* Secondary glass reflection - subtle bottom right */}
-      <div className="absolute inset-0 bg-linear-to-tl from-white/10 via-transparent to-transparent pointer-events-none" />
-      
-      {/* Inner glow effect */}
-      <div 
-        className="absolute inset-0 rounded-2xl pointer-events-none"
-        style={{
-          boxShadow: `inset 0 0 20px ${primaryColor}20`,
-        }}
-      />
-      
-      {/* Premium border highlight */}
-      <div className="absolute inset-0 rounded-2xl border border-white/30 pointer-events-none" />
-      
-      {/* Initials with premium styling */}
-      <span 
-        className={`${sizeConfig.text} text-white font-extrabold relative z-10 tracking-tighter`}
-        style={{
-          textShadow: `
-            0 1px 2px rgba(0, 0, 0, 0.3),
-            0 0 8px ${primaryColor}60,
-            inset 0 1px 0 rgba(255, 255, 255, 0.2)
-          `,
-          letterSpacing: '-0.02em',
-        }}
-      >
-        {initials}
-      </span>
-      
-      {/* Subtle animated shimmer on hover */}
-      <div className="absolute inset-0 bg-linear-to-r from-transparent via-white/10 to-transparent opacity-0 hover:opacity-100 transition-opacity duration-700 pointer-events-none" />
-    </div>
+    <img src={brand.logo.imagePath} alt={brand.getName()} className={`w-8 h-8 ${sizeConfig.container}`} />
   );
 }
 
@@ -178,14 +93,14 @@ export function Logo({
  * Returns a logo using the image path if available
  * Falls back to initials logo if image not found
  */
-export function LogoImage({ 
+export function LogoImage({
   size = 'md',
   className = '',
   alt = brand.getName(),
-  ...props 
+  ...props
 } = {}) {
   const sizeConfig = brand.logo.sizes[size] || brand.logo.sizes.md;
-  
+
   return (
     <img
       src={brand.logo.imagePath}

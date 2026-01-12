@@ -2,6 +2,7 @@
 
 import { useEffect, useRef, useState } from 'react';
 import { useRouter } from 'next/navigation';
+import { useSession } from 'next-auth/react';
 import Container from '../Container';
 import CinematicPlayer from '../ui/CinematicPlayer';
 import { ArrowRight, Play, Sparkles, Star, Trophy, Rocket, Send, Mail, Target, PartyPopper, Search, Briefcase, Palette } from 'lucide-react';
@@ -11,6 +12,7 @@ import { brand } from '../../utils/brand';
 
 export default function HeroParallax() {
   const router = useRouter();
+  const { status } = useSession();
   const [scrollY, setScrollY] = useState(0);
   const [particles, setParticles] = useState([]);
   const [isVideoOpen, setIsVideoOpen] = useState(false);
@@ -213,27 +215,45 @@ export default function HeroParallax() {
                 transform: `translateY(${parallaxSpeed * 0.1}px)`,
               }}
             >
-              <button
-                type="button"
-                onClick={() => router.push('/signup')}
-                className="cursor-pointer relative group text-white px-6 py-3 rounded-full text-sm font-semibold flex items-center justify-center gap-2 shadow-lg overflow-hidden hover:shadow-xl transition-shadow"
-                style={{
-                  background: theme.getAccentGradient(90),
-                  boxShadow: `0 15px 30px -8px ${theme.accentPrimary}80`,
-                }}
-              >
-                <span className="relative z-10 flex items-center gap-2">
-                  Start Applying for Free
-                  <ArrowRight className="w-4 h-4" />
-                </span>
-                {/* Glass shine effect */}
-                <div className="absolute inset-0" style={{ background: 'linear-gradient(90deg, transparent, rgba(255,255,255,0.2), transparent)' }}></div>
-              </button>
-
+              {status === 'authenticated' ? (
+                <button
+                  type="button"
+                  onClick={() => router.push('/dashboard')}
+                  className="cursor-pointer relative group text-white px-6 py-3 rounded-full text-sm font-semibold flex items-center justify-center gap-2 shadow-lg overflow-hidden hover:shadow-xl transition-shadow"
+                  style={{
+                    background: theme.getAccentGradient(90),
+                    boxShadow: `0 15px 30px -8px ${theme.accentPrimary}80`,
+                  }}
+                >
+                  <span className="relative z-10 flex items-center gap-2">
+                    Go to Dashboard
+                    <ArrowRight className="w-4 h-4" />
+                  </span>
+                  {/* Glass shine effect */}
+                  <div className="absolute inset-0" style={{ background: 'linear-gradient(90deg, transparent, rgba(255,255,255,0.2), transparent)' }}></div>
+                </button>
+              ) : (
+                <button
+                  type="button"
+                  onClick={() => router.push('/signup')}
+                  className="cursor-pointer relative group text-white px-6 py-3 rounded-full text-sm font-semibold flex items-center justify-center gap-2 shadow-lg overflow-hidden hover:shadow-xl transition-shadow"
+                  style={{
+                    background: theme.getAccentGradient(90),
+                    boxShadow: `0 15px 30px -8px ${theme.accentPrimary}80`,
+                  }}
+                >
+                  <span className="relative z-10 flex items-center gap-2">
+                    Start Applying for Free
+                    <ArrowRight className="w-4 h-4" />
+                  </span>
+                  {/* Glass shine effect */}
+                  <div className="absolute inset-0" style={{ background: 'linear-gradient(90deg, transparent, rgba(255,255,255,0.2), transparent)' }}></div>
+                </button>
+              )}
               <button
                 type="button"
                 onClick={() => setIsVideoOpen(true)}
-                className="cursor-pointer relative bg-white/60 backdrop-blur-xl border-2 border-white/80 text-gray-900 px-6 py-3 rounded-full text-sm font-semibold flex items-center justify-center gap-2 shadow-md overflow-hidden hover:shadow-lg transition-all hover:scale-105 active:scale-95"
+                className="cursor-pointer relative bg-white/60 backdrop-blur-xl border-2 border-white/80 text-gray-900 px-6 py-3 rounded-full text-sm font-semibold flex items-center justify-center gap-2 shadow-md overflow-hidden hover:shadow-lg transition-all active:scale-95"
                 style={{
                   boxShadow: '0 8px 20px -4px rgba(0, 0, 0, 0.15), inset 0 1px 0 0 rgba(255, 255, 255, 0.8)',
                 }}
@@ -449,7 +469,7 @@ export default function HeroParallax() {
         videoId="DWHQl3rTtwo"
         title={`${brand.getName()} Demo`}
       />
-    </section>
+    </section >
   );
 }
 

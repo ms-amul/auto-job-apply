@@ -140,22 +140,24 @@ export default function SettingsPage() {
 
     setSaving(true);
     try {
-      // TODO: Implement change password API
-      // const response = await fetch(`/api/auth/change-password`, {
-      //   method: 'POST',
-      //   headers: { 'Content-Type': 'application/json' },
-      //   body: JSON.stringify({
-      //     currentPassword: passwordData.currentPassword,
-      //     newPassword: passwordData.newPassword,
-      //   }),
-      // });
+      const response = await fetch(`/api/auth/change-password`, {
+        method: 'POST',
+        headers: { 'Content-Type': 'application/json' },
+        body: JSON.stringify({
+          currentPassword: passwordData.currentPassword,
+          newPassword: passwordData.newPassword,
+        }),
+      });
 
-      // Simulate API call
-      await new Promise(resolve => setTimeout(resolve, 1000));
+      const data = await response.json();
 
-      toast.success('Password changed successfully!');
-      setShowChangePasswordModal(false);
-      setPasswordData({ currentPassword: '', newPassword: '', confirmPassword: '' });
+      if (data.success) {
+        toast.success('Password changed successfully!');
+        setShowChangePasswordModal(false);
+        setPasswordData({ currentPassword: '', newPassword: '', confirmPassword: '' });
+      } else {
+        toast.error(data.error || 'Failed to change password');
+      }
     } catch (error) {
       console.error('Error changing password:', error);
       toast.error('Failed to change password');

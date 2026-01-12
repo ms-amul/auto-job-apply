@@ -1,14 +1,11 @@
 'use client';
 
-import { useState } from 'react';
-import Container from './Container';
-import SignInModal from './auth/SignInModal';
-import { Sparkles, ArrowUpRight, Twitter, Linkedin, Github } from 'lucide-react';
-import { theme } from '@/utils/theme';
 import { brand, Logo } from '@/utils/brand';
+import { theme } from '@/utils/theme';
+import { ArrowUpRight, Github, Linkedin, Sparkles, Twitter } from 'lucide-react';
+import Container from './Container';
 
 export default function Footer() {
-  const [isSignInOpen, setIsSignInOpen] = useState(false);
 
   return (
     <>
@@ -75,14 +72,6 @@ export default function Footer() {
                       Impact
                     </a>
                   </div>
-                  <div>
-                    <button
-                      onClick={() => setIsSignInOpen(true)}
-                      className="text-white/70 hover:text-white text-base transition-colors"
-                    >
-                      Get Started
-                    </button>
-                  </div>
                 </div>
               </div>
             </div>
@@ -107,7 +96,7 @@ export default function Footer() {
 
               <div className="flex items-center gap-6">
                 {[
-                  { name: 'LinkedIn', icon: Linkedin, href: '#' },
+                  { name: 'LinkedIn', icon: Linkedin, href: 'https://www.linkedin.com/company/rangam-inc/posts/?feedView=all' },
                   { name: 'Twitter', icon: Twitter, href: '#' },
                   { name: 'GitHub', icon: Github, href: '#' },
                 ].map((social) => {
@@ -128,8 +117,6 @@ export default function Footer() {
           </div>
         </Container>
       </footer>
-
-      <SignInModal isOpen={isSignInOpen} onClose={() => setIsSignInOpen(false)} />
     </>
   );
 }

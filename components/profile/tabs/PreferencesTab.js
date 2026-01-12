@@ -270,13 +270,13 @@ export default function PreferencesTab({ userId }) {
               <div className="absolute inset-0 h-3 my-auto bg-slate-100 rounded-full overflow-hidden border border-white">
                 <div
                   className="h-full bg-linear-to-r from-blue-500 to-indigo-600 rounded-full transition-all duration-300"
-                  style={{ width: `${((data.min_payrate - 25) / (200 - 25)) * 100}%` }}
+                  style={{ width: `${((data.min_payrate - 10) / (200 - 10)) * 100}%` }}
                 />
               </div>
 
               <input
                 type="range"
-                min="25"
+                min="10"
                 max="200"
                 step="5"
                 value={data.min_payrate}
@@ -288,7 +288,7 @@ export default function PreferencesTab({ userId }) {
               <div
                 className="absolute w-6 h-6 bg-white border-2 border-blue-500 rounded-full shadow-lg pointer-events-none transition-all duration-300 transform group-hover:scale-110"
                 style={{
-                  left: `calc(${((data.min_payrate - 25) / (200 - 25)) * 100}% - 12px)`,
+                  left: `calc(${((data.min_payrate - 10) / (200 - 10)) * 100}% - 12px)`,
                   top: '50%',
                   marginTop: '-12px'
                 }}
@@ -298,7 +298,7 @@ export default function PreferencesTab({ userId }) {
             </div>
 
             <div className="flex justify-between px-1">
-              <span className="text-[10px] font-bold text-slate-400">$25/hr</span>
+              <span className="text-[10px] font-bold text-slate-400">$10/hr</span>
               <span className="text-[10px] font-bold text-slate-400">$200/hr</span>
             </div>
           </div>

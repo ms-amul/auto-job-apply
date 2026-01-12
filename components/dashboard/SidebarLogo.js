@@ -23,15 +23,7 @@ export default function SidebarLogo({ isOpen }) {
                 </Link>
             ) : (
                 <Link href="/" className="w-full flex justify-center group">
-                    <div
-                        className="w-12 h-12 rounded-xl flex items-center justify-center transition-all duration-300 shadow-lg"
-                        style={{
-                            background: theme.getAccentGradient(135),
-                            boxShadow: `0 4px 16px ${theme.accentPrimary}30`,
-                        }}
-                    >
-                        <span className="text-white font-bold text-lg">RW</span>
-                    </div>
+                    <img src="/logo.png" alt="Logo" className="w-10 h-10" />
                 </Link>
             )}
         </div>
