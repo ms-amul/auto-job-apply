@@ -7,8 +7,6 @@
  */
 
 import { NextResponse } from 'next/server';
-import stats from '@/data/stats.json';
-import users from '@/data/users.json';
 
 export async function GET(request, { params }) {
   try {
@@ -18,8 +16,10 @@ export async function GET(request, { params }) {
     await new Promise(resolve => setTimeout(resolve, 400));
 
     // Find user
-    const user = users.users.find(u => u.id === userId);
-    
+    const user = await prisma.auto_apply_cand.findUnique({
+      where: { cand_id: parseInt(userId) },
+    });
+
     if (!user) {
       return NextResponse.json(
         { success: false, error: 'User not found' },
@@ -56,9 +56,9 @@ export async function GET(request, { params }) {
   } catch (error) {
     console.error('Get stats error:', error);
     return NextResponse.json(
-      { 
-        success: false, 
-        error: 'Failed to fetch stats' 
+      {
+        success: false,
+        error: 'Failed to fetch stats'
       },
       { status: 500 }
     );
