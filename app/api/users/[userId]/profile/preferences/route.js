@@ -12,7 +12,7 @@ import prisma from '@/lib/prisma';
 export async function GET(_request, { params }) {
   try {
     const session = await getServerSession(authOptions);
-    
+
     if (!session?.user?.candidate_id) {
       return NextResponse.json(
         { success: false, error: 'Unauthorized' },
@@ -40,6 +40,7 @@ export async function GET(_request, { params }) {
         race_id: true,
         disability_id: true,
         veteran_disclosure_id: true,
+        Preferred_MinimumPayrate_PerHour: true,
       },
     });
 
@@ -75,7 +76,7 @@ export async function GET(_request, { params }) {
         // Career Preferences
         relocation: candidate.relocation ?? false,
         experience: candidate.experience ?? 0,
-        
+
         // Diversity & Inclusion - return both ID and text for proper handling
         gender_id: candidate.gender_id,
         gender: gender?.gender_text || '',
@@ -87,6 +88,7 @@ export async function GET(_request, { params }) {
         disability: disability?.disability_text || '',
         veteran_disclosure_id: candidate.veteran_disclosure_id,
         veteran: veteran?.veteran_disclosure_text || '',
+        min_payrate: candidate.Preferred_MinimumPayrate_PerHour || 25,
       },
     });
   } catch (error) {
@@ -102,7 +104,7 @@ export async function GET(_request, { params }) {
 export async function PUT(request, { params }) {
   try {
     const session = await getServerSession(authOptions);
-    
+
     if (!session?.user?.candidate_id) {
       return NextResponse.json(
         { success: false, error: 'Unauthorized' },
@@ -133,6 +135,7 @@ export async function PUT(request, { params }) {
         race_id: body.race_id || null,
         disability_id: body.disability_id || null,
         veteran_disclosure_id: body.veteran_disclosure_id || null,
+        Preferred_MinimumPayrate_PerHour: body.min_payrate ? parseFloat(body.min_payrate) : null,
         profile_updated_on: now,
         updated_at: now,
       },

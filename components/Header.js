@@ -1,12 +1,11 @@
 'use client';
 
-import { useState, useEffect } from 'react';
-import { Sparkles, Menu, X, LayoutDashboard, User } from 'lucide-react';
-import { useRouter } from 'next/navigation';
+import { LayoutDashboard, Menu, Sparkles, X } from 'lucide-react';
 import { useSession } from 'next-auth/react';
-import SignInModal from './auth/SignInModal';
+import { useRouter } from 'next/navigation';
+import { useEffect, useState } from 'react';
 import { theme } from '../utils/theme';
-import { brand, Logo } from '../utils/brand';
+import SignInModal from './auth/SignInModal';
 
 export default function Header() {
   const router = useRouter();
@@ -67,7 +66,7 @@ export default function Header() {
   const navLinks = [
     { href: '#features', label: 'Features' },
     { href: '#how-it-works', label: 'How it Works' },
-    { href: '#pricing', label: 'Pricing' },
+    { href: '#impact', label: 'Impact' },
   ];
 
   return (
@@ -108,7 +107,6 @@ export default function Header() {
           `}>
             {/* Logo */}
             <div className="flex items-center gap-2 group cursor-pointer">
-              <Logo size="sm" theme={theme} className="scale-125" />
               <div className="flex flex-col">
                 <img
                   src="/brand.png"
@@ -204,7 +202,7 @@ export default function Header() {
                       opacity: scrolled ? 0.3 : 0,
                     }}
                   ></div>
-                  
+
                   <button
                     onClick={() => router.push('/dashboard')}
                     className="group cursor-pointer relative px-5 py-2 rounded-full font-semibold transition-all duration-300 text-white flex items-center gap-2 text-sm hover:scale-105 hover:shadow-xl active:scale-95 overflow-hidden border border-white/20"

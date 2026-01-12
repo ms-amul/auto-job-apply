@@ -12,7 +12,7 @@ import prisma from '@/lib/prisma';
 export async function GET(_request, { params }) {
   try {
     const session = await getServerSession(authOptions);
-    
+
     if (!session?.user?.candidate_id) {
       return NextResponse.json(
         { success: false, error: 'Unauthorized' },
@@ -70,7 +70,7 @@ export async function GET(_request, { params }) {
 export async function PUT(request, { params }) {
   try {
     const session = await getServerSession(authOptions);
-    
+
     if (!session?.user?.candidate_id) {
       return NextResponse.json(
         { success: false, error: 'Unauthorized' },
@@ -81,6 +81,13 @@ export async function PUT(request, { params }) {
     const { userId } = await params;
     const candidateId = parseInt(userId);
 
+    if (isNaN(candidateId)) {
+      return NextResponse.json(
+        { success: false, error: 'Invalid candidate ID' },
+        { status: 400 }
+      );
+    }
+
     // Verify user owns this resource
     if (session.user.candidate_id !== candidateId) {
       return NextResponse.json(
@@ -90,25 +97,25 @@ export async function PUT(request, { params }) {
     }
 
     const body = await request.json();
-    const {
-      emailNotifications,
-      smsNotifications,
-      jobAlerts,
-      weeklyDigest,
-    } = body;
 
-    // Update notification preferences
-    // Note: jobAlerts and weeklyDigest map to notify_email for now
-    const notify_email = emailNotifications ?? jobAlerts ?? weeklyDigest ?? true;
-    const notify_sms = smsNotifications ?? false;
+    // Build update object surgically
+    const updateData = {
+      updated_at: new Date(),
+    };
+
+    if (body.emailNotifications !== undefined) updateData.notify_email = body.emailNotifications;
+    if (body.smsNotifications !== undefined) updateData.notify_sms = body.smsNotifications;
+
+    // If jobAlerts or weeklyDigest are provided, they also influence notify_email for now
+    // but only if emailNotifications itself wasn't explicitly provided
+    if (body.emailNotifications === undefined) {
+      if (body.jobAlerts !== undefined) updateData.notify_email = body.jobAlerts;
+      else if (body.weeklyDigest !== undefined) updateData.notify_email = body.weeklyDigest;
+    }
 
     const updated = await prisma.auto_apply_cand.update({
       where: { cand_id: candidateId },
-      data: {
-        notify_email,
-        notify_sms,
-        updated_at: new Date(),
-      },
+      data: updateData,
       select: {
         notify_email: true,
         notify_sms: true,

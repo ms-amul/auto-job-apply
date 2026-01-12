@@ -1,7 +1,6 @@
 'use client';
 
-import { CheckCircle, Building2, MapPin, Zap } from 'lucide-react';
-import { theme } from '@/utils/theme';
+import { Building2, CheckCircle, MapPin, Zap } from 'lucide-react';
 
 export default function ApplicationHistoryItem({ item, index }) {
   return (
@@ -9,20 +8,9 @@ export default function ApplicationHistoryItem({ item, index }) {
       <div className="flex flex-col sm:flex-row sm:items-center gap-5">
         {/* Index & Logo Section */}
         <div className="flex items-center gap-4">
-          <div className="flex items-center justify-center w-10 h-10 rounded-2xl bg-slate-900 text-white text-sm font-black shrink-0 shadow-lg">
-            {index + 1}
-          </div>
 
           <div className="w-14 h-14 rounded-2xl bg-white border border-slate-100 flex items-center justify-center overflow-hidden shrink-0 shadow-sm transition-transform duration-500">
-            {item.job.companyLogo ? (
-              <img
-                src={item.job.companyLogo}
-                alt={item.job.company}
-                className="w-10 h-10 object-contain"
-              />
-            ) : (
-              <Building2 className="w-7 h-7 text-slate-300" />
-            )}
+            <Building2 className="w-7 h-7 text-slate-300" />
           </div>
         </div>
 

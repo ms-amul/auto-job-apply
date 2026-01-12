@@ -56,14 +56,12 @@ const JobCard = ({ job, onClick }) => {
             onClick={onClick}
             className="neu-card group relative p-4 md:p-6 cursor-pointer overflow-hidden"
         >
-            {/* Accent Top Line - Animated Center Expand with Glow */}
-            <div className="absolute top-0 left-0 right-0 h-1 bg-gradient-to-r from-blue-500 via-purple-500 to-pink-500 transform scale-x-0 group-hover:scale-x-100 transition-transform duration-500 ease-out origin-center shadow-[0_0_20px_rgba(168,85,247,0.6)]" />
 
             {/* Header Section */}
             <div className="flex justify-between items-start gap-4 mb-5">
                 <div className="flex gap-4">
-                    <div className="w-12 h-12 md:w-14 md:h-14 shrink-0 neu-icon">
-                        <Building2 className="w-6 h-6 md:w-7 md:h-7 text-blue-500" />
+                    <div className="w-12 h-12 md:w-14 md:h-14 shrink-0 neu-icon neu-liquid-fill">
+                        <Building2 className="relative w-6 h-6 md:w-7 md:h-7 text-blue-500 group-hover:text-white transition-colors duration-300 z-10" />
                     </div>
                     <div>
                         <h3 className="font-bold text-lg text-slate-800 group-hover:text-blue-700 transition-colors line-clamp-1 break-all">

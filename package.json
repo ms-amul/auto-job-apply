@@ -9,6 +9,8 @@
     "lint": "eslint",
     "postinstall": "prisma generate",
     "prisma:generate": "prisma generate",
+    "db:cleanup": "node scripts/cleanup-db.js",
+    "seed:medical": "node scripts/seed-prod-jobs.js",
     "prisma:studio": "prisma studio",
     "prisma:pull": "prisma db pull",
     "prisma:push": "prisma db push"

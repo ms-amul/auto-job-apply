@@ -98,13 +98,15 @@ export default function AgentPage() {
     try {
       const userId = session.user.id || session.user.candidate_id?.toString();
 
-      const [agentRes, statsRes] = await Promise.all([
+      const [agentRes, statsRes, historyRes] = await Promise.all([
         fetch(`/api/agent/${userId}`),
         fetch(`/api/agent/${userId}/stats`),
+        fetch(`/api/applications/user/${userId}`),
       ]);
 
       const agentData = await agentRes.json();
       const statsData = await statsRes.json();
+      const historyData = await historyRes.json();
 
       if (agentData.success && agentData.agent) {
         setAgent(agentData.agent);
@@ -119,6 +121,20 @@ export default function AgentPage() {
 
       if (statsData.success) {
         setStats(statsData.stats);
+      }
+
+      if (historyData.success) {
+        // Filter history to only show agent applications
+        const agentHistory = (historyData.data || [])
+          .filter(app => app.source === 'agent')
+          .map(app => ({
+            id: app.id,
+            job: app.job,
+            appliedAt: new Date(app.appliedDate),
+            timeTaken: "2s", // Mock for existing items
+            status: 'success', // For UI display
+          }));
+        setApplicationHistory(agentHistory);
       }
     } catch (error) {
       console.error('Error loading agent:', error);
@@ -266,6 +282,10 @@ export default function AgentPage() {
     const startTime = Date.now();
 
     try {
+      // NOTE: Using mock data from MongoDB for now. 
+      // This simulation is temporary until the production job queue is fully ready.
+      // Configs are stored in Prisma (Postgres), but application logic remains in MongoDB mock.
+
       // Animate workflow steps BEFORE making API call
       await animateWorkflow();
 
@@ -316,7 +336,7 @@ export default function AgentPage() {
 
           setAgent(prev => ({ ...prev, status: 'paused' }));
         } else if (data.message === 'No matching jobs found') {
-          console.log('No matching jobs found');
+          toast.error('No new jobs matching your keywords were found in the database.');
         }
       }
     } catch (error) {
@@ -367,13 +387,14 @@ export default function AgentPage() {
         currentIndex++;
         workflowRef.current = setTimeout(animateStep, 600); // 0.6 seconds per step (faster for 30s cycle)
       };
-
       animateStep();
     });
   };
 
   const handleToggleAgent = async () => {
-    if (!agent || !agent.keywords || agent.keywords.length === 0) {
+    const isCurrentlyRunning = agent?.status === 'running';
+
+    if (!isCurrentlyRunning && (!agent || !agent.keywords || agent.keywords.length === 0)) {
       toast.error('Please configure the agent first');
       setShowConfig(true);
       return;
@@ -395,13 +416,10 @@ export default function AgentPage() {
 
       if (data.success) {
         setAgent({ ...agent, status: newStatus });
-        if (newStatus === 'paused') {
-          setApplicationHistory([]); // Clear history when paused
-          setDailyLimitReached(false); // Reset limit flag
-        } else {
-          setDailyLimitReached(false); // Reset when starting
-        }
-        toast.success(newStatus === 'running' ? 'Agent activated' : 'Agent paused');
+        // Always reset limit flag when toggling activation to allow fresh starts
+        setDailyLimitReached(false);
+
+        toast.success(newStatus === 'running' ? 'Agent Protocol Initiated' : 'Agent Protocol Terminated');
       } else {
         toast.error('Failed to update agent status');
       }
@@ -475,7 +493,7 @@ export default function AgentPage() {
         <Button
           onClick={handleToggleAgent}
           variant={isRunning ? 'danger' : 'primary'}
-          disabled={!isConfigured}
+          disabled={!isRunning && !isConfigured}
           className="h-10 px-4 rounded-xl cursor-pointer font-black text-sm uppercase tracking-widest shadow-2xl group"
         >
           {isRunning ? <Pause className="w-5 h-5" /> : <Play className="w-5 h-5 group-hover:animate-ping" />}
@@ -516,10 +534,8 @@ export default function AgentPage() {
         />
       )}
 
-      {/* Applications History */}
-      {isRunning && (
-        <ApplicationHistory applicationHistory={applicationHistory} />
-      )}
+      {/* Applications History - Always show if history exists */}
+      <ApplicationHistory applicationHistory={applicationHistory} />
 
       <div className="grid grid-cols-1 lg:grid-cols-2 gap-6">
         {/* Current Configuration */}

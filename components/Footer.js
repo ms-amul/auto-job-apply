@@ -69,10 +69,10 @@ export default function Footer() {
                   </div>
                   <div>
                     <a
-                      href="#pricing"
+                      href="#impact"
                       className="text-white/70 hover:text-white text-base transition-colors"
                     >
-                      Pricing
+                      Impact
                     </a>
                   </div>
                   <div>
@@ -97,7 +97,7 @@ export default function Footer() {
                     &copy; {new Date().getFullYear()} {brand.getName()}. All rights reserved.
                   </p>
                 </div>
-                
+
                 {/* Powered by Nexi - Highlighted */}
                 <div className="flex items-center gap-2 px-3 py-1.5 rounded-lg bg-white/5 border border-white/10">
                   <span className="text-xs text-white/50">Powered by</span>

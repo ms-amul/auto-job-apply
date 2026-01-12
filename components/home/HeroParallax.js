@@ -3,7 +3,7 @@
 import { useEffect, useRef, useState } from 'react';
 import { useRouter } from 'next/navigation';
 import Container from '../Container';
-import VideoModal from '../ui/VideoModal';
+import CinematicPlayer from '../ui/CinematicPlayer';
 import { ArrowRight, Play, Sparkles, Star, Trophy, Rocket, Send, Mail, Target, PartyPopper, Search, Briefcase, Palette } from 'lucide-react';
 import { useMobile } from '@/hooks/useMobile';
 import { theme } from '../../utils/theme';
@@ -55,7 +55,7 @@ export default function HeroParallax() {
   const shouldAnimate = !isReducedMotion;
 
   return (
-    <section 
+    <section
       ref={heroRef}
       className="relative min-h-screen flex items-center overflow-hidden"
       style={{
@@ -67,30 +67,30 @@ export default function HeroParallax() {
         {/* Base gradient overlay */}
         <div className="absolute inset-0" style={{ background: `radial-gradient(ellipse at top right, ${theme.accentPrimary}06, transparent 70%)` }}></div>
         <div className="absolute inset-0" style={{ background: `radial-gradient(ellipse at bottom left, ${theme.accentSecondary}04, transparent 70%)` }}></div>
-        
+
         {/* Multi-layered floating orbs - reduced on mobile */}
         {!isMobile && (
           <>
-            <div 
+            <div
               className={`absolute top-20 -left-20 w-96 h-96 rounded-full blur-3xl ${shouldAnimate ? 'animate-float' : ''}`}
-              style={{ 
+              style={{
                 background: theme.getAccentGradient(135),
                 opacity: 0.12,
                 transform: shouldAnimate ? `translate(${parallaxSpeed * 0.3}px, ${parallaxSpeed * 0.4}px) scale(${1 + scrollY * 0.0001})` : 'none',
               }}
             ></div>
-            <div 
+            <div
               className={`absolute top-40 -right-32 w-[500px] h-[500px] rounded-full blur-3xl ${shouldAnimate ? 'animate-float' : ''}`}
-              style={{ 
+              style={{
                 background: theme.getAccentGradient(45),
                 opacity: 0.1,
                 transform: shouldAnimate ? `translate(${parallaxSpeed * -0.5}px, ${parallaxSpeed * 0.6}px) scale(${1 + scrollY * 0.00012})` : 'none',
                 animationDelay: '1s',
               }}
             ></div>
-            <div 
+            <div
               className={`absolute bottom-20 left-1/4 w-[600px] h-[600px] rounded-full blur-3xl ${shouldAnimate ? 'animate-float' : ''}`}
-              style={{ 
+              style={{
                 background: theme.getAccentGradient(180),
                 opacity: 0.08,
                 transform: shouldAnimate ? `translate(${parallaxSpeed * 0.4}px, ${parallaxSpeed * -0.3}px) scale(${1 + scrollY * 0.00008})` : 'none',
@@ -119,7 +119,7 @@ export default function HeroParallax() {
 
         {/* Subtle grid overlay - disabled on mobile */}
         {!isMobile && (
-          <div 
+          <div
             className="absolute inset-0 opacity-[0.015]"
             style={{
               backgroundImage: 'repeating-linear-gradient(0deg, #000 0px, #000 1px, transparent 1px, transparent 40px), repeating-linear-gradient(90deg, #000 0px, #000 1px, transparent 1px, transparent 40px)',
@@ -132,7 +132,7 @@ export default function HeroParallax() {
       <Container>
         <div className="relative z-10 grid lg:grid-cols-2 gap-10 items-center pt-10">
           {/* Left Content - Premium Glass Design */}
-          <div 
+          <div
             className="text-center lg:text-left text-sm"
             style={{
               transform: `translateY(${parallaxSpeed * 0.2}px)`,
@@ -140,7 +140,7 @@ export default function HeroParallax() {
             }}
           >
             {/* Premium Glassmorphic Badge */}
-            <div 
+            <div
               className="inline-flex items-center gap-2 bg-white/60 backdrop-blur-xl border border-white/80 rounded-full px-3 py-2 mb-4 shadow-xl animate-fadeInUp"
               style={{
                 boxShadow: `0 10px 30px -5px ${theme.accentPrimary}4D, inset 0 1px 0 0 rgba(255, 255, 255, 0.8)`,
@@ -155,7 +155,7 @@ export default function HeroParallax() {
             </div>
 
             {/* Enhanced Heading with Parallax */}
-            <h1 
+            <h1
               className="text-3xl sm:text-4xl lg:text-5xl xl:text-6xl font-black text-gray-900 leading-tight mb-4 animate-fadeInUp tracking-tight"
               style={{
                 transform: `translateY(${parallaxSpeed * 0.05}px)`,
@@ -168,16 +168,16 @@ export default function HeroParallax() {
                 <span className="relative z-10 bg-clip-text text-transparent drop-shadow-sm" style={{ backgroundImage: theme.getAccentGradient(90) }}>
                   one click
                 </span>
-                <svg 
-                  className="absolute -bottom-1 left-0 w-full" 
-                  height="12" 
-                  viewBox="0 0 200 12" 
+                <svg
+                  className="absolute -bottom-1 left-0 w-full"
+                  height="12"
+                  viewBox="0 0 200 12"
                   fill="none"
                 >
-                  <path 
-                    d="M2 9C50 4 150 4 198 9" 
-                    stroke="url(#gradient)" 
-                    strokeWidth="3" 
+                  <path
+                    d="M2 9C50 4 150 4 198 9"
+                    stroke="url(#gradient)"
+                    strokeWidth="3"
                     strokeLinecap="round"
                   />
                   <defs>
@@ -190,11 +190,11 @@ export default function HeroParallax() {
               </span>
               {' '}away
             </h1>
-            
+
             {/* Enhanced Description */}
-            <p 
-              className="text-base sm:text-lg text-gray-700 mb-4 max-w-2xl mx-auto lg:mx-0 animate-fadeInUp font-medium leading-relaxed" 
-              style={{ 
+            <p
+              className="text-base sm:text-lg text-gray-700 mb-4 max-w-2xl mx-auto lg:mx-0 animate-fadeInUp font-medium leading-relaxed"
+              style={{
                 animationDuration: '1.2s',
                 animationDelay: '0.6s',
                 transform: `translateY(${parallaxSpeed * 0.08}px)`,
@@ -205,15 +205,15 @@ export default function HeroParallax() {
             </p>
 
             {/* Premium Glassmorphic Buttons */}
-            <div 
-              className="flex flex-col sm:flex-row gap-3 justify-center lg:justify-start mb-4 animate-fadeInUp" 
-              style={{ 
+            <div
+              className="flex flex-col sm:flex-row gap-3 justify-center lg:justify-start mb-4 animate-fadeInUp"
+              style={{
                 animationDuration: '1.2s',
                 animationDelay: '0.8s',
                 transform: `translateY(${parallaxSpeed * 0.1}px)`,
               }}
             >
-              <button 
+              <button
                 type="button"
                 onClick={() => router.push('/signup')}
                 className="cursor-pointer relative group text-white px-6 py-3 rounded-full text-sm font-semibold flex items-center justify-center gap-2 shadow-lg overflow-hidden hover:shadow-xl transition-shadow"
@@ -229,8 +229,8 @@ export default function HeroParallax() {
                 {/* Glass shine effect */}
                 <div className="absolute inset-0" style={{ background: 'linear-gradient(90deg, transparent, rgba(255,255,255,0.2), transparent)' }}></div>
               </button>
-              
-              <button 
+
+              <button
                 type="button"
                 onClick={() => setIsVideoOpen(true)}
                 className="cursor-pointer relative bg-white/60 backdrop-blur-xl border-2 border-white/80 text-gray-900 px-6 py-3 rounded-full text-sm font-semibold flex items-center justify-center gap-2 shadow-md overflow-hidden hover:shadow-lg transition-all hover:scale-105 active:scale-95"
@@ -245,7 +245,7 @@ export default function HeroParallax() {
           </div>
 
           {/* Right Content - Premium Glassmorphic Dashboard */}
-          <div 
+          <div
             className="relative hidden lg:block"
             style={{
               transform: `translateY(${parallaxSpeed * -0.3}px)`,
@@ -254,18 +254,18 @@ export default function HeroParallax() {
             <div className="relative w-full h-[600px]">
               {/* Background glow effects */}
               <div className="absolute inset-0">
-                <div 
+                <div
                   className="absolute top-0 left-0 w-96 h-96 rounded-full blur-3xl"
                   style={{ background: theme.getAccentGradient(135), opacity: 0.08, transform: `translate(${parallaxSpeed * 0.1}px, ${parallaxSpeed * 0.15}px)` }}
                 ></div>
-                <div 
+                <div
                   className="absolute bottom-0 right-0 w-80 h-80 rounded-full blur-3xl"
                   style={{ background: theme.getAccentGradient(30), opacity: 0.06, transform: `translate(${parallaxSpeed * -0.1}px, ${parallaxSpeed * -0.12}px)` }}
                 ></div>
               </div>
 
               {/* Main glassmorphic dashboard card - Light Theme */}
-              <div 
+              <div
                 className="absolute inset-0 rounded-3xl shadow-2xl p-4 overflow-hidden z-10"
                 style={{
                   transform: `translateY(${parallaxSpeed * 0.05}px)`,
@@ -276,10 +276,10 @@ export default function HeroParallax() {
               >
                 {/* Premium glass reflection layer */}
                 <div className="absolute inset-0 bg-linear-to-br from-white/40 via-transparent to-transparent pointer-events-none"></div>
-                
+
                 {/* Subtle accent gradient overlay */}
                 <div className="absolute inset-0 opacity-[0.03]" style={{ background: theme.getAccentGradient(135) }}></div>
-                
+
                 {/* Top highlight edge */}
                 <div className="absolute top-0 left-0 right-0 h-px bg-linear-to-r from-transparent via-gray-200 to-transparent"></div>
 
@@ -309,8 +309,8 @@ export default function HeroParallax() {
                     ].map((stat, i) => {
                       const IconComponent = stat.icon;
                       return (
-                        <div 
-                          key={i} 
+                        <div
+                          key={i}
                           className={`relative rounded-2xl p-5 shadow-xl overflow-hidden hover:scale-105 transition-transform duration-300`}
                           style={{
                             transform: `translateY(${parallaxSpeed * (0.02 + i * 0.005)}px)`,
@@ -322,10 +322,10 @@ export default function HeroParallax() {
                         >
                           {/* Premium glass reflection */}
                           <div className="absolute inset-0 bg-linear-to-br from-white/40 via-transparent to-transparent pointer-events-none"></div>
-                          
+
                           {/* Accent overlay */}
                           <div className="absolute inset-0 opacity-[0.03]" style={{ background: theme.getAccentGradient(135) }}></div>
-                          
+
                           <div className="relative z-10">
                             <div className="flex items-start justify-between mb-2">
                               <div className="w-9 h-9 rounded-xl flex items-center justify-center shadow-lg relative overflow-hidden" style={{ background: theme.getAccentGradient(135) }}>
@@ -343,7 +343,7 @@ export default function HeroParallax() {
                   </div>
 
                   {/* Premium progress section - Light Theme */}
-                  <div 
+                  <div
                     className="relative rounded-2xl p-5 shadow-xl overflow-hidden"
                     style={{
                       background: 'rgba(255, 255, 255, 0.6)',
@@ -353,14 +353,14 @@ export default function HeroParallax() {
                   >
                     {/* Premium glass reflection */}
                     <div className="absolute inset-0 bg-linear-to-br from-white/40 via-transparent to-transparent pointer-events-none"></div>
-                    
+
                     <div className="relative z-10">
                       <div className="flex items-center justify-between mb-3">
                         <span className="text-sm font-bold text-slate-900">Success Rate</span>
                         <span className="text-2xl font-black bg-clip-text text-transparent" style={{ backgroundImage: theme.getAccentGradient(90) }}>68%</span>
                       </div>
                       <div className="relative h-4 bg-gray-200/80 rounded-full overflow-hidden shadow-inner">
-                        <div 
+                        <div
                           className="absolute inset-y-0 left-0 rounded-full shadow-lg animate-progress-hero"
                           style={{ width: '68%', background: theme.getAccentGradient(90) }}
                         >
@@ -400,7 +400,7 @@ export default function HeroParallax() {
                   >
                     {/* Premium glass reflection layer */}
                     <div className="absolute inset-0 bg-linear-to-br from-white/40 via-transparent to-transparent pointer-events-none"></div>
-                    
+
                     <div className="relative z-10">
                       <div className="flex items-center gap-3 mb-4">
                         <div className="w-12 h-12 rounded-xl flex items-center justify-center shadow-xl relative overflow-hidden" style={{ background: theme.getAccentGradient(135) }}>
@@ -414,7 +414,7 @@ export default function HeroParallax() {
                         </div>
                       </div>
                       <div className="flex items-center justify-between pt-2.5 border-t border-gray-200">
-                        <span 
+                        <span
                           className="text-[10px] font-bold px-2.5 py-1 rounded-full"
                           style={{
                             background: `linear-gradient(135deg, ${theme.accentPrimary}15, ${theme.accentSecondary}10)`,
@@ -442,8 +442,8 @@ export default function HeroParallax() {
         </div>
       </div>
 
-      {/* Video Modal */}
-      <VideoModal 
+      {/* Cinematic Dock Player (Replaces Modal) */}
+      <CinematicPlayer
         isOpen={isVideoOpen}
         onClose={() => setIsVideoOpen(false)}
         videoId="DWHQl3rTtwo"

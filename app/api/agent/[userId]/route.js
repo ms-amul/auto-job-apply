@@ -18,20 +18,24 @@ export async function GET(_request, { params }) {
 
     const preferences = await prisma.auto_apply_agent_preferences.findUnique({
       where: { cand_id: candId },
+      include: {
+        auto_apply_cand: {
+          select: {
+            notify_email: true,
+            notify_sms: true,
+          }
+        }
+      }
     });
 
-    // Map database fields to application-friendly names if needed, 
-    // or return as is. The UI expects certain names.
     const agent = preferences ? {
       userId: preferences.cand_id.toString(),
       status: preferences.is_active ? 'running' : 'paused',
       dailyLimit: preferences.daily_application_limit,
       keywords: preferences.job_keywords,
       applyRecentFirst: preferences.apply_most_recent_jobs_first,
-      // Notifications are currently separate in schema, 
-      // but we can default them or fetch from candidate table if needed
-      emailNotifications: true,
-      smsNotifications: false,
+      emailNotifications: preferences.auto_apply_cand?.notify_email ?? true,
+      smsNotifications: preferences.auto_apply_cand?.notify_sms ?? false,
     } : null;
 
     return NextResponse.json({
@@ -63,34 +67,60 @@ export async function PUT(request, { params }) {
 
     const now = new Date();
 
-    // Upsert preferences in PostgreSQL
-    const updatedPref = await prisma.auto_apply_agent_preferences.upsert({
-      where: { cand_id: candId },
-      update: {
-        daily_application_limit: body.dailyLimit ?? 10,
-        job_keywords: body.keywords ?? [],
-        apply_most_recent_jobs_first: body.applyRecentFirst !== undefined ? body.applyRecentFirst : true,
-        is_active: body.status === 'running',
-        updated_at: now,
-      },
-      create: {
-        cand_id: candId,
-        daily_application_limit: body.dailyLimit ?? 10,
-        job_keywords: body.keywords ?? [],
-        apply_most_recent_jobs_first: body.applyRecentFirst !== undefined ? body.applyRecentFirst : true,
-        is_active: body.status === 'running',
-        created_at: now,
-        updated_at: now,
-      },
+    // Build update object dynamically to avoid resetting fields
+    const updateData = { updated_at: now };
+    if (body.dailyLimit !== undefined) updateData.daily_application_limit = body.dailyLimit;
+    if (body.keywords !== undefined) updateData.job_keywords = body.keywords;
+    if (body.applyRecentFirst !== undefined) updateData.apply_most_recent_jobs_first = body.applyRecentFirst;
+    if (body.status !== undefined) updateData.is_active = body.status === 'running';
+
+    // Use a transaction to update both preferences and candidate notification settings
+    const result = await prisma.$transaction(async (tx) => {
+      // 1. Upsert preferences
+      const updatedPref = await tx.auto_apply_agent_preferences.upsert({
+        where: { cand_id: candId },
+        update: updateData,
+        create: {
+          cand_id: candId,
+          daily_application_limit: body.dailyLimit ?? 10,
+          job_keywords: body.keywords ?? [],
+          apply_most_recent_jobs_first: body.applyRecentFirst !== undefined ? body.applyRecentFirst : true,
+          is_active: body.status === 'running',
+          created_at: now,
+          updated_at: now,
+        },
+      });
+
+      // 2. Update candidate notification settings if provided
+      const candUpdateData = {};
+      if (body.emailNotifications !== undefined) candUpdateData.notify_email = body.emailNotifications;
+      if (body.smsNotifications !== undefined) candUpdateData.notify_sms = body.smsNotifications;
+
+      let updatedCand = null;
+      if (Object.keys(candUpdateData).length > 0) {
+        updatedCand = await tx.auto_apply_cand.update({
+          where: { cand_id: candId },
+          data: candUpdateData,
+        });
+      } else {
+        updatedCand = await tx.auto_apply_cand.findUnique({
+          where: { cand_id: candId },
+          select: { notify_email: true, notify_sms: true }
+        });
+      }
+
+      return { updatedPref, updatedCand };
     });
+
+    const { updatedPref, updatedCand } = result;
 
     const agentDoc = {
       userId: updatedPref.cand_id.toString(),
       status: updatedPref.is_active ? 'running' : 'paused',
       dailyLimit: updatedPref.daily_application_limit,
       keywords: updatedPref.job_keywords,
-      emailNotifications: body.emailNotifications !== undefined ? body.emailNotifications : true,
-      smsNotifications: body.smsNotifications ?? false,
+      emailNotifications: updatedCand?.notify_email ?? true,
+      smsNotifications: updatedCand?.notify_sms ?? false,
       applyRecentFirst: updatedPref.apply_most_recent_jobs_first,
       updatedAt: updatedPref.updated_at,
     };
