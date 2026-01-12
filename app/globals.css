@@ -558,6 +558,30 @@ h6 {
   animation: fadeIn 0.5s ease-out;
 }
 
+@keyframes laser-scan {
+  0% {
+    top: -10%;
+    opacity: 0;
+  }
+
+  10% {
+    opacity: 1;
+  }
+
+  90% {
+    opacity: 1;
+  }
+
+  100% {
+    top: 110%;
+    opacity: 0;
+  }
+}
+
+.animate-laser-scan {
+  animation: laser-scan 3s cubic-bezier(0.4, 0, 0.2, 1) infinite;
+}
+
 /* =============================== */
 /* Book Loader Animations          */
 /* =============================== */
