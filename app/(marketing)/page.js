@@ -22,16 +22,16 @@ export default function Home() {
     <div className="min-h-screen bg-white">
       {/* Hero loads immediately */}
       <HeroParallax />
-      
+
       {/* Heavy sections load on demand */}
       <Suspense fallback={<SectionLoader />}>
         <Features />
       </Suspense>
-      
+
       <Suspense fallback={<SectionLoader />}>
         <ProcessParallax />
       </Suspense>
-      
+
       <Suspense fallback={<SectionLoader />}>
         <ParallaxStats />
       </Suspense>
