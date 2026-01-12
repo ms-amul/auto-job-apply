@@ -1,46 +1,62 @@
 'use client';
 
-import { CheckCircle, Building2, MapPin } from 'lucide-react';
+import { CheckCircle, Building2, MapPin, Zap } from 'lucide-react';
+import { theme } from '@/utils/theme';
 
 export default function ApplicationHistoryItem({ item, index }) {
   return (
-    <div className="flex items-center gap-4 p-4 bg-gradient-to-r from-emerald-50 to-blue-50 border border-emerald-200 rounded-xl animate-fadeIn">
-      <div className="flex items-center justify-center w-8 h-8 rounded-full bg-emerald-500 text-white text-sm font-bold shrink-0">
-        {index + 1}
-      </div>
-      
-      <div className="w-12 h-12 rounded-lg bg-white border border-gray-200 flex items-center justify-center overflow-hidden shrink-0">
-        {item.job.companyLogo ? (
-          <img 
-            src={item.job.companyLogo} 
-            alt={item.job.company}
-            className="w-8 h-8 object-contain"
-          />
-        ) : (
-          <Building2 className="w-6 h-6 text-slate-400" />
-        )}
-      </div>
+    <div className="relative group bg-white/20 hover:bg-white/50 border border-white/60 p-4 rounded-2xl transition-all duration-300 animate-fadeIn cursor-pointer">
+      <div className="flex flex-col sm:flex-row sm:items-center gap-5">
+        {/* Index & Logo Section */}
+        <div className="flex items-center gap-4">
+          <div className="flex items-center justify-center w-10 h-10 rounded-2xl bg-slate-900 text-white text-sm font-black shrink-0 shadow-lg">
+            {index + 1}
+          </div>
 
-      <div className="flex-1 min-w-0">
-        <p className="font-semibold text-slate-900 truncate">{item.job.title}</p>
-        <div className="flex items-center gap-3 mt-1 text-sm text-slate-600">
-          <span className="flex items-center gap-1">
-            <Building2 className="w-3.5 h-3.5" />
-            {item.job.company}
-          </span>
-          <span className="flex items-center gap-1">
-            <MapPin className="w-3.5 h-3.5" />
-            {item.job.location}
-          </span>
+          <div className="w-14 h-14 rounded-2xl bg-white border border-slate-100 flex items-center justify-center overflow-hidden shrink-0 shadow-sm transition-transform duration-500">
+            {item.job.companyLogo ? (
+              <img
+                src={item.job.companyLogo}
+                alt={item.job.company}
+                className="w-10 h-10 object-contain"
+              />
+            ) : (
+              <Building2 className="w-7 h-7 text-slate-300" />
+            )}
+          </div>
         </div>
-      </div>
 
-      <div className="flex flex-col items-end gap-1 shrink-0">
-        <div className="flex items-center gap-1.5 px-3 py-1 bg-emerald-100 border border-emerald-300 rounded-lg">
-          <CheckCircle className="w-3.5 h-3.5 text-emerald-700" />
-          <span className="text-xs font-semibold text-emerald-700">Applied</span>
+        {/* Info Section */}
+        <div className="flex-1 min-w-0">
+          <div className="flex flex-wrap items-center gap-2 mb-1">
+            <h4 className="font-black text-lg text-slate-900 truncate tracking-tight">{item.job.title}</h4>
+            <div className="flex items-center gap-1.5 px-3 py-1 bg-emerald-500/10 border border-emerald-500/20 rounded-full">
+              <CheckCircle className="w-3 h-3 text-emerald-600" />
+              <span className="text-[10px] font-black uppercase text-emerald-600 tracking-wider">Dispatched</span>
+            </div>
+          </div>
+          <div className="flex flex-wrap items-center gap-x-4 gap-y-1 text-sm font-bold text-slate-500 uppercase tracking-wide">
+            <span className="flex items-center gap-1.5">
+              <Building2 className="w-4 h-4 text-slate-400" />
+              {item.job.company}
+            </span>
+            <span className="flex items-center gap-1.5">
+              <MapPin className="w-4 h-4 text-slate-400" />
+              {item.job.location}
+            </span>
+          </div>
         </div>
-        <span className="text-xs text-slate-500">{item.timeTaken}</span>
+
+        {/* Status & Timing Section */}
+        <div className="flex flex-col sm:items-end gap-2 shrink-0">
+          <div className="flex items-center gap-2 px-4 py-2 bg-slate-900 border border-slate-800 rounded-xl shadow-lg">
+            <Zap className="w-3.5 h-3.5 text-yellow-400 fill-yellow-400" />
+            <span className="text-xs font-black text-white uppercase tracking-widest">{item.timeTaken} process</span>
+          </div>
+          <p className="text-[10px] font-extrabold text-slate-400 uppercase tracking-[0.2em]">
+            Applied {new Date(item.appliedAt).toLocaleTimeString([], { hour: '2-digit', minute: '2-digit' })}
+          </p>
+        </div>
       </div>
     </div>
   );

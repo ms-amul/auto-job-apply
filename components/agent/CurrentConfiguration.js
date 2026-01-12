@@ -2,42 +2,58 @@
 
 import { Settings as SettingsIcon } from 'lucide-react';
 import Button from '@/components/ui/Button';
-import GlassPanel from '@/components/ui/GlassPanel';
+import PremiumCard from '@/components/ui/PremiumCard';
 import ConfigRow from './ConfigRow';
 
 export default function CurrentConfiguration({ agent, isConfigured, onConfigure }) {
   return (
-    <GlassPanel>
-      <div className="flex items-center gap-3 mb-6">
-        <div className="w-10 h-10 rounded-xl flex items-center justify-center bg-blue-50">
-          <SettingsIcon className="w-5 h-5 text-blue-600" />
+    <PremiumCard>
+      <div className="flex items-center justify-between mb-8">
+        <div className="flex items-center gap-3">
+          <div className="w-10 h-10 rounded-2xl flex items-center justify-center bg-blue-500/10 border border-blue-500/20">
+            <SettingsIcon className="w-5 h-5 text-blue-600" />
+          </div>
+          <div>
+            <h3 className="text-xl font-black text-slate-900 tracking-tight">Active Config</h3>
+            <p className="text-[10px] font-bold text-slate-500 uppercase tracking-widest">Global parameters</p>
+          </div>
         </div>
-        <h3 className="text-xl font-semibold text-slate-900">Current Configuration</h3>
+
+        {isConfigured && (
+          <button
+            onClick={onConfigure}
+            className="p-2 hover:bg-white/60 cursor-pointer rounded-xl border border-white/60 transition-colors shadow-sm"
+          >
+            <SettingsIcon className="w-4 h-4 text-slate-400" />
+          </button>
+        )}
       </div>
-      
+
       {isConfigured ? (
-        <div className="space-y-4">
-          <ConfigRow label="Daily Limit" value={`${agent.dailyLimit} applications/day`} />
-          <ConfigRow 
-            label="Email Notifications" 
-            value={agent.emailNotifications !== false ? 'Enabled' : 'Disabled'} 
-          />
-          <ConfigRow 
-            label="SMS Notifications" 
-            value={agent.smsNotifications ? 'Enabled' : 'Disabled'} 
-          />
-          <ConfigRow 
-            label="Apply Recent First" 
-            value={agent.applyRecentFirst !== false ? 'Enabled' : 'Disabled'} 
-          />
-          
+        <div className="space-y-6">
+          <div className="bg-white/40 border border-white/60 p-5 rounded-3xl">
+            <ConfigRow label="Daily Limit" value={`${agent.dailyLimit} Apps`} />
+            <ConfigRow
+              label="Email Sync"
+              value={agent.emailNotifications !== false ? 'Connected' : 'Paused'}
+            />
+            <ConfigRow
+              label="SMS Link"
+              value={agent.smsNotifications ? 'Active' : 'Inactive'}
+            />
+            <ConfigRow
+              label="Strict Mode"
+              value={agent.applyRecentFirst !== false ? 'Priority' : 'General'}
+            />
+          </div>
+
           <div className="pt-2">
-            <p className="text-sm font-medium text-slate-700 mb-3">Keywords</p>
+            <p className="text-[10px] font-black text-slate-500 uppercase tracking-widest mb-4">Target Keywords</p>
             <div className="flex flex-wrap gap-2">
               {agent.keywords?.map((keyword, i) => (
-                <span 
-                  key={i} 
-                  className="px-3 py-1.5 bg-blue-50 text-blue-700 rounded-lg text-sm font-medium border border-blue-200"
+                <span
+                  key={i}
+                  className="px-4 py-2 bg-slate-900 border border-slate-800 text-white rounded-xl text-xs font-black tracking-tight shadow-lg transition-transform hover:scale-110"
                 >
                   {keyword}
                 </span>
@@ -46,15 +62,18 @@ export default function CurrentConfiguration({ agent, isConfigured, onConfigure 
           </div>
         </div>
       ) : (
-        <div className="text-center py-8">
-          <p className="text-slate-600 mb-4">Agent not configured yet</p>
-          <Button variant="primary" onClick={onConfigure}>
+        <div className="text-center py-10">
+          <div className="w-16 h-16 rounded-[2rem] bg-slate-100 flex items-center justify-center mx-auto mb-4 border border-slate-200">
+            <SettingsIcon className="w-8 h-8 text-slate-300" />
+          </div>
+          <p className="text-sm font-bold text-slate-500 mb-6 uppercase tracking-wider">Agent not initialized</p>
+          <Button variant="primary" onClick={onConfigure} className="h-12 px-8">
             <SettingsIcon className="w-4 h-4" />
-            <span>Configure Now</span>
+            <span>Bootstrap Agent</span>
           </Button>
         </div>
       )}
-    </GlassPanel>
+    </PremiumCard>
   );
 }
 

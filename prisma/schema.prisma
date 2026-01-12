@@ -11,42 +11,45 @@ datasource db {
 /// This table contains check constraints and requires additional setup for migrations. Visit https://pris.ly/d/check-constraints for more info.
 /// This model or at least one of its fields has comments in the database, and requires an additional setup for migrations: Read more: https://pris.ly/d/database-comments
 model auto_apply_cand {
-  cand_id                  Int                        @id
-  first_name               String
-  last_name                String
-  email                    String                     @unique
-  password                 String
-  birth_date               DateTime?                  @db.Date
-  ssn                      String?
-  over_18_age              Boolean?                   @default(true)
-  mobile                   String?
-  home                     String?
-  work                     String?
-  work_ext                 String?
-  country                  String?
-  city                     String?
-  zipcode                  String?
-  address                  String?
-  relocation               Boolean?                   @default(false)
-  experience               Int?                       @default(0)
-  race_id                  Int?
-  ethnicity_id             Int?
-  disability_id            Int?
-  veteran_disclosure_id    Int?
-  resume_storage_path      String?
-  resume_file_name         String?
-  resume_file_type         String?
-  resume_file_size         Int?
-  resume_upload_date       DateTime?                  @db.Timestamptz(6)
-  profile_updated_on       DateTime?                  @default(now()) @db.Timestamptz(6)
-  created_at               DateTime?                  @default(now()) @db.Timestamptz(6)
-  updated_at               DateTime?                  @default(now()) @db.Timestamptz(6)
-  gender_id                Int?
-  notify_email             Boolean                    @default(true)
-  notify_sms               Boolean                    @default(false)
-  cand_job_matching        cand_job_matching[]
-  job_application_tracking job_application_tracking[]
-  parsed_cand_resume       parsed_cand_resume?
+  cand_id                          Int                           @id
+  first_name                       String
+  last_name                        String
+  email                            String                        @unique
+  password                         String
+  birth_date                       DateTime?                     @db.Date
+  ssn                              String?
+  over_18_age                      Boolean?                      @default(true)
+  mobile                           String?
+  home                             String?
+  work                             String?
+  work_ext                         String?
+  country                          String?
+  city                             String?
+  zipcode                          String?
+  address                          String?
+  relocation                       Boolean?                      @default(false)
+  experience                       Int?                          @default(0)
+  race_id                          Int?
+  ethnicity_id                     Int?
+  disability_id                    Int?
+  veteran_disclosure_id            Int?
+  resume_storage_path              String?
+  resume_file_name                 String?
+  resume_file_type                 String?
+  resume_file_size                 Int?
+  resume_upload_date               DateTime?                     @db.Timestamptz(6)
+  profile_updated_on               DateTime?                     @default(now()) @db.Timestamptz(6)
+  created_at                       DateTime?                     @default(now()) @db.Timestamptz(6)
+  updated_at                       DateTime?                     @default(now()) @db.Timestamptz(6)
+  gender_id                        Int?
+  notify_email                     Boolean                       @default(true)
+  notify_sms                       Boolean                       @default(false)
+  is_remote_preferred              Boolean?
+  Preferred_MinimumPayrate_PerHour Float?
+  auto_apply_agent_preferences     auto_apply_agent_preferences?
+  cand_job_matching                cand_job_matching[]
+  job_application_tracking         job_application_tracking[]
+  parsed_cand_resume               parsed_cand_resume?
 
   @@index([created_at(sort: Desc)], map: "idx_auto_apply_cand_created")
   @@index([email], map: "idx_auto_apply_cand_email")
@@ -216,4 +219,20 @@ model veteran_disclosure_master {
   company_id              Int?      @default(1)
   is_active               Boolean?  @default(true)
   created_at              DateTime? @default(now()) @db.Timestamptz(6)
+}
+
+/// This table contains check constraints and requires additional setup for migrations. Visit https://pris.ly/d/check-constraints for more info.
+model auto_apply_agent_preferences {
+  agent_pref_id                Int             @id @default(autoincrement())
+  cand_id                      Int             @unique(map: "ux_agent_pref_cand")
+  daily_application_limit      Int             @default(10)
+  job_keywords                 String[]
+  apply_most_recent_jobs_first Boolean         @default(true)
+  is_active                    Boolean         @default(true)
+  created_at                   DateTime?       @default(now()) @db.Timestamptz(6)
+  updated_at                   DateTime?       @default(now()) @db.Timestamptz(6)
+  auto_apply_cand              auto_apply_cand @relation(fields: [cand_id], references: [cand_id], onDelete: Cascade, onUpdate: NoAction, map: "fk_agent_pref_candidate")
+
+  @@index([is_active], map: "idx_agent_pref_active")
+  @@index([job_keywords], map: "idx_agent_pref_keywords", type: Gin)
 }

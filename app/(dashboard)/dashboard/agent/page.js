@@ -458,28 +458,28 @@ export default function AgentPage() {
   const isRunning = agent?.status === 'running';
 
   return (
-    <div className="space-y-8">
+    <div className="max-w-[1600px] mx-auto space-y-12 pb-20">
       {/* Header */}
       <PageHeader
-        title="AI Job"
+        title="Automated"
         highlight="Agent"
-        description="Intelligent automated job applications"
+        description="Your AI-powered executive assistant, tirelessly navigating the job market to find and secure your next role."
       >
-        <Button
-          variant="secondary"
+        <button
           onClick={() => setShowConfig(!showConfig)}
+          className="h-10 px-4 rounded-xl cursor-pointer bg-white border border-slate-200 text-slate-600 font-black text-sm uppercase tracking-widest hover:bg-slate-50 transition-all flex items-center gap-3 shadow-sm"
         >
-          <SettingsIcon className="w-5 h-5" />
+          <SettingsIcon className="w-5 h-5 text-slate-400" />
           <span>Configure</span>
-        </Button>
+        </button>
         <Button
           onClick={handleToggleAgent}
           variant={isRunning ? 'danger' : 'primary'}
           disabled={!isConfigured}
-          size="lg"
+          className="h-10 px-4 rounded-xl cursor-pointer font-black text-sm uppercase tracking-widest shadow-2xl group"
         >
-          {isRunning ? <Pause className="w-5 h-5" /> : <Play className="w-5 h-5" />}
-          <span>{isRunning ? 'Pause Agent' : 'Start Agent'}</span>
+          {isRunning ? <Pause className="w-5 h-5" /> : <Play className="w-5 h-5 group-hover:animate-ping" />}
+          <span>{isRunning ? 'Deactivate' : 'Activate Agent'}</span>
         </Button>
       </PageHeader>
 
