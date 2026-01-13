@@ -1,5 +1,5 @@
 import { NextResponse } from 'next/server';
-import mockData from '@/data/all-jobs.json';
+import mockData from '@/data/mock-recommendations.json';
 
 const AGENT_API_BASE_URL = process.env.AGENT_API_BASE_URL;
 

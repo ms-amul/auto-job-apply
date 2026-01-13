@@ -123,7 +123,7 @@ export default function JobsPage() {
       const data = await res.json();
       
       
-      const jobsList = data.job_list || [];
+      const jobsList = data.recommendations || data.job_list || [];
       setJobs(jobsList);
       setTotalJobs(data.total_count || jobsList.length);
 
