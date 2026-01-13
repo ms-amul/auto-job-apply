@@ -1,58 +1,48 @@
 import { NextResponse } from 'next/server';
-import { ObjectId } from 'mongodb';
-import { getDb } from '@/lib/mongodb';
+import mockData from '@/data/mock-recommendations.json';
 
-export async function GET(_request, { params }) {
+const AGENT_API_BASE_URL = process.env.AGENT_API_BASE_URL;
+
+export async function GET(request, { params }) {
+  const { jobId } = await params;
+  const { searchParams } = new URL(request.url);
+  const source_id = searchParams.get('source_id') || '1';
+  const use_cache = searchParams.get('use_cache') ?? 'true';
+
+  // If no AGENT_API_BASE_URL configured, use mock data
+  if (!AGENT_API_BASE_URL) {
+    const jobDetails = mockData.job_details[jobId];
+    if (jobDetails) {
+      return NextResponse.json(jobDetails);
+    } else {
+      return NextResponse.json({ error: 'Job not found' }, { status: 404 });
+    }
+  }
+
   try {
-    const { jobId } = await params;
-
-    if (!jobId) {
-      return NextResponse.json(
-        { success: false, error: 'Job ID is required' },
-        { status: 400 },
-      );
-    }
-
-    const db = await getDb();
-    const jobsCollection = db.collection('jobs');
-
-    // Validate ObjectId format
-    if (!ObjectId.isValid(jobId)) {
-      return NextResponse.json(
-        { success: false, error: 'Invalid job ID format' },
-        { status: 400 },
-      );
-    }
-
-    // Fetch complete job details
-    const job = await jobsCollection.findOne({ _id: new ObjectId(jobId) });
-
-    if (!job) {
-      return NextResponse.json(
-        { success: false, error: 'Job not found' },
-        { status: 404 },
-      );
-    }
-
-    // Increment view count
-    await jobsCollection.updateOne(
-      { _id: new ObjectId(jobId) },
-      { $inc: { views: 1 } },
+    const res = await fetch(
+      `${AGENT_API_BASE_URL}/api/recommendations/${jobId}?source_id=${source_id}&use_cache=${use_cache}`,
+      {
+        headers: {
+          'Content-Type': 'application/json',
+        },
+      }
     );
 
-    return NextResponse.json({
-      success: true,
-      job: {
-        ...job,
-        _id: job._id.toString(),
-      },
-    });
+    if (!res.ok) {
+      console.error(`[API] Agent API error: ${res.status}`);
+      const jobDetails = mockData.job_details[jobId];
+      if (jobDetails) return NextResponse.json(jobDetails);
+      return NextResponse.json({ error: 'Job not found' }, { status: 404 });
+    }
+
+    const data = await res.json();
+    return NextResponse.json(data);
+
   } catch (error) {
-    console.error('GET /api/jobs/[jobId] error:', error);
-    return NextResponse.json(
-      { success: false, error: 'Failed to fetch job details' },
-      { status: 500 },
-    );
+    console.error('[API] Error fetching job details:', error);
+    const jobDetails = mockData.job_details[jobId];
+    if (jobDetails) return NextResponse.json(jobDetails);
+    return NextResponse.json({ error: 'Internal API Error' }, { status: 500 });
   }
 }
-

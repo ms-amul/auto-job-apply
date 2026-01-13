@@ -2,7 +2,7 @@
 
 import { brand, Logo } from '@/utils/brand';
 import { theme } from '@/utils/theme';
-import { ArrowUpRight, Github, Linkedin, Sparkles, Twitter } from 'lucide-react';
+import { ArrowUpRight, Github, Globe, Linkedin, Sparkles, Twitter } from 'lucide-react';
 import Container from './Container';
 
 export default function Footer() {
@@ -94,18 +94,38 @@ export default function Footer() {
                 </div>
               </div>
 
-              <div className="flex items-center gap-6">
+              <div className="flex items-center gap-4">
                 {[
-                  { name: 'LinkedIn', icon: Linkedin, href: 'https://www.linkedin.com/company/rangam-inc/posts/?feedView=all' },
-                  { name: 'Twitter', icon: Twitter, href: '#' },
-                  { name: 'GitHub', icon: Github, href: '#' },
+                  { name: 'LinkedIn', icon: Linkedin, href: 'https://www.linkedin.com/company/rangam-inc/posts/?feedView=all', type: 'icon' },
+                  { name: 'Rangam', icon: Globe, href: 'https://www.rangam.com', type: 'badge' },
+                  { name: 'Nexi', icon: Globe, href: 'https://nexi.net.in', type: 'badge' },
                 ].map((social) => {
                   const Icon = social.icon;
+
+                  if (social.type === 'badge') {
+                    return (
+                      <a
+                        key={social.name}
+                        href={social.href}
+                        target="_blank"
+                        rel="noopener noreferrer"
+                        className="group relative flex items-center gap-2 px-3 py-1.5 rounded-full bg-white/5 border border-white/10 hover:bg-white/10 hover:border-white/20 transition-all duration-300"
+                      >
+                        <Icon className="w-3.5 h-3.5 text-white/70 group-hover:text-white transition-colors" strokeWidth={2} />
+                        <span className="text-[10px] font-bold text-white/70 group-hover:text-white uppercase tracking-wider">{social.name}</span>
+                        {/* Premium Glow effect */}
+                        <div className="absolute inset-0 rounded-full bg-blue-500/0 group-hover:bg-blue-500/5 blur-md transition-all duration-300" />
+                      </a>
+                    );
+                  }
+
                   return (
                     <a
                       key={social.name}
                       href={social.href}
-                      className="text-white/40 hover:text-white transition-colors"
+                      target="_blank"
+                      rel="noopener noreferrer"
+                      className="p-2 rounded-full text-white/40 hover:text-white hover:bg-white/5 transition-all duration-300"
                       aria-label={social.name}
                     >
                       <Icon className="w-5 h-5" strokeWidth={1.5} />

@@ -47,7 +47,7 @@ const JobCard = ({ job, onClick }) => {
     };
 
     // Check both created_date (recommendations) and datePosted (jobs)
-    const postedAt = getPostedDate(job.created_date || job.datePosted);
+    const postedAt = getPostedDate(job.created_at || job.datePosted);
 
     const badgeText = score ? "Recommended" : (job.experienceLevel || jobType || "New");
 
@@ -100,14 +100,6 @@ const JobCard = ({ job, onClick }) => {
                     </div>
                 )}
 
-                {/* Job Type Pill */}
-                {jobType && (
-                    <div className="neu-badge inline-flex items-center gap-1.5 px-3 py-1.5 text-xs">
-                        <Briefcase className="w-3.5 h-3.5 text-purple-500" />
-                        <span className="text-purple-700">{jobType}</span>
-                    </div>
-                )}
-
                 {/* Remote Option Pill */}
                 {remoteOption && (
                     <div className="neu-badge inline-flex items-center gap-1.5 px-3 py-1.5 text-xs">
@@ -119,8 +111,8 @@ const JobCard = ({ job, onClick }) => {
                 {/* Posted Date Pill */}
                 {postedAt && (
                     <div className="neu-badge inline-flex items-center gap-1.5 px-3 py-1.5 text-xs">
-                        <Clock className="w-3.5 h-3.5 text-slate-400" />
-                        <span className="text-slate-500">{postedAt}</span>
+                        <Clock className="w-3.5 h-3.5 text-cyan-700" />
+                        <span className="text-cyan-700">{postedAt}</span>
                     </div>
                 )}
             </div>
