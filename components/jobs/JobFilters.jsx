@@ -50,7 +50,7 @@ export const JobFilters = ({
     };
 
     return (
-        <div className="neu-card p-6 sticky top-24">
+        <div className="neu-card p-6 sticky top-0 overflow-y-auto max-h-screen">
             <FilterSection title="Company">
                 <div className="relative group">
                     <Search className="absolute left-3 top-1/2 -translate-y-1/2 w-4 h-4 text-slate-400 group-focus-within:text-blue-500 transition-colors" />

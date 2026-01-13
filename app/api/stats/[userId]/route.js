@@ -8,58 +8,15 @@
 
 import { NextResponse } from 'next/server';
 
-export async function GET(request, { params }) {
+export async function GET() {
   try {
-    const { userId } = await params;
-
-    // Simulate network delay
-    await new Promise(resolve => setTimeout(resolve, 400));
-
-    // Find user
-    const user = await prisma.auto_apply_cand.findUnique({
-      where: { cand_id: parseInt(userId) },
-    });
-
-    if (!user) {
-      return NextResponse.json(
-        { success: false, error: 'User not found' },
-        { status: 404 }
-      );
-    }
-
-    // Get stats based on role
-    let userStats;
-    if (user.role === 'applicant') {
-      userStats = stats.applicantStats[userId];
-    } else if (user.role === 'recruiter') {
-      userStats = stats.recruiterStats[userId];
-    }
-
-    // TODO: In production, calculate with Prisma:
-    // if (user.role === 'applicant') {
-    //   const applications = await prisma.application.findMany({
-    //     where: { applicantId: userId },
-    //   });
-    //   userStats = {
-    //     totalApplications: applications.length,
-    //     pending: applications.filter(a => a.status === 'pending').length,
-    //     interview: applications.filter(a => a.status === 'interview').length,
-    //     // ... more calculations
-    //   };
-    // }
-
     return NextResponse.json({
       success: true,
-      data: userStats || {},
+      data: {},
     });
-
   } catch (error) {
-    console.error('Get stats error:', error);
     return NextResponse.json(
-      {
-        success: false,
-        error: 'Failed to fetch stats'
-      },
+      { success: false, error: error.message },
       { status: 500 }
     );
   }

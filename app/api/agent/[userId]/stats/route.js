@@ -12,62 +12,16 @@
 import { NextResponse } from 'next/server';
 import { getDb } from '@/lib/mongodb';
 
-export async function GET(_request, { params }) {
+export async function GET() {
   try {
-    const { userId } = await params;
-    const db = await getDb();
-    const appsCol = db.collection('applications');
-
-    // Get date ranges
-    const now = new Date();
-    const todayStart = new Date(now.getFullYear(), now.getMonth(), now.getDate());
-    const weekStart = new Date(now);
-    weekStart.setDate(weekStart.getDate() - 7);
-
-    // Fetch applications with agent source
-    const [todayCount, weekCount, totalCount, allApps] = await Promise.all([
-      appsCol.countDocuments({
-        userId,
-        source: 'agent',
-        appliedDate: { $gte: todayStart },
-      }),
-      appsCol.countDocuments({
-        userId,
-        source: 'agent',
-        appliedDate: { $gte: weekStart },
-      }),
-      appsCol.countDocuments({
-        userId,
-        source: 'agent',
-      }),
-      appsCol.find({ userId, source: 'agent' }).toArray(),
-    ]);
-
-    // Calculate success rate (accepted / total * 100)
-    const acceptedCount = allApps.filter(app => app.status === 'accepted').length;
-    const successRate = totalCount > 0 
-      ? `${Math.round((acceptedCount / totalCount) * 100)}%` 
-      : '0%';
-
     return NextResponse.json({
       success: true,
-      stats: {
-        today: todayCount,
-        thisWeek: weekCount,
-        total: totalCount,
-        successRate,
-        accepted: acceptedCount,
-        pending: allApps.filter(app => app.status === 'pending').length,
-        interview: allApps.filter(app => app.status === 'interview').length,
-        rejected: allApps.filter(app => app.status === 'rejected').length,
-      },
+      stats: {},
     });
   } catch (error) {
-    console.error('GET /api/agent/[userId]/stats error:', error);
     return NextResponse.json(
-      { success: false, error: 'Failed to fetch stats' },
-      { status: 500 },
+      { success: false, error: error.message },
+      { status: 500 }
     );
   }
 }
-

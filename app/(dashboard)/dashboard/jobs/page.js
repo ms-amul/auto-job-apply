@@ -37,9 +37,56 @@ export default function JobsPage() {
     experience: []
   });
 
+  // Fetch jobs once on session change (or manual refresh)
   useEffect(() => {
     fetchJobs();
-  }, [session, categoryFilter, sidebarFilters, searchLocation]); // Fetch when filters change
+  }, [session]);
+
+  // TODO: Move these filters to API level for better performance with large datasets
+  const filteredJobs = React.useMemo(() => {
+    return jobs.filter(job => {
+      // 1. Company Filter (client_name, company, client)
+      const comp = (job.client_name || job.company || job.client || '').toLowerCase();
+      if (sidebarFilters.company && !comp.includes(sidebarFilters.company.toLowerCase())) return false;
+
+      // 2. Location Filter
+      const loc = (job.location || job.locationType || '').toLowerCase();
+      if (searchLocation && !loc.includes(searchLocation.toLowerCase())) return false;
+
+      // 3. Category Filter
+      if (categoryFilter) {
+        const jobCat = (job.category || '').toLowerCase();
+        if (jobCat !== categoryFilter.toLowerCase()) return false;
+      }
+
+      // 4. Industry Filter
+      if (sidebarFilters.industry?.length > 0) {
+        const jobInd = (job.industry || '').toLowerCase();
+        const matches = sidebarFilters.industry.some(ind => jobInd.includes(ind.toLowerCase()));
+        if (!matches) return false;
+      }
+
+      // 5. Job Type Filter (Full Time, Contract, etc.)
+      if (sidebarFilters.type?.length > 0) {
+        const jobType = (job.job_type || job.type || job.employmentType || '').toLowerCase();
+        const matches = sidebarFilters.type.some(t => {
+          const tNorm = t.toLowerCase().replace(/\s/g, '');
+          const jNorm = jobType.replace(/\s/g, '');
+          return jNorm.includes(tNorm) || tNorm.includes(jNorm);
+        });
+        if (!matches) return false;
+      }
+
+      // 6. Experience Filter
+      if (sidebarFilters.experience?.length > 0) {
+        const jobExp = (job.experienceLevel || '').toLowerCase();
+        const matches = sidebarFilters.experience.some(exp => jobExp.includes(exp.toLowerCase()));
+        if (!matches) return false;
+      }
+
+      return true;
+    });
+  }, [jobs, sidebarFilters, searchLocation, categoryFilter]);
 
   const fetchJobs = async () => {
     setLoading(true);
@@ -51,16 +98,7 @@ export default function JobsPage() {
         candidate_id: candidateId,
       });
 
-      // TODO: Implement backend support for these filters
-      /*
-      if (sidebarFilters.company) params.append('company', sidebarFilters.company);
-      if (searchLocation) params.append('location', searchLocation);
-      if (categoryFilter) params.append('category', categoryFilter);
-      if (sidebarFilters.industry.length) params.append('industries', sidebarFilters.industry.join(','));
-      if (sidebarFilters.type.length) params.append('types', sidebarFilters.type.join(','));
-      if (sidebarFilters.experience.length) params.append('experience', sidebarFilters.experience.join(','));
-      */
-
+      // API currently handles base recommendations; filtering is done in UI
       const res = await fetch(`/api/jobs?${params.toString()}`);
       const data = await res.json();
 
@@ -81,9 +119,13 @@ export default function JobsPage() {
       <PageHeader
         badge="Market Opportunities"
         badgeIcon={Briefcase}
-        title="Total"
-        highlight={`${totalJobs.toLocaleString()}+ Jobs`}
-        description="Find Jobs, Employment & career Opportunities across the top industries world wide."
+        title={filteredJobs.length === totalJobs ? "Total" : "Found"}
+        highlight={`${filteredJobs.length} Jobs`}
+        description={
+          filteredJobs.length === totalJobs
+            ? "Find Jobs, Employment & career Opportunities across the top industries world wide."
+            : `Showing results matching your current filters out of ${totalJobs} available opportunities.`
+        }
       />
 
 
@@ -101,13 +143,13 @@ export default function JobsPage() {
               setFilters={setSidebarFilters}
               counts={{
                 total: totalJobs,
-                software: Math.floor(totalJobs * 0.4),
-                finance: Math.floor(totalJobs * 0.2),
-                management: Math.floor(totalJobs * 0.15),
-                advertising: Math.floor(totalJobs * 0.1),
-                fulltime: Math.floor(totalJobs * 0.6),
-                parttime: Math.floor(totalJobs * 0.2),
-                contract: Math.floor(totalJobs * 0.15)
+                software: jobs.filter(j => (j.industry || j.category || '').toLowerCase().includes('software')).length || Math.floor(totalJobs * 0.4),
+                finance: jobs.filter(j => (j.industry || j.category || '').toLowerCase().includes('finance')).length || Math.floor(totalJobs * 0.2),
+                management: jobs.filter(j => (j.industry || j.category || '').toLowerCase().includes('management')).length || Math.floor(totalJobs * 0.15),
+                advertising: jobs.filter(j => (j.industry || j.category || '').toLowerCase().includes('advertising')).length || Math.floor(totalJobs * 0.1),
+                fulltime: jobs.filter(j => (j.job_type || '').toLowerCase().includes('full')).length || Math.floor(totalJobs * 0.6),
+                parttime: jobs.filter(j => (j.job_type || '').toLowerCase().includes('part')).length || Math.floor(totalJobs * 0.2),
+                contract: jobs.filter(j => (j.job_type || '').toLowerCase().includes('contract')).length || Math.floor(totalJobs * 0.15)
               }}
             />
           </aside>
@@ -122,18 +164,19 @@ export default function JobsPage() {
                   <div key={n} className="h-64 bg-slate-50 rounded-2xl animate-pulse" />
                 ))}
               </div>
-            ) : jobs.length === 0 ? (
+            ) : filteredJobs.length === 0 ? (
               <div className="text-center py-20 bg-slate-50 rounded-2xl border-2 border-dashed border-slate-200">
                 <Briefcase className="w-16 h-16 text-slate-200 mx-auto mb-4" />
                 <h3 className="text-xl font-bold text-slate-400 uppercase tracking-widest">No Matches Found</h3>
+                <p className="text-slate-400 text-sm mt-2">Try adjusting your filters to find more opportunities</p>
               </div>
             ) : (
               <div className="grid grid-cols-1 gap-8">
-                {jobs.map((job, idx) => (
+                {filteredJobs.map((job, idx) => (
                   <div key={job.requirement_id || idx} style={{ animationDelay: `${idx * 100}ms` }} className="animate-fadeIn">
                     <JobCard
                       job={job}
-                      onClick={() => router.push(`/dashboard/browse-jobs/${job.requirement_id}?source_id=${job.source_id || 1}`)}
+                      onClick={() => router.push(`/dashboard/jobs/${job.requirement_id}?source_id=${job.source_id || 1}`)}
                     />
                   </div>
                 ))}
