@@ -476,7 +476,7 @@ export default function AgentPage() {
   const isRunning = agent?.status === 'running';
 
   return (
-    <div className="max-w-[1600px] mx-auto space-y-12 pb-20">
+    <div className="max-w-[1600px] mx-auto space-y-12">
       {/* Header */}
       <PageHeader
         title="Automated"

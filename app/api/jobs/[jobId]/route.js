@@ -13,9 +13,9 @@ export async function GET(request, { params }) {
   if (!AGENT_API_BASE_URL) {
     const jobDetails = mockData.job_details[jobId];
     if (jobDetails) {
-      return NextResponse.json(jobDetails);
+      return NextResponse.json({ success: true, job: jobDetails });
     } else {
-      return NextResponse.json({ error: 'Job not found' }, { status: 404 });
+      return NextResponse.json({ success: false, error: 'Job not found' }, { status: 404 });
     }
   }
 
@@ -32,17 +32,17 @@ export async function GET(request, { params }) {
     if (!res.ok) {
       console.error(`[API] Agent API error: ${res.status}`);
       const jobDetails = mockData.job_details[jobId];
-      if (jobDetails) return NextResponse.json(jobDetails);
-      return NextResponse.json({ error: 'Job not found' }, { status: 404 });
+      if (jobDetails) return NextResponse.json({ success: true, job: jobDetails });
+      return NextResponse.json({ success: false, error: 'Job not found' }, { status: 404 });
     }
 
     const data = await res.json();
-    return NextResponse.json(data);
+    return NextResponse.json({ success: true, job: data });
 
   } catch (error) {
     console.error('[API] Error fetching job details:', error);
     const jobDetails = mockData.job_details[jobId];
-    if (jobDetails) return NextResponse.json(jobDetails);
-    return NextResponse.json({ error: 'Internal API Error' }, { status: 500 });
+    if (jobDetails) return NextResponse.json({ success: true, job: jobDetails });
+    return NextResponse.json({ success: false, error: 'Internal API Error' }, { status: 500 });
   }
 }

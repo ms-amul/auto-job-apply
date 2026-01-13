@@ -34,8 +34,24 @@ export default function JobsPage() {
     company: '',
     industry: [],
     type: [],
+    type: [],
     experience: []
   });
+
+  // Pay Rate Filter State
+  const [payRange, setPayRange] = useState([0, 200]);
+
+  const handleClearAll = () => {
+    setSearchLocation('');
+    setCategoryFilter('');
+    setSidebarFilters({
+      company: '',
+      industry: [],
+      type: [],
+      experience: []
+    });
+    setPayRange([0, 200]);
+  };
 
   // Fetch jobs once on session change (or manual refresh)
   useEffect(() => {
@@ -84,9 +100,13 @@ export default function JobsPage() {
         if (!matches) return false;
       }
 
+      // 7. Pay Rate Filter
+      const jobPay = parseFloat(job.pay_rate_to_candidate || 0);
+      if (jobPay < payRange[0] || jobPay > payRange[1]) return false;
+
       return true;
     });
-  }, [jobs, sidebarFilters, searchLocation, categoryFilter]);
+  }, [jobs, sidebarFilters, searchLocation, categoryFilter, payRange]);
 
   const fetchJobs = async () => {
     setLoading(true);
@@ -115,7 +135,7 @@ export default function JobsPage() {
   };
 
   return (
-    <div className="min-h-screen pb-20">
+    <div className="min-h-screen">
       <PageHeader
         badge="Market Opportunities"
         badgeIcon={Briefcase}
@@ -129,7 +149,7 @@ export default function JobsPage() {
       />
 
 
-      <div className="max-w-7xl mx-auto px-4 relative z-20">
+      <div className="max-w-7xl mx-auto px-4 relative z-10">
         <div className="flex flex-col lg:flex-row gap-8">
 
           {/* Sidebar Filters */}
@@ -141,6 +161,9 @@ export default function JobsPage() {
               setCategory={setCategoryFilter}
               filters={sidebarFilters}
               setFilters={setSidebarFilters}
+              payRange={payRange}
+              setPayRange={setPayRange}
+              onClearAll={handleClearAll}
               counts={{
                 total: totalJobs,
                 software: jobs.filter(j => (j.industry || j.category || '').toLowerCase().includes('software')).length || Math.floor(totalJobs * 0.4),
