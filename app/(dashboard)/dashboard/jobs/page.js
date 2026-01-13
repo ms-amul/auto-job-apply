@@ -121,8 +121,9 @@ export default function JobsPage() {
       // API currently handles base recommendations; filtering is done in UI
       const res = await fetch(`/api/jobs?${params.toString()}`);
       const data = await res.json();
-
-      const jobsList = data.recommendations || data.jobs || [];
+      
+      
+      const jobsList = data.job_list || [];
       setJobs(jobsList);
       setTotalJobs(data.total_count || jobsList.length);
 
@@ -133,7 +134,9 @@ export default function JobsPage() {
       setLoading(false);
     }
   };
-
+  const handleJobClick = (job) => {
+    router.push(`/dashboard/browse-jobs/${job.requirement_id}?source_id=${job.source_id}`);
+};
   return (
     <div className="min-h-screen">
       <PageHeader
@@ -199,7 +202,7 @@ export default function JobsPage() {
                   <div key={job.requirement_id || idx} style={{ animationDelay: `${idx * 100}ms` }} className="animate-fadeIn">
                     <JobCard
                       job={job}
-                      onClick={() => router.push(`/dashboard/jobs/${job.requirement_id}?source_id=${job.source_id || 1}`)}
+                      onClick={() => handleJobClick(job)}
                     />
                   </div>
                 ))}
