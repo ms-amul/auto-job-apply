@@ -11,26 +11,60 @@
 import { NextResponse } from 'next/server';
 import { ObjectId } from 'mongodb';
 import { getDb } from '@/lib/mongodb';
+import prisma from '@/lib/prisma';
 
 export async function GET(_request, { params }) {
   try {
     const { userId } = await params;
-    const db = await getDb();
 
+    // 1. Fetch from Prisma (job_application_tracking) - This is the "Original Data"
+    const prismaApplications = await prisma.job_application_tracking.findMany({
+      where: {
+        cand_id: parseInt(userId, 10)
+      },
+      include: {
+        parsed_requirements: true
+      },
+      orderBy: {
+        created_at: 'desc'
+      }
+    });
+
+    const prismaDataMapped = prismaApplications.map((app) => ({
+      id: `pg-${app.application_id}`,
+      jobId: app.requirement_id,
+      applicantId: app.cand_id.toString(),
+      status: app.application_status,
+      appliedDate: app.applied_at || app.created_at,
+      source: app.applied_via_agent ? 'agent' : 'manual',
+      coverLetter: app.cover_letter ?? '',
+      job: app.parsed_requirements ? {
+        id: app.parsed_requirements.requirement_id,
+        title: app.parsed_requirements.client_job_title,
+        company: app.parsed_requirements.client_name,
+        companyLogo: null, // PostgreSQL schema doesn't seem to have logos yet
+        location: app.parsed_requirements.address,
+        employmentType: app.parsed_requirements.requirement_duration,
+        salary: app.parsed_requirements.min_payrate ? app.parsed_requirements.min_payrate.toString() : null,
+      } : null,
+      notes: app.application_notes ? [{ text: app.application_notes, date: app.created_at }] : [],
+    }));
+
+    // TODO: remove after prod
+    // 2. Fetch from MongoDB - This is the "Mock Data"
+    const db = await getDb();
     const appsCol = db.collection('applications');
     const jobsCol = db.collection('jobs');
 
-    // Fetch all applications for this user
     const userApplications = await appsCol
       .find({ userId })
       .sort({ appliedDate: -1 })
       .toArray();
 
-    // Enrich with job details from jobs collection
     const enrichedApplications = await Promise.all(
       userApplications.map(async (app) => {
         let job = null;
-        
+
         try {
           if (ObjectId.isValid(app.jobId)) {
             job = await jobsCol.findOne({ _id: new ObjectId(app.jobId) });
@@ -44,7 +78,7 @@ export async function GET(_request, { params }) {
           jobId: app.jobId,
           applicantId: app.userId,
           status: app.status,
-          appliedDate: app.appliedDate,
+          appliedDate: app.applied_date,
           source: app.source ?? 'manual',
           coverLetter: app.coverLetter ?? '',
           job: job ? {
@@ -63,7 +97,7 @@ export async function GET(_request, { params }) {
 
     return NextResponse.json({
       success: true,
-      data: enrichedApplications,
+      data: [...prismaDataMapped, ...enrichedApplications],
     });
   } catch (error) {
     console.error('Get applications error:', error);
