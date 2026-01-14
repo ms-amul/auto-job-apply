@@ -4,6 +4,16 @@ import mockData from '@/data/mock-recommendations.json';
 
 const AGENT_API_BASE_URL = process.env.AGENT_API_BASE_URL;
 
+function getRandomRecommendations(count = 10) {
+  const allRecs = mockData.recommendations_list.recommendations;
+  const shuffled = [...allRecs].sort(() => 0.5 - Math.random());
+  return {
+    ...mockData.recommendations_list,
+    recommendations: shuffled.slice(0, count),
+    total_count: count
+  };
+}
+
 export async function GET(request) {
   const { searchParams } = new URL(request.url);
   const candidate_id = searchParams.get('candidate_id');
@@ -13,7 +23,7 @@ export async function GET(request) {
   if (!AGENT_API_BASE_URL) {
     console.log('[API] AGENT_API_BASE_URL not set, using mock data');
     await new Promise(resolve => setTimeout(resolve, 300));
-    return NextResponse.json(mockData.recommendations_list);
+    return NextResponse.json(getRandomRecommendations(10));
   }
 
   try {
@@ -31,7 +41,7 @@ export async function GET(request) {
     if (!res.ok) {
       console.error(`[API] Agent API error: ${res.status} ${res.statusText}`);
       // Fallback to mock data on error
-      return NextResponse.json(mockData.recommendations_list);
+      return NextResponse.json(getRandomRecommendations(10));
     }
 
     const data = await res.json();
@@ -40,6 +50,6 @@ export async function GET(request) {
   } catch (error) {
     console.error('[API] Error fetching recommendations:', error);
     // Fallback to mock data on error
-    return NextResponse.json(mockData.recommendations_list);
+    return NextResponse.json(getRandomRecommendations(10));
   }
 }

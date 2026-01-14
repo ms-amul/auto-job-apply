@@ -15,6 +15,7 @@ import JobCard from '@/components/jobs/JobCard';
 import { JobFilters } from '@/components/jobs/JobFilters';
 import PageHeader from '@/components/dashboard/PageHeader';
 import toast from 'react-hot-toast';
+import { PageLoader } from '@/components/ui/Loader';
 
 export default function JobsPage() {
   const router = useRouter();
@@ -25,32 +26,40 @@ export default function JobsPage() {
   const [loading, setLoading] = useState(true);
   const [totalJobs, setTotalJobs] = useState(0);
 
+  // Derived Filter Options State
+  const [filterOptions, setFilterOptions] = useState({
+    categories: [],
+    jobTypes: [],
+    minPay: 0,
+    maxPay: 200
+  });
+
   // Basic Filters
+  const [searchTitle, setSearchTitle] = useState('');
   const [searchLocation, setSearchLocation] = useState('');
   const [categoryFilter, setCategoryFilter] = useState('');
 
   // Advanced Sidebar Filters
   const [sidebarFilters, setSidebarFilters] = useState({
     company: '',
-    industry: [],
-    type: [],
-    type: [],
-    experience: []
+    type: [], // Only keeping type as it's in the data
   });
 
   // Pay Rate Filter State
   const [payRange, setPayRange] = useState([0, 200]);
 
   const handleClearAll = () => {
+    setSearchTitle('');
     setSearchLocation('');
     setCategoryFilter('');
     setSidebarFilters({
       company: '',
-      industry: [],
       type: [],
-      experience: []
     });
-    setPayRange([0, 200]);
+    setPayRange([
+      Math.floor(filterOptions.minPay),
+      Math.ceil(filterOptions.maxPay)
+    ]);
   };
 
   // Fetch jobs once on session change (or manual refresh)
@@ -58,9 +67,12 @@ export default function JobsPage() {
     fetchJobs();
   }, [session]);
 
-  // TODO: Move these filters to API level for better performance with large datasets
   const filteredJobs = React.useMemo(() => {
     return jobs.filter(job => {
+      // 0. Job Title Filter
+      const titleProp = (job.job_title || job.title || '').toLowerCase();
+      if (searchTitle && !titleProp.includes(searchTitle.toLowerCase())) return false;
+
       // 1. Company Filter (client_name, company, client)
       const comp = (job.client_name || job.company || job.client || '').toLowerCase();
       if (sidebarFilters.company && !comp.includes(sidebarFilters.company.toLowerCase())) return false;
@@ -75,14 +87,7 @@ export default function JobsPage() {
         if (jobCat !== categoryFilter.toLowerCase()) return false;
       }
 
-      // 4. Industry Filter
-      if (sidebarFilters.industry?.length > 0) {
-        const jobInd = (job.industry || '').toLowerCase();
-        const matches = sidebarFilters.industry.some(ind => jobInd.includes(ind.toLowerCase()));
-        if (!matches) return false;
-      }
-
-      // 5. Job Type Filter (Full Time, Contract, etc.)
+      // 4. Job Type Filter (Full Time, Contract, etc.)
       if (sidebarFilters.type?.length > 0) {
         const jobType = (job.job_type || job.type || job.employmentType || '').toLowerCase();
         const matches = sidebarFilters.type.some(t => {
@@ -93,20 +98,13 @@ export default function JobsPage() {
         if (!matches) return false;
       }
 
-      // 6. Experience Filter
-      if (sidebarFilters.experience?.length > 0) {
-        const jobExp = (job.experienceLevel || '').toLowerCase();
-        const matches = sidebarFilters.experience.some(exp => jobExp.includes(exp.toLowerCase()));
-        if (!matches) return false;
-      }
-
-      // 7. Pay Rate Filter
+      // 5. Pay Rate Filter
       const jobPay = parseFloat(job.pay_rate_to_candidate || 0);
       if (jobPay < payRange[0] || jobPay > payRange[1]) return false;
 
       return true;
     });
-  }, [jobs, sidebarFilters, searchLocation, categoryFilter, payRange]);
+  }, [jobs, sidebarFilters, searchLocation, categoryFilter, payRange, searchTitle]);
 
   const fetchJobs = async () => {
     setLoading(true);
@@ -118,14 +116,36 @@ export default function JobsPage() {
         candidate_id: candidateId,
       });
 
-      // API currently handles base recommendations; filtering is done in UI
       const res = await fetch(`/api/jobs?${params.toString()}`);
       const data = await res.json();
-      
-      
+
       const jobsList = data.recommendations || data.job_list || [];
       setJobs(jobsList);
       setTotalJobs(data.total_count || jobsList.length);
+
+      // Derive Filters from Data
+      if (jobsList.length > 0) {
+        // Categories
+        const categories = [...new Set(jobsList.map(j => j.category).filter(Boolean))];
+
+        // Job Types
+        const jobTypes = [...new Set(jobsList.map(j => j.job_type).filter(Boolean))];
+
+        // Pay Range
+        const payRates = jobsList.map(j => parseFloat(j.pay_rate_to_candidate || 0));
+        const minPay = Math.floor(Math.min(...payRates));
+        const maxPay = Math.ceil(Math.max(...payRates));
+
+        setFilterOptions({
+          categories,
+          jobTypes,
+          minPay,
+          maxPay
+        });
+
+        // Initialize pay range based on actual data
+        setPayRange([minPay, maxPay]);
+      }
 
     } catch (error) {
       console.error('Error fetching jobs:', error);
@@ -134,9 +154,16 @@ export default function JobsPage() {
       setLoading(false);
     }
   };
+
   const handleJobClick = (job) => {
     router.push(`/dashboard/browse-jobs/${job.requirement_id}?source_id=${job.source_id}`);
-};
+  };
+
+  // Full Page Loader
+  if (loading) {
+    return <PageLoader text="Finding best matches for you..." />;
+  }
+
   return (
     <div className="min-h-screen">
       <PageHeader
@@ -158,6 +185,8 @@ export default function JobsPage() {
           {/* Sidebar Filters */}
           <aside className="lg:w-72 shrink-0">
             <JobFilters
+              title={searchTitle}
+              setTitle={setSearchTitle}
               location={searchLocation}
               setLocation={setSearchLocation}
               category={categoryFilter}
@@ -167,15 +196,10 @@ export default function JobsPage() {
               payRange={payRange}
               setPayRange={setPayRange}
               onClearAll={handleClearAll}
+              options={filterOptions} // Pass derived options
               counts={{
                 total: totalJobs,
-                software: jobs.filter(j => (j.industry || j.category || '').toLowerCase().includes('software')).length || Math.floor(totalJobs * 0.4),
-                finance: jobs.filter(j => (j.industry || j.category || '').toLowerCase().includes('finance')).length || Math.floor(totalJobs * 0.2),
-                management: jobs.filter(j => (j.industry || j.category || '').toLowerCase().includes('management')).length || Math.floor(totalJobs * 0.15),
-                advertising: jobs.filter(j => (j.industry || j.category || '').toLowerCase().includes('advertising')).length || Math.floor(totalJobs * 0.1),
-                fulltime: jobs.filter(j => (j.job_type || '').toLowerCase().includes('full')).length || Math.floor(totalJobs * 0.6),
-                parttime: jobs.filter(j => (j.job_type || '').toLowerCase().includes('part')).length || Math.floor(totalJobs * 0.2),
-                contract: jobs.filter(j => (j.job_type || '').toLowerCase().includes('contract')).length || Math.floor(totalJobs * 0.15)
+                // Dynamic counts could be added here if needed, but for now simple Total is enough as valid options are shown
               }}
             />
           </aside>
@@ -183,18 +207,18 @@ export default function JobsPage() {
           {/* Main Job List */}
           <main className="flex-1">
 
-            {/* Grid of JobCards - Sticking to existing JobCard component */}
-            {loading ? (
-              <div className="grid grid-cols-1 gap-6">
-                {[1, 2, 3].map(n => (
-                  <div key={n} className="h-64 bg-slate-50 rounded-2xl animate-pulse" />
-                ))}
-              </div>
-            ) : filteredJobs.length === 0 ? (
+            {/* Grid of JobCards */}
+            {filteredJobs.length === 0 ? (
               <div className="text-center py-20 bg-slate-50 rounded-2xl border-2 border-dashed border-slate-200">
                 <Briefcase className="w-16 h-16 text-slate-200 mx-auto mb-4" />
                 <h3 className="text-xl font-bold text-slate-400 uppercase tracking-widest">No Matches Found</h3>
                 <p className="text-slate-400 text-sm mt-2">Try adjusting your filters to find more opportunities</p>
+                <button
+                  onClick={handleClearAll}
+                  className="mt-6 px-6 py-2 bg-blue-600 text-white rounded-xl font-semibold hover:bg-blue-700 transition-colors"
+                >
+                  Clear All Filters
+                </button>
               </div>
             ) : (
               <div className="grid grid-cols-1 gap-8">
