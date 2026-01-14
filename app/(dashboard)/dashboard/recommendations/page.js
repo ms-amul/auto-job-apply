@@ -37,7 +37,7 @@ export default function BrowseJobsPage() {
     };
 
     const handleJobClick = (job) => {
-        router.push(`/dashboard/browse-jobs/${job.requirement_id}?source_id=${job.source_id}`);
+        router.push(`/dashboard/job/${job.requirement_id}?source_id=${job.source_id}`);
     };
 
     return (

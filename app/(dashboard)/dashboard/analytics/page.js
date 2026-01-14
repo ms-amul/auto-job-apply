@@ -24,7 +24,7 @@ export default function AnalyticsPage() {
   }, []);
 
   return (
-    <div className="relative min-h-[calc(100vh-120px)] w-full overflow-hidden flex items-center justify-center rounded-[40px] bg-[#020617]">
+    <div className="relative max-h-[calc(100vh-90px)] w-full overflow-hidden flex items-center justify-center rounded-[40px] bg-[#020617]">
       {/* Heavy Animated Background Background */}
       <div className="absolute inset-0 z-0">
         <div className="absolute inset-0 bg-gradient-to-br from-indigo-950/20 via-slate-950 to-blue-950/20" />
@@ -118,9 +118,9 @@ export default function AnalyticsPage() {
           className="mb-12"
         >
           <h1 className="text-6xl md:text-8xl font-black text-white tracking-tighter leading-[0.85] mb-6">
-            THE FUTURE <br />
+            Analytics <br />
             <span className="text-transparent bg-clip-text bg-gradient-to-r from-blue-300 via-indigo-200 to-emerald-300 animate-premium-shimmer bg-[length:200%_auto] selection:bg-blue-500/30">
-              IS ANALYTICAL
+              Coming soon!
             </span>
           </h1>
           <p className="text-lg md:text-xl text-slate-400 font-medium max-w-2xl mx-auto leading-relaxed opacity-80">
@@ -152,48 +152,6 @@ export default function AnalyticsPage() {
             </motion.div>
           ))}
         </div>
-
-        {/* Action Row Row */}
-        <motion.div
-          initial={{ opacity: 0, y: 20 }}
-          animate={{ opacity: 1, y: 0 }}
-          transition={{ delay: 0.9, duration: 0.8 }}
-          className="flex flex-col md:flex-row items-center gap-8"
-        >
-          {/* Animated Coming Soon Indicator */}
-          <div className="relative group">
-            <motion.div
-              animate={{
-                scale: [1, 1.05, 1],
-                opacity: [0.5, 0.8, 0.5]
-              }}
-              transition={{ duration: 4, repeat: Infinity, ease: "easeInOut" }}
-              className="absolute inset-0 bg-blue-600 blur-2xl rounded-full"
-            />
-            <div className="relative px-12 py-5 bg-white/5 backdrop-blur-2xl border border-white/10 rounded-[28px] overflow-hidden">
-              <div className="absolute inset-0 bg-gradient-to-r from-blue-500/10 via-white/5 to-blue-500/10 animate-premium-shimmer bg-[length:200%_auto]" />
-              <span className="relative z-10 text-white font-black text-sm uppercase tracking-[0.4em] flex items-center gap-4">
-                <motion.span
-                  animate={{ opacity: [0.4, 1, 0.4] }}
-                  transition={{ duration: 2, repeat: Infinity }}
-                  className="w-2 h-2 rounded-full bg-blue-500 shadow-[0_0_12px_#3b82f6]"
-                />
-                Coming Soon
-              </span>
-            </div>
-          </div>
-
-          <div className="flex items-center gap-5 px-8 py-5 rounded-[28px] bg-white/[0.03] border border-white/[0.08] backdrop-blur-md">
-            <div className="relative">
-              <div className="absolute inset-0 bg-emerald-500 blur-lg opacity-20 animate-pulse" />
-              <div className="w-3.5 h-3.5 rounded-full bg-emerald-500 shadow-[0_0_15px_rgba(16,185,129,0.5)] relative" />
-            </div>
-            <div className="text-left">
-              <p className="text-[10px] font-black text-slate-500 uppercase tracking-widest mb-1">Live Status</p>
-              <p className="text-xs font-bold text-white/90">Core Systems Initializing...</p>
-            </div>
-          </div>
-        </motion.div>
       </motion.div>
 
       {/* Interactive Floating Orb Container Overlay */}

@@ -822,3 +822,16 @@ h6 {
 .animate-pulse-slow {
   animation: pulse-slow 8s ease-in-out infinite;
 }
+
+.hide-scrollbar {
+  scrollbar-width: none !important;
+  -ms-overflow-style: none !important;
+}
+
+.hide-scrollbar::-webkit-scrollbar {
+  display: none !important;
+}
+
+button {
+  cursor: pointer !important;
+}

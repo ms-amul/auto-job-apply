@@ -4,8 +4,8 @@ import React from 'react';
 import { Search, MapPin, ChevronDown, Check, Filter, Trash2 } from 'lucide-react';
 
 export const FilterSection = ({ title, children }) => (
-    <div className="mb-8">
-        <h3 className="text-sm font-bold text-slate-900 mb-4 uppercase tracking-wider flex items-center gap-2">
+    <div className="mb-4">
+        <h3 className="text-sm font-bold text-slate-900 mb-2 capitalize tracking-wider flex items-center gap-2">
             <span className="w-1 h-3 bg-blue-600 rounded-full"></span>
             {title}
         </h3>
@@ -45,8 +45,8 @@ export const JobFilters = ({ location, setLocation, category, setCategory, filte
     };
 
     return (
-        <div className="neu-card sticky relative top-0 overflow-y-auto max-h-screen">
-            <div className="flex items-center justify-between mb-6 sticky top-0 w-full z-10 bg-white/70 backdrop-blur-md p-4 border-b border-slate-100/50 shadow-sm">
+        <div className="neu-card sticky relative top-0 overflow-y-auto max-h-screen hide-scrollbar">
+            <div className="flex items-center justify-between mb-6 sticky top-0 w-full z-10 bg-white/70 backdrop-blur-md p-2 border-b border-slate-100/50 shadow-sm">
                 <div className="flex items-center justify-between w-full">
                     <div className="flex items-center gap-2">
                         <Filter className="w-5 h-5 text-indigo-600" />
@@ -61,7 +61,7 @@ export const JobFilters = ({ location, setLocation, category, setCategory, filte
                     </button>
                 </div>
             </div>
-            <div className='p-6 pt-2 space-y-8'>
+            <div className='p-2 space-y-2'>
                 <FilterSection title="Job Title">
                     <div className="relative group">
                         <Search className="absolute left-3 top-1/2 -translate-y-1/2 w-4 h-4 text-slate-400 group-focus-within:text-blue-500 transition-colors" />

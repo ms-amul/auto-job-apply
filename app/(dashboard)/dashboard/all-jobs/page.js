@@ -169,7 +169,7 @@ export default function JobsPage() {
   };
 
   const handleJobClick = (job) => {
-    router.push(`/dashboard/browse-jobs/${job.requirement_id}?source_id=${job.source_id}`);
+    router.push(`/dashboard/job/${job.requirement_id}?source_id=${job.source_id}`);
   };
 
   // Full Page Loader
@@ -246,18 +246,18 @@ export default function JobsPage() {
                   ))}
                 </div>
 
-                {/* Pagination Controls */}
-                <div className="mt-12">
-                  <Pagination
-                    currentPage={currentPage}
-                    totalPages={totalPages}
-                    onPageChange={setCurrentPage}
-                  />
-                </div>
               </>
             )}
           </main>
         </div>
+      </div>
+      {/* Pagination Controls */}
+      <div className="mt-5">
+        <Pagination
+          currentPage={currentPage}
+          totalPages={totalPages}
+          onPageChange={setCurrentPage}
+        />
       </div>
     </div>
   );

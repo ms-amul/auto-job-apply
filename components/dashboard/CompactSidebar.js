@@ -31,8 +31,8 @@ export default function CompactSidebar({ isOpen, setIsOpen, user }) {
 
   const applicantMenuItems = [
     { href: '/dashboard', icon: LayoutDashboard, label: 'Dashboard' },
-    { href: '/dashboard/jobs', icon: Briefcase, label: 'Browse Jobs' },
-    { href: '/dashboard/browse-jobs', icon: Sparkles, label: 'Recommended', badge: 'AI' },
+    { href: '/dashboard/all-jobs', icon: Briefcase, label: 'All Jobs' },
+    { href: '/dashboard/recommendations', icon: Sparkles, label: 'Recommendations', badge: 'AI' },
     { href: '/dashboard/applications', icon: FileText, label: 'Applications' },
     { href: '/dashboard/agent', icon: Bot, label: 'AI Agent' },
     { href: '/dashboard/analytics', icon: BarChart3, label: 'Analytics' },
@@ -41,7 +41,7 @@ export default function CompactSidebar({ isOpen, setIsOpen, user }) {
 
   const recruiterMenuItems = [
     { href: '/dashboard', icon: LayoutDashboard, label: 'Dashboard' },
-    { href: '/dashboard/jobs', icon: Briefcase, label: 'My Jobs' },
+    { href: '/dashboard/all-jobs', icon: Briefcase, label: 'All Jobs' },
     { href: '/dashboard/applicants', icon: Users, label: 'Applicants' },
     { href: '/dashboard/agent', icon: Sparkles, label: 'AI Assistant' },
     { href: '/dashboard/analytics', icon: BarChart3, label: 'Analytics' },

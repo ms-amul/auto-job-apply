@@ -33,7 +33,7 @@ export default function JobDetailsPage() {
 
     const fetchJobDetails = async () => {
         try {
-            const res = await fetch(`/api/recommendations/${requirement_id}?source_id=${source_id}`);
+            const res = await fetch(`/api/jobs/${requirement_id}?source_id=${source_id}`);
 
             if (!res.ok) throw new Error("Failed to fetch job details");
 
