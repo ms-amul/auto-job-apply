@@ -1,21 +1,17 @@
 'use client';
 
-import React, { useState, useEffect, useRef } from 'react';
-import { useRouter } from 'next/navigation';
-import { useSession } from 'next-auth/react';
-import {
-  Search,
-  MapPin,
-  SlidersHorizontal,
-  ChevronDown,
-  Sparkles,
-  Briefcase
-} from 'lucide-react';
+import PageHeader from '@/components/dashboard/PageHeader';
 import JobCard from '@/components/jobs/JobCard';
 import { JobFilters } from '@/components/jobs/JobFilters';
-import PageHeader from '@/components/dashboard/PageHeader';
-import toast from 'react-hot-toast';
 import { PageLoader } from '@/components/ui/Loader';
+import Pagination from '@/components/ui/Pagination';
+import {
+  Briefcase
+} from 'lucide-react';
+import { useSession } from 'next-auth/react';
+import { useRouter } from 'next/navigation';
+import React, { useEffect, useState } from 'react';
+import toast from 'react-hot-toast';
 
 export default function JobsPage() {
   const router = useRouter();
@@ -48,6 +44,10 @@ export default function JobsPage() {
   // Pay Rate Filter State
   const [payRange, setPayRange] = useState([0, 200]);
 
+  // Pagination State
+  const ITEMS_PER_PAGE = 9;
+  const [currentPage, setCurrentPage] = useState(1);
+
   const handleClearAll = () => {
     setSearchTitle('');
     setSearchLocation('');
@@ -60,7 +60,13 @@ export default function JobsPage() {
       Math.floor(filterOptions.minPay),
       Math.ceil(filterOptions.maxPay)
     ]);
+    setCurrentPage(1); // Reset page on clear
   };
+
+  // Reset page when filters change
+  useEffect(() => {
+    setCurrentPage(1);
+  }, [searchTitle, sidebarFilters, searchLocation, categoryFilter, payRange]);
 
   // Fetch jobs once on session change (or manual refresh)
   useEffect(() => {
@@ -105,6 +111,13 @@ export default function JobsPage() {
       return true;
     });
   }, [jobs, sidebarFilters, searchLocation, categoryFilter, payRange, searchTitle]);
+
+  // Pagination Logic
+  const totalPages = Math.ceil(filteredJobs.length / ITEMS_PER_PAGE);
+  const paginatedJobs = filteredJobs.slice(
+    (currentPage - 1) * ITEMS_PER_PAGE,
+    currentPage * ITEMS_PER_PAGE
+  );
 
   const fetchJobs = async () => {
     setLoading(true);
@@ -170,7 +183,7 @@ export default function JobsPage() {
         badge="Market Opportunities"
         badgeIcon={Briefcase}
         title={filteredJobs.length === totalJobs ? "Total" : "Found"}
-        highlight={`${filteredJobs.length} Jobs`}
+        highlight={`${filteredJobs.length}+ Jobs`}
         description={
           filteredJobs.length === totalJobs
             ? "Find Jobs, Employment & career Opportunities across the top industries world wide."
@@ -221,16 +234,27 @@ export default function JobsPage() {
                 </button>
               </div>
             ) : (
-              <div className="grid grid-cols-1 gap-8">
-                {filteredJobs.map((job, idx) => (
-                  <div key={job.requirement_id || idx} style={{ animationDelay: `${idx * 100}ms` }} className="animate-fadeIn">
-                    <JobCard
-                      job={job}
-                      onClick={() => handleJobClick(job)}
-                    />
-                  </div>
-                ))}
-              </div>
+              <>
+                <div className="grid grid-cols-1 gap-8">
+                  {paginatedJobs.map((job, idx) => (
+                    <div key={job.requirement_id || idx} style={{ animationDelay: `${idx * 100}ms` }} className="animate-fadeIn">
+                      <JobCard
+                        job={job}
+                        onClick={() => handleJobClick(job)}
+                      />
+                    </div>
+                  ))}
+                </div>
+
+                {/* Pagination Controls */}
+                <div className="mt-12">
+                  <Pagination
+                    currentPage={currentPage}
+                    totalPages={totalPages}
+                    onPageChange={setCurrentPage}
+                  />
+                </div>
+              </>
             )}
           </main>
         </div>
