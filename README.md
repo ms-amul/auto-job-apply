@@ -1,100 +1,118 @@
-This is a [Next.js](https://nextjs.org) project bootstrapped with [`create-next-app`](https://github.com/vercel/next.js/tree/canary/packages/create-next-app).
+# Auto Job Apply AI
 
-## Database Setup
+A professional, AI-powered job application automation platform built with Next.js, Prisma, and Supabase.
 
-This project uses **MongoDB** (MongoDB Atlas or local MongoDB) for data storage.
+## 🚀 Overview
 
-### Quick Setup
+Auto Job Apply AI streamlines the job hunt process by automatically matching candidates with relevant job opportunities and handling the application flow. It features a sophisticated AI Agent system that respects user preferences and daily limits.
 
-1. **Create `.env.local` file** in the project root:
+> [!IMPORTANT]
+> **Database Transition Phase**: This project is currently migrating from MongoDB to PostgreSQL (Supabase). 
+> - **MongoDB** is currently used for job listings and application storage.
+> - **PostgreSQL (via Prisma)** is used for user profiles, agent preferences, and core relational data.
+> MongoDB will be phased out once the production schema is fully robust.
+
+## 🛠️ Tech Stack
+
+- **Framework**: [Next.js 15](https://nextjs.org/) (App Router)
+- **Database**: 
+  - [Supabase](https://supabase.com/) (PostgreSQL) - Primary Relational DB
+  - [MongoDB Atlas](https://www.mongodb.com/atlas) - Transitional/Job Data
+- **ORM**: [Prisma](https://www.prisma.io/)
+- **Authentication**: [NextAuth.js](https://next-auth.js.org/)
+- **Styling**: [Tailwind CSS](https://tailwindcss.com/) & [Ant Design](https://ant.design/)
+- **Animations**: [Framer Motion](https://www.framer-motion.dev/)
+
+## ⚙️ Environment Setup
+
+To run this project locally, you need to configure the following environment variables in a `.env.local` file.
+
+### 1. Database Configuration
+
+#### Supabase (PostgreSQL)
+- **DATABASE_URL**: Connection pooling URL (Port 6543) for Next.js.
+- **DIRECT_URL**: Direct connection URL (Port 5432) for migrations.
+
 ```env
-MONGODB_URI=your-mongodb-connection-string-here
+DATABASE_URL="postgresql://postgres.[REF]:[PASSWORD]@aws-0-[REGION].pooler.supabase.com:6543/postgres?pgbouncer=true"
+DIRECT_URL="postgresql://postgres.[REF]:[PASSWORD]@aws-0-[REGION].pooler.supabase.com:5432/postgres"
 ```
 
-2. **Get MongoDB Connection String:**
-   - **MongoDB Atlas (Cloud):**
-     - Go to [MongoDB Atlas](https://www.mongodb.com/cloud/atlas)
-     - Create a cluster (free tier available)
-     - Click "Connect" → "Connect your application"
-     - Copy the connection string
-     - Replace `<password>` with your database password
-     - Example: `mongodb+srv://username:password@cluster0.xxxxx.mongodb.net/?retryWrites=true&w=majority`
+#### MongoDB
+- **MONGODB_URI**: Connection string for your MongoDB Atlas cluster or local instance.
+
+```env
+MONGODB_URI="mongodb+srv://[USER]:[PASS]@[CLUSTER].mongodb.net/jobvita?retryWrites=true&w=majority"
+```
+
+### 2. Authentication & API
+- **NEXTAUTH_SECRET**: A random string (min 32 chars) for JWT encryption.
+- **NEXTAUTH_URL**: `http://localhost:3000` (for development).
+- **AGENT_API_BASE_URL**: Base URL for the external Agent API service.
+
+```env
+NEXTAUTH_SECRET="your-secret-key-here"
+NEXTAUTH_URL="http://localhost:3000"
+AGENT_API_BASE_URL="http://localhost:8000"
+```
+
+## 🤖 AI Agent Architecture
+
+The AI Agent automates the application process through a set of internal API routes and external dependencies.
+
+### Agent APIs
+- **`GET /api/agent/[userId]`**: Fetches agent configuration and preferences.
+- **`PUT /api/agent/[userId]`**: Updates agent settings (daily limits, keywords, status).
+- **`POST /api/agent/[userId]/apply`**: Executes a single application cycle.
+- **`GET /api/agent/[userId]/stats`**: Retrieves real-time application metrics.
+
+### Dependencies & Logic
+- **Prisma (PostgreSQL)**: Stores user-specific preferences (`auto_apply_agent_preferences`), keywords, and application limits.
+- **MongoDB**: Currently used to query active job listings and check for pre-existing applications.
+- **Adaptive Timing**: The agent maintains a 30-second interval between applications to mimic human behavior and avoid rate limits.
+- **Keyword Matching**: Relevancy is calculated by matching user-defined keywords against job titles and skill requirements.
+
+## 🏃 Getting Started
+
+1. **Install Dependencies**:
+   ```bash
+   npm install
+   ```
+
+2. **Sync Database Schema**:
+   ```bash
+   # Generate Prisma client
+   npx prisma generate
    
-   - **Local MongoDB:**
-     - If running MongoDB locally: `mongodb://localhost:27017`
-     - Database name: `jobvita` (default)
+   # Push schema to Supabase (if needed)
+   npx prisma db push
+   ```
 
-3. **Install dependencies:**
-```bash
-npm install
-```
+3. **Seed Data (Optional)**:
+   ```bash
+   node scripts/seed-jobs.js
+   ```
 
-4. **Seed the database (optional):**
-```bash
-# Seed with 180+ realistic jobs across multiple industries
-node scripts/seed-jobs.js
-```
+4. **Run Development Server**:
+   ```bash
+   npm run dev
+   ```
 
-5. **Run the development server:**
-```bash
-npm run dev
-```
+## 📁 Project Structure
 
-Open [http://localhost:3000](http://localhost:3000) with your browser to see the result.
+- `app/` - Next.js App Router (Pages, API Routes)
+- `components/` - Shared UI components (AntD + Tailwind)
+- `lib/` - Shared utilities (MongoDB, Prisma, Auth config)
+- `prisma/` - Database schema and migrations
+- `scripts/` - Database seeding and maintenance scripts
+- `public/` - Static assets
 
-## Database Collections
+## 📜 Available Scripts
 
-The app uses the following MongoDB collections:
-- `users` - User accounts (applicants and recruiters)
-- `jobs` - Job listings
-- `applications` - Job applications
-- `agents` - Auto-apply agent configurations
+- `npm run dev` - Starts the development server.
+- `npm run build` - Creates an optimized production build.
+- `npm run prisma:studio` - Visual interface for exploring the database.
+- `node scripts/seed-jobs.js` - Populates MongoDB with sample job listings.
 
-## Available Scripts
-
-- `npm run dev` - Start development server
-- `npm run build` - Build for production
-- `npm run start` - Start production server
-- `npm run lint` - Run ESLint
-- `node scripts/seed-jobs.js` - Seed database with sample jobs
-
-## Project Structure
-
-- `app/` - Next.js app router (pages and API routes)
-- `components/` - React components
-- `data/` - Mock JSON data (fallback for demo accounts)
-- `lib/mongodb.js` - MongoDB connection client
-- `lib/prisma.js` - Prisma client (for future PostgreSQL migration)
-- `scripts/` - Database seeding scripts
-- `prisma/` - Prisma schema (for future use)
-
-## Features
-
-- ✅ User authentication (sign in/sign up)
-- ✅ Job listings with advanced filtering
-- ✅ Application management
-- ✅ Auto-apply agent system
-- ✅ Dashboard for applicants and recruiters
-- ✅ Profile management
-- ✅ Analytics and statistics
-
-## Migration Notes
-
-This project currently uses MongoDB for temporary storage. The codebase includes:
-- Prisma schema (ready for PostgreSQL migration)
-- Hybrid database utilities in `lib/db-hybrid.js`
-- Both MongoDB and Prisma clients available
-
-See `MOCK_DATA_SUMMARY.txt` for details on migrating from mock data to database.
-
-## Learn More
-
-- [Next.js Documentation](https://nextjs.org/docs)
-- [MongoDB Documentation](https://docs.mongodb.com/)
-- [Prisma Documentation](https://www.prisma.io/docs)
-
-## Deploy on Vercel
-
-The easiest way to deploy your Next.js app is to use the [Vercel Platform](https://vercel.com/new?utm_medium=default-template&filter=next.js&utm_source=create-next-app&utm_campaign=create-next-app-readme).
-
-Make sure to add your `MONGODB_URI` environment variable in Vercel's project settings.
+---
+*Built with ❤️ for a faster job hunt.*
