@@ -46,7 +46,7 @@ export const JobFilters = ({ location, setLocation, category, setCategory, filte
 
     return (
         <div className="neu-card sticky relative top-0 overflow-y-auto max-h-screen hide-scrollbar">
-            <div className="flex items-center justify-between mb-6 sticky top-0 w-full z-10 bg-white/70 backdrop-blur-md p-2 border-b border-slate-100/50 shadow-sm">
+            <div className="flex items-center justify-between mb-2 sticky top-0 w-full z-10 bg-white/70 backdrop-blur-md p-2 border-b border-slate-100/50 shadow-sm">
                 <div className="flex items-center justify-between w-full">
                     <div className="flex items-center gap-2">
                         <Filter className="w-5 h-5 text-indigo-600" />

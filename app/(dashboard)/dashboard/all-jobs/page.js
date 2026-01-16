@@ -192,7 +192,7 @@ export default function JobsPage() {
       />
 
 
-      <div className="max-w-7xl mx-auto px-4 relative z-10">
+      <div className="max-w-7xl mx-auto relative z-10">
         <div className="flex flex-col lg:flex-row gap-8">
 
           {/* Sidebar Filters */}
@@ -248,16 +248,16 @@ export default function JobsPage() {
 
               </>
             )}
+            {/* Pagination Controls */}
+            <div className="mt-5">
+              <Pagination
+                currentPage={currentPage}
+                totalPages={totalPages}
+                onPageChange={setCurrentPage}
+              />
+            </div>
           </main>
         </div>
-      </div>
-      {/* Pagination Controls */}
-      <div className="mt-5">
-        <Pagination
-          currentPage={currentPage}
-          totalPages={totalPages}
-          onPageChange={setCurrentPage}
-        />
       </div>
     </div>
   );
