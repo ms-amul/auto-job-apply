@@ -39,6 +39,7 @@ export default function AgentPage() {
     emailNotifications: true,
     smsNotifications: false,
     applyRecentFirst: true,
+    minPayRate: 25,
   });
 
   // Live workflow state
@@ -116,6 +117,7 @@ export default function AgentPage() {
           emailNotifications: agentData.agent.emailNotifications !== undefined ? agentData.agent.emailNotifications : true,
           smsNotifications: agentData.agent.smsNotifications || false,
           applyRecentFirst: agentData.agent.applyRecentFirst !== undefined ? agentData.agent.applyRecentFirst : true,
+          minPayRate: agentData.agent.minPayRate || 25,
         });
       }
 
@@ -441,6 +443,7 @@ export default function AgentPage() {
           emailNotifications: configForm.emailNotifications,
           smsNotifications: configForm.smsNotifications,
           applyRecentFirst: configForm.applyRecentFirst,
+          minPayRate: configForm.minPayRate,
         }),
       });
 

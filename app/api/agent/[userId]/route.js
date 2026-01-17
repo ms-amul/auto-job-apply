@@ -36,6 +36,7 @@ export async function GET(_request, { params }) {
       applyRecentFirst: preferences.apply_most_recent_jobs_first,
       emailNotifications: preferences.auto_apply_cand?.notify_email ?? true,
       smsNotifications: preferences.auto_apply_cand?.notify_sms ?? false,
+      minPayRate: preferences.Preferred_MinimumPayrate_PerHour || 25,
     } : null;
 
     return NextResponse.json({
@@ -73,6 +74,7 @@ export async function PUT(request, { params }) {
     if (body.keywords !== undefined) updateData.job_keywords = body.keywords;
     if (body.applyRecentFirst !== undefined) updateData.apply_most_recent_jobs_first = body.applyRecentFirst;
     if (body.status !== undefined) updateData.is_active = body.status === 'running';
+    if (body.minPayRate !== undefined) updateData.Preferred_MinimumPayrate_PerHour = body.minPayRate;
 
     // Use a transaction to update both preferences and candidate notification settings
     const result = await prisma.$transaction(async (tx) => {
@@ -86,6 +88,7 @@ export async function PUT(request, { params }) {
           job_keywords: body.keywords ?? [],
           apply_most_recent_jobs_first: body.applyRecentFirst !== undefined ? body.applyRecentFirst : true,
           is_active: body.status === 'running',
+          Preferred_MinimumPayrate_PerHour: body.minPayRate ?? 25,
           created_at: now,
           updated_at: now,
         },
@@ -122,6 +125,7 @@ export async function PUT(request, { params }) {
       emailNotifications: updatedCand?.notify_email ?? true,
       smsNotifications: updatedCand?.notify_sms ?? false,
       applyRecentFirst: updatedPref.apply_most_recent_jobs_first,
+      minPayRate: updatedPref.Preferred_MinimumPayrate_PerHour || 25,
       updatedAt: updatedPref.updated_at,
     };
 

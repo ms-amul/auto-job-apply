@@ -45,6 +45,10 @@ export default function CurrentConfiguration({ agent, isConfigured, onConfigure 
               label="Strict Mode"
               value={agent.applyRecentFirst !== false ? 'Priority' : 'General'}
             />
+            <ConfigRow
+              label="Min Pay Rate"
+              value={agent.minPayRate ? `$${agent.minPayRate}/hr` : 'Not Set'}
+            />
           </div>
 
           <div className="pt-2">

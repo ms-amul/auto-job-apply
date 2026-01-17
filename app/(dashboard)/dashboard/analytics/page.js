@@ -1,12 +1,7 @@
 'use client';
 
 import { motion } from 'framer-motion';
-import {
-  Activity,
-  BarChart2,
-  Cpu,
-  Shield
-} from 'lucide-react';
+import { BarChart } from 'lucide-react';
 import { useEffect, useState } from 'react';
 
 export default function AnalyticsPage() {
@@ -24,168 +19,127 @@ export default function AnalyticsPage() {
   }, []);
 
   return (
-    <div className="relative max-h-[calc(100vh-90px)] w-full overflow-hidden flex items-center justify-center rounded-[40px] bg-[#020617]">
-      {/* Heavy Animated Background Background */}
-      <div className="absolute inset-0 z-0">
-        <div className="absolute inset-0 bg-gradient-to-br from-indigo-950/20 via-slate-950 to-blue-950/20" />
+    <div className="flex items-center justify-center min-h-[90vh]">
 
-        {/* Animated Orbs */}
-        <motion.div
-          animate={{
-            x: [0, 100, 0],
-            y: [0, -50, 0],
-            scale: [1, 1.2, 1]
-          }}
-          transition={{ duration: 20, repeat: Infinity, ease: "linear" }}
-          className="absolute top-[-10%] left-[-10%] w-[600px] h-[600px] bg-blue-600/10 rounded-full blur-[120px]"
-        />
-        <motion.div
-          animate={{
-            x: [0, -80, 0],
-            y: [0, 120, 0],
-            scale: [1, 1.3, 1]
-          }}
-          transition={{ duration: 25, repeat: Infinity, ease: "linear" }}
-          className="absolute bottom-[-10%] right-[-10%] w-[500px] h-[500px] bg-indigo-600/10 rounded-full blur-[100px]"
-        />
+      {/* Background Mesh & Grid Layer */}
+      <div className="absolute inset-0 z-0 overflow-hidden pointer-events-none">
+        {/* Soft colorful blobs for mesh effect */}
+        <div className="absolute top-[-20%] left-[-10%] w-[70vw] h-[70vw] bg-blue-100/40 rounded-full blur-[100px] mix-blend-multiply opacity-70 animate-blob" />
+        <div className="absolute top-[-20%] right-[-10%] w-[70vw] h-[70vw] bg-purple-100/40 rounded-full blur-[100px] mix-blend-multiply opacity-70 animate-blob animation-delay-2000" />
+        <div className="absolute bottom-[-20%] left-[20%] w-[70vw] h-[70vw] bg-indigo-100/40 rounded-full blur-[100px] mix-blend-multiply opacity-70 animate-blob animation-delay-4000" />
 
-        {/* Grid Pattern */}
-        <div className="absolute inset-0 opacity-[0.03]"
+        {/* Faded Grid Overlay */}
+        <div
+          className="absolute inset-0"
           style={{
-            backgroundImage: `radial-gradient(#fff 1px, transparent 1px)`,
-            backgroundSize: '40px 40px'
+            backgroundImage: `
+              linear-gradient(to right, rgba(99, 102, 241, 0.05) 1px, transparent 1px),
+              linear-gradient(to bottom, rgba(99, 102, 241, 0.05) 1px, transparent 1px)
+            `,
+            backgroundSize: '40px 40px',
+            maskImage: 'radial-gradient(ellipse at center, black 40%, transparent 80%)'
           }}
         />
       </div>
 
-      {/* Floating Data Nodes (Decorative) */}
-      <div className="absolute inset-0 z-10 pointer-events-none">
-        {[...Array(6)].map((_, i) => (
-          <motion.div
-            key={i}
-            initial={{ opacity: 0 }}
-            animate={{
-              opacity: [0.1, 0.4, 0.1],
-              y: [0, -30, 0],
-              x: mousePosition.x * (i + 1) * 0.2
-            }}
-            transition={{
-              duration: 5 + i,
-              repeat: Infinity,
-              delay: i * 0.5
-            }}
-            className="absolute"
-            style={{
-              top: `${20 + (i * 12)}%`,
-              left: `${15 + (i * 15)}%`,
-            }}
-          >
-            <div className="w-px h-20 bg-gradient-to-b from-transparent via-blue-500/50 to-transparent" />
-            <div className="w-2 h-2 rounded-full bg-blue-500 shadow-[0_0_10px_#3b82f6]" />
-          </motion.div>
-        ))}
-      </div>
-
-      {/* Main Content Content */}
+      {/* Main Content */}
       <motion.div
         style={{
-          rotateX: mousePosition.y * 0.2,
-          rotateY: mousePosition.x * 0.2
+          rotateX: mousePosition.y * -0.05,
+          rotateY: mousePosition.x * 0.05,
         }}
-        className="relative z-20 w-full max-w-5xl px-6 py-20 flex flex-col items-center text-center perspective-1000"
+        className="relative z-10 flex flex-col items-center justify-center text-center perspective-1000"
       >
-        {/* Upper Badge */}
+
+        {/* Classy CSS Animation Element */}
+        <div className="relative mb-10 group cursor-default">
+          {/* Pulse Ring */}
+          <div className="absolute top-1/2 left-1/2 -translate-x-1/2 -translate-y-1/2 w-[200px] h-[200px] bg-blue-400/10 rounded-full blur-3xl group-hover:bg-blue-400/20 transition-all duration-1000 animate-pulse-slow" />
+
+          {/* Central Classy Icon/Badge */}
+          <div className="relative w-24 h-24 mx-auto flex items-center justify-center">
+            <div className="absolute inset-0 bg-gradient-to-tr from-blue-50 to-indigo-50 rounded-3xl rotate-6 animate-float" />
+            <div className="absolute inset-0 bg-white rounded-3xl shadow-[0_8px_30px_rgb(0,0,0,0.04)] flex items-center justify-center border border-white/60 backdrop-blur-sm z-10 animate-float-delayed">
+              <BarChart className="w-10 h-10 text-slate-700" />
+            </div>
+            {/* Orbiting Dot */}
+            <div className="absolute inset-[-12px] animate-spin-slow">
+              <div className="w-3 h-3 bg-blue-500 rounded-full shadow-lg shadow-blue-500/30 absolute top-0 left-1/2 -translate-x-1/2" />
+            </div>
+          </div>
+        </div>
+
+        {/* Text Content */}
         <motion.div
           initial={{ opacity: 0, y: 20 }}
           animate={{ opacity: 1, y: 0 }}
-          transition={{ duration: 0.8 }}
-          className="flex items-center gap-3 px-6 py-2 rounded-full bg-white/5 border border-white/10 backdrop-blur-md mb-8"
+          transition={{ delay: 0.2, duration: 0.8 }}
+          className="space-y-6 max-w-lg relative z-20"
         >
-          <motion.div
-            animate={{ rotate: 360 }}
-            transition={{ duration: 8, repeat: Infinity, ease: "linear" }}
-          >
-            <Cpu className="w-4 h-4 text-blue-400" />
-          </motion.div>
-          <span className="text-[10px] font-black uppercase tracking-[0.3em] text-blue-300">AI Intelligence Core</span>
-        </motion.div>
-
-        {/* Hero Title */}
-        <motion.div
-          initial={{ opacity: 0, scale: 0.95 }}
-          animate={{ opacity: 1, scale: 1 }}
-          transition={{ duration: 1.2, ease: [0.16, 1, 0.3, 1] }}
-          className="mb-12"
-        >
-          <h1 className="text-6xl md:text-8xl font-black text-white tracking-tighter leading-[0.85] mb-6">
-            Analytics <br />
-            <span className="text-transparent bg-clip-text bg-gradient-to-r from-blue-300 via-indigo-200 to-emerald-300 animate-premium-shimmer bg-[length:200%_auto] selection:bg-blue-500/30">
-              Coming soon!
+          <div className="inline-flex items-center gap-2 px-4 py-1.5 rounded-full bg-white/80 border border-slate-200 shadow-sm backdrop-blur-md">
+            <span className="relative flex h-2 w-2">
+              <span className="animate-ping absolute inline-flex h-full w-full rounded-full bg-indigo-400 opacity-75"></span>
+              <span className="relative inline-flex rounded-full h-2 w-2 bg-indigo-500"></span>
             </span>
-          </h1>
-          <p className="text-lg md:text-xl text-slate-400 font-medium max-w-2xl mx-auto leading-relaxed opacity-80">
-            We're engineering a predictive engine that decodes the job market.
-            Real-time tracking, success probability, and AI-driven optimizations.
-          </p>
-        </motion.div>
+            <span className="text-xs font-bold uppercase tracking-widest text-slate-500">
+              Coming Soon
+            </span>
+          </div>
 
-        {/* Feature Cards Grid (Compact & Premium) */}
-        <div className="grid grid-cols-1 md:grid-cols-3 gap-6 w-full max-w-4xl mb-16">
-          {[
-            { icon: BarChart2, label: 'Success Funnel', desc: 'Conversion analysis' },
-            { icon: Activity, label: 'Real-time Pulse', desc: 'Live market trends' },
-            { icon: Shield, label: 'Secure Audits', desc: 'Data privacy core' }
-          ].map((feature, i) => (
-            <motion.div
-              key={i}
-              initial={{ opacity: 0, y: 20 }}
-              animate={{ opacity: 1, y: 0 }}
-              transition={{ delay: 0.5 + (i * 0.1), ease: "easeOut" }}
-              whileHover={{ y: -8, backgroundColor: 'rgba(255,255,255,0.06)', borderColor: 'rgba(255,255,255,0.2)' }}
-              className="p-8 rounded-[40px] bg-white/[0.03] border border-white/[0.08] backdrop-blur-md text-left group cursor-default transition-colors duration-500"
-            >
-              <div className="w-12 h-12 rounded-2xl bg-blue-500/10 flex items-center justify-center mb-6 border border-blue-500/20 group-hover:bg-blue-600 group-hover:border-blue-400 transition-all duration-500">
-                <feature.icon className="w-6 h-6 text-blue-400 group-hover:text-white transition-colors" />
-              </div>
-              <h3 className="text-white font-bold text-base mb-2">{feature.label}</h3>
-              <p className="text-slate-500 text-sm leading-relaxed">{feature.desc}</p>
-            </motion.div>
-          ))}
-        </div>
+          <div>
+            <h1 className="text-5xl md:text-6xl font-black text-slate-900 tracking-tight mb-4">
+              Advanced <span className="text-transparent bg-clip-text bg-gradient-to-r from-blue-600 to-indigo-600">Analytics</span>
+            </h1>
+            <p className="text-lg text-slate-500 font-medium leading-relaxed">
+              We are engineering a predictive engine to decode your application performance with AI-driven insights.
+            </p>
+          </div>
+        </motion.div>
       </motion.div>
 
-      {/* Interactive Floating Orb Container Overlay */}
-      <div className="absolute inset-0 pointer-events-none z-30">
-        <motion.div
-          animate={{
-            x: mousePosition.x * 2,
-            y: mousePosition.y * 2,
-          }}
-          className="absolute top-1/2 left-1/2 -translate-x-1/2 -translate-y-1/2 w-[800px] h-[800px] border border-blue-500/10 rounded-full"
-        />
-        <motion.div
-          animate={{
-            x: mousePosition.x * -1,
-            y: mousePosition.y * -1,
-          }}
-          className="absolute top-1/2 left-1/2 -translate-x-1/2 -translate-y-1/2 w-[600px] h-[600px] border border-indigo-500/5 rounded-full"
-        />
-      </div>
-
       <style jsx global>{`
-        @keyframes premium-shimmer {
-          0% { background-position: 0% center; }
-          100% { background-position: -200% center; }
+        @keyframes blob {
+          0% { transform: translate(0px, 0px) scale(1); }
+          33% { transform: translate(30px, -50px) scale(1.1); }
+          66% { transform: translate(-20px, 20px) scale(0.9); }
+          100% { transform: translate(0px, 0px) scale(1); }
         }
-        .animate-premium-shimmer {
-          animation: premium-shimmer 8s cubic-bezier(0.4, 0, 0.2, 1) infinite;
+        .animate-blob {
+          animation: blob 7s infinite;
         }
-        .perspective-1000 {
-          perspective: 1000px;
+        .animation-delay-2000 {
+          animation-delay: 2s;
         }
-        ::selection {
-          background: rgba(59, 130, 246, 0.2);
-          color: white;
+        .animation-delay-4000 {
+          animation-delay: 4s;
+        }
+        @keyframes float {
+          0%, 100% { transform: translateY(0) rotate(6deg); }
+          50% { transform: translateY(-10px) rotate(8deg); }
+        }
+        @keyframes float-delayed {
+          0%, 100% { transform: translateY(0); }
+          50% { transform: translateY(-12px); }
+        }
+        @keyframes spin-slow {
+          from { transform: rotate(0deg); }
+          to { transform: rotate(360deg); }
+        }
+        @keyframes pulse-slow {
+          0%, 100% { opacity: 0.5; transform: translate(-50%, -50%) scale(1); }
+          50% { opacity: 0.8; transform: translate(-50%, -50%) scale(1.1); }
+        }
+        .animate-float {
+          animation: float 6s ease-in-out infinite;
+        }
+        .animate-float-delayed {
+          animation: float-delayed 7s ease-in-out infinite;
+        }
+        .animate-spin-slow {
+          animation: spin-slow 12s linear infinite;
+        }
+        .animate-pulse-slow {
+          animation: pulse-slow 4s ease-in-out infinite;
         }
       `}</style>
     </div>

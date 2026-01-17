@@ -6,6 +6,7 @@ import { useEffect, useState } from 'react';
 import { Activity, Clock, Mail, MessageSquare, Search, Target, X } from 'lucide-react';
 import Button from '@/components/ui/Button';
 import ToggleSwitch from './ToggleSwitch';
+import MinPayRate from '../ui/MinPayRate';
 
 export default function AgentConfigPanel({
   isOpen,
@@ -102,7 +103,13 @@ export default function AgentConfigPanel({
               </div>
             </div>
           </div>
-
+          {/* Min Pay Rate */}
+          <div className="p-1 rounded-2xl bg-white/50 border border-slate-100 shadow-sm my-2">
+            <MinPayRate
+              value={configForm.minPayRate}
+              onChange={(value) => setConfigForm({ ...configForm, minPayRate: value })}
+            />
+          </div>
           {/* Compact Keywords */}
           <div className="space-y-1 my-4">
             <div className="flex items-center gap-2">

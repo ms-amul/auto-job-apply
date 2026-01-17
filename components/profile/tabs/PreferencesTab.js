@@ -10,6 +10,7 @@ import GenderSelect from '../GenderSelect';
 import RaceSelect from '../RaceSelect';
 import SectionCard from '../SectionCard';
 import VeteranSelect from '../VeteranSelect';
+import MinPayRate from '../../ui/MinPayRate';
 
 export default function PreferencesTab({ userId }) {
   const [loading, setLoading] = useState(true);
@@ -251,64 +252,11 @@ export default function PreferencesTab({ userId }) {
           </div>
 
           {/* Minimum Payrate Slider */}
-          <div className="md:col-span-2 space-y-4 pt-4 border-t border-slate-100 px-3">
-            <div className="flex items-center justify-between">
-              <div>
-                <label className="block text-sm font-semibold text-slate-700">
-                  Minimum Desired Payrate (Per Hour)
-                </label>
-                <p className="text-xs text-slate-500 mt-0.5">Filter opportunities based on your compensation floor</p>
-              </div>
-              <div className="bg-blue-50 px-3 py-1.5 rounded-xl border border-blue-100 flex items-center gap-1 focus-within:ring-2 focus-within:ring-blue-200 transition-all">
-                <span className="text-xl font-bold text-blue-600">$</span>
-                <input
-                  type="number"
-                  min="1"
-                  max="200"
-                  value={data.min_payrate}
-                  onChange={(e) => updateField('min_payrate', Math.min(200, Math.max(1, parseInt(e.target.value) || 0)))}
-                  className="w-14 bg-transparent text-xl font-bold text-blue-600 focus:outline-none [appearance:textfield] [&::-webkit-outer-spin-button]:appearance-none [&::-webkit-inner-spin-button]:appearance-none"
-                />
-                <span className="text-xs font-semibold text-blue-400">/hr</span>
-              </div>
-            </div>
-
-            <div className="relative h-12 flex items-center group px-4">
-              {/* Custom Track */}
-              <div className="absolute inset-0 h-3 my-auto bg-slate-100 rounded-full overflow-hidden border border-white">
-                <div
-                  className="h-full bg-linear-to-r from-blue-500 to-indigo-600 rounded-full transition-all duration-300"
-                  style={{ width: `${((data.min_payrate - 1) / (200 - 1)) * 100}%` }}
-                />
-              </div>
-
-              <input
-                type="range"
-                min="1"
-                max="200"
-                step="1"
-                value={data.min_payrate}
-                onChange={(e) => updateField('min_payrate', parseInt(e.target.value))}
-                className="absolute inset-0 w-full h-full opacity-0 cursor-pointer z-10"
-              />
-
-              {/* Custom Thumb (Visual only) */}
-              <div
-                className="absolute w-6 h-6 bg-white border-2 border-blue-500 rounded-full shadow-lg pointer-events-none transition-all duration-300 transform group-hover:scale-110"
-                style={{
-                  left: `calc(${((data.min_payrate - 1) / (200 - 1)) * 100}% - 12px)`,
-                  top: '50%',
-                  marginTop: '-12px'
-                }}
-              >
-                <div className="w-1.5 h-1.5 bg-blue-500 rounded-full m-auto mt-[7px]" />
-              </div>
-            </div>
-
-            <div className="flex justify-between px-1">
-              <span className="text-[10px] font-bold text-slate-400">$1/hr</span>
-              <span className="text-[10px] font-bold text-slate-400">$200/hr</span>
-            </div>
+          <div className="md:col-span-2 border-t border-slate-100">
+            <MinPayRate
+              value={data.min_payrate}
+              onChange={(value) => updateField('min_payrate', value)}
+            />
           </div>
         </div>
       </SectionCard>
