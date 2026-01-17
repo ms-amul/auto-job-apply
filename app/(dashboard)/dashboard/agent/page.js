@@ -10,21 +10,21 @@
 
 'use client';
 
-import { useEffect, useState, useRef } from 'react';
-import { useRouter } from 'next/navigation';
-import { useSession } from 'next-auth/react';
-import { Play, Pause, Settings as SettingsIcon, Search, FileText, Send, Activity } from 'lucide-react';
-import Button from '@/components/ui/Button';
-import Loader from '@/components/ui/Loader';
-import toast from 'react-hot-toast';
 import AgentConfigPanel from '@/components/agent/AgentConfigPanel';
 import AgentStatusOverview from '@/components/agent/AgentStatusOverview';
-import LiveWorkflow from '@/components/agent/LiveWorkflow';
-import DailyLimitReached from '@/components/agent/DailyLimitReached';
 import ApplicationHistory from '@/components/agent/ApplicationHistory';
 import CurrentConfiguration from '@/components/agent/CurrentConfiguration';
+import DailyLimitReached from '@/components/agent/DailyLimitReached';
 import HowItWorks from '@/components/agent/HowItWorks';
+import LiveWorkflow from '@/components/agent/LiveWorkflow';
 import PageHeader from '@/components/dashboard/PageHeader';
+import Button from '@/components/ui/Button';
+import { PageLoader } from '@/components/ui/Loader';
+import { Activity, FileText, Pause, Play, Search, Send, Settings as SettingsIcon } from 'lucide-react';
+import { useSession } from 'next-auth/react';
+import { useRouter } from 'next/navigation';
+import { useEffect, useRef, useState } from 'react';
+import toast from 'react-hot-toast';
 
 export default function AgentPage() {
   const router = useRouter();
@@ -464,9 +464,7 @@ export default function AgentPage() {
 
   if (status === 'loading' || loading) {
     return (
-      <div className="min-h-[60vh] flex items-center justify-center">
-        <Loader size="lg" text="Loading agent..." />
-      </div>
+      <PageLoader text="Loading agent..." />
     );
   }
 

@@ -1,7 +1,6 @@
 'use client';
 
-import { useState, useEffect } from 'react';
-import { theme } from '@/utils/theme';
+import { useEffect, useState } from 'react';
 import toast from 'react-hot-toast';
 
 export default function DisabilitySelect({ value = null, onChange }) {

@@ -6,6 +6,7 @@ import SectionCard from '../SectionCard';
 import { User, Mail, Phone, MapPin, UserCircle, FileText } from 'lucide-react';
 import { theme } from '@/utils/theme';
 import toast from 'react-hot-toast';
+import { CardLoader } from '@/components/ui/Loader';
 
 export default function GeneralTab({ userId, onUpdate }) {
   const [loading, setLoading] = useState(true);
@@ -86,9 +87,7 @@ export default function GeneralTab({ userId, onUpdate }) {
 
   if (loading) {
     return (
-      <div className="flex items-center justify-center py-12">
-        <div className="w-8 h-8 border-2 border-slate-300 border-t-blue-500 rounded-full animate-spin" />
-      </div>
+      <CardLoader text='Loading general profile...' />
     );
   }
 

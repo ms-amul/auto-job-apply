@@ -1,10 +1,11 @@
 'use client';
 
-import { useState, useEffect } from 'react';
-import SectionCard from '../SectionCard';
-import { Plus, X, Briefcase, FolderKanban } from 'lucide-react';
+import { CardLoader } from '@/components/ui/Loader';
 import { theme } from '@/utils/theme';
+import { Briefcase, FolderKanban, Plus, X } from 'lucide-react';
+import { useEffect, useState } from 'react';
 import toast from 'react-hot-toast';
+import SectionCard from '../SectionCard';
 
 export default function WorkExperienceProjectsTab({ userId }) {
   const [loading, setLoading] = useState(true);
@@ -128,9 +129,7 @@ export default function WorkExperienceProjectsTab({ userId }) {
 
   if (loading) {
     return (
-      <div className="flex items-center justify-center py-12">
-        <div className="w-8 h-8 border-2 border-slate-300 border-t-blue-500 rounded-full animate-spin" />
-      </div>
+      <CardLoader text='Loading work experience...' />
     );
   }
 

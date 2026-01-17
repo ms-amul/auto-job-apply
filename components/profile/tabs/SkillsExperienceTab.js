@@ -6,6 +6,7 @@ import SkillInput from '../SkillInput';
 import { Plus, X, GraduationCap, Award, Sparkles } from 'lucide-react';
 import { theme } from '@/utils/theme';
 import toast from 'react-hot-toast';
+import { CardLoader } from '@/components/ui/Loader';
 
 export default function SkillsExperienceTab({ userId }) {
   const [loading, setLoading] = useState(true);
@@ -130,9 +131,7 @@ export default function SkillsExperienceTab({ userId }) {
 
   if (loading) {
     return (
-      <div className="flex items-center justify-center py-12">
-        <div className="w-8 h-8 border-2 border-slate-300 border-t-blue-500 rounded-full animate-spin" />
-      </div>
+      <CardLoader text='Loading skills...' />
     );
   }
 

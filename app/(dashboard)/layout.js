@@ -39,10 +39,6 @@ export default function DashboardLayout({ children }) {
     return () => window.removeEventListener('resize', handleResize);
   }, [status, router]);
 
-  if (status === 'loading') {
-    return <PageLoader />;
-  }
-
   if (!session?.user) {
     return null;
   }

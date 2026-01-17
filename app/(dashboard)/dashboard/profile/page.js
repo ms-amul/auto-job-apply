@@ -5,18 +5,17 @@
 
 'use client';
 
-import { useEffect, useState } from 'react';
+import Loader, { PageLoader } from '@/components/ui/Loader';
 import { useSession } from 'next-auth/react';
 import { useRouter } from 'next/navigation';
+import { useEffect, useState } from 'react';
 import toast from 'react-hot-toast';
-import { theme } from '@/utils/theme';
-import Loader from '@/components/ui/Loader';
 
 // Profile Components
+import ProfileCompletion from '@/components/profile/ProfileCompletion';
 import ProfileHeader from '@/components/profile/ProfileHeader';
 import ProfileTabs from '@/components/profile/ProfileTabs';
 import ResumeUploadSection from '@/components/profile/ResumeUploadSection';
-import ProfileCompletion from '@/components/profile/ProfileCompletion';
 
 // Tab Components
 import GeneralTab from '@/components/profile/tabs/GeneralTab';
@@ -173,9 +172,7 @@ export default function ProfilePage() {
 
   if (initialLoading) {
     return (
-      <div className="min-h-[60vh] flex items-center justify-center">
-        <Loader />
-      </div>
+      <PageLoader text="Loading profile..." />
     );
   }
 

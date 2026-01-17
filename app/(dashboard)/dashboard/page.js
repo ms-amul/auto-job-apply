@@ -7,18 +7,19 @@
 
 'use client';
 
-import { useEffect, useState } from 'react';
-import { useRouter } from 'next/navigation';
-import { useSession } from 'next-auth/react';
-import {
-  Briefcase, Send, CheckCircle2, Clock, TrendingUp, Users, Eye, FileText,
-  Building2, MapPin, DollarSign, Calendar, Target, Bot, Sparkles
-} from 'lucide-react';
-import GlassPanel from '@/components/ui/GlassPanel';
 import PageHeader from '@/components/dashboard/PageHeader';
-import Badge from '@/components/ui/Badge';
-import Loader from '@/components/ui/Loader';
-import { theme } from '@/utils/theme';
+import Loader, { PageLoader } from '@/components/ui/Loader';
+import {
+  Briefcase,
+  Building2,
+  CheckCircle2, Clock,
+  Send,
+  Target,
+  TrendingUp, Users
+} from 'lucide-react';
+import { useSession } from 'next-auth/react';
+import { useRouter } from 'next/navigation';
+import { useEffect, useState } from 'react';
 
 export default function DashboardPage() {
   const router = useRouter();
@@ -131,9 +132,7 @@ export default function DashboardPage() {
 
   if (status === 'loading' || loading) {
     return (
-      <div className="min-h-[60vh] flex items-center justify-center">
-        <Loader size="lg" text="Loading dashboard..." />
-      </div>
+      <PageLoader text="Loading dashboard..." />
     );
   }
 
