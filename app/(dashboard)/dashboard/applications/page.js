@@ -8,23 +8,24 @@
 
 'use client';
 
-import { useEffect, useState } from 'react';
-import { useRouter } from 'next/navigation';
-import { useSession } from 'next-auth/react';
-import { FileText, Calendar, ExternalLink, Trash2, Briefcase, MapPin, Building2 } from 'lucide-react';
-import Button from '@/components/ui/Button';
-import Loader from '@/components/ui/Loader';
-import { theme } from '@/utils/theme';
-import toast from 'react-hot-toast';
-import PageHeader from '@/components/dashboard/PageHeader';
+import ToggleSwitch from '@/components/agent/ToggleSwitch';
 import ApplicationCard from '@/components/applications/ApplicationCard';
+import PageHeader from '@/components/dashboard/PageHeader';
+import JobGridSkeleton from '@/components/jobs/JobGridSkeleton';
+import Button from '@/components/ui/Button';
+import { FileText } from 'lucide-react';
+import { useSession } from 'next-auth/react';
+import { useRouter } from 'next/navigation';
+import { useEffect, useState } from 'react';
+import toast from 'react-hot-toast';
 
 export default function ApplicationsPage() {
   const router = useRouter();
   const { data: session, status } = useSession();
   const [applications, setApplications] = useState([]);
   const [loading, setLoading] = useState(true);
-  const [filter, setFilter] = useState('all');
+
+  const [isAgentView, setIsAgentView] = useState(true); // false = Manual, true = Agent
 
   useEffect(() => {
     if (status === 'authenticated') {
@@ -73,50 +74,37 @@ export default function ApplicationsPage() {
     return colors[status] || 'bg-gray-100 text-gray-700 border-gray-200';
   };
 
-  const filteredApplications = filter === 'all'
-    ? applications
-    : applications.filter(app => app.status === filter);
+  const filteredApplications = applications.filter(app =>
+    isAgentView ? app.source === 'agent' : (app.source === 'manual' || !app.source)
+  );
 
   return (
     <div className="space-y-8">
-      {/* Header */}
-      <PageHeader
-        title="My"
-        highlight="Applications"
-        description="Track and manage your job applications"
-      />
+      {/* Header with Toggle */}
+      <div className="flex flex-col md:flex-row md:items-center justify-between gap-4">
+        <PageHeader
+          title="My"
+          highlight="Applications"
+          description="Track and manage your job applications"
+        />
 
-      {/* Filter Tabs */}
-      <div className="bg-white border border-gray-200 rounded-2xl p-2">
-        <div className="flex flex-wrap gap-2">
-          {['all', 'pending', 'interview', 'accepted', 'rejected'].map((status) => {
-            const count = status === 'all'
-              ? applications.length
-              : applications.filter(a => a.status === status).length;
-
-            return (
-              <button
-                key={status}
-                onClick={() => setFilter(status)}
-                style={filter === status ? { background: theme.getAccentGradient(135) } : {}}
-                className={`px-4 cursor-pointer py-2.5 rounded-xl text-sm font-medium transition-all ${filter === status
-                  ? 'text-white'
-                  : 'bg-white text-gray-700 border border-gray-300'
-                  }`}
-              >
-                {status.charAt(0).toUpperCase() + status.slice(1)}
-                <span className="ml-1.5 opacity-75">({count})</span>
-              </button>
-            );
-          })}
+        <div className="flex items-center gap-4 bg-white p-2 md:p-3 rounded-2xl border border-gray-200 shadow-sm self-start md:self-auto">
+          <span className={`text-sm font-semibold transition-colors ${!isAgentView ? 'text-blue-600' : 'text-slate-400'}`}>
+            Manual
+          </span>
+          <ToggleSwitch
+            checked={isAgentView}
+            onChange={setIsAgentView}
+          />
+          <span className={`text-sm font-semibold transition-colors ${isAgentView ? 'text-blue-600' : 'text-slate-400'}`}>
+            Agent Applied
+          </span>
         </div>
       </div>
 
       {/* Loading State */}
       {(status === 'loading' || loading) && (
-        <div className="flex items-center justify-center py-20">
-          <Loader size="lg" text="Loading applications..." />
-        </div>
+        <JobGridSkeleton count={4} className="grid grid-cols-1 gap-6" />
       )}
 
       {/* Empty State */}
@@ -128,9 +116,9 @@ export default function ApplicationsPage() {
             </div>
             <h3 className="text-2xl font-bold text-slate-800 mb-3">No applications found</h3>
             <p className="text-base text-slate-500 mb-8">
-              {filter === 'all'
-                ? "Start applying to jobs to see them here"
-                : `No ${filter} applications yet`}
+              {isAgentView
+                ? "No agent-submitted applications found yet"
+                : "You haven't manually applied to any jobs yet"}
             </p>
             <Button
               variant="primary"

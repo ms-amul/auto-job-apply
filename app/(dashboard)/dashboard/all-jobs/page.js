@@ -4,6 +4,7 @@ import PageHeader from '@/components/dashboard/PageHeader';
 import JobCard from '@/components/jobs/JobCard';
 import { JobFilters } from '@/components/jobs/JobFilters';
 import { PageLoader } from '@/components/ui/Loader';
+import JobGridSkeleton from '@/components/jobs/JobGridSkeleton';
 import Pagination from '@/components/ui/Pagination';
 import {
   Briefcase
@@ -172,11 +173,6 @@ export default function JobsPage() {
     router.push(`/dashboard/job/${job.requirement_id}?source_id=${job.source_id}`);
   };
 
-  // Full Page Loader
-  if (loading) {
-    return <PageLoader text="Finding best matches for you..." />;
-  }
-
   return (
     <div className="min-h-screen">
       <PageHeader
@@ -221,7 +217,9 @@ export default function JobsPage() {
           <main className="flex-1">
 
             {/* Grid of JobCards */}
-            {filteredJobs.length === 0 ? (
+            {loading ? (
+              <JobGridSkeleton className="grid grid-cols-1 gap-8" count={5} />
+            ) : filteredJobs.length === 0 ? (
               <div className="text-center py-20 bg-slate-50 rounded-2xl border-2 border-dashed border-slate-200">
                 <Briefcase className="w-16 h-16 text-slate-200 mx-auto mb-4" />
                 <h3 className="text-xl font-bold text-slate-400 uppercase tracking-widest">No Matches Found</h3>

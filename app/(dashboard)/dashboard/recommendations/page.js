@@ -1,14 +1,14 @@
 
 'use client';
 
-import { useState, useEffect } from 'react';
-import { useRouter } from 'next/navigation';
-import { useSession } from 'next-auth/react';
-import { Sparkles } from 'lucide-react';
-import JobCard from '@/components/jobs/JobCard';
-import Loader from '@/components/ui/Loader';
-import toast from 'react-hot-toast';
 import PageHeader from '@/components/dashboard/PageHeader';
+import JobCard from '@/components/jobs/JobCard';
+import { Sparkles } from 'lucide-react';
+import { useSession } from 'next-auth/react';
+import { useRouter } from 'next/navigation';
+import { useEffect, useState } from 'react';
+import toast from 'react-hot-toast';
+import JobGridSkeleton from '@/components/jobs/JobGridSkeleton';
 
 export default function BrowseJobsPage() {
     const router = useRouter();
@@ -58,23 +58,7 @@ export default function BrowseJobsPage() {
 
                 {/* Job Grid */}
                 {loading ? (
-                    <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-2 gap-6 min-h-[40vh]">
-                        {[1, 2, 3, 4].map((n) => (
-                            <div key={n} className="bg-white rounded-2xl p-6 h-64 animate-pulse">
-                                <div className="flex gap-4">
-                                    <div className="w-14 h-14 bg-slate-100 rounded-xl"></div>
-                                    <div className="flex-1 space-y-3 pt-2">
-                                        <div className="h-4 bg-slate-100 rounded w-3/4"></div>
-                                        <div className="h-3 bg-slate-100 rounded w-1/2"></div>
-                                    </div>
-                                </div>
-                                <div className="mt-8 space-y-3">
-                                    <div className="h-3 bg-slate-100 rounded w-full"></div>
-                                    <div className="h-3 bg-slate-100 rounded w-5/6"></div>
-                                </div>
-                            </div>
-                        ))}
-                    </div>
+                    <JobGridSkeleton />
                 ) : jobs.length === 0 ? (
                     <div className="text-center py-20">
                         <div className="w-20 h-20 bg-slate-100 rounded-full flex items-center justify-center mx-auto mb-4">
