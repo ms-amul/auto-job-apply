@@ -196,7 +196,7 @@ export default function Features() {
               {feature.title}
             </h3>
 
-            <p className={`text-gray-300 ${isMobile ? 'text-sm' : 'text-base'} leading-relaxed`}>
+            <p className={`text-slate-200 ${isMobile ? 'text-sm' : 'text-base'} leading-relaxed`}>
               {feature.description}
             </p>
           </div>
@@ -304,12 +304,12 @@ export default function Features() {
                   Everything You Need to
                 </span>
                 <br />
-                <span className="bg-clip-text text-transparent" style={{ backgroundImage: theme.getAccentGradient(90) }}>
+                <span className="bg-clip-text text-transparent bg-gradient-to-r from-blue-400 to-cyan-400">
                   Land Your Dream Job
                 </span>
               </h2>
 
-              <p className={`${isMobile ? 'text-sm' : 'text-base md:text-lg'} text-gray-300 font-medium ${isMobile ? 'max-w-md' : 'max-w-2xl'} ${isMobile ? 'mx-auto' : 'lg:mx-0'}`}>
+              <p className={`${isMobile ? 'text-sm' : 'text-base md:text-lg'} text-slate-200 font-medium ${isMobile ? 'max-w-md' : 'max-w-2xl'} ${isMobile ? 'mx-auto' : 'lg:mx-0'}`}>
                 Powerful automation features that work 24/7 to help you{' '}
                 <span className="font-bold text-white">
                   apply faster, track smarter,
@@ -389,8 +389,8 @@ export default function Features() {
                         key={index}
                         onClick={() => goToSlide(index)}
                         className={`transition-all duration-300 rounded-full ${index === currentIndex
-                            ? 'w-8 h-2 bg-white'
-                            : 'w-2 h-2 bg-white/30 hover:bg-white/50'
+                          ? 'w-8 h-2 bg-white'
+                          : 'w-2 h-2 bg-white/30 hover:bg-white/50'
                           }`}
                         style={
                           index === currentIndex
@@ -415,7 +415,7 @@ export default function Features() {
                 <h3 className={`${isMobile ? 'text-2xl' : 'text-3xl md:text-4xl lg:text-5xl'} font-black mb-3 md:mb-4 tracking-tight text-white`}>
                   How It Works
                 </h3>
-                <p className={`${isMobile ? 'text-sm' : 'text-base md:text-lg'} text-gray-300 font-medium`}>
+                <p className={`${isMobile ? 'text-sm' : 'text-base md:text-lg'} text-slate-200 font-medium`}>
                   Your personal AI agent working 24/7 to land your dream job
                 </p>
               </div>
@@ -498,7 +498,7 @@ export default function Features() {
                         <h4 className={`${isMobile ? 'text-base' : 'text-lg md:text-xl'} font-black text-white mb-2 md:mb-3 tracking-tight`}>
                           {item.title}
                         </h4>
-                        <p className={`text-gray-300 ${isMobile ? 'text-xs' : 'text-sm md:text-base'} leading-relaxed`}>
+                        <p className={`text-slate-200 ${isMobile ? 'text-xs' : 'text-sm md:text-base'} leading-relaxed`}>
                           {item.description}
                         </p>
 
@@ -527,10 +527,10 @@ export default function Features() {
                   >
                     <div className="absolute inset-0 bg-linear-to-br from-white/10 via-transparent to-transparent rounded-xl"></div>
                     <div className="relative z-10">
-                      <div className={`${isMobile ? 'text-2xl' : 'text-3xl md:text-4xl'} font-black bg-clip-text text-transparent mb-1 md:mb-2`} style={{ backgroundImage: theme.getAccentGradient(90) }}>
+                      <div className={`${isMobile ? 'text-2xl' : 'text-3xl md:text-4xl'} font-black bg-clip-text text-transparent bg-gradient-to-r from-blue-400 to-cyan-400 mb-1 md:mb-2`}>
                         {stat.value}
                       </div>
-                      <div className={`${isMobile ? 'text-xs' : 'text-sm'} text-gray-300 font-bold`}>
+                      <div className={`${isMobile ? 'text-xs' : 'text-sm'} text-slate-200 font-bold`}>
                         {stat.label}
                       </div>
                     </div>

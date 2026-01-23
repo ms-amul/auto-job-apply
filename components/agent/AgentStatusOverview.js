@@ -7,7 +7,7 @@ import PremiumCard from '@/components/ui/PremiumCard';
 
 export default function AgentStatusOverview({ isRunning, isConfigured, stats }) {
   return (
-    <PremiumCard padding="p-5 md:p-6" className="cursor-pointer">
+    <PremiumCard padding="p-5 md:p-6">
       <div className="flex flex-col md:flex-row md:items-center justify-between gap-6 mb-8">
         <div className="flex items-center gap-5">
           <div
@@ -23,7 +23,7 @@ export default function AgentStatusOverview({ isRunning, isConfigured, stats }) 
               {isRunning ? 'System Active' : 'System Paused'}
             </div>
             <h3 className="text-2xl font-black text-slate-900 tracking-tight">AI Agent Status</h3>
-            <p className="text-[13px] font-medium text-slate-500 max-w-sm leading-relaxed">
+            <p className="text-[13px] font-medium text-slate-500 max-w-sm leading-relaxed" aria-live="polite">
               {isRunning
                 ? 'Your intelligent assistant is actively searching and applying to matching jobs.'
                 : 'Agent is currently idle. Configure or start the agent to begin automation.'}

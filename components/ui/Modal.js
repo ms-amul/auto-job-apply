@@ -4,27 +4,35 @@ import { useEffect } from 'react';
 import { X } from 'lucide-react';
 import { theme } from '@/utils/theme';
 
-export default function Modal({ 
-  isOpen, 
-  onClose, 
-  children, 
+export default function Modal({
+  isOpen,
+  onClose,
+  children,
   maxWidth = 'md', // 'sm', 'md', 'lg', 'xl', '2xl', 'full'
   showCloseButton = true,
   closeOnBackdropClick = true,
   zIndex = 100,
   className = '',
 }) {
-  // Prevent body scroll when modal is open
+  // Prevent body scroll and handle Escape key
   useEffect(() => {
+    const handleEscape = (e) => {
+      if (isOpen && e.key === 'Escape') {
+        onClose();
+      }
+    };
+
     if (isOpen) {
       document.body.style.overflow = 'hidden';
+      document.addEventListener('keydown', handleEscape);
     } else {
       document.body.style.overflow = '';
     }
     return () => {
       document.body.style.overflow = '';
+      document.removeEventListener('keydown', handleEscape);
     };
-  }, [isOpen]);
+  }, [isOpen, onClose]);
 
   if (!isOpen) return null;
 
@@ -44,13 +52,15 @@ export default function Modal({
   };
 
   return (
-    <div 
+    <div
       className="fixed inset-0 flex items-center justify-center p-4 animate-modal-fadeIn"
       onClick={handleBackdropClick}
       style={{ zIndex }}
+      role="dialog"
+      aria-modal="true"
     >
       {/* Premium Backdrop with Blur */}
-      <div 
+      <div
         className="absolute inset-0 backdrop-blur-xl transition-opacity duration-500"
         style={{
           background: 'linear-gradient(135deg, rgba(0, 0, 0, 0.6) 0%, rgba(0, 0, 0, 0.8) 100%)',
@@ -58,12 +68,12 @@ export default function Modal({
       ></div>
 
       {/* Modal Container */}
-      <div 
+      <div
         className={`relative w-full ${maxWidthClasses[maxWidth]} rounded-3xl overflow-hidden animate-modal-slideUp ${className}`}
         onClick={(e) => e.stopPropagation()}
       >
         {/* Glassmorphic Background */}
-        <div 
+        <div
           className="absolute inset-0 bg-white/95 backdrop-blur-3xl"
           style={{
             boxShadow: `0 25px 50px -12px rgba(0, 0, 0, 0.4), 0 0 0 1px ${theme.accentPrimary}10`,
@@ -71,7 +81,7 @@ export default function Modal({
         ></div>
 
         {/* Subtle Accent Gradient Top Border */}
-        <div 
+        <div
           className="absolute top-0 left-0 right-0 h-0.5"
           style={{
             background: theme.getAccentGradient(90),
@@ -84,7 +94,7 @@ export default function Modal({
         <div className="absolute top-0 left-0 right-0 h-px bg-linear-to-r from-transparent via-white to-transparent opacity-60"></div>
 
         {/* Subtle Ambient Glow */}
-        <div 
+        <div
           className="absolute -top-24 -right-24 w-48 h-48 rounded-full blur-3xl opacity-10 pointer-events-none"
           style={{
             background: theme.getAccentGradient(135),
@@ -95,12 +105,13 @@ export default function Modal({
         {showCloseButton && (
           <button
             onClick={onClose}
+            aria-label="Close modal"
             className="absolute top-6 right-6 z-50 w-9 h-9 rounded-full bg-gray-100 hover:bg-gray-200 flex items-center justify-center transition-all duration-300 hover:scale-110 group"
             style={{
               boxShadow: '0 2px 8px -1px rgba(0, 0, 0, 0.1)',
             }}
           >
-            <X className="w-4 h-4 text-gray-600 group-hover:rotate-90 transition-transform duration-300" strokeWidth={2} />
+            <X className="w-4 h-4 text-gray-600 group-hover:rotate-90 transition-transform duration-300" strokeWidth={2} aria-hidden="true" />
           </button>
         )}
 

@@ -23,18 +23,18 @@ export default function ImpactCTA({ onSignIn }) {
                     <div className="max-w-xl text-center lg:text-left">
                         <h3 className="text-4xl md:text-6xl font-bold text-white mb-6 tracking-tight leading-tight">
                             Start your <br />
-                            <span className="text-slate-500">Nexi Journey.</span>
+                            <span className="text-slate-400">Nexi Journey.</span>
                         </h3>
-                        <p className="text-lg text-slate-400 font-medium mb-10 leading-relaxed">
+                        <p className="text-lg text-slate-300 font-medium mb-10 leading-relaxed">
                             Join 2,500+ professionals accelerating their careers with AI automation.
                             No credit card required.
                         </p>
 
                         <div className="flex flex-wrap gap-4 justify-center lg:justify-start">
-                            <span className="px-4 py-2 rounded-xl bg-white/5 border border-white/10 text-[10px] font-black uppercase tracking-widest text-slate-500">
+                            <span className="px-4 py-2 rounded-xl bg-white/5 border border-white/10 text-[10px] font-black uppercase tracking-widest text-slate-300">
                                 ✓ 100 Free Applications
                             </span>
-                            <span className="px-4 py-2 rounded-xl bg-white/5 border border-white/10 text-[10px] font-black uppercase tracking-widest text-slate-500">
+                            <span className="px-4 py-2 rounded-xl bg-white/5 border border-white/10 text-[10px] font-black uppercase tracking-widest text-slate-300">
                                 ✓ Privacy Encrypted
                             </span>
                         </div>

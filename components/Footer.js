@@ -27,15 +27,15 @@ export default function Footer() {
                 <div className="max-w-xl">
                   <div className="inline-flex items-center gap-2 px-3 py-1 rounded-full bg-white/5 border border-white/10 mb-6">
                     <Sparkles className="w-3 h-3 text-white" strokeWidth={2} />
-                    <span className="text-xs text-white/80">Contact Us</span>
+                    <span className="text-xs text-white/90">Contact Us</span>
                   </div>
 
-                  <h2 className="text-xl md:text-2xl lg:text-3xl font-light text-white/90 mb-8 leading-tight">
+                  <h2 className="text-xl md:text-2xl lg:text-3xl font-light text-white mb-8 leading-tight">
                     Interested in working together, trying our the platform or simply learning more?
                   </h2>
 
                   <div className="mt-8">
-                    <p className="text-sm text-white/50 mb-2">Contact us at:</p>
+                    <p className="text-sm text-white/70 mb-2">Contact us at:</p>
                     <a
                       href={`mailto:${brand.contact.email}`}
                       className="inline-flex items-center gap-2 text-white text-lg hover:text-white/80 transition-colors group"
@@ -51,7 +51,7 @@ export default function Footer() {
                   <div>
                     <a
                       href="#how-it-works"
-                      className="text-white/70 hover:text-white text-base transition-colors"
+                      className="text-white/80 hover:text-white text-base transition-colors"
                     >
                       How It Works
                     </a>
@@ -59,7 +59,7 @@ export default function Footer() {
                   <div>
                     <a
                       href="#features"
-                      className="text-white/70 hover:text-white text-base transition-colors"
+                      className="text-white/80 hover:text-white text-base transition-colors"
                     >
                       Features
                     </a>
@@ -67,7 +67,7 @@ export default function Footer() {
                   <div>
                     <a
                       href="#impact"
-                      className="text-white/70 hover:text-white text-base transition-colors"
+                      className="text-white/80 hover:text-white text-base transition-colors"
                     >
                       Impact
                     </a>
@@ -82,14 +82,14 @@ export default function Footer() {
                 {/* Logo and Copyright */}
                 <div className="flex items-center gap-3">
                   <Logo size="sm" theme={theme} />
-                  <p className="text-sm text-white/40">
+                  <p className="text-sm text-white/60">
                     &copy; {new Date().getFullYear()} {brand.getName()}. All rights reserved.
                   </p>
                 </div>
 
                 {/* Powered by Nexi - Highlighted */}
                 <div className="flex items-center gap-2 px-3 py-1.5 rounded-lg bg-white/5 border border-white/10">
-                  <span className="text-xs text-white/50">Powered by</span>
+                  <span className="text-xs text-white/60">Powered by</span>
                   <span className="text-sm font-bold text-white">Nexi</span>
                 </div>
               </div>

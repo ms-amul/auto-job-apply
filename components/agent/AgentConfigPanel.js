@@ -61,6 +61,7 @@ export default function AgentConfigPanel({
             <button
               onClick={onClose}
               className="w-8 h-8 flex items-center justify-center bg-slate-100 hover:bg-slate-200 rounded-full transition-all"
+              aria-label="Close configuration"
             >
               <X className="w-4 h-4 text-slate-500" />
             </button>
@@ -95,6 +96,7 @@ export default function AgentConfigPanel({
                 value={configForm.dailyLimit}
                 onChange={(e) => setConfigForm({ ...configForm, dailyLimit: parseInt(e.target.value) })}
                 className="absolute inset-0 w-full h-2 cursor-pointer opacity-0 z-20"
+                aria-label="Daily application limit"
               />
               <div className="flex justify-between mt-2 text-[9px] font-bold text-slate-400">
                 <span>1</span>
@@ -114,9 +116,10 @@ export default function AgentConfigPanel({
           <div className="space-y-1 my-4">
             <div className="flex items-center gap-2">
               <Search className="w-4 h-4 text-slate-500" />
-              <label className="text-sm font-bold text-slate-800">Keywords</label>
+              <label htmlFor="agent-keywords" className="text-sm font-bold text-slate-800">Keywords</label>
             </div>
             <input
+              id="agent-keywords"
               type="text"
               value={configForm.keywords}
               onChange={(e) => setConfigForm({ ...configForm, keywords: e.target.value })}
@@ -199,7 +202,7 @@ function CompactToggle({ icon: Icon, label, active, onChange }) {
           {label}
         </span>
       </div>
-      <ToggleSwitch checked={active} onChange={onChange} />
+      <ToggleSwitch checked={active} onChange={onChange} aria-label={label} />
     </div>
   );
 }

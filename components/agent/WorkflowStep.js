@@ -65,6 +65,7 @@ export default function WorkflowStep({ step, index, isLast }) {
           <p className={`text-sm font-bold tracking-tight ${config.text}`}>
             {step.label}
           </p>
+          <span className="sr-only">Status: {step.status}</span>
         </div>
       </div>
     </div>

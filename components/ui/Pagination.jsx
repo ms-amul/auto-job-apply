@@ -56,7 +56,7 @@ const Pagination = ({
     };
 
     return (
-        <div className={`flex items-center justify-center gap-2 ${className}`}>
+        <nav role="navigation" aria-label="Pagination" className={`flex items-center justify-center gap-2 ${className}`}>
             {showControls && (
                 <button
                     onClick={() => onPageChange(Math.max(1, currentPage - 1))}
@@ -78,6 +78,8 @@ const Pagination = ({
                         ) : (
                             <button
                                 onClick={() => onPageChange(page)}
+                                aria-label={`Go to page ${page}`}
+                                aria-current={currentPage === page ? 'page' : undefined}
                                 className={`
                   w-10 h-10 flex items-center justify-center rounded-xl font-semibold text-sm transition-all duration-300 active:scale-95
                   ${currentPage === page
@@ -103,7 +105,7 @@ const Pagination = ({
                     <ChevronRight className="w-5 h-5" />
                 </button>
             )}
-        </div>
+        </nav>
     );
 };
 

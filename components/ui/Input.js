@@ -3,7 +3,7 @@
  * Uses theme.js for consistent styling
  */
 
-'use client';
+import { useId } from 'react';
 
 export default function Input({
   label,
@@ -18,30 +18,40 @@ export default function Input({
   disabled = false,
   fullWidth = true,
   className = '',
+  id,
   ...props
 }) {
+  const generatedId = useId();
+  const inputId = id || generatedId;
+  const errorId = `${inputId}-error`;
+  const helperId = `${inputId}-helper`;
+
   return (
     <div className={`${fullWidth ? 'w-full' : ''} ${className}`}>
       {label && (
-        <label className="block text-sm font-semibold text-slate-700 mb-2 ml-1">
+        <label htmlFor={inputId} className="block text-sm font-semibold text-slate-700 mb-2 ml-1">
           {label}
-          {required && <span className="text-red-500 ml-0.5">*</span>}
+          {required && <span className="text-red-500 ml-0.5" aria-hidden="true">*</span>}
         </label>
       )}
 
       <div className="relative group">
         {icon && (
-          <div className="absolute left-3.5 top-1/2 transform -translate-y-1/2 text-slate-400 group-focus-within:text-blue-500 transition-colors duration-200">
+          <div className="absolute left-3.5 top-1/2 transform -translate-y-1/2 text-slate-400 group-focus-within:text-blue-500 transition-colors duration-200" aria-hidden="true">
             {icon}
           </div>
         )}
 
         <input
+          id={inputId}
           type={type}
           value={value}
           onChange={onChange}
           placeholder={placeholder}
           disabled={disabled}
+          required={required}
+          aria-invalid={!!error}
+          aria-describedby={error ? errorId : (helperText ? helperId : undefined)}
           className={`
             w-full px-4 py-3 rounded-xl text-sm font-medium
             ${icon ? 'pl-11' : ''}
@@ -56,7 +66,11 @@ export default function Input({
       </div>
 
       {(error || helperText) && (
-        <p className={`mt-1.5 ml-1 text-xs font-medium ${error ? 'text-red-500' : 'text-slate-500'}`}>
+        <p
+          id={error ? errorId : helperId}
+          role={error ? "alert" : undefined}
+          className={`mt-1.5 ml-1 text-xs font-medium ${error ? 'text-red-500' : 'text-slate-500'}`}
+        >
           {error || helperText}
         </p>
       )}

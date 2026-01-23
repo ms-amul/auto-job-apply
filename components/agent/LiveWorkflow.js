@@ -20,12 +20,16 @@ export default function LiveWorkflow({ workflow, nextApplicationIn }) {
           </div>
 
           {nextApplicationIn !== null && (
-            <div className="flex items-center gap-3 px-5 py-3 bg-white/40 border border-white/60 rounded-[1.5rem] shadow-sm">
-              <div className="flex items-center gap-1.5">
+            <div
+              className="flex items-center gap-3 px-5 py-3 bg-white/40 border border-white/60 rounded-[1.5rem] shadow-sm"
+              role="timer"
+              aria-label={`Next application in ${nextApplicationIn} seconds`}
+            >
+              <div className="flex items-center gap-1.5" aria-hidden="true">
                 <div className="w-2 h-2 rounded-full bg-blue-500 animate-ping" />
                 <Clock className="w-4 h-4 text-blue-600" />
               </div>
-              <span className="text-sm font-black text-slate-700">
+              <span className="text-sm font-black text-slate-700" aria-hidden="true">
                 Next Application: <span className="text-blue-600 ml-1">{nextApplicationIn}s</span>
               </span>
             </div>

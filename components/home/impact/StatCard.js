@@ -7,7 +7,7 @@ export default function StatCard({ stat }) {
 
     return (
         <div
-            className="group relative cursor-pointer"
+            className="group relative"
             style={{
                 '--liquid-color-low': `color-mix(in srgb, ${stat.color}, transparent 90%)`,
                 '--liquid-color-high': `color-mix(in srgb, ${stat.color}, transparent 75%)`,
@@ -49,7 +49,7 @@ export default function StatCard({ stat }) {
 
                         {/* Category Badge */}
                         <div className="absolute top-8 right-8">
-                            <span className="text-[10px] font-black tracking-widest uppercase text-white/40 px-3 py-1 rounded-full border border-white/5 bg-white/5">
+                            <span className="text-[10px] font-black tracking-widest uppercase text-white/70 px-3 py-1 rounded-full border border-white/10 bg-white/5">
                                 {stat.category}
                             </span>
                         </div>
@@ -58,11 +58,11 @@ export default function StatCard({ stat }) {
                     {/* Content Area */}
                     <div className="flex-1 px-8 pb-10">
                         <h3 className="text-xl font-bold text-white mb-1 transition-colors duration-500 group-hover:text-white">{stat.title}</h3>
-                        <p className="text-xs text-slate-500 font-medium mb-6 opacity-80 transition-colors duration-500 group-hover:text-slate-300">{stat.label}</p>
+                        <p className="text-xs text-slate-300 font-medium mb-6 opacity-90 transition-colors duration-500 group-hover:text-white">{stat.label}</p>
 
                         <div className="mb-8">
                             <span className="text-5xl font-black text-white tracking-tighter transition-shadow duration-500 group-hover:drop-shadow-[0_0_15px_rgba(255,255,255,0.3)]">{stat.value}</span>
-                            <span className="text-xs text-slate-500 font-bold ml-2 tracking-widest opacity-40 uppercase">Metrics</span>
+                            <span className="text-xs text-slate-300 font-bold ml-2 tracking-widest opacity-60 uppercase">Metrics</span>
                         </div>
 
                         {/* Features List */}
@@ -70,9 +70,9 @@ export default function StatCard({ stat }) {
                             {stat.features.map((feature, fIdx) => (
                                 <div key={fIdx} className="flex items-center gap-3">
                                     <div className="w-5 h-5 rounded-full bg-white/5 border border-white/10 flex items-center justify-center group-hover:border-white/20 transition-colors">
-                                        <CheckCircle className="w-3 h-3 text-slate-400 group-hover:text-white transition-colors" />
+                                        <CheckCircle className="w-3 h-3 text-slate-300 group-hover:text-white transition-colors" />
                                     </div>
-                                    <span className="text-[11px] font-medium text-slate-400 group-hover:text-slate-200 transition-colors uppercase tracking-wide">
+                                    <span className="text-[11px] font-medium text-slate-300 group-hover:text-white transition-colors uppercase tracking-wide">
                                         {feature}
                                     </span>
                                 </div>
