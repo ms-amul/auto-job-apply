@@ -30,6 +30,7 @@ export default function SidebarNav({ menuItems, isOpen, setIsOpen }) {
                                 setIsOpen(false);
                             }
                         }}
+                        aria-label={item.label}
                         className={`
               group relative flex items-center ${isOpen ? 'gap-3 px-4 py-3' : 'justify-center px-2 py-3'} 
               rounded-xl text-sm font-medium

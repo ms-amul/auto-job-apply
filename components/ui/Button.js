@@ -22,9 +22,9 @@ const sizes = {
   lg: 'px-6 py-3 text-base',
 };
 
-export default function Button({ 
-  children, 
-  variant = 'primary', 
+export default function Button({
+  children,
+  variant = 'primary',
   size = 'md',
   className = '',
   onClick,
@@ -33,7 +33,7 @@ export default function Button({
   loading = false,
   fullWidth = false,
   icon,
-  ...props 
+  ...props
 }) {
   const getButtonStyle = () => {
     if (variant === 'primary') {
@@ -49,6 +49,8 @@ export default function Button({
       type={type}
       onClick={onClick}
       disabled={disabled || loading}
+      aria-busy={loading}
+      aria-disabled={disabled || loading}
       className={`
         inline-flex items-center justify-center font-medium rounded-xl
         transition-all duration-300
@@ -66,14 +68,14 @@ export default function Button({
           <>
             {/* Brand Loader */}
             <div className="relative w-4 h-4">
-              <div 
+              <div
                 className="absolute inset-0 rounded-full border-2 border-transparent animate-spin"
                 style={{
                   borderTopColor: 'currentColor',
                   borderRightColor: 'currentColor',
                 }}
               />
-              <div 
+              <div
                 className="absolute inset-0 flex items-center justify-center text-[6px] font-bold opacity-70"
                 style={{
                   color: 'currentColor',

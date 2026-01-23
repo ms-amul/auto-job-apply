@@ -29,7 +29,7 @@ export const CheckboxFilter = ({ label, count, checked, onChange }) => (
                 {count}
             </span>
         )}
-        <input type="checkbox" className="hidden" checked={checked} onChange={onChange} />
+        <input type="checkbox" className="sr-only" checked={checked} onChange={onChange} />
     </label>
 );
 
@@ -70,6 +70,7 @@ export const JobFilters = ({ location, setLocation, category, setCategory, filte
                             placeholder="Search job title..."
                             value={title || ''}
                             onChange={(e) => setTitle(e.target.value)}
+                            aria-label="Search job title"
                             className="w-full pl-10 pr-4 py-2.5 bg-slate-50 border border-slate-100 rounded-xl text-sm focus:outline-none focus:ring-2 focus:ring-blue-100 transition-all"
                         />
                     </div>
@@ -83,6 +84,7 @@ export const JobFilters = ({ location, setLocation, category, setCategory, filte
                             placeholder="Search company..."
                             value={filters.company || ''}
                             onChange={(e) => setFilters(prev => ({ ...prev, company: e.target.value }))}
+                            aria-label="Search company"
                             className="w-full pl-10 pr-4 py-2.5 bg-slate-50 border border-slate-100 rounded-xl text-sm focus:outline-none focus:ring-2 focus:ring-blue-100 transition-all"
                         />
                     </div>
@@ -96,6 +98,7 @@ export const JobFilters = ({ location, setLocation, category, setCategory, filte
                             placeholder="City, State"
                             value={location}
                             onChange={(e) => setLocation(e.target.value)}
+                            aria-label="Search location"
                             className="w-full pl-10 pr-4 py-2.5 bg-slate-50 border border-slate-100 rounded-xl text-sm focus:outline-none focus:ring-2 focus:ring-blue-100 transition-all"
                         />
                     </div>
@@ -106,6 +109,7 @@ export const JobFilters = ({ location, setLocation, category, setCategory, filte
                         <select
                             value={category}
                             onChange={(e) => setCategory(e.target.value)}
+                            aria-label="Select category"
                             className="w-full pl-4 pr-10 py-2.5 bg-slate-50 border border-slate-100 rounded-xl text-sm focus:outline-none focus:ring-2 focus:ring-blue-100 transition-all appearance-none cursor-pointer"
                         >
                             <option value="">Select Category</option>
@@ -146,6 +150,7 @@ export const JobFilters = ({ location, setLocation, category, setCategory, filte
                                     const val = Math.min(Number(e.target.value), payRange[1] - 1);
                                     setPayRange([val, payRange[1]]);
                                 }}
+                                aria-label="Minimum pay rate"
                                 className="absolute top-1/2 left-0 w-full -translate-y-1/2 appearance-none bg-transparent pointer-events-none [&::-webkit-slider-thumb]:pointer-events-auto [&::-webkit-slider-thumb]:w-4 [&::-webkit-slider-thumb]:h-4 [&::-webkit-slider-thumb]:rounded-full [&::-webkit-slider-thumb]:bg-white [&::-webkit-slider-thumb]:border-2 [&::-webkit-slider-thumb]:border-blue-600 [&::-webkit-slider-thumb]:shadow-md [&::-webkit-slider-thumb]:appearance-none [&::-webkit-slider-thumb]:cursor-grab active:[&::-webkit-slider-thumb]:cursor-grabbing z-5"
                             />
                             <input
@@ -157,6 +162,7 @@ export const JobFilters = ({ location, setLocation, category, setCategory, filte
                                     const val = Math.max(Number(e.target.value), payRange[0] + 1);
                                     setPayRange([payRange[0], val]);
                                 }}
+                                aria-label="Maximum pay rate"
                                 className="absolute top-1/2 left-0 w-full -translate-y-1/2 appearance-none bg-transparent pointer-events-none [&::-webkit-slider-thumb]:pointer-events-auto [&::-webkit-slider-thumb]:w-4 [&::-webkit-slider-thumb]:h-4 [&::-webkit-slider-thumb]:rounded-full [&::-webkit-slider-thumb]:bg-white [&::-webkit-slider-thumb]:border-2 [&::-webkit-slider-thumb]:border-blue-600 [&::-webkit-slider-thumb]:shadow-md [&::-webkit-slider-thumb]:appearance-none [&::-webkit-slider-thumb]:cursor-grab active:[&::-webkit-slider-thumb]:cursor-grabbing z-5"
                             />
                         </div>

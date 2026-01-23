@@ -55,6 +55,7 @@ export default function CompactSidebar({ isOpen, setIsOpen, user }) {
       {/* Mobile Toggle Button - Floating Top Right */}
       <button
         onClick={() => setIsOpen(!isOpen)}
+        aria-label="Toggle sidebar"
         className={`
             lg:hidden fixed top-4 right-4 z-[60] w-10 h-10 rounded-xl flex items-center justify-center 
             backdrop-blur-xl bg-white/80 border border-white/50 shadow-md hover:shadow-lg 
@@ -71,6 +72,7 @@ export default function CompactSidebar({ isOpen, setIsOpen, user }) {
       {/* Desktop Toggle Button - Sidebar Border */}
       <button
         onClick={() => setIsOpen(!isOpen)}
+        aria-label="Toggle sidebar"
         className={`
             hidden lg:flex fixed z-50 w-8 h-8 rounded-full items-center justify-center 
             bg-white border border-slate-200 shadow-sm text-slate-500 hover:text-slate-800 hover:shadow-md

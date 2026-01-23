@@ -13,7 +13,7 @@ export default function MarketingLayout({ children }) {
   return (
     <div className="min-h-screen bg-white">
       <Header />
-      <main>
+      <main id="main-content">
         {children}
       </main>
       <Footer />

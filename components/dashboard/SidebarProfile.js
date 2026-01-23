@@ -62,6 +62,7 @@ export default function SidebarProfile({ user, isOpen, setIsOpen }) {
                                 setIsOpen(false);
                             }
                         }}
+                        aria-label="Profile"
                         className={`
                 flex items-center flex-1 min-w-0 
                 ${isOpen ? 'gap-3' : 'justify-center'}
@@ -100,6 +101,7 @@ export default function SidebarProfile({ user, isOpen, setIsOpen }) {
                             onClick={handleLogoutClick}
                             className="w-8 h-8 flex items-center justify-center rounded-lg text-slate-400 hover:text-red-500 hover:bg-red-50 transition-all duration-200 shrink-0"
                             title="Sign Out"
+                            aria-label="Sign Out"
                         >
                             <LogOut className="w-4 h-4" />
                         </button>
@@ -109,7 +111,12 @@ export default function SidebarProfile({ user, isOpen, setIsOpen }) {
 
             {/* Logout Confirmation Modal - Portaled to body */}
             {showConfirm && typeof document !== 'undefined' && createPortal(
-                <div className="fixed inset-0 z-[9999] flex items-center justify-center p-4 bg-slate-900/60 backdrop-blur-sm animate-fadeIn">
+                <div
+                    className="fixed inset-0 z-[9999] flex items-center justify-center p-4 bg-slate-900/60 backdrop-blur-sm animate-fadeIn"
+                    role="dialog"
+                    aria-modal="true"
+                    aria-labelledby="logout-title"
+                >
                     <div
                         className="bg-white rounded-2xl shadow-2xl w-full max-w-sm overflow-hidden scale-100 animate-scaleIn border border-white/50"
                         onClick={(e) => e.stopPropagation()}
@@ -117,10 +124,10 @@ export default function SidebarProfile({ user, isOpen, setIsOpen }) {
                         <div className="p-6 text-center">
                             <div className="w-16 h-16 bg-red-50 rounded-full flex items-center justify-center mx-auto mb-4 relative">
                                 <div className="absolute inset-0 rounded-full bg-red-500/10 animate-ping opacity-20"></div>
-                                <Power className="w-8 h-8 text-red-500" />
+                                <Power className="w-8 h-8 text-red-500" aria-hidden="true" />
                             </div>
 
-                            <h3 className="text-xl font-bold text-slate-900 mb-2">Sign Out?</h3>
+                            <h3 id="logout-title" className="text-xl font-bold text-slate-900 mb-2">Sign Out?</h3>
                             <p className="text-slate-500 text-sm mb-6">
                                 Are you sure you want to end your session? You'll need to sign in again to access the dashboard.
                             </p>

@@ -4,7 +4,7 @@ import { Building2, CheckCircle, MapPin, Zap } from 'lucide-react';
 
 export default function ApplicationHistoryItem({ item, index }) {
   return (
-    <div className="relative group bg-white/20 hover:bg-white/50 border border-white/60 p-4 rounded-2xl transition-all duration-300 animate-fadeIn cursor-pointer">
+    <div className="relative group bg-white/20 hover:bg-white/50 border border-white/60 p-4 rounded-2xl transition-all duration-300 animate-fadeIn">
       <div className="flex flex-col sm:flex-row sm:items-center gap-5">
         {/* Index & Logo Section */}
         <div className="flex items-center gap-4">

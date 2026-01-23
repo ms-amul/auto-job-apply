@@ -29,6 +29,9 @@ export default function CinematicPlayer({ isOpen, onClose, videoId, title = 'Wat
         <div
             className={`fixed bottom-6 right-6 z-[100] transition-all duration-700 ease-[cubic-bezier(0.23,1,0.32,1)] animate-modalPop ${isExpanded ? 'w-[calc(100vw-3rem)] md:w-[800px]' : 'w-[calc(100vw-3rem)] md:w-[420px]'
                 }`}
+            role="dialog"
+            aria-label="Video Player"
+            aria-modal="false"
         >
             {/* Premium Glass Container */}
             <div
@@ -59,6 +62,7 @@ export default function CinematicPlayer({ isOpen, onClose, videoId, title = 'Wat
                                 onClick={() => setIsExpanded(!isExpanded)}
                                 className="w-8 h-8 hidden md:flex items-center justify-center rounded-full bg-white/10 hover:bg-white/20 backdrop-blur-md border border-white/10 transition-all active:scale-90"
                                 title={isExpanded ? "Restore" : "Expand"}
+                                aria-label={isExpanded ? "Restore video size" : "Expand video size"}
                             >
                                 {isExpanded ? <Minimize2 className="w-4 h-4 text-white" /> : <Maximize2 className="w-4 h-4 text-white" />}
                             </button>
@@ -66,6 +70,7 @@ export default function CinematicPlayer({ isOpen, onClose, videoId, title = 'Wat
                             <button
                                 onClick={onClose}
                                 className="w-8 h-8 flex items-center justify-center rounded-full bg-red-500/20 hover:bg-red-500/40 backdrop-blur-md border border-red-500/30 transition-all active:scale-90"
+                                aria-label="Close video player"
                             >
                                 <X className="w-4 h-4 text-white" strokeWidth={2.5} />
                             </button>
@@ -76,6 +81,7 @@ export default function CinematicPlayer({ isOpen, onClose, videoId, title = 'Wat
                     <button
                         onClick={onClose}
                         className="absolute top-3 right-3 z-30 w-7 h-7 flex md:hidden items-center justify-center rounded-full bg-black/40 backdrop-blur-md border border-white/10"
+                        aria-label="Close video player"
                     >
                         <X className="w-4 h-4 text-white" />
                     </button>
